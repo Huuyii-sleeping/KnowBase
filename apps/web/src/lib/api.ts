@@ -85,7 +85,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.json()) as T;
 }
 
-export const documentsApi = {
+const httpDocumentsApi = {
   list(query: ListDocumentsQuery = {}): Promise<DocumentListResult> {
     const params = new URLSearchParams();
     if (query.keyword) params.set('keyword', query.keyword);
@@ -148,3 +148,8 @@ export const documentsApi = {
     return request(`/documents/${id}`, { method: 'DELETE' });
   },
 };
+
+// Mock 模式（?mock=1 开启）下使用内存数据源，便于无后端环境演示。
+import { isMockEnabled, mockDocumentsApi } from './mock-api';
+
+export const documentsApi = isMockEnabled() ? mockDocumentsApi : httpDocumentsApi;
