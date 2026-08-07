@@ -19,6 +19,9 @@ import { DocumentContentStore } from './document-content.store';
 import { DocumentQueryService } from './document-query.service';
 import { DocumentCommandService } from './document-command.service';
 import { DocumentWorkflowService } from './document-workflow.service';
+import { DocumentPipelinePublisher } from './document-pipeline.publisher';
+import { DocumentPublishService } from './document-publish.service';
+import { MessageQueueModule } from '../message-queue/message-queue.module';
 
 @Module({
   imports: [
@@ -27,6 +30,7 @@ import { DocumentWorkflowService } from './document-workflow.service';
       { name: DocumentContent.name, schema: DocumentContentSchema },
     ]),
     StorageModule,
+    MessageQueueModule,
   ],
   controllers: [DocumentsController],
   providers: [
@@ -35,6 +39,8 @@ import { DocumentWorkflowService } from './document-workflow.service';
     DocumentQueryService,
     DocumentCommandService,
     DocumentWorkflowService,
+    DocumentPipelinePublisher,
+    DocumentPublishService,
     FileParserService,
     AssetUploaderService,
     TextParser,
@@ -45,5 +51,6 @@ import { DocumentWorkflowService } from './document-workflow.service';
     PptxParser,
     OfficeParserFallback,
   ],
+  exports: [DocumentContentStore, DocumentQueryService],
 })
 export class DocumentsModule {}

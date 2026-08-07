@@ -48,7 +48,62 @@ services:
     volumes:
       - rustfs-data:/data
 
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: knowbase-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: knowbase
+      RABBITMQ_DEFAULT_PASS: knowbase
+    ports:
+      - "15672:5672"
+      - "15673:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: knowbase-elasticsearch
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "19200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: knowbase-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/knowbase
+    ports:
+      - "17687:7687"
+      - "17474:7474"
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p knowbase 'RETURN 1' >/dev/null"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+
 volumes:
   postgres-data:
   mongodb-data:
   rustfs-data:
+  rabbitmq-data:
+  elasticsearch-data:
+  neo4j-data:
+  neo4j-logs:

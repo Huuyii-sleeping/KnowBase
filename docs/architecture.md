@@ -21,7 +21,7 @@ metadata     markdown      original file
 - `content_id` 是 PostgreSQL 当前正文版本和 MongoDB 正文的关联键。
 - 文档正文更新创建新的 `content_id`，历史正文暂不删除，为后续版本历史保留空间。
 - 文档列表默认只查询 PostgreSQL，文档详情才读取 MongoDB 正文。
-- 所有已发布文档后续需要通过一个 `DocumentPublished` 入口触发索引流水线。
+- 所有已发布文档通过 `POST /documents/:id/publish` 或审核通过入口触发三条独立的 RabbitMQ 管线。
 
 ## 解析流水线
 
@@ -48,4 +48,23 @@ FileParserService
 | PUT | `/api/v1/documents/:id/content` | 更新 Markdown 正文并递增版本 |
 | POST | `/api/v1/documents/:id/submit-review` | 提交审核 |
 | POST | `/api/v1/documents/:id/review` | 管理员通过或驳回 |
+| POST | `/api/v1/documents/:id/publish` | 发布待审核文档并投递索引任务 |
 | DELETE | `/api/v1/documents/:id` | 删除文档及其存储资源 |
+
+## 发布后的异步管线
+
+```text
+PUBLISHED
+   |
+   +--> RabbitMQ document.index ------> SearchConsumer --> Elasticsearch kh_document
+   |
+   +--> RabbitMQ document.rag.rebuild -> RagConsumer ------> Markdown Chunk
+   |                                                    -> OpenAI Embeddings
+   |                                                    -> Elasticsearch kh_chunk
+   |
+   +--> RabbitMQ document.kg.rebuild --> KgConsumer ------> Neo4j Document/Chunk graph
+```
+
+Search 消息携带整篇文档元数据和 Markdown；RAG、KG 消息只携带文档 ID 和版本，消费者重新从 PostgreSQL/MongoDB 读取正文。三条队列相互独立，单条管线失败不会阻塞其他管线。
+
+当前 KG 管线已经完成文档和 chunk 节点的幂等重建，实体/关系抽取作为下一步接入 LLM 的独立组件。

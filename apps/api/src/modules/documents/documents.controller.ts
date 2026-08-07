@@ -20,6 +20,7 @@ import { ListDocumentsDto } from './dto/list-documents.dto';
 import { ReviewDocumentDto } from './dto/review-document.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
+import { PublishDocumentDto } from './dto/publish-document.dto';
 import { DocumentsService } from './documents.service';
 
 @Controller('documents')
@@ -69,6 +70,14 @@ export class DocumentsController {
     @Body() dto: ReviewDocumentDto,
   ) {
     return this.documentsService.review(id, dto);
+  }
+
+  @Post(':id/publish')
+  publish(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: PublishDocumentDto,
+  ) {
+    return this.documentsService.publish(id, dto.reviewerId);
   }
 
   @Delete(':id')

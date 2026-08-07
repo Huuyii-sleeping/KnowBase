@@ -7,6 +7,7 @@ import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentCommandService } from './document-command.service';
 import { DocumentQueryService } from './document-query.service';
 import { DocumentWorkflowService } from './document-workflow.service';
+import { DocumentPublishService } from './document-publish.service';
 
 @Injectable()
 export class DocumentsService {
@@ -14,6 +15,7 @@ export class DocumentsService {
     private readonly commandService: DocumentCommandService,
     private readonly queryService: DocumentQueryService,
     private readonly workflowService: DocumentWorkflowService,
+    private readonly publishService: DocumentPublishService,
   ) {}
 
   async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto) {
@@ -46,7 +48,15 @@ export class DocumentsService {
 
   async review(id: string, dto: ReviewDocumentDto) {
     await this.workflowService.review(id, dto);
+    if (dto.approved) {
+      await this.publishService.dispatch(id);
+    }
     return this.queryService.findOne(id);
+  }
+
+  async publish(id: string, reviewerId: string) {
+    await this.publishService.publish(id, reviewerId);
+    return this.queryService.findOne(id, true);
   }
 
   remove(id: string) {

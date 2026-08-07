@@ -7,6 +7,7 @@
 - RustFS 保存原始二进制文件
 - NestJS 提供文档上传、CRUD 和审核接口
 - FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
+- 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 
 开发约定：
 
@@ -33,7 +34,7 @@ npm run start:dev
 
 API 地址：`http://localhost:3000/api/v1`
 
-本项目基础设施使用独立端口：PostgreSQL `15432`、MongoDB `17017`、RustFS API `19000`、RustFS Console `19001`，避免和本机已有容器冲突。
+本项目基础设施使用独立端口：PostgreSQL `15432`、MongoDB `17017`、RustFS API `19000`、RustFS Console `19001`、RabbitMQ `15672`、Elasticsearch `19200`、Neo4j Bolt `17687`，避免和本机已有容器冲突。
 
 健康检查：`GET http://localhost:3000/api/v1/health`
 
@@ -62,3 +63,13 @@ curl -X POST http://localhost:3000/api/v1/documents/<document-id>/review \
   -H 'Content-Type: application/json' \
   -d '{"approved":true,"reviewerId":"admin-001"}'
 ```
+
+审核通过会自动投递三条索引消息，也可以使用显式发布接口：
+
+```bash
+curl -X POST http://localhost:3000/api/v1/documents/<document-id>/publish \
+  -H 'Content-Type: application/json' \
+  -d '{"reviewerId":"admin-001"}'
+```
+
+异步管线说明见 [docs/pipeline.md](./docs/pipeline.md)。
