@@ -71,6 +71,9 @@ export class Document {
   })
   parseStatus!: DocumentParseStatus;
 
+  @Column({ name: 'parse_error', type: 'text', nullable: true })
+  parseError!: string | null;
+
   @Column({ name: 'rejection_reason', type: 'text', nullable: true })
   rejectionReason!: string | null;
 

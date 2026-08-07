@@ -15,6 +15,19 @@
 - 只有已发布文档才允许进入后续 Chunk、图谱、全文和向量索引流程。
 - 文档元数据和正文均具备 CRUD 接口。
 
+## 解析支持
+
+| 类型 | 主解析器 | 输出规则 |
+| --- | --- | --- |
+| PDF | `pdf-parse` | 按页输出 `## Page N`，提取文本、表格和可解码图片 |
+| XLSX | `exceljs` | 每个 Sheet 输出 `# SheetName`，数据输出 Markdown 表格 |
+| DOCX | `mammoth` + `turndown` | DOCX 转 HTML，再转 Markdown，图片上传 RustFS |
+| PPTX | `jszip` + XML | 按幻灯片提取文本、表格和图片 |
+| TXT | Node Buffer | 添加文档标题后输出 Markdown |
+| MD | Node Buffer | 保留 Markdown 正文 |
+
+主解析器失败时使用 `officeparser` 的 AST 转 Markdown 作为兜底，并把解析器名称、警告和失败原因写入文档结果。
+
 ## 当前边界
 
 本阶段实现文件和正文的存储、文档业务状态及 CRUD。PDF、音频、视频的真实解析器由后续 ingestion worker 接入；当前接口支持解析服务通过 `markdown` 字段回传标准化正文，并对尚未解析的媒体文件标记 `parseStatus=PENDING`。
@@ -35,4 +48,3 @@ DRAFT -> PENDING_REVIEW -> PUBLISHED
 | RustFS | 原始二进制文件和后续图片资源 |
 | PostgreSQL | 元数据、状态、权限、统计、版本和审核信息 |
 | MongoDB | 当前版本的完整 Markdown 正文和正文资源引用 |
-

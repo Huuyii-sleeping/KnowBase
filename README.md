@@ -6,6 +6,12 @@
 - MongoDB 保存 Markdown 正文
 - RustFS 保存原始二进制文件
 - NestJS 提供文档上传、CRUD 和审核接口
+- FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
+
+开发约定：
+
+- 通用开发规则见 [AGENTS.md](./AGENTS.md)
+- 当前项目架构和技术决策见 [docs/development-guide.md](./docs/development-guide.md)
 
 ## 启动基础设施
 
@@ -15,6 +21,8 @@ cp .env.example apps/api/.env
 ```
 
 Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改初始化 SQL 或 Mongo 脚本后，需要手动处理现有数据卷。
+
+已有 PostgreSQL 数据库可执行 `deploy/postgres/migrations` 下的增量 SQL。
 
 ## 启动 API
 

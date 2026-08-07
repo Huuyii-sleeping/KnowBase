@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS kh_document (
   tags TEXT[] NOT NULL DEFAULT '{}',
   status kh_document_status_enum NOT NULL DEFAULT 'DRAFT',
   parse_status kh_document_parse_status_enum NOT NULL DEFAULT 'PENDING',
+  parse_error TEXT,
   rejection_reason TEXT,
   version INTEGER NOT NULL DEFAULT 1,
   permissions JSONB NOT NULL DEFAULT '{}'::jsonb,
