@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Knowbase · 原型</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f7f5;
+    --bg-hover: #f1f1ee;
+    --border: #e8e8e4;
+    --border-strong: #d4d4d0;
+    --text: #1f1f1d;
+    --text-2: #6b6b67;
+    --text-3: #a3a39e;
+    --accent: #534ab7;
+    --accent-soft: #eeedfe;
+    --green-soft: #e1f5ee; --green-text: #0f6e56;
+    --amber-soft: #faeeda; --amber-text: #854f0b;
+    --red-soft: #fcebeb;   --red-text: #a32d2d;
+    --blue-soft: #e6f1fb;  --blue-text: #185fa5;
+    --gray-soft: #f1efe8;  --gray-text: #5f5e5a;
+    --radius: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg-subtle);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, select { font: inherit; }
+
+  /* ---------- 应用外壳 ---------- */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 216px; flex-shrink: 0; background: var(--bg);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 16px 12px;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .brand { display: flex; align-items: baseline; gap: 8px; padding: 4px 10px 16px; }
+  .brand strong { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .brand span { font-size: 12px; color: var(--text-3); }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 7px 10px; border-radius: 6px; font-size: 13.5px;
+    color: var(--text-2); text-align: left; transition: background .12s;
+  }
+  .nav-item:hover { background: var(--bg-hover); }
+  .nav-item.active { background: var(--bg-hover); color: var(--text); font-weight: 500; }
+  .nav-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); flex-shrink: 0; }
+  .nav-item.active .dot { background: var(--accent); }
+  .nav-item .count {
+    margin-left: auto; font-size: 11px; background: var(--amber-soft);
+    color: var(--amber-text); border-radius: 999px; padding: 0 8px; line-height: 18px;
+  }
+  .nav-item.disabled { color: var(--text-3); cursor: default; }
+  .nav-item.disabled:hover { background: none; }
+  .nav-section { margin-top: 20px; padding: 0 10px 6px; font-size: 11px; color: var(--text-3); }
+  .sidebar-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+  .user-chip { display: flex; align-items: center; gap: 10px; padding: 6px 10px; }
+  .avatar {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft);
+    color: var(--accent); font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .user-chip span { font-size: 13px; color: var(--text-2); }
+
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .topbar {
+    height: 52px; display: flex; align-items: center; gap: 16px;
+    padding: 0 28px; background: var(--bg); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 5;
+  }
+  .crumb { font-size: 13px; color: var(--text-3); }
+  .crumb b { color: var(--text); font-weight: 500; }
+  .search-box {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 12px; width: 220px; color: var(--text-3); font-size: 13px;
+  }
+  .content { padding: 32px 40px 64px; max-width: 1080px; width: 100%; margin: 0 auto; }
+
+  /* ---------- 通用组件 ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border-strong); background: var(--bg);
+    border-radius: 6px; padding: 6px 14px; font-size: 13px; color: var(--text);
+    transition: background .12s;
+  }
+  .btn:hover { background: var(--bg-hover); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #463e9e; }
+  .btn.success { background: var(--green-text); border-color: var(--green-text); color: #fff; }
+  .btn.danger-ghost { color: var(--red-text); border-color: #eccfcf; }
+  .btn.danger-ghost:hover { background: var(--red-soft); }
+  .btn.sm { padding: 3px 10px; font-size: 12.5px; }
+
+  .badge {
+    display: inline-flex; align-items: center; border-radius: 999px;
+    padding: 1px 10px; font-size: 12px; line-height: 20px; white-space: nowrap;
+  }
+  .badge.draft    { background: var(--gray-soft);  color: var(--gray-text); }
+  .badge.pending  { background: var(--amber-soft); color: var(--amber-text); }
+  .badge.published{ background: var(--green-soft); color: var(--green-text); }
+  .badge.rejected { background: var(--red-soft);   color: var(--red-text); }
+  .badge.parse-pending { background: var(--blue-soft); color: var(--blue-text); }
+  .badge.parse-ready   { background: var(--gray-soft); color: var(--gray-text); }
+  .badge.parse-failed  { background: var(--red-soft);  color: var(--red-text); }
+
+  .chips { display: flex; gap: 8px; }
+  .chip {
+    border-radius: 999px; padding: 3px 14px; font-size: 13px;
+    color: var(--text-2); border: 1px solid transparent; transition: all .12s;
+  }
+  .chip:hover { background: var(--bg-hover); }
+  .chip.active { background: var(--text); color: #fff; }
+
+  .page-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .page-head h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+  .page-head .spacer { flex: 1; }
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .toolbar .search-inline {
+    margin-left: auto; border: 1px solid var(--border); border-radius: 6px;
+    padding: 5px 12px; width: 200px; font-size: 13px; background: var(--bg); color: var(--text);
+  }
+  .toolbar .search-inline::placeholder { color: var(--text-3); }
+
+  /* ---------- 文档表格 ---------- */
+  .doc-table { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .doc-row {
+    display: grid; grid-template-columns: minmax(0,2.4fr) minmax(0,1.4fr) 84px 76px 96px;
+    gap: 12px; align-items: center; padding: 12px 18px;
+    border-bottom: 1px solid var(--border); cursor: pointer; transition: background .12s;
+  }
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row.head { background: var(--bg-subtle); cursor: default; padding: 8px 18px; }
+  .doc-row.head span { font-size: 12px; color: var(--text-2); font-weight: 500; }
+  .doc-row:not(.head):hover { background: var(--bg-subtle); }
+  .doc-title { font-size: 13.5px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .doc-sub { font-size: 12px; color: var(--text-3); }
+  .doc-meta { font-size: 12.5px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .table-footer {
+    display: flex; align-items: center; padding: 10px 18px;
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .table-footer .pager { margin-left: auto; display: flex; gap: 6px; }
+
+  /* ---------- 详情页 ---------- */
+  .detail-head h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .detail-head { margin-bottom: 24px; }
+  .detail-head .actions { display: flex; gap: 8px; margin-top: 12px; }
+  .detail-grid { display: grid; grid-template-columns: minmax(0,1fr) 260px; gap: 24px; align-items: start; }
+  .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); }
+  .card .card-title {
+    font-size: 12px; font-weight: 500; color: var(--text-2);
+    padding: 12px 16px 0; letter-spacing: 0.01em;
+  }
+  .side-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 76px; }
+  .meta-list { padding: 8px 16px 14px; }
+  .meta-list .row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 12.5px; }
+  .meta-list .k { color: var(--text-3); flex-shrink: 0; }
+  .meta-list .v { color: var(--text); text-align: right; word-break: break-all; }
+  .meta-list .v.link { color: var(--accent); cursor: pointer; }
+  .reject-note {
+    margin: 8px 16px 14px; padding: 10px 12px; border-radius: 6px;
+    background: var(--red-soft); color: var(--red-text); font-size: 12.5px;
+  }
+  .op-area { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .op-area .btn { justify-content: center; }
+  .op-hint { font-size: 12px; color: var(--text-3); padding: 0 16px 12px; }
+
+  .markdown-body { padding: 20px 28px 32px; font-size: 14px; }
+  .markdown-body h2 { font-size: 17px; font-weight: 600; margin: 20px 0 8px; }
+  .markdown-body h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
+  .markdown-body p { margin: 8px 0; color: #333330; }
+  .markdown-body ul { margin: 8px 0 8px 22px; color: #333330; }
+  .markdown-body table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  .markdown-body th, .markdown-body td { border: 1px solid var(--border); padding: 6px 12px; text-align: left; }
+  .markdown-body th { background: var(--bg-subtle); font-weight: 500; }
+  .markdown-body code {
+    background: var(--bg-subtle); border-radius: 4px; padding: 1px 5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px;
+  }
+  .parse-notice {
+    margin: 20px 28px; padding: 14px 16px; border-radius: 6px; font-size: 13px;
+    background: var(--blue-soft); color: var(--blue-text);
+  }
+  .parse-notice.error { background: var(--red-soft); color: var(--red-text); }
+
+  /* ---------- 审核队列 ---------- */
+  .review-item {
+    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    margin-bottom: 10px; transition: border-color .12s;
+  }
+  .review-item:hover { border-color: var(--border-strong); }
+  .review-item .info { flex: 1; min-width: 0; cursor: pointer; }
+  .review-item .actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* ---------- 弹窗 ---------- */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(15,15,14,.32);
+    display: none; align-items: flex-start; justify-content: center; z-index: 20;
+  }
+  .modal-mask.open { display: flex; }
+  .modal {
+    margin-top: 10vh; width: 480px; background: var(--bg);
+    border-radius: 12px; border: 1px solid var(--border);
+    box-shadow: 0 16px 48px rgba(0,0,0,.12); padding: 22px 24px;
+  }
+  .modal h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .modal h2 button { color: var(--text-3); font-size: 18px; line-height: 1; }
+  .dropzone {
+    border: 1.5px dashed var(--border-strong); border-radius: var(--radius);
+    padding: 26px 16px; text-align: center; color: var(--text-2); font-size: 13px;
+    transition: border-color .12s, background .12s; cursor: pointer;
+  }
+  .dropzone:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .dropzone .hint { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+  .upload-progress {
+    display: none; margin-top: 12px; border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 12px; font-size: 12.5px; color: var(--text-2);
+  }
+  .upload-progress .bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .upload-progress .bar i { display: block; height: 100%; width: 43%; background: var(--accent); border-radius: 2px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 12.5px; color: var(--text-2); margin-bottom: 5px; }
+  .field input, .field select {
+    width: 100%; border: 1px solid var(--border-strong); border-radius: 6px;
+    padding: 7px 10px; font-size: 13px; background: var(--bg); color: var(--text); outline: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: #fff; border-radius: 8px; padding: 9px 18px;
+    font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 30;
+  }
+  .toast.show { opacity: 1; }
+
+  .empty-state { text-align: center; padding: 56px 0; color: var(--text-3); font-size: 13px; }
+
+  [data-view] { display: none; }
+  [data-view].active { display: block; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ============ 侧边导航 ============ -->
+  <aside class="sidebar">
+    <div class="brand"><strong>Knowbase</strong><span>企业知识库</span></div>
+    <button class="nav-item active" data-nav="library"><span class="dot"></span>文档库</button>
+    <button class="nav-item" data-nav="review"><span class="dot"></span>审核队列<span class="count" id="reviewCount">2</span></button>
+    <div class="nav-section">管理</div>
+    <button class="nav-item disabled"><span class="dot"></span>分类与标签</button>
+    <button class="nav-item disabled"><span class="dot"></span>检索与问答（预留）</button>
+    <div class="sidebar-footer">
+      <div class="user-chip"><div class="avatar">华</div><span>huayi · 管理员</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="crumb" id="crumb">Knowbase / <b>文档库</b></span>
+      <div class="search-box">⌕ &nbsp;全局搜索（预留）</div>
+    </header>
+
+    <div class="content">
+      <!-- ============ 视图：文档库 ============ -->
+      <section data-view="library" class="active">
+        <div class="page-head">
+          <h1>文档库</h1>
+          <div class="spacer"></div>
+          <button class="btn primary" id="openUpload">＋ 上传文档</button>
+        </div>
+        <div class="toolbar">
+          <div class="chips" id="statusChips">
+            <button class="chip active" data-status="ALL">全部</button>
+            <button class="chip" data-status="DRAFT">草稿</button>
+            <button class="chip" data-status="PENDING_REVIEW">待审核</button>
+            <button class="chip" data-status="PUBLISHED">已发布</button>
+            <button class="chip" data-status="REJECTED">已驳回</button>
+          </div>
+          <input class="search-inline" placeholder="搜索标题 / 标签…" />
+        </div>
+        <div class="doc-table">
+          <div class="doc-row head">
+            <span>标题</span><span>分类 / 标签</span><span>状态</span><span>解析</span><span>更新时间</span>
+          </div>
+          <div id="docRows"></div>
+          <div class="table-footer">
+            <span id="docTotal"></span>
+            <div class="pager"><button class="btn sm">‹</button><button class="btn sm">1</button><button class="btn sm">›</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 视图：审核队列 ============ -->
+      <section data-view="review">
+        <div class="page-head"><h1>审核队列</h1></div>
+        <div id="reviewList"></div>
+      </section>
+
+      <!-- ============ 视图：文档详情 ============ -->
+      <section data-view="detail">
+        <div class="detail-head">
+          <h1><span id="dTitle"></span> <span class="badge" id="dStatus"></span> <span class="badge" id="dParse"></span></h1>
+          <div class="actions">
+            <button class="btn" id="backToList">‹ 返回列表</button>
+            <button class="btn" id="editMeta">编辑元数据</button>
+            <button class="btn" id="editContent">编辑正文</button>
+          </div>
+        </div>
+        <div class="detail-grid">
+          <div class="card">
+            <div class="card-title">正文预览 · MARKDOWN</div>
+            <div id="dBody"></div>
+          </div>
+          <div class="side-col">
+            <div class="card">
+              <div class="card-title">元信息</div>
+              <div class="meta-list" id="dMeta"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">审核信息</div>
+              <div class="meta-list" id="dReview"></div>
+              <div class="reject-note" id="dRejectNote" style="display:none"></div>
+            </div>
+            <div class="card">
+              <div class="card-title">操作</div>
+              <div class="op-area" id="dOps"></div>
+              <div class="op-hint" id="dOpHint"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 上传弹窗 ============ -->
+<div class="modal-mask" id="uploadModal">
+  <div class="modal">
+    <h2>上传文档 <button id="closeUpload">×</button></h2>
+    <div class="dropzone" id="dropzone">
+      拖放文件到这里，或点击选择
+      <div class="hint">支持 PDF / DOCX / PPTX / XLSX / TXT / MD / 音视频</div>
+    </div>
+    <div class="upload-progress" id="uploadProgress">
+      产品需求文档 v3.pdf · 2.4 MB · 上传中 43%
+      <div class="bar"><i></i></div>
+    </div>
+    <div class="form-grid">
+      <div class="field full"><label>标题</label><input value="产品需求文档 v3" /></div>
+      <div class="field"><label>分类</label><select><option>产品</option><option>运营</option><option>研发</option><option>销售</option></select></div>
+      <div class="field"><label>团队</label><select><option>平台组</option><option>增长组</option></select></div>
+      <div class="field full"><label>标签</label><input placeholder="输入后回车添加，可多个" /></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="cancelUpload">取消</button>
+      <button class="btn primary" id="saveDraft">保存为草稿</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---------- Mock 数据（字段对齐 kh_document 实体） ----------
+  const STATUS_LABEL = { DRAFT: ['draft','草稿'], PENDING_REVIEW: ['pending','待审核'], PUBLISHED: ['published','已发布'], REJECTED: ['rejected','已驳回'] };
+  const PARSE_LABEL = { PENDING: ['parse-pending','解析中'], READY: ['parse-ready','就绪'], FAILED: ['parse-failed','失败'] };
+
+  const docs = [
+    { id:'a1', title:'产品需求文档 v3.pdf', size:'2.4 MB', version:3, category:'产品', team:'平台组', tags:['PRD','2026'], status:'PUBLISHED', parseStatus:'READY', updated:'10 分钟前', uploader:'huayi', submittedAt:'2026-08-06 14:20', reviewedBy:'admin', reviewedAt:'2026-08-07 09:12' },
+    { id:'b2', title:'Q3 数据复盘.xlsx', size:'812 KB', version:1, category:'运营', team:'增长组', tags:['复盘'], status:'PENDING_REVIEW', parseStatus:'READY', updated:'2 小时前', uploader:'lily', submittedAt:'2026-08-07 18:40', reviewedBy:null, reviewedAt:null },
+    { id:'c3', title:'客户访谈录音.mp4', size:'128 MB', version:1, category:'用研', team:'平台组', tags:['访谈'], status:'DRAFT', parseStatus:'PENDING', updated:'昨天', uploader:'huayi', submittedAt:null, reviewedBy:null, reviewedAt:null },
+    { id:'d4', title:'旧版报价方案.docx', size:'356 KB', version:2, category:'销售', team:null, tags:[], status:'REJECTED', parseStatus:'FAILED', updated:'3 天前', uploader:'tom', submittedAt:'2026-08-03 11:02', reviewedBy:'admin', reviewedAt:'2026-08-04 10:30', rejectionReason:'报价口径与最新折扣策略不一致，请更新后重新提交。', parseError:'officeparser 兜底解析失败：文档包含损坏的嵌入对象。' },
+    { id:'e5', title:'后端架构评审纪要.md', size:'18 KB', version:1, category:'研发', team:'平台组', tags:['架构','评审'], status:'PENDING_REVIEW', parseStatus:'READY', updated:'昨天', uploader:'huayi', submittedAt:'2026-08-06 20:15', reviewedBy:null, reviewedAt:null },
+  ];
+  let currentDoc = docs[0];
+  let currentFilter = 'ALL';
+
+  const $ = s => document.querySelector(s);
+  const badge = (map, key) => { const [cls, label] = map[key]; return `<span class="badge ${cls}">${label}</span>`; };
+
+  function toast(msg) {
+    const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // ---------- 视图切换 ----------
+  const crumbs = { library: 'Knowbase / <b>文档库</b>', review: 'Knowbase / <b>审核队列</b>', detail: 'Knowbase / <b>文档库</b> / <b id="crumbDoc">详情</b>' };
+  function showView(name) {
+    document.querySelectorAll('[data-view]').forEach(v => v.classList.toggle('active', v.dataset.view === name));
+    document.querySelectorAll('.nav-item[data-nav]').forEach(n => n.classList.toggle('active', n.dataset.nav === (name === 'detail' ? 'library' : name)));
+    $('#crumb').innerHTML = crumbs[name];
+    if (name === 'library') renderList();
+    if (name === 'review') renderReview();
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('.nav-item[data-nav]').forEach(n => n.onclick = () => showView(n.dataset.nav));
+
+  // ---------- 文档列表 ----------
+  function renderList() {
+    const rows = docs.filter(d => currentFilter === 'ALL' || d.status === currentFilter);
+    $('#docRows').innerHTML = rows.map(d => `
+      <div class="doc-row" data-id="${d.id}">
+        <div><div class="doc-title">${d.title}</div><div class="doc-sub">${d.size} · v${d.version}</div></div>
+        <div class="doc-meta">${d.category || '—'}${d.tags.length ? ' · ' + d.tags.join(', ') : ''}</div>
+        <div>${badge(STATUS_LABEL, d.status)}</div>
+        <div>${badge(PARSE_LABEL, d.parseStatus)}</div>
+        <div class="doc-meta">${d.updated}</div>
+      </div>`).join('') || '<div class="empty-state">该状态下暂无文档</div>';
+    $('#docTotal').textContent = `共 ${rows.length} 篇文档`;
+    document.querySelectorAll('#docRows .doc-row').forEach(r => r.onclick = () => openDetail(r.dataset.id));
+  }
+  document.querySelectorAll('#statusChips .chip').forEach(c => c.onclick = () => {
+    document.querySelectorAll('#statusChips .chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active'); currentFilter = c.dataset.status; renderList();
+  });
+
+  // ---------- 审核队列 ----------
+  function renderReview() {
+    const items = docs.filter(d => d.status === 'PENDING_REVIEW');
+    $('#reviewCount').textContent = items.length;
+    $('#reviewCount').style.display = items.length ? '' : 'none';
+    $('#reviewList').innerHTML = items.map(d => `
+      <div class="review-item" data-id="${d.id}">
+        <div class="info" data-open="${d.id}">
+          <div class="doc-title">${d.title}</div>
+          <div class="doc-sub">${d.uploader} 提交于 ${d.submittedAt} · ${d.category || '未分类'} · v${d.version}</div>
+        </div>
+        ${badge(PARSE_LABEL, d.parseStatus)}
+        <div class="actions">
+          <button class="btn sm success" data-approve="${d.id}">通过</button>
+          <button class="btn sm danger-ghost" data-reject="${d.id}">驳回</button>
+        </div>
+      </div>`).join('') || '<div class="empty-state">太棒了，没有待审核的文档</div>';
+    document.querySelectorAll('[data-open]').forEach(el => el.onclick = () => openDetail(el.dataset.open));
+    document.querySelectorAll('[data-approve]').forEach(el => el.onclick = () => { docs.find(d=>d.id===el.dataset.approve).status='PUBLISHED'; toast('已通过并发布'); renderReview(); });
+    document.querySelectorAll('[data-reject]').forEach(el => el.onclick = () => { docs.find(d=>d.id===el.dataset.reject).status='REJECTED'; toast('已驳回（原型中省略原因填写弹窗）'); renderReview(); });
+  }
+
+  // ---------- 详情 ----------
+  const MD_SAMPLE = `
+    <div class="markdown-body">
+      <h2>1. 背景与目标</h2>
+      <p>企业知识库第一阶段聚焦文档模块：完成从文件上传到 <code>PostgreSQL + MongoDB</code> 双库分层持久化的闭环，并建立文档审核生命周期。</p>
+      <h2>2. 成功标准</h2>
+      <ul>
+        <li>原始文件写入 RustFS，元数据写入 <code>kh_document</code></li>
+        <li>Markdown 正文写入 <code>document_content</code>，通过 content_id 关联</li>
+        <li>支持草稿、待审核、已发布、已驳回四种业务状态</li>
+      </ul>
+      <h2>3. 解析支持矩阵</h2>
+      <table>
+        <tr><th>类型</th><th>主解析器</th><th>输出规则</th></tr>
+        <tr><td>PDF</td><td>pdf-parse</td><td>按页输出 ## Page N</td></tr>
+        <tr><td>XLSX</td><td>exceljs</td><td>每个 Sheet 输出 Markdown 表格</td></tr>
+        <tr><td>DOCX</td><td>mammoth + turndown</td><td>HTML 转 Markdown</td></tr>
+      </table>
+      <h3>3.1 兜底策略</h3>
+      <p>主解析器失败时使用 officeparser AST 转 Markdown，并把解析器名称、警告与失败原因写入文档结果。</p>
+    </div>`;
+
+  function openDetail(id) {
+    const d = docs.find(x => x.id === id); currentDoc = d;
+    $('#dTitle').textContent = d.title;
+    $('#dStatus').className = 'badge ' + STATUS_LABEL[d.status][0];
+    $('#dStatus').textContent = STATUS_LABEL[d.status][1];
+    $('#dParse').className = 'badge ' + PARSE_LABEL[d.parseStatus][0];
+    $('#dParse').textContent = PARSE_LABEL[d.parseStatus][1];
+
+    // 正文区域：按解析状态切换
+    if (d.parseStatus === 'READY') $('#dBody').innerHTML = MD_SAMPLE;
+    else if (d.parseStatus === 'PENDING') $('#dBody').innerHTML = '<div class="parse-notice">该文档正在排队解析中（parseStatus = PENDING），解析完成后将在此展示 Markdown 正文。</div>';
+    else $('#dBody').innerHTML = `<div class="parse-notice error">解析失败：${d.parseError || '未知错误'}</div>`;
+
+    // 元信息
+    $('#dMeta').innerHTML = `
+      <div class="row"><span class="k">文件名</span><span class="v">${d.title}</span></div>
+      <div class="row"><span class="k">大小</span><span class="v">${d.size}</span></div>
+      <div class="row"><span class="k">版本</span><span class="v">v${d.version}</span></div>
+      <div class="row"><span class="k">上传人</span><span class="v">${d.uploader}</span></div>
+      <div class="row"><span class="k">分类</span><span class="v">${d.category || '—'}</span></div>
+      <div class="row"><span class="k">团队</span><span class="v">${d.team || '—'}</span></div>
+      <div class="row"><span class="k">标签</span><span class="v">${d.tags.join(', ') || '—'}</span></div>
+      <div class="row"><span class="k">更新时间</span><span class="v">${d.updated}</span></div>
+      <div class="row"><span class="k">原始文件</span><span class="v link">下载 ↓</span></div>`;
+
+    // 审核信息
+    $('#dReview').innerHTML = `
+      <div class="row"><span class="k">提交时间</span><span class="v">${d.submittedAt || '—'}</span></div>
+      <div class="row"><span class="k">审核人</span><span class="v">${d.reviewedBy || '—'}</span></div>
+      <div class="row"><span class="k">审核时间</span><span class="v">${d.reviewedAt || '—'}</span></div>`;
+    $('#dRejectNote').style.display = d.status === 'REJECTED' ? '' : 'none';
+    if (d.rejectionReason) $('#dRejectNote').textContent = '驳回原因：' + d.rejectionReason;
+
+    // 操作区：随状态切换
+    const ops = $('#dOps'), hint = $('#dOpHint');
+    if (d.status === 'DRAFT' || d.status === 'REJECTED') {
+      const canSubmit = d.parseStatus === 'READY';
+      ops.innerHTML = `<button class="btn primary" id="opSubmit" ${canSubmit ? '' : 'disabled style="opacity:.45;cursor:not-allowed"'}>提交审核</button>
+                       <button class="btn danger-ghost" id="opDelete">删除文档</button>`;
+      hint.textContent = canSubmit ? '' : '仅解析状态为「就绪」的文档可提交审核';
+      if (canSubmit) $('#opSubmit').onclick = () => { d.status = 'PENDING_REVIEW'; d.submittedAt = '刚刚'; toast('已提交审核'); openDetail(d.id); };
+      $('#opDelete').onclick = () => { docs.splice(docs.indexOf(d), 1); toast('已删除'); showView('library'); };
+    } else if (d.status === 'PENDING_REVIEW') {
+      ops.innerHTML = `<button class="btn success" id="opApprove">通过并发布</button>
+                       <button class="btn danger-ghost" id="opReject">驳回</button>`;
+      hint.textContent = '审核操作将记录审核人与审核时间';
+      $('#opApprove').onclick = () => { d.status = 'PUBLISHED'; d.reviewedBy = 'huayi'; d.reviewedAt = '刚刚'; toast('已通过并发布'); openDetail(d.id); };
+      $('#opReject').onclick = () => { d.status = 'REJECTED'; d.reviewedBy = 'huayi'; d.reviewedAt = '刚刚'; d.rejectionReason = '（原型省略驳回原因输入）'; toast('已驳回'); openDetail(d.id); };
+    } else {
+      ops.innerHTML = `<button class="btn" id="opNewVersion">编辑正文（产生新版本）</button>`;
+      hint.textContent = '内容更新会生成新的 content_id，版本号 +1 并回到草稿';
+      $('#opNewVersion').onclick = () => { d.version += 1; d.status = 'DRAFT'; toast(`已生成 v${d.version} 草稿`); openDetail(d.id); };
+    }
+
+    showView('detail');
+    const c = $('#crumbDoc'); if (c) c.textContent = d.title;
+  }
+  $('#backToList').onclick = () => showView('library');
+  $('#editMeta').onclick = () => toast('原型说明：打开元数据编辑弹窗（对应 PATCH /documents/:id）');
+  $('#editContent').onclick = () => toast('原型说明：打开 Markdown 正文编辑器（对应 PUT /documents/:id/content）');
+
+  // ---------- 上传弹窗 ----------
+  const modal = $('#uploadModal');
+  $('#openUpload').onclick = () => modal.classList.add('open');
+  $('#closeUpload').onclick = $('#cancelUpload').onclick = () => modal.classList.remove('open');
+  modal.onclick = e => { if (e.target === modal) modal.classList.remove('open'); };
+  $('#dropzone').onclick = () => { $('#uploadProgress').style.display = 'block'; };
+  $('#saveDraft').onclick = () => {
+    docs.unshift({ id:'new'+Date.now(), title:'产品需求文档 v3.pdf', size:'2.4 MB', version:1, category:'产品', team:'平台组', tags:[], status:'DRAFT', parseStatus:'PENDING', updated:'刚刚', uploader:'huayi', submittedAt:null, reviewedBy:null, reviewedAt:null });
+    modal.classList.remove('open'); $('#uploadProgress').style.display = 'none';
+    toast('已保存为草稿，等待解析'); showView('library');
+  };
+
+  renderList();
+</script>
+</body>
+</html>

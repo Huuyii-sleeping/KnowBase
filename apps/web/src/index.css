@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 60 3% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 60 3% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 60 3% 12%;
+    --primary: 244 41% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 5% 96%;
+    --secondary-foreground: 60 3% 12%;
+    --muted: 60 5% 96%;
+    --muted-foreground: 60 2% 42%;
+    --accent: 60 5% 94%;
+    --accent-foreground: 60 3% 12%;
+    --destructive: 0 57% 41%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 60 5% 90%;
+    --input: 60 4% 83%;
+    --ring: 244 41% 50%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-secondary text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+      'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Markdown 正文渲染 */
+.markdown-body {
+  @apply text-[14px] leading-relaxed text-foreground/90;
+}
+.markdown-body h1,
+.markdown-body h2 {
+  @apply text-[17px] font-semibold mt-6 mb-2 text-foreground;
+}
+.markdown-body h3,
+.markdown-body h4 {
+  @apply text-[15px] font-semibold mt-5 mb-1.5 text-foreground;
+}
+.markdown-body p {
+  @apply my-2;
+}
+.markdown-body ul {
+  @apply list-disc my-2 ml-6;
+}
+.markdown-body ol {
+  @apply list-decimal my-2 ml-6;
+}
+.markdown-body table {
+  @apply w-full border-collapse my-3 text-[13px];
+}
+.markdown-body th,
+.markdown-body td {
+  @apply border border-border px-3 py-1.5 text-left;
+}
+.markdown-body th {
+  @apply bg-muted font-medium;
+}
+.markdown-body code {
+  @apply bg-muted rounded px-1.5 py-0.5 text-[12.5px];
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.markdown-body pre {
+  @apply bg-muted rounded-md p-4 my-3 overflow-x-auto;
+}
+.markdown-body pre code {
+  @apply bg-transparent p-0;
+}
+.markdown-body blockquote {
+  @apply border-l-2 border-border pl-4 my-3 text-muted-foreground;
+}
+.markdown-body img {
+  @apply max-w-full rounded-md my-3;
+}
+.markdown-body a {
+  @apply text-primary underline underline-offset-2;
+}
