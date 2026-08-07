@@ -34,8 +34,36 @@ export class StorageService {
     });
   }
 
+  async putAsset(input: {
+    documentId: string;
+    fileName: string;
+    data: Buffer;
+    contentType: string;
+  }): Promise<{ objectKey: string; url: string }> {
+    const safeName = input.fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const objectKey = `assets/${input.documentId}/${Date.now()}-${safeName}`;
+    await this.putObject(objectKey, input.data, input.contentType);
+    return { objectKey, url: this.getObjectUrl(objectKey) };
+  }
+
   async removeObject(key: string): Promise<void> {
     await this.client.removeObject(this.bucket, key);
+  }
+
+  async getObject(key: string) {
+    return this.client.getObject(this.bucket, key);
+  }
+
+  async statObject(key: string) {
+    return this.client.statObject(this.bucket, key);
+  }
+
+  getObjectUrl(key: string): string {
+    const baseUrl = this.config.get<string>(
+      'PUBLIC_API_BASE_URL',
+      'http://localhost:3000/api/v1',
+    );
+    return `${baseUrl}/storage/object?key=${encodeURIComponent(key)}`;
   }
 
   private getBoolean(key: string, fallback: boolean): boolean {

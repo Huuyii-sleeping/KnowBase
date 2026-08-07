@@ -39,7 +39,7 @@ export class DocumentsController {
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentsService.findOne(id, true);
+    return this.documentsService.findOne(id);
   }
 
   @Patch(':id')

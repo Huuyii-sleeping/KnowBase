@@ -23,6 +23,20 @@ metadata     markdown      original file
 - 文档列表默认只查询 PostgreSQL，文档详情才读取 MongoDB 正文。
 - 所有已发布文档后续需要通过一个 `DocumentPublished` 入口触发索引流水线。
 
+## 解析流水线
+
+```text
+FileParserService
+  -> extension dispatcher
+  -> PDF / XLSX / DOCX / PPTX / TXT / MD parser
+  -> Markdown + assets + warnings
+  -> RustFS assets
+  -> MongoDB document_content
+  -> PostgreSQL kh_document
+```
+
+图片正文使用 `/api/v1/storage/object?key=...` 的稳定 API 链接，不直接暴露 RustFS 地址。后续接入认证后，可以在该对象代理接口统一增加文档权限校验。
+
 ## API
 
 | 方法 | 路径 | 用途 |
@@ -35,4 +49,3 @@ metadata     markdown      original file
 | POST | `/api/v1/documents/:id/submit-review` | 提交审核 |
 | POST | `/api/v1/documents/:id/review` | 管理员通过或驳回 |
 | DELETE | `/api/v1/documents/:id` | 删除文档及其存储资源 |
-

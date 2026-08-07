@@ -6,7 +6,8 @@
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix"
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "test": "vitest run"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
@@ -17,11 +18,18 @@
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "exceljs": "^4.4.0",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0",
     "minio": "^8.0.5",
     "mongoose": "^8.18.0",
+    "officeparser": "^7.5.1",
     "pg": "^8.16.3",
+    "pdf-parse": "^1.1.1",
+    "pngjs": "^7.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
+    "turndown": "^7.2.1",
     "typeorm": "^0.3.26",
     "uuid": "^11.1.0"
   },
@@ -31,6 +39,9 @@
     "@nestjs/testing": "^11.0.0",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0",
+    "@types/pdf-parse": "^1.1.5",
+    "@types/pngjs": "^6.0.4",
+    "@types/turndown": "^5.0.6",
     "@types/node": "^22.15.0",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
@@ -42,6 +53,7 @@
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }

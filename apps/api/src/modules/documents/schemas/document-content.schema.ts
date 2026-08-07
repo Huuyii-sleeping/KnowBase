@@ -31,6 +31,12 @@ export class DocumentContent {
   @Prop({ required: true })
   markdown!: string;
 
+  @Prop({ required: true })
+  parser!: string;
+
+  @Prop({ type: [String], default: [] })
+  warnings!: string[];
+
   @Prop({ required: true, default: 1 })
   version!: number;
 
