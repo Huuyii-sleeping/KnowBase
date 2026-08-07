@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: knowbase-postgres
+    environment:
+      POSTGRES_DB: knowbase
+      POSTGRES_USER: knowbase
+      POSTGRES_PASSWORD: knowbase
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U knowbase -d knowbase"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mongodb:
+    image: mongo:8
+    container_name: knowbase-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: knowbase
+      MONGO_INITDB_ROOT_PASSWORD: knowbase
+      MONGO_INITDB_DATABASE: knowbase
+    ports:
+      - "17017:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - ./mongodb/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok' localhost:27017/knowbase | grep 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rustfs:
+    image: rustfs/rustfs:latest
+    container_name: knowbase-rustfs
+    environment:
+      RUSTFS_ACCESS_KEY: knowbaseadmin
+      RUSTFS_SECRET_KEY: knowbaseadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "19000:9000"
+      - "19001:9001"
+    volumes:
+      - rustfs-data:/data
+
+volumes:
+  postgres-data:
+  mongodb-data:
+  rustfs-data:
