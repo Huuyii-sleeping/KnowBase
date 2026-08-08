@@ -7,6 +7,34 @@ export interface SearchDocumentInput {
   document: Record<string, unknown>;
 }
 
+export interface DocumentSearchInput {
+  keyword?: string;
+  category?: string;
+  team?: string;
+  tag?: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface DocumentSearchItem {
+  id: string;
+  title: string;
+  fileName?: string;
+  category?: string | null;
+  team?: string | null;
+  tags?: string[];
+  version?: number;
+  score: number | null;
+  highlights: Record<string, string[]>;
+}
+
+export interface DocumentSearchResult {
+  items: DocumentSearchItem[];
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
 export interface VectorChunkInput {
   id: string;
   documentId: string;
@@ -46,6 +74,66 @@ export class VectorIndexService implements OnModuleDestroy {
       document: input.document,
       refresh: 'wait_for',
     });
+  }
+
+  async searchDocuments(input: DocumentSearchInput): Promise<DocumentSearchResult> {
+    const must = input.keyword
+      ? [{
+          multi_match: {
+            query: input.keyword,
+            fields: ['title^3', 'content', 'tags^2', 'category', 'team'],
+            type: 'best_fields' as const,
+          },
+        }]
+      : [{ match_all: {} }];
+    const filter = [
+      { term: { status: 'PUBLISHED' } },
+      ...(input.category ? [{ term: { category: input.category } }] : []),
+      ...(input.team ? [{ term: { team: input.team } }] : []),
+      ...(input.tag ? [{ term: { tags: input.tag } }] : []),
+    ];
+    const response = await this.client.search<Record<string, unknown>>({
+      index: this.documentIndex,
+      from: (input.page - 1) * input.pageSize,
+      size: input.pageSize,
+      track_total_hits: true,
+      query: { bool: { must, filter } },
+      ...(input.keyword
+        ? {
+            highlight: {
+              fields: {
+                title: {},
+                content: { fragment_size: 180, number_of_fragments: 2 },
+              },
+            },
+            sort: [{ _score: 'desc' }, { updatedAt: 'desc' }],
+          }
+        : { sort: [{ updatedAt: 'desc' }] }),
+    });
+
+    const total = typeof response.hits.total === 'number'
+      ? response.hits.total
+      : response.hits.total?.value ?? 0;
+
+    return {
+      items: response.hits.hits.map((hit) => {
+        const source = hit._source ?? {};
+        return {
+          id: String(source.id ?? hit._id),
+          title: String(source.title ?? ''),
+          fileName: this.optionalString(source.fileName),
+          category: this.optionalString(source.category),
+          team: this.optionalString(source.team),
+          tags: Array.isArray(source.tags) ? source.tags.map(String) : [],
+          version: this.optionalNumber(source.version),
+          score: hit._score ?? null,
+          highlights: hit.highlight ?? {},
+        };
+      }),
+      page: input.page,
+      pageSize: input.pageSize,
+      total,
+    };
   }
 
   async replaceChunks(documentId: string, chunks: VectorChunkInput[]): Promise<void> {
@@ -126,5 +214,13 @@ export class VectorIndexService implements OnModuleDestroy {
       },
     });
     this.logger.log(`Created Elasticsearch index: ${this.chunkIndex}`);
+  }
+
+  private optionalString(value: unknown): string | undefined {
+    return value === null || value === undefined ? undefined : String(value);
+  }
+
+  private optionalNumber(value: unknown): number | undefined {
+    return typeof value === 'number' ? value : undefined;
   }
 }

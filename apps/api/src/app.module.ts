@@ -8,6 +8,7 @@ import { StorageModule } from './modules/storage/storage.module';
 import { HealthController } from './health.controller';
 import { MessageQueueModule } from './modules/message-queue/message-queue.module';
 import { PipelineModule } from './modules/pipeline/pipeline.module';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { PipelineModule } from './modules/pipeline/pipeline.module';
     DocumentsModule,
     MessageQueueModule,
     PipelineModule,
+    SearchModule,
   ],
   controllers: [HealthController],
 })
