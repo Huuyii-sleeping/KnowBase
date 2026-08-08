@@ -35,6 +35,20 @@ export interface DocumentSearchResult {
   total: number;
 }
 
+export interface VectorChunkSearchInput {
+  queryVector: number[];
+  topK: number;
+}
+
+export interface VectorChunkSearchItem {
+  id: string;
+  documentId: string;
+  version: number;
+  chunkIndex: number;
+  content: string;
+  score: number | null;
+}
+
 export interface VectorChunkInput {
   id: string;
   documentId: string;
@@ -134,6 +148,32 @@ export class VectorIndexService implements OnModuleDestroy {
       pageSize: input.pageSize,
       total,
     };
+  }
+
+  async searchChunks(input: VectorChunkSearchInput): Promise<VectorChunkSearchItem[]> {
+    await this.ensureChunkIndex();
+    const response = await this.client.search<Record<string, unknown>>({
+      index: this.chunkIndex,
+      size: input.topK,
+      knn: {
+        field: 'embedding',
+        query_vector: input.queryVector,
+        k: input.topK,
+        num_candidates: Math.max(input.topK * 10, 100),
+      },
+    });
+
+    return response.hits.hits.map((hit) => {
+      const source = hit._source ?? {};
+      return {
+        id: String(source.id ?? hit._id),
+        documentId: String(source.document_id ?? ''),
+        version: Number(source.document_version ?? 0),
+        chunkIndex: Number(source.chunk_index ?? 0),
+        content: String(source.content ?? ''),
+        score: hit._score ?? null,
+      };
+    });
   }
 
   async replaceChunks(documentId: string, chunks: VectorChunkInput[]): Promise<void> {

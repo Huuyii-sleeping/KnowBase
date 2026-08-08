@@ -18,6 +18,19 @@ GET /api/v1/search/documents?keyword=RabbitMQ&category=platform&page=1&pageSize=
 
 支持标题、正文、标签、分类和团队的关键词检索，以及分类、团队、标签过滤。返回文档元数据、匹配分数和正文高亮片段；不返回整篇 Markdown 正文，详情需要通过文档详情接口读取 MongoDB 内容。
 
+## RAG 语义检索
+
+RAG 查询接口将问题交给当前配置的 Embedding Provider，默认使用 Ollama `nomic-embed-text`，再通过 Elasticsearch `kh_chunk` 的 KNN 查询返回语义相近的 Markdown Chunk：
+
+```http
+POST /api/v1/search/semantic
+Content-Type: application/json
+
+{"query":"What port is Elasticsearch running on?","topK":3}
+```
+
+查询结果会回查 PostgreSQL，只保留当前仍为 `PUBLISHED` 的文档，并返回 Chunk 内容、相似度、文档标题、分类、团队和标签。
+
 ## RAG 配置
 
 ```env

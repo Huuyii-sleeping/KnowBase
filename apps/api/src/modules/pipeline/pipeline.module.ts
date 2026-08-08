@@ -28,6 +28,6 @@ import { VectorIndexService } from './vector-index/vector-index.service';
     KgPipelineConsumer,
     PipelineWorkerService,
   ],
-  exports: [VectorIndexService],
+  exports: [EmbeddingService, VectorIndexService],
 })
 export class PipelineModule {}

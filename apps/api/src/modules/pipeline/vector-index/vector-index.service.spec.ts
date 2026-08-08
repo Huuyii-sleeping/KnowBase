@@ -118,4 +118,48 @@ describe('VectorIndexService document search', () => {
       sort: [{ updatedAt: 'desc' }],
     }));
   });
+
+  it('runs a KNN query against chunk embeddings', async () => {
+    searchMock.mockReset();
+    searchMock.mockResolvedValue({
+      hits: {
+        hits: [{
+          _id: 'document-1:v1:c0',
+          _score: 0.91,
+          _source: {
+            document_id: 'document-1',
+            document_version: 1,
+            chunk_index: 0,
+            content: '# RabbitMQ',
+          },
+        }],
+      },
+    });
+    const service = new VectorIndexService({
+      get: vi.fn((_key: string, fallback: unknown) => fallback),
+    } as any);
+
+    await expect(service.searchChunks({
+      queryVector: [0.1, 0.2],
+      topK: 3,
+    })).resolves.toEqual([{
+      id: 'document-1:v1:c0',
+      documentId: 'document-1',
+      version: 1,
+      chunkIndex: 0,
+      content: '# RabbitMQ',
+      score: 0.91,
+    }]);
+
+    expect(searchMock).toHaveBeenCalledWith({
+      index: 'kh_chunk',
+      size: 3,
+      knn: {
+        field: 'embedding',
+        query_vector: [0.1, 0.2],
+        k: 3,
+        num_candidates: 100,
+      },
+    });
+  });
 });
