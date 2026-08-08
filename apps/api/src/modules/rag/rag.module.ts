@@ -8,5 +8,6 @@ import { RagQueryService } from './rag-query.service';
   imports: [DocumentsModule, PipelineModule],
   controllers: [RagController],
   providers: [RagQueryService],
+  exports: [RagQueryService],
 })
 export class RagModule {}

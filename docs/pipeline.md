@@ -31,6 +31,17 @@ Content-Type: application/json
 
 查询结果会回查 PostgreSQL，只保留当前仍为 `PUBLISHED` 的文档，并返回 Chunk 内容、相似度、文档标题、分类、团队和标签。
 
+## 混合检索
+
+混合检索接口并行执行关键词检索和向量检索，再按文档/Chunk 合并结果。当前使用简单加权：关键词得分占 40%，语义得分占 60%，用于后续接入更复杂的重排模型：
+
+```http
+POST /api/v1/search/hybrid
+Content-Type: application/json
+
+{"query":"How do I search the knowledge base?","topK":5}
+```
+
 ## RAG 配置
 
 ```env
