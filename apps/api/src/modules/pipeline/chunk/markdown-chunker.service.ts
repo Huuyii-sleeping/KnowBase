@@ -8,8 +8,10 @@ export class MarkdownChunkerService {
 
   constructor(config: ConfigService) {
     this.splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: config.get<number>('RAG_CHUNK_SIZE', 1000),
-      chunkOverlap: config.get<number>('RAG_CHUNK_OVERLAP', 150),
+      chunkSize: Number(config.get<string | number>('RAG_CHUNK_SIZE', 1000)),
+      chunkOverlap: Number(
+        config.get<string | number>('RAG_CHUNK_OVERLAP', 150),
+      ),
       separators: ['\n# ', '\n## ', '\n### ', '\n\n', '\n', ' ', ''],
     });
   }

@@ -45,10 +45,10 @@ export class Document {
   @Column({ name: 'uploader_id', length: 128 })
   uploaderId!: string;
 
-  @Column({ length: 128, nullable: true })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   category!: string | null;
 
-  @Column({ length: 128, nullable: true })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   team!: string | null;
 
   @Column('text', { array: true, default: '{}' })
@@ -92,7 +92,7 @@ export class Document {
   @Column({ name: 'reviewed_at', type: 'timestamptz', nullable: true })
   reviewedAt!: Date | null;
 
-  @Column({ name: 'reviewed_by', length: 128, nullable: true })
+  @Column({ name: 'reviewed_by', type: 'varchar', length: 128, nullable: true })
   reviewedBy!: string | null;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

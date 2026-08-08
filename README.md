@@ -8,6 +8,7 @@
 - NestJS 提供文档上传、CRUD 和审核接口
 - FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
+- RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
 
 开发约定：
 
@@ -19,6 +20,8 @@
 ```bash
 docker compose -f deploy/docker-compose.yml up -d
 cp .env.example apps/api/.env
+brew services start ollama
+ollama pull nomic-embed-text
 ```
 
 Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改初始化 SQL 或 Mongo 脚本后，需要手动处理现有数据卷。
@@ -28,8 +31,8 @@ Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改�
 ## 启动 API
 
 ```bash
-npm install
-npm run start:dev
+pnpm install
+pnpm --filter @knowbase/api start:dev
 ```
 
 API 地址：`http://localhost:3000/api/v1`

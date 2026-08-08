@@ -33,7 +33,9 @@ export class VectorIndexService implements OnModuleDestroy {
     });
     this.documentIndex = config.get<string>('ELASTICSEARCH_DOCUMENT_INDEX', 'kh_document');
     this.chunkIndex = config.get<string>('ELASTICSEARCH_CHUNK_INDEX', 'kh_chunk');
-    this.embeddingDimensions = config.get<number>('RAG_EMBEDDING_DIMENSIONS', 1536);
+    this.embeddingDimensions = Number(
+      config.get<string | number>('RAG_EMBEDDING_DIMENSIONS', 768),
+    );
   }
 
   async indexDocument(input: SearchDocumentInput): Promise<void> {
