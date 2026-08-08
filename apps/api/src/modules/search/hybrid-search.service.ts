@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RagQueryService, SemanticSearchItem } from '../rag/rag-query.service';
+import { RerankService } from '../retrieval/rerank/rerank.service';
+import { RerankableCandidate } from '../retrieval/rerank/rerank.types';
 import { SearchQueryService } from './search-query.service';
 import { HybridSearchDto } from './dto/hybrid-search.dto';
 
@@ -18,6 +20,7 @@ export interface HybridSearchItem {
   keywordScore: number | null;
   semanticScore: number | null;
   sources: HybridSearchSource[];
+  rerankScore: number;
 }
 
 export interface HybridSearchResult {
@@ -35,6 +38,7 @@ export class HybridSearchService {
   constructor(
     private readonly searchQuery: SearchQueryService,
     private readonly ragQuery: RagQueryService,
+    private readonly rerank: RerankService,
   ) {}
 
   async search(query: HybridSearchDto): Promise<HybridSearchResult> {
@@ -48,20 +52,21 @@ export class HybridSearchService {
       this.ragQuery.search({ query: normalizedQuery, topK: query.topK }),
     ]);
     const candidates = this.mergeResults(keywordResult.items, semanticResult.items);
+    const reranked = this.rerank.rerank(normalizedQuery, candidates, {
+      topK: query.topK,
+    });
 
     return {
       query: normalizedQuery,
       topK: query.topK,
-      items: candidates
-        .sort((left, right) => right.score - left.score)
-        .slice(0, query.topK),
+      items: reranked,
     };
   }
 
   private mergeResults(
     keywordItems: Awaited<ReturnType<SearchQueryService['searchDocuments']>>['items'],
     semanticItems: SemanticSearchItem[],
-  ): Candidate[] {
+  ): Array<Candidate & RerankableCandidate> {
     const maxKeywordScore = this.maxScore(keywordItems.map((item) => item.score ?? 0));
     const maxSemanticScore = this.maxScore(semanticItems.map((item) => item.score ?? 0));
     const keywordByDocument = new Map(
@@ -74,6 +79,7 @@ export class HybridSearchService {
       sources: keywordByDocument.has(item.documentId)
         ? ['semantic', 'keyword']
         : ['semantic'],
+      rerankScore: 0,
       score: this.blendedScore(
         keywordByDocument.get(item.documentId),
         item.score,
@@ -96,6 +102,7 @@ export class HybridSearchService {
         keywordScore: item.score,
         semanticScore: null,
         sources: ['keyword'],
+        rerankScore: 0,
       });
     }
 
@@ -116,6 +123,7 @@ export class HybridSearchService {
       keywordScore: null,
       semanticScore: item.score,
       sources: ['semantic'],
+      rerankScore: 0,
     };
   }
 

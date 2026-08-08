@@ -64,7 +64,17 @@ describe('HybridSearchService', () => {
         ],
       }),
     };
-    const service = new HybridSearchService(searchQuery as any, ragQuery as any);
+    const rerank = {
+      rerank: vi.fn((_query, candidates) => candidates.map((candidate) => ({
+        ...candidate,
+        rerankScore: candidate.score,
+      }))),
+    };
+    const service = new HybridSearchService(
+      searchQuery as any,
+      ragQuery as any,
+      rerank as any,
+    );
 
     const result = await service.search({
       query: '  how does retrieval work? ',
@@ -98,5 +108,10 @@ describe('HybridSearchService', () => {
       query: 'how does retrieval work?',
       topK: 3,
     });
+    expect(rerank.rerank).toHaveBeenCalledWith(
+      'how does retrieval work?',
+      expect.any(Array),
+      { topK: 3 },
+    );
   });
 });
