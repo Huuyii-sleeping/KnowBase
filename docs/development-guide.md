@@ -57,7 +57,7 @@ Parsers receive a `FileParserContext` with an asset upload callback. They must n
 
 Primary parser decisions:
 
-- PDF: `pdf-parse`, with page text, page sections, simple table heuristics, and decodable image extraction.
+- PDF: `pdf-parse`, with page text, page sections, and simple table heuristics. Embedded image extraction is best effort; the current Node runtime skips the browser-only PDF.js image pipeline and records a parser warning instead of crashing the API.
 - XLSX: `exceljs`, one Markdown section and table per worksheet.
 - DOCX: `mammoth` to HTML, then `turndown` to Markdown, including image callbacks.
 - PPTX: `jszip` plus slide XML parsing for text, tables, and media relationships.

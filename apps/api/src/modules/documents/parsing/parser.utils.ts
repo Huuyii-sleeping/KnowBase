@@ -38,7 +38,7 @@ export function decodeXml(value: string): string {
 }
 
 export function extractXmlText(xml: string): string {
-  return [...xml.matchAll(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g)]
+  return [...xml.matchAll(/<a:t(?:\s[^>]*)?>([\s\S]*?)<\/a:t>/g)]
     .map((match) => decodeXml(match[1]))
     .join('\n');
 }

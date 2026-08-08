@@ -11,11 +11,16 @@ export class PdfParser implements FormatParser {
 
   async parse(buffer: Buffer, fileName: string, context: FileParserContext): Promise<ParsedDocument> {
     const pages: Array<{ text: string; images: ParsedAsset[] }> = [];
+    const canExtractImages = typeof (globalThis as { document?: unknown }).document !== 'undefined';
     const parsed = await pdfParse(buffer, {
       pagerender: async (pageData: any) => {
         const content = await pageData.getTextContent();
         const text = this.renderText(content.items);
-        const images = await this.extractImages(pageData, pages.length + 1, context);
+        // pdf-parse bundles a browser-oriented PDF.js image pipeline. Calling
+        // getOperatorList in Node can crash the process through document APIs.
+        const images = canExtractImages
+          ? await this.extractImages(pageData, pages.length + 1, context)
+          : [];
         pages.push({ text, images });
         return text;
       },
@@ -37,7 +42,9 @@ export class PdfParser implements FormatParser {
       assets: pages.flatMap((page) => page.images),
       ready: true,
       parser: 'pdf-parse',
-      warnings: [],
+      warnings: canExtractImages
+        ? []
+        : ['Embedded PDF image extraction is skipped in the Node.js parser runtime.'],
     };
   }
 
