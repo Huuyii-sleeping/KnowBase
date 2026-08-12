@@ -10,6 +10,7 @@ import { MessageQueueModule } from './modules/message-queue/message-queue.module
 import { PipelineModule } from './modules/pipeline/pipeline.module';
 import { SearchModule } from './modules/search/search.module';
 import { RagModule } from './modules/rag/rag.module';
+import { AnswerModule } from './modules/answer/answer.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RagModule } from './modules/rag/rag.module';
     PipelineModule,
     SearchModule,
     RagModule,
+    AnswerModule,
   ],
   controllers: [HealthController],
 })

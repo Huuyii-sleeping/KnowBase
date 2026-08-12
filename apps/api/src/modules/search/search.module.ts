@@ -11,5 +11,6 @@ import { SearchQueryService } from './search-query.service';
   imports: [PipelineModule, RagModule, RerankModule],
   controllers: [SearchController, HybridSearchController],
   providers: [SearchQueryService, HybridSearchService],
+  exports: [HybridSearchService],
 })
 export class SearchModule {}

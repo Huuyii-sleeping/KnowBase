@@ -9,6 +9,7 @@
 - FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 - RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
+- 提供基于检索上下文的 Ollama AI 问答接口，并返回引用来源
 
 开发约定：
 
@@ -22,6 +23,7 @@ docker compose -f deploy/docker-compose.yml up -d
 cp .env.example apps/api/.env
 brew services start ollama
 ollama pull nomic-embed-text
+ollama pull qwen2.5:0.5b
 ```
 
 Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改初始化 SQL 或 Mongo 脚本后，需要手动处理现有数据卷。
@@ -42,6 +44,14 @@ API 地址：`http://localhost:3000/api/v1`
 健康检查：`GET http://localhost:3000/api/v1/health`
 
 文档接口：`/documents`
+
+RAG 问答接口：`POST /api/v1/rag/answer`
+
+```bash
+curl -X POST http://localhost:3000/api/v1/rag/answer \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"RAG 的基本流程是什么？","topK":5}'
+```
 
 ## 文档上传示例
 

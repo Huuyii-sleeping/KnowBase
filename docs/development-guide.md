@@ -43,6 +43,15 @@ The document module is organized around these responsibilities:
 
 Do not add format-specific parsing logic back into `FileParserService` or document workflow logic into `DocumentsService`.
 
+The answer module is organized around these responsibilities:
+
+- `answer/answer.service.ts`: coordinates retrieval, prompt construction, model invocation, and response projection.
+- `answer/answer-prompt.service.ts`: builds the grounded Chinese prompt and stable `[S1]` source labels.
+- `answer/answer-citation.service.ts`: parses model source labels into structured citations.
+- `answer/chat-model.service.ts`: Ollama chat model adapter only.
+
+The answer service must not access Elasticsearch, MongoDB, or Ollama directly. Replaceable providers are injected through explicit tokens.
+
 ## Parser Contract
 
 Every format parser implements the shared `FormatParser` contract and returns a `ParsedDocument`:
@@ -141,5 +150,7 @@ Do not add the following to the document module unless the relevant milestone is
 - authentication and full RBAC enforcement;
 - Mem0 long-term memory;
 - Agentic RAG orchestration.
+
+The first AI answer milestone is implemented as a local Ollama grounded-answer path. Ragas/DeepEval answer evaluation remains pending until this endpoint has stable answer and citation behavior.
 
 When these are added, consume the published-document boundary rather than coupling directly to parser internals.

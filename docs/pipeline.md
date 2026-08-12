@@ -51,8 +51,23 @@ RAG_EMBEDDING_DIMENSIONS=768
 EMBEDDING_PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_EMBEDDING_MODEL=nomic-embed-text
+OLLAMA_CHAT_MODEL=qwen2.5:0.5b
+OLLAMA_CHAT_TEMPERATURE=0.1
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 ```
+
+## AI 问答
+
+AI 问答在混合检索之上调用 Ollama 对话模型。问答模块只把带有正文的 Chunk 作为上下文，关键词检索返回的纯文档元数据不会直接交给模型，避免模型根据标题猜测答案。
+
+```http
+POST /api/v1/rag/answer
+Content-Type: application/json
+
+{"question":"RAG 的基本流程是什么？","topK":5}
+```
+
+返回结构包含 `answer`、`citations` 和 `contexts`。回答中的 `[S1]` 等来源标记会被转换为结构化引用；没有可用 Chunk 时，接口直接返回“知识库中没有找到足够信息”，不会调用模型。
 
 Markdown 使用 `RecursiveCharacterTextSplitter`，优先按标题和段落边界切分。默认使用本地 Ollama `nomic-embed-text` 生成 768 维向量，也可以将 `EMBEDDING_PROVIDER` 改为 `openai`。ES `kh_chunk.embedding` 使用 `dense_vector` 并启用 cosine 相似度。
 

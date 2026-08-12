@@ -58,4 +58,4 @@ python tools/rag-evaluation/evaluate_retrieval.py \
 - `qrels.txt`：标准相关性标注。
 - `run.txt`：标准检索结果，可交给其他 TREC/IR 工具复用。
 
-当前没有 Answer API，因此不会在这里计算 Faithfulness、Answer Relevancy 或 Citation Correctness；这些属于后续问答生成评测。
+当前已经有 `POST /api/v1/rag/answer`，但本评测命令仍专注于检索层指标。Faithfulness、Answer Relevancy、Citation Correctness 等问答生成指标将在下一步接入 Ragas 或 DeepEval。
