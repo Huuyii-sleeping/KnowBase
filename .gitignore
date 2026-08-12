@@ -4,3 +4,8 @@ dist
 .DS_Store
 data/
 coverage/
+reports/retrieval/
+reports/retrieval-*/
+.venv-rag-eval/
+__pycache__/
+*.pyc
