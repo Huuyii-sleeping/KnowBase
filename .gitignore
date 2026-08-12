@@ -10,5 +10,6 @@ reports/answer/
 reports/answer-*/
 .venv-rag-eval/
 .venv-ragas/
+apps/api/.env.langfuse
 __pycache__/
 *.pyc

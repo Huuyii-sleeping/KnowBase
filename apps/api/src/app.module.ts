@@ -11,6 +11,7 @@ import { PipelineModule } from './modules/pipeline/pipeline.module';
 import { SearchModule } from './modules/search/search.module';
 import { RagModule } from './modules/rag/rag.module';
 import { AnswerModule } from './modules/answer/answer.module';
+import { ObservabilityModule } from './modules/observability/observability.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { AnswerModule } from './modules/answer/answer.module';
     SearchModule,
     RagModule,
     AnswerModule,
+    ObservabilityModule,
   ],
   controllers: [HealthController],
 })

@@ -57,6 +57,8 @@ OLLAMA_CHAT_SEED=42
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
+Langfuse 配置和问答链路观测见 [docs/observability.md](observability.md)。
+
 ## AI 问答
 
 AI 问答在混合检索之上调用 Ollama 对话模型。问答模块只把带有正文的 Chunk 作为上下文，关键词检索返回的纯文档元数据不会直接交给模型，避免模型根据标题猜测答案。

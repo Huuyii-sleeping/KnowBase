@@ -1,6 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import { AnswerService } from './answer.service';
 
+const observability = {
+  startAnswerTrace: vi.fn().mockReturnValue({ startedAt: Date.now() }),
+  recordRetrieval: vi.fn(),
+  recordGrounding: vi.fn(),
+  recordGeneration: vi.fn(),
+  completeAnswer: vi.fn(),
+  failAnswer: vi.fn(),
+};
+
 describe('AnswerService', () => {
   it('retrieves context, generates a grounded answer, and returns citations', async () => {
     const hybridSearch = {
@@ -55,6 +64,7 @@ describe('AnswerService', () => {
           rerankScore: 0.9,
         }]),
       } as any,
+      observability as any,
     );
     await expect(service.answer({ question: '  如何搜索？ ', topK: 2 })).resolves.toMatchObject({
       question: '如何搜索？',
@@ -73,6 +83,7 @@ describe('AnswerService', () => {
       { generate: vi.fn() } as any,
       { build: vi.fn().mockReturnValue([]) } as any,
       { selectSupportedItems: vi.fn().mockReturnValue([]) } as any,
+      observability as any,
     );
 
     await expect(service.answer({ question: '问题', topK: 1 })).resolves.toMatchObject({
@@ -103,6 +114,7 @@ describe('AnswerService', () => {
       chatModel as any,
       { build: vi.fn().mockReturnValue([]) } as any,
       { selectSupportedItems: vi.fn().mockReturnValue([]) } as any,
+      observability as any,
     );
 
     await expect(service.answer({ question: '公司是否允许在火星办公？', topK: 1 })).resolves.toMatchObject({
@@ -133,6 +145,7 @@ describe('AnswerService', () => {
       { generate: vi.fn().mockResolvedValue('知识库中没有找到足够信息 [S1]') } as any,
       { build: vi.fn() } as any,
       { selectSupportedItems: vi.fn().mockReturnValue([item]) } as any,
+      observability as any,
     );
 
     await expect(service.answer({ question: '问题', topK: 1 })).resolves.toMatchObject({

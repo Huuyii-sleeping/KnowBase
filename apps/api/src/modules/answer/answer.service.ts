@@ -5,6 +5,7 @@ import { AnswerGroundingService } from './answer-grounding.service';
 import { ChatModelProvider } from './chat-model.types';
 import { AnswerQuestionDto } from './dto/answer-question.dto';
 import { HybridSearchItem, HybridSearchService } from '../search/hybrid-search.service';
+import { ObservabilityService } from '../observability/observability.service';
 
 export interface AnswerResult {
   question: string;
@@ -31,30 +32,74 @@ export class AnswerService {
     private readonly chatModel: ChatModelProvider,
     private readonly citations: AnswerCitationService,
     private readonly grounding: AnswerGroundingService,
+    private readonly observability: ObservabilityService,
   ) {}
 
   async answer(query: AnswerQuestionDto): Promise<AnswerResult> {
     const question = query.question.trim();
-    const retrieval = await this.hybridSearch.search({
-      query: question,
-      topK: query.topK,
-    });
-    const items = retrieval.items.filter((item) => item.content?.trim());
-    const groundedItems = this.grounding.selectSupportedItems(question, items);
-    const generated = groundedItems.length
-      ? await this.chatModel.generate(this.prompt.build(question, groundedItems))
-      : AnswerService.REFUSAL;
-    const answer = this.isRefusal(generated)
-      ? AnswerService.REFUSAL
-      : this.ensureCitationMarker(generated);
-    const answerable = answer !== AnswerService.REFUSAL;
+    const trace = this.observability.startAnswerTrace(question, query.topK);
+    try {
+      const retrievalStartedAt = Date.now();
+      const retrieval = await this.hybridSearch.search({
+        query: question,
+        topK: query.topK,
+      });
+      const items = retrieval.items.filter((item) => item.content?.trim());
+      this.observability.recordRetrieval(
+        trace,
+        { query: question, topK: query.topK },
+        { itemCount: items.length, items: this.toTraceItems(items) },
+        Date.now() - retrievalStartedAt,
+      );
 
-    return {
-      question,
-      answer: answer || AnswerService.REFUSAL,
-      citations: answerable ? this.citations.build(answer, groundedItems) : [],
-      contexts: answerable ? this.toContexts(groundedItems) : [],
-    };
+      const groundingStartedAt = Date.now();
+      const groundedItems = this.grounding.selectSupportedItems(question, items);
+      this.observability.recordGrounding(
+        trace,
+        { question, candidateCount: items.length },
+        {
+          selectedCount: groundedItems.length,
+          selectedChunkIds: groundedItems.map((item) => item.chunkId ?? item.documentId),
+        },
+        Date.now() - groundingStartedAt,
+      );
+
+      const prompt = groundedItems.length ? this.prompt.build(question, groundedItems) : '';
+      const generatedStartedAt = Date.now();
+      const generated = groundedItems.length
+        ? await this.chatModel.generate(prompt)
+        : AnswerService.REFUSAL;
+      if (groundedItems.length) {
+        this.observability.recordGeneration(
+          trace,
+          { prompt, model: process.env.OLLAMA_CHAT_MODEL ?? 'qwen2.5:0.5b' },
+          generated,
+          Date.now() - generatedStartedAt,
+        );
+      }
+
+      const answer = this.isRefusal(generated)
+        ? AnswerService.REFUSAL
+        : this.ensureCitationMarker(generated);
+      const answerable = answer !== AnswerService.REFUSAL;
+      const result = {
+        question,
+        answer: answer || AnswerService.REFUSAL,
+        citations: answerable ? this.citations.build(answer, groundedItems) : [],
+        contexts: answerable ? this.toContexts(groundedItems) : [],
+      };
+      this.observability.completeAnswer(trace, {
+        answer: result.answer,
+        citations: result.citations,
+        contextCount: result.contexts.length,
+      }, {
+        status: answerable ? 'success' : 'refusal',
+      });
+      return result;
+    } catch (error) {
+      this.observability.failAnswer(trace, error);
+      throw error;
+    }
   }
 
   private toContexts(items: HybridSearchItem[]) {
@@ -64,6 +109,15 @@ export class AnswerService {
       chunkId: item.chunkId,
       title: item.title,
       content: item.content,
+      score: item.rerankScore,
+    }));
+  }
+
+  private toTraceItems(items: HybridSearchItem[]) {
+    return items.map((item) => ({
+      documentId: item.documentId,
+      chunkId: item.chunkId,
+      title: item.title,
       score: item.rerankScore,
     }));
   }

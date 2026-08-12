@@ -10,6 +10,7 @@
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 - RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
 - 提供基于检索上下文的 Ollama AI 问答接口，并返回引用来源
+- 支持通过 Langfuse Self-hosted 记录 RAG 问答链路
 
 开发约定：
 
@@ -25,6 +26,16 @@ brew services start ollama
 ollama pull nomic-embed-text
 ollama pull qwen2.5:0.5b
 ```
+
+启用本地 Langfuse：
+
+```bash
+docker compose -f deploy/docker-compose.yml up -d \
+  langfuse-postgres langfuse-clickhouse langfuse-minio langfuse-redis \
+  langfuse-web langfuse-worker
+```
+
+Langfuse 地址：`http://localhost:13000`，默认账号为 `admin@knowbase.local`，密码为 `knowbase-admin`。将 `apps/api/.env` 中的 `LANGFUSE_ENABLED` 改为 `true` 后重启 API。Compose 会自动创建 Langfuse 所需的 MinIO bucket。
 
 Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改初始化 SQL 或 Mongo 脚本后，需要手动处理现有数据卷。
 
@@ -86,3 +97,5 @@ curl -X POST http://localhost:3000/api/v1/documents/<document-id>/publish \
 ```
 
 异步管线说明见 [docs/pipeline.md](./docs/pipeline.md)。
+
+Langfuse 观测链路说明见 [docs/observability.md](./docs/observability.md)。

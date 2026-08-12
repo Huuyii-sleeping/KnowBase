@@ -6,9 +6,10 @@ import { AnswerPromptService } from './answer-prompt.service';
 import { AnswerService } from './answer.service';
 import { ChatModelService } from './chat-model.service';
 import { AnswerGroundingService } from './answer-grounding.service';
+import { ObservabilityModule } from '../observability/observability.module';
 
 @Module({
-  imports: [SearchModule],
+  imports: [SearchModule, ObservabilityModule],
   controllers: [AnswerController],
   providers: [
     AnswerCitationService,
