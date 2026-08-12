@@ -4,21 +4,52 @@ import { HybridSearchItem } from '../search/hybrid-search.service';
 @Injectable()
 export class AnswerGroundingService {
   hasLexicalSupport(question: string, items: HybridSearchItem[]): boolean {
+    return this.selectSupportedItems(question, items).length > 0;
+  }
+
+  selectSupportedItems(
+    question: string,
+    items: HybridSearchItem[],
+    limit = 1,
+  ): HybridSearchItem[] {
     const terms = this.extractTerms(question);
-    if (!terms.length) {
-      return items.length > 0;
-    }
-    const context = items
-      .map((item) => `${item.title} ${item.content ?? ''}`)
-      .join(' ')
-      .toLowerCase();
     const latinTerms = terms.filter((term) => /[a-z0-9]/i.test(term));
-    if (latinTerms.length > 0) {
-      return latinTerms.some((term) => context.includes(term));
+    const chineseTerms = terms.filter((term) => !/[a-z0-9]/i.test(term));
+    if (!terms.length) {
+      return items.slice(0, limit);
     }
 
-    const chineseHits = terms.filter((term) => context.includes(term));
-    return new Set(chineseHits).size >= 2;
+    return items
+      .map((item, index) => ({
+        item,
+        index,
+        support: this.supportScore(latinTerms, chineseTerms, item),
+      }))
+      .filter(({ support }) => support > 0)
+      .sort((left, right) =>
+        right.item.rerankScore - left.item.rerankScore
+        || right.support - left.support
+        || left.index - right.index,
+      )
+      .slice(0, limit)
+      .map(({ item }) => item);
+  }
+
+  private supportScore(
+    latinTerms: string[],
+    chineseTerms: string[],
+    item: HybridSearchItem,
+  ): number {
+    const context = `${item.title} ${item.content ?? ''}`.toLowerCase();
+    const latinHits = latinTerms.filter((term) => context.includes(term)).length;
+    const chineseHits = chineseTerms.filter((term) => context.includes(term)).length;
+
+    if (latinTerms.length > 0) {
+      return latinHits > 0
+        ? latinHits + chineseHits
+        : 0;
+    }
+    return chineseHits >= 2 ? chineseHits : 0;
   }
 
   private extractTerms(value: string): string[] {

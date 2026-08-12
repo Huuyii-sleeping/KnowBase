@@ -18,7 +18,7 @@ const item = (content: string) => ({
 describe('AnswerGroundingService', () => {
   it('accepts questions supported by retrieved context', () => {
     expect(new AnswerGroundingService().hasLexicalSupport('RAG 的基本流程是什么？', [
-      item('RAG 是检索增强生成。'),
+      item('RAG 的基本流程是检索增强生成。'),
     ])).toBe(true);
   });
 
@@ -26,5 +26,17 @@ describe('AnswerGroundingService', () => {
     expect(new AnswerGroundingService().hasLexicalSupport('公司是否允许在火星办公？', [
       item('RAG 是检索增强生成。'),
     ])).toBe(false);
+  });
+
+  it('selects supported contexts and limits noisy candidates', () => {
+    const service = new AnswerGroundingService();
+    const selected = service.selectSupportedItems('embedding 的作用是什么？', [
+      item('无关的 top-k 和延迟说明。'),
+      item('embedding 的作用是把文本映射到向量空间，支持语义检索。'),
+      item('embedding 也可以用于文档向量化。'),
+    ], 1);
+
+    expect(selected).toHaveLength(1);
+    expect(selected.every((candidate) => candidate.content?.includes('embedding'))).toBe(true);
   });
 });

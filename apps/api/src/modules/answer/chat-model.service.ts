@@ -11,7 +11,8 @@ export class ChatModelService implements ChatModelProvider {
     this.model = new ChatOllama({
       baseUrl: config.get<string>('OLLAMA_BASE_URL', 'http://localhost:11434'),
       model: config.get<string>('OLLAMA_CHAT_MODEL', 'qwen2.5:0.5b'),
-      temperature: Number(config.get<string>('OLLAMA_CHAT_TEMPERATURE', '0.1')),
+      temperature: Number(config.get<string>('OLLAMA_CHAT_TEMPERATURE', '0')),
+      seed: Number(config.get<string>('OLLAMA_CHAT_SEED', '42')),
     });
   }
 

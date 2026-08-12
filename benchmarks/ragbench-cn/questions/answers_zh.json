@@ -1,0 +1,68 @@
+[
+  {
+    "id": "a001",
+    "question": "RAG 的基本流程是什么？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "RAG 先将文档解析、切分并向量化入库，在线再对问题进行检索，把相关上下文交给大模型生成回答。",
+    "required_facts": ["文档", "切分", "向量", "检索", "上下文", "生成"]
+  },
+  {
+    "id": "a002",
+    "question": "chunk size 过大会带来什么问题？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "chunk 过大会包含更多无关信息，增加噪声和上下文占用，也可能降低定位关键事实的能力。",
+    "required_facts": ["无关", "噪声", "上下文", "关键"]
+  },
+  {
+    "id": "a003",
+    "question": "embedding 在 RAG 系统中起什么作用？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "embedding 将文本映射到向量空间，使语义相近的文本距离更近，从而支持语义检索。",
+    "required_facts": ["文本", "向量", "语义", "检索"]
+  },
+  {
+    "id": "a004",
+    "question": "rerank 的作用是什么？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "rerank 在初步检索之后对候选片段重新排序，更精细地判断问题和片段的相关性。",
+    "required_facts": ["检索", "候选", "重新排序", "相关性"]
+  },
+  {
+    "id": "a005",
+    "question": "RAG 为什么仍然可能出现幻觉？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "因为检索可能失败或上下文不完整，提示词约束不足时模型也可能在信息不足的情况下自行补全事实。",
+    "required_facts": ["检索", "上下文", "提示词", "模型", "事实"]
+  },
+  {
+    "id": "a006",
+    "question": "为什么不能只看大模型回答是否流畅？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "回答流畅不代表事实正确或引用来源正确，还需要检查关键事实、来源和幻觉。",
+    "required_facts": ["流畅", "事实", "来源", "幻觉"]
+  },
+  {
+    "id": "a007",
+    "question": "公司是否允许在火星办公？",
+    "type": "unanswerable",
+    "gold_docs": [],
+    "reference_answer": "知识库中没有足够信息，不能判断公司是否允许在火星办公。",
+    "required_facts": [],
+    "must_refuse": true
+  },
+  {
+    "id": "a008",
+    "question": "公司今年的海外差旅预算是多少？",
+    "type": "unanswerable",
+    "gold_docs": [],
+    "reference_answer": "知识库中没有足够信息，不能确定公司的海外差旅预算。",
+    "required_facts": [],
+    "must_refuse": true
+  }
+]

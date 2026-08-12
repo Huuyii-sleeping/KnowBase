@@ -59,3 +59,22 @@ python tools/rag-evaluation/evaluate_retrieval.py \
 - `run.txt`：标准检索结果，可交给其他 TREC/IR 工具复用。
 
 当前已经有 `POST /api/v1/rag/answer`，但本评测命令仍专注于检索层指标。Faithfulness、Answer Relevancy、Citation Correctness 等问答生成指标将在下一步接入 Ragas 或 DeepEval。
+
+## 问答评测基线
+
+问答数据集位于 `benchmarks/ragbench-cn/questions/answers_zh.json`，每条样本包含参考答案、关键事实、标准来源以及是否应该拒答。运行器会真实调用 `/rag/answer`，输出以下可解释指标：
+
+- `answer_fact_coverage`：回答覆盖关键事实的比例；
+- `context_fact_support`：检索上下文覆盖关键事实的比例；
+- `citation_correctness`：引用是否指向标准来源，拒答问题要求没有引用；
+- `citation_completeness`：是否存在引用且没有引用非标准来源；
+- `refusal_accuracy`：无答案问题是否正确拒答；
+- `pass_rate` 和平均延迟。
+
+```bash
+python tools/rag-evaluation/evaluate_answer.py \
+  --top-k 3 \
+  --output-dir reports/answer
+```
+
+该基线不依赖 OpenAI Key，也不把评测逻辑放进 API。后续可在相同数据采集结果上增加 Ragas/DeepEval 的模型评判指标，例如 Faithfulness 和 Answer Relevancy。

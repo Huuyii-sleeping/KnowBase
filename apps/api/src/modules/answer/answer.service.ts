@@ -22,6 +22,8 @@ export interface AnswerResult {
 
 @Injectable()
 export class AnswerService {
+  private static readonly REFUSAL = '知识库中没有找到足够信息';
+
   constructor(
     private readonly hybridSearch: HybridSearchService,
     private readonly prompt: AnswerPromptService,
@@ -38,19 +40,20 @@ export class AnswerService {
       topK: query.topK,
     });
     const items = retrieval.items.filter((item) => item.content?.trim());
-    const groundedItems = this.grounding.hasLexicalSupport(question, items) ? items : [];
+    const groundedItems = this.grounding.selectSupportedItems(question, items);
     const generated = groundedItems.length
       ? await this.chatModel.generate(this.prompt.build(question, groundedItems))
-      : '知识库中没有找到足够信息';
-    const answer = groundedItems.length
-      ? this.ensureCitationMarker(generated)
-      : generated;
+      : AnswerService.REFUSAL;
+    const answer = this.isRefusal(generated)
+      ? AnswerService.REFUSAL
+      : this.ensureCitationMarker(generated);
+    const answerable = answer !== AnswerService.REFUSAL;
 
     return {
       question,
-      answer: answer || '知识库中没有找到足够信息',
-      citations: this.citations.build(answer, groundedItems),
-      contexts: this.toContexts(groundedItems),
+      answer: answer || AnswerService.REFUSAL,
+      citations: answerable ? this.citations.build(answer, groundedItems) : [],
+      contexts: answerable ? this.toContexts(groundedItems) : [],
     };
   }
 
@@ -70,5 +73,14 @@ export class AnswerService {
     return normalized && !/\[S\d+\]/.test(normalized)
       ? `${normalized} [S1]`
       : normalized;
+  }
+
+  private isRefusal(answer: string): boolean {
+    return answer
+      .trim()
+      .replace(/(?:\s*\[S\d+\])+\s*$/g, '')
+      .trim()
+      .replace(/[。！？.!?]+$/g, '')
+      .trim() === AnswerService.REFUSAL;
   }
 }

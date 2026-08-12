@@ -6,6 +6,9 @@ data/
 coverage/
 reports/retrieval/
 reports/retrieval-*/
+reports/answer/
+reports/answer-*/
 .venv-rag-eval/
+.venv-ragas/
 __pycache__/
 *.pyc
