@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { Brackets, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Document } from './entities/document.entity';
+import { Document, DocumentStatus } from './entities/document.entity';
 import { ListDocumentsDto } from './dto/list-documents.dto';
 import { DocumentContentStore } from './document-content.store';
+import { AuthUser } from '../auth/auth.types';
+import { DocumentAccessService } from '../authorization/document-access.service';
 
 @Injectable()
 export class DocumentQueryService {
@@ -11,10 +13,12 @@ export class DocumentQueryService {
     @InjectRepository(Document)
     private readonly documentRepository: Repository<Document>,
     private readonly contentStore: DocumentContentStore,
+    @Optional() private readonly access?: DocumentAccessService,
   ) {}
 
-  async findAll(query: ListDocumentsDto) {
+  async findAll(query: ListDocumentsDto, user?: AuthUser) {
     const builder = this.documentRepository.createQueryBuilder('document');
+    if (user) this.access?.applyVisibilityFilter(builder, user);
 
     if (query.keyword) {
       builder.andWhere(
@@ -68,6 +72,41 @@ export class DocumentQueryService {
           }
         : undefined,
     };
+  }
+
+  async findOneForUser(id: string, user: AuthUser, includeContent = false) {
+    const document = await this.findEntity(id);
+    this.access?.assertCanView(document, user);
+    const content = includeContent
+      ? await this.contentStore.findByContentId(document.contentId)
+      : undefined;
+
+    return {
+      ...this.toMetadata(document),
+      content: content
+        ? {
+            contentId: content.contentId,
+            markdown: content.markdown,
+            parser: content.parser,
+            warnings: content.warnings,
+            version: content.version,
+            assets: content.assets,
+            characterCount: content.characterCount,
+          }
+        : undefined,
+    };
+  }
+
+  async findVisiblePublishedIds(user: AuthUser): Promise<string[]> {
+    const builder = this.documentRepository
+      .createQueryBuilder('document')
+      .select('document.id', 'id')
+      .where('document.status = :publishedStatus', {
+        publishedStatus: DocumentStatus.PUBLISHED,
+      });
+    this.access?.applyVisibilityFilter(builder, user);
+    const rows = await builder.getRawMany<{ id: string }>();
+    return rows.map((row) => row.id);
   }
 
   async findEntity(id: string): Promise<Document> {

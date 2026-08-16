@@ -9,7 +9,7 @@ describe('SearchQueryService', () => {
       pageSize: 10,
       total: 0,
     });
-    const service = new SearchQueryService({ searchDocuments } as any);
+    const service = new SearchQueryService({ searchDocuments } as any, undefined);
 
     await service.searchDocuments({
       keyword: '  RabbitMQ  ',

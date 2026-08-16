@@ -92,7 +92,7 @@ describe('DocumentCommandService', () => {
   it('persists the original file, parsed content, and metadata', async () => {
     const { service, repository, contentStore, storage, fileParser } = makeService();
 
-    const id = await service.create(makeFile(), { uploaderId: 'user-1' });
+    const id = await service.create(makeFile(), {}, { id: 'user-1' } as any);
 
     expect(id).toMatch(/^[0-9a-f-]{36}$/);
     expect(storage.putObject).toHaveBeenCalledOnce();
@@ -110,7 +110,7 @@ describe('DocumentCommandService', () => {
       repository: { save: vi.fn(async () => { throw new Error('postgres failed'); }) },
     });
 
-    await expect(service.create(makeFile(), { uploaderId: 'user-1' })).rejects.toThrow('postgres failed');
+    await expect(service.create(makeFile(), {}, { id: 'user-1' } as any)).rejects.toThrow('postgres failed');
     expect(storage.removeObject).toHaveBeenCalledOnce();
     expect(contentStore.deleteByContentId).toHaveBeenCalledOnce();
   });

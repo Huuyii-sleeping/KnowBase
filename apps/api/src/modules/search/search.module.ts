@@ -6,9 +6,10 @@ import { HybridSearchController } from './hybrid-search.controller';
 import { HybridSearchService } from './hybrid-search.service';
 import { SearchController } from './search.controller';
 import { SearchQueryService } from './search-query.service';
+import { DocumentsModule } from '../documents/documents.module';
 
 @Module({
-  imports: [PipelineModule, RagModule, RerankModule],
+  imports: [PipelineModule, RagModule, RerankModule, DocumentsModule],
   controllers: [SearchController, HybridSearchController],
   providers: [SearchQueryService, HybridSearchService],
   exports: [HybridSearchService],

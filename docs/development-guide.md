@@ -22,6 +22,22 @@ KnowBase is an enterprise knowledge base. The first milestone is the document mo
 - Binary files and extracted assets: RustFS through its S3-compatible API
 - Package manager: pnpm workspace
 
+## Authentication And Document RBAC
+
+The API is protected by a global JWT guard. `POST /auth/login` and `GET /health` are public; all other endpoints require `Authorization: Bearer <token>`. User passwords are stored as bcrypt hashes and tokens contain only the user id. The current roles are `ADMIN` and `MEMBER`.
+
+Authentication is split into small responsibilities:
+
+- `users/user.service.ts`: active-user lookup and public auth projection.
+- `users/user-admin.service.ts`: administrator user creation and listing.
+- `auth/auth.service.ts`: credential verification and JWT issuance.
+- `common/auth/*.guard.ts`: transport-level authentication and role enforcement.
+- `authorization/document-access.service.ts`: document visibility and ownership rules.
+
+Document visibility is `PRIVATE`, `TEAM`, or `PUBLIC`. Administrators can access all documents. Members can access their own documents, public published documents, and team-published documents that match both the document team and the user's team. A document's explicit `userIds` allow-list is also honored. Non-published documents remain visible only to the uploader and administrators. Empty or legacy `permissions` values are intentionally treated as `PRIVATE`.
+
+The same access service is used by document queries, document commands, review/publish workflows, search filters, semantic retrieval, answer grounding, and the RustFS object proxy. This keeps authorization decisions consistent across metadata, content, search results, and binary assets.
+
 ## Module Boundaries
 
 The backend is a modular monolith for now. Keep business modules isolated in code, but do not split them into deployable services until there is a real operational reason.
@@ -147,7 +163,7 @@ Do not add the following to the document module unless the relevant milestone is
 - audio and video transcription;
 - Chunking and retrieval indexes;
 - Neo4j graph extraction;
-- authentication and full RBAC enforcement;
+- fine-grained organization-level roles, groups, and audit trails beyond the current JWT/RBAC MVP;
 - Mem0 long-term memory;
 - Agentic RAG orchestration.
 

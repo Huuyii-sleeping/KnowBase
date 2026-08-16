@@ -53,7 +53,7 @@ describe('DocumentQueryService', () => {
         characterCount: 11,
       })),
     };
-    const service = new DocumentQueryService(repository as any, contentStore as any);
+    const service = new DocumentQueryService(repository as any, contentStore as any, { assertCanView: vi.fn() } as any);
 
     const result = await service.findOne('document-1', true);
 
@@ -73,7 +73,7 @@ describe('DocumentQueryService', () => {
     const document = { id: 'document-1', contentId: 'content-1' };
     const repository = { findOne: vi.fn(async () => document) };
     const contentStore = { findByContentId: vi.fn() };
-    const service = new DocumentQueryService(repository as any, contentStore as any);
+    const service = new DocumentQueryService(repository as any, contentStore as any, { assertCanView: vi.fn() } as any);
 
     const result = await service.findOne('document-1');
 

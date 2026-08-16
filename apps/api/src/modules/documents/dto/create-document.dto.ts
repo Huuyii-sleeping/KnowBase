@@ -1,13 +1,11 @@
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import { DocumentVisibility } from '../../authorization/document-access.service';
 
 export class CreateDocumentDto {
   @IsOptional()
   @IsString()
   @MaxLength(255)
   title?: string;
-
-  @IsString()
-  uploaderId!: string;
 
   @IsOptional()
   @IsString()
@@ -20,6 +18,10 @@ export class CreateDocumentDto {
   @IsOptional()
   @IsString()
   tags?: string;
+
+  @IsOptional()
+  @IsEnum(DocumentVisibility)
+  visibility?: DocumentVisibility;
 
   // 允许未来的解析服务把标准化 Markdown 直接传回文档模块。
   @IsOptional()

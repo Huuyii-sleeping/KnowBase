@@ -7,6 +7,7 @@ import {
   VectorIndexService,
 } from '../pipeline/vector-index/vector-index.service';
 import { SemanticSearchDto } from './dto/semantic-search.dto';
+import { AuthUser } from '../auth/auth.types';
 
 export interface SemanticSearchItem {
   chunkId: string;
@@ -37,7 +38,7 @@ export class RagQueryService {
     private readonly documentQuery: DocumentQueryService,
   ) {}
 
-  async search(query: SemanticSearchDto): Promise<SemanticSearchResult> {
+  async search(query: SemanticSearchDto, user?: AuthUser): Promise<SemanticSearchResult> {
     const normalizedQuery = query.query.trim();
     const [queryVector] = await this.embedding.embedDocuments([normalizedQuery]);
     if (!queryVector) {
@@ -47,6 +48,9 @@ export class RagQueryService {
     const candidates = await this.vectorIndex.searchChunks({
       queryVector,
       topK: Math.min(query.topK * 3, 100),
+      allowedDocumentIds: user
+        ? await this.documentQuery.findVisiblePublishedIds(user)
+        : undefined,
     });
     const items = await this.keepPublishedCandidates(candidates, query.topK);
 

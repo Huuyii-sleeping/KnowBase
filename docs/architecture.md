@@ -16,6 +16,10 @@ metadata     markdown      original file
 
 ## 关键设计
 
+- API 使用全局 JWT 鉴权；`ADMIN` 负责用户管理、审核和发布，`MEMBER` 负责上传和管理自己提交的文档。
+- 文档可见性由 `PRIVATE`、`TEAM`、`PUBLIC` 三种策略表达。统一由 `DocumentAccessService` 判断，并复用于列表、详情、对象代理、全文检索、向量检索和 AI 问答。
+- 客户端不再提交 `uploaderId` 或 `reviewerId`；这些身份都从 JWT 当前用户获取。
+
 - `status` 表示业务审核生命周期。
 - `parse_status` 表示正文是否已经准备好，和审核状态分离。
 - `content_id` 是 PostgreSQL 当前正文版本和 MongoDB 正文的关联键。

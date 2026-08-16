@@ -22,6 +22,8 @@ import { UpdateContentDto } from './dto/update-content.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { PublishDocumentDto } from './dto/publish-document.dto';
 import { DocumentsService } from './documents.service';
+import { CurrentUser } from '../common/auth/current-user.decorator';
+import { AuthUser } from '../auth/auth.types';
 
 @Controller('documents')
 export class DocumentsController {
@@ -29,60 +31,64 @@ export class DocumentsController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 100 * 1024 * 1024 } }))
-  create(@UploadedFile() file: Express.Multer.File | undefined, @Body() dto: CreateDocumentDto) {
-    return this.documentsService.create(file, dto);
+  create(@UploadedFile() file: Express.Multer.File | undefined, @Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser) {
+    return this.documentsService.create(file, dto, user);
   }
 
   @Get()
-  findAll(@Query() query: ListDocumentsDto) {
-    return this.documentsService.findAll(query);
+  findAll(@Query() query: ListDocumentsDto, @CurrentUser() user: AuthUser) {
+    return this.documentsService.findAll(query, user);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentsService.findOne(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser) {
+    return this.documentsService.findOne(id, user);
   }
 
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateDocumentDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.documentsService.update(id, dto);
+    return this.documentsService.update(id, dto, user);
   }
 
   @Put(':id/content')
   updateContent(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateContentDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.documentsService.updateContent(id, dto);
+    return this.documentsService.updateContent(id, dto, user);
   }
 
   @Post(':id/submit-review')
-  submitForReview(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentsService.submitForReview(id);
+  submitForReview(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser) {
+    return this.documentsService.submitForReview(id, user);
   }
 
   @Post(':id/review')
   review(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: ReviewDocumentDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.documentsService.review(id, dto);
+    return this.documentsService.review(id, dto, user);
   }
 
   @Post(':id/publish')
   publish(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: PublishDocumentDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return this.documentsService.publish(id, dto.reviewerId);
+    return this.documentsService.publish(id, user);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    await this.documentsService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser): Promise<void> {
+    await this.documentsService.remove(id, user);
   }
 }

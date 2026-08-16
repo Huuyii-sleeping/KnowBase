@@ -1,4 +1,5 @@
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import { DocumentVisibility } from '../../authorization/document-access.service';
 
 export class UpdateDocumentDto {
   @IsOptional()
@@ -17,4 +18,8 @@ export class UpdateDocumentDto {
   @IsOptional()
   @IsString()
   tags?: string;
+
+  @IsOptional()
+  @IsEnum(DocumentVisibility)
+  visibility?: DocumentVisibility;
 }

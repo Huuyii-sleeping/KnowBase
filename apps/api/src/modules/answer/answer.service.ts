@@ -6,6 +6,7 @@ import { ChatModelProvider } from './chat-model.types';
 import { AnswerQuestionDto } from './dto/answer-question.dto';
 import { HybridSearchItem, HybridSearchService } from '../search/hybrid-search.service';
 import { ObservabilityService } from '../observability/observability.service';
+import { AuthUser } from '../auth/auth.types';
 
 export interface AnswerResult {
   question: string;
@@ -35,7 +36,7 @@ export class AnswerService {
     private readonly observability: ObservabilityService,
   ) {}
 
-  async answer(query: AnswerQuestionDto): Promise<AnswerResult> {
+  async answer(query: AnswerQuestionDto, user?: AuthUser): Promise<AnswerResult> {
     const question = query.question.trim();
     const trace = this.observability.startAnswerTrace(question, query.topK);
     try {
@@ -43,7 +44,7 @@ export class AnswerService {
       const retrieval = await this.hybridSearch.search({
         query: question,
         topK: query.topK,
-      });
+      }, user);
       const items = retrieval.items.filter((item) => item.content?.trim());
       this.observability.recordRetrieval(
         trace,

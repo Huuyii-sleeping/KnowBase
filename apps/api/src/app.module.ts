@@ -12,6 +12,9 @@ import { SearchModule } from './modules/search/search.module';
 import { RagModule } from './modules/rag/rag.module';
 import { AnswerModule } from './modules/answer/answer.module';
 import { ObservabilityModule } from './modules/observability/observability.module';
+import { User } from './modules/users/entities/user.entity';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthorizationModule } from './modules/authorization/authorization.module';
 
 @Module({
   imports: [
@@ -25,7 +28,7 @@ import { ObservabilityModule } from './modules/observability/observability.modul
         database: config.getOrThrow<string>('POSTGRES_DB'),
         username: config.getOrThrow<string>('POSTGRES_USER'),
         password: config.getOrThrow<string>('POSTGRES_PASSWORD'),
-        entities: [Document],
+        entities: [Document, User],
         synchronize: false,
       }),
     }),
@@ -43,6 +46,8 @@ import { ObservabilityModule } from './modules/observability/observability.modul
     RagModule,
     AnswerModule,
     ObservabilityModule,
+    AuthModule,
+    AuthorizationModule,
   ],
   controllers: [HealthController],
 })

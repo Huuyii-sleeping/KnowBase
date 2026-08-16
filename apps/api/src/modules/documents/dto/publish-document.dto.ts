@@ -1,7 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class PublishDocumentDto {
-  @IsString()
-  @IsNotEmpty()
-  reviewerId!: string;
+  @IsOptional()
+  noop?: never;
 }

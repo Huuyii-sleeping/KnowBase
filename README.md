@@ -54,12 +54,21 @@ API 地址：`http://localhost:3000/api/v1`
 
 健康检查：`GET http://localhost:3000/api/v1/health`
 
-文档接口：`/documents`
+文档接口：`/documents`。除健康检查和登录接口外，API 默认要求 Bearer JWT。
+
+登录并保存 Token：
+
+```bash
+TOKEN=$(curl -s http://localhost:3000/api/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"admin","password":"knowbase-admin"}' | jq -r .accessToken)
+```
 
 RAG 问答接口：`POST /api/v1/rag/answer`
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/rag/answer \
+  -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{"question":"RAG 的基本流程是什么？","topK":5}'
 ```
@@ -68,33 +77,37 @@ curl -X POST http://localhost:3000/api/v1/rag/answer \
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/documents \
+  -H "Authorization: Bearer $TOKEN" \
   -F "file=@./example.md" \
-  -F "uploaderId=user-001" \
   -F "title=示例文档" \
-  -F "category=技术"
+  -F "category=技术" \
+  -F "visibility=TEAM"
 ```
 
 提交审核：
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/documents/<document-id>/submit-review
+curl -X POST http://localhost:3000/api/v1/documents/<document-id>/submit-review \
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 审核通过：
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/documents/<document-id>/review \
+  -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
-  -d '{"approved":true,"reviewerId":"admin-001"}'
+  -d '{"approved":true}'
 ```
 
 审核通过会自动投递三条索引消息，也可以使用显式发布接口：
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/documents/<document-id>/publish \
-  -H 'Content-Type: application/json' \
-  -d '{"reviewerId":"admin-001"}'
+  -H "Authorization: Bearer $TOKEN"
 ```
+
+管理员才能审核、发布和管理用户。普通成员只能访问自己拥有、公开或所在团队可见的已发布文档；历史文档中缺少权限配置时按 `PRIVATE` 处理。
 
 异步管线说明见 [docs/pipeline.md](./docs/pipeline.md)。
 

@@ -8,6 +8,7 @@ import { DocumentCommandService } from './document-command.service';
 import { DocumentQueryService } from './document-query.service';
 import { DocumentWorkflowService } from './document-workflow.service';
 import { DocumentPublishService } from './document-publish.service';
+import { AuthUser } from '../auth/auth.types';
 
 @Injectable()
 export class DocumentsService {
@@ -18,48 +19,48 @@ export class DocumentsService {
     private readonly publishService: DocumentPublishService,
   ) {}
 
-  async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto) {
-    const id = await this.commandService.create(file, dto);
-    return this.queryService.findOne(id, true);
+  async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto, user: AuthUser) {
+    const id = await this.commandService.create(file, dto, user);
+    return this.queryService.findOneForUser(id, user, true);
   }
 
-  findAll(query: ListDocumentsDto) {
-    return this.queryService.findAll(query);
+  findAll(query: ListDocumentsDto, user: AuthUser) {
+    return this.queryService.findAll(query, user);
   }
 
-  findOne(id: string) {
-    return this.queryService.findOne(id, true);
+  findOne(id: string, user: AuthUser) {
+    return this.queryService.findOneForUser(id, user, true);
   }
 
-  async update(id: string, dto: UpdateDocumentDto) {
-    await this.commandService.updateMetadata(id, dto);
-    return this.queryService.findOne(id, true);
+  async update(id: string, dto: UpdateDocumentDto, user: AuthUser) {
+    await this.commandService.updateMetadata(id, dto, user);
+    return this.queryService.findOneForUser(id, user, true);
   }
 
-  async updateContent(id: string, dto: UpdateContentDto) {
-    await this.commandService.updateContent(id, dto);
-    return this.queryService.findOne(id, true);
+  async updateContent(id: string, dto: UpdateContentDto, user: AuthUser) {
+    await this.commandService.updateContent(id, dto, user);
+    return this.queryService.findOneForUser(id, user, true);
   }
 
-  async submitForReview(id: string) {
-    await this.workflowService.submitForReview(id);
-    return this.queryService.findOne(id);
+  async submitForReview(id: string, user: AuthUser) {
+    await this.workflowService.submitForReview(id, user);
+    return this.queryService.findOneForUser(id, user);
   }
 
-  async review(id: string, dto: ReviewDocumentDto) {
-    await this.workflowService.review(id, dto);
+  async review(id: string, dto: ReviewDocumentDto, user: AuthUser) {
+    await this.workflowService.review(id, dto, user);
     if (dto.approved) {
-      await this.publishService.dispatch(id);
+      await this.publishService.dispatch(id, user);
     }
-    return this.queryService.findOne(id);
+    return this.queryService.findOneForUser(id, user);
   }
 
-  async publish(id: string, reviewerId: string) {
-    await this.publishService.publish(id, reviewerId);
-    return this.queryService.findOne(id, true);
+  async publish(id: string, user: AuthUser) {
+    await this.publishService.publish(id, user);
+    return this.queryService.findOneForUser(id, user, true);
   }
 
-  remove(id: string) {
-    return this.commandService.remove(id);
+  remove(id: string, user: AuthUser) {
+    return this.commandService.remove(id, user);
   }
 }

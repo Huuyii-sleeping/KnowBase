@@ -27,9 +27,11 @@ describe('DocumentPublishService', () => {
       save: vi.fn().mockResolvedValue(document),
     };
     const publisher = { publishDocument: vi.fn().mockResolvedValue(undefined) };
-    const service = new DocumentPublishService(repository as any, publisher as any);
+    const service = new DocumentPublishService(repository as any, publisher as any, {
+      assertCanReview: vi.fn(),
+    } as any);
 
-    await service.publish('document-1', 'admin-1');
+    await service.publish('document-1', { id: 'admin-1', role: 'ADMIN' } as any);
 
     expect(document.status).toBe(DocumentStatus.PUBLISHED);
     expect(document.reviewedBy).toBe('admin-1');
@@ -47,9 +49,11 @@ describe('DocumentPublishService', () => {
       save: vi.fn(),
     };
     const publisher = { publishDocument: vi.fn() };
-    const service = new DocumentPublishService(repository as any, publisher as any);
+    const service = new DocumentPublishService(repository as any, publisher as any, {
+      assertCanReview: vi.fn(),
+    } as any);
 
-    await expect(service.publish('document-1', 'admin-1')).rejects.toThrow(
+    await expect(service.publish('document-1', { id: 'admin-1', role: 'ADMIN' } as any)).rejects.toThrow(
       'only pending documents can be published',
     );
     expect(publisher.publishDocument).not.toHaveBeenCalled();

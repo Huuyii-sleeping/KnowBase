@@ -14,6 +14,7 @@ export interface DocumentSearchInput {
   tag?: string;
   page: number;
   pageSize: number;
+  allowedDocumentIds?: string[];
 }
 
 export interface DocumentSearchItem {
@@ -38,6 +39,7 @@ export interface DocumentSearchResult {
 export interface VectorChunkSearchInput {
   queryVector: number[];
   topK: number;
+  allowedDocumentIds?: string[];
 }
 
 export interface VectorChunkSearchItem {
@@ -102,6 +104,9 @@ export class VectorIndexService implements OnModuleDestroy {
       : [{ match_all: {} }];
     const filter = [
       { term: { status: 'PUBLISHED' } },
+      ...(input.allowedDocumentIds
+        ? [{ terms: { id: input.allowedDocumentIds } }]
+        : []),
       ...(input.category ? [{ term: { category: input.category } }] : []),
       ...(input.team ? [{ term: { team: input.team } }] : []),
       ...(input.tag ? [{ term: { tags: input.tag } }] : []),
@@ -160,6 +165,9 @@ export class VectorIndexService implements OnModuleDestroy {
         query_vector: input.queryVector,
         k: input.topK,
         num_candidates: Math.max(input.topK * 10, 100),
+        ...(input.allowedDocumentIds
+          ? { filter: [{ terms: { document_id: input.allowedDocumentIds } }] }
+          : {}),
       },
     });
 

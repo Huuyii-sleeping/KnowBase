@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { extname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,8 @@ import { UpdateDocumentDto } from './dto/update-document.dto';
 import { Document, DocumentParseStatus, DocumentStatus } from './entities/document.entity';
 import { FileParserService } from './parsing/file-parser.service';
 import { DocumentContentStore } from './document-content.store';
+import { AuthUser } from '../auth/auth.types';
+import { DocumentAccessService, DocumentVisibility } from '../authorization/document-access.service';
 
 @Injectable()
 export class DocumentCommandService {
@@ -19,9 +21,10 @@ export class DocumentCommandService {
     private readonly contentStore: DocumentContentStore,
     private readonly storage: StorageService,
     private readonly fileParser: FileParserService,
+    @Optional() private readonly access?: DocumentAccessService,
   ) {}
 
-  async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto): Promise<string> {
+  async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto, user: AuthUser): Promise<string> {
     if (!file) {
       throw new BadRequestException('file is required');
     }
@@ -68,7 +71,7 @@ export class DocumentCommandService {
         fileSize: file.size,
         storageKey,
         contentId,
-        uploaderId: dto.uploaderId,
+        uploaderId: user.id,
         category: dto.category ?? null,
         team: dto.team ?? null,
         tags: this.parseTags(dto.tags),
@@ -81,7 +84,11 @@ export class DocumentCommandService {
         parseError: parsed.error ?? null,
         rejectionReason: null,
         version: 1,
-        permissions: {},
+        permissions: {
+          visibility: dto.visibility ?? DocumentVisibility.PRIVATE,
+          userIds: [],
+          teams: [],
+        },
         statistics: { viewCount: 0, queryCount: 0 },
         submittedAt: null,
         reviewedAt: null,
@@ -97,13 +104,17 @@ export class DocumentCommandService {
     }
   }
 
-  async updateMetadata(id: string, dto: UpdateDocumentDto): Promise<void> {
+  async updateMetadata(id: string, dto: UpdateDocumentDto, user?: AuthUser): Promise<void> {
     const document = await this.getEntity(id);
+    if (user) this.access?.assertCanEdit(document, user);
     Object.assign(document, {
       ...(dto.title === undefined ? {} : { title: dto.title }),
       ...(dto.category === undefined ? {} : { category: dto.category }),
       ...(dto.team === undefined ? {} : { team: dto.team }),
       ...(dto.tags === undefined ? {} : { tags: this.parseTags(dto.tags) }),
+      ...(dto.visibility === undefined
+        ? {}
+        : { permissions: { ...document.permissions, visibility: dto.visibility } }),
     });
 
     if (document.status === DocumentStatus.PUBLISHED) {
@@ -116,8 +127,9 @@ export class DocumentCommandService {
     await this.documentRepository.save(document);
   }
 
-  async updateContent(id: string, dto: UpdateContentDto): Promise<void> {
+  async updateContent(id: string, dto: UpdateContentDto, user?: AuthUser): Promise<void> {
     const document = await this.getEntity(id);
+    if (user) this.access?.assertCanEdit(document, user);
     const nextContentId = randomUUID();
     const nextVersion = document.version + 1;
 
@@ -149,8 +161,9 @@ export class DocumentCommandService {
     }
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, user?: AuthUser): Promise<void> {
     const document = await this.getEntity(id);
+    if (user) this.access?.assertCanEdit(document, user);
     await this.contentStore.deleteByDocumentId(id);
     await this.documentRepository.delete(id);
     await this.storage.removeObject(document.storageKey).catch(() => undefined);

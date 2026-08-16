@@ -4,6 +4,7 @@ import { RerankService } from '../retrieval/rerank/rerank.service';
 import { RerankableCandidate } from '../retrieval/rerank/rerank.types';
 import { SearchQueryService } from './search-query.service';
 import { HybridSearchDto } from './dto/hybrid-search.dto';
+import { AuthUser } from '../auth/auth.types';
 
 export type HybridSearchSource = 'keyword' | 'semantic';
 
@@ -41,16 +42,22 @@ export class HybridSearchService {
     private readonly rerank: RerankService,
   ) {}
 
-  async search(query: HybridSearchDto): Promise<HybridSearchResult> {
+  async search(query: HybridSearchDto, user?: AuthUser): Promise<HybridSearchResult> {
     const normalizedQuery = query.query.trim();
-    const [keywordResult, semanticResult] = await Promise.all([
-      this.searchQuery.searchDocuments({
-        keyword: normalizedQuery,
-        page: 1,
-        pageSize: query.topK,
-      }),
-      this.ragQuery.search({ query: normalizedQuery, topK: query.topK }),
-    ]);
+    const searchInput = {
+      keyword: normalizedQuery,
+      page: 1,
+      pageSize: query.topK,
+    };
+    const [keywordResult, semanticResult] = await Promise.all(user
+      ? [
+          this.searchQuery.searchDocuments(searchInput, user),
+          this.ragQuery.search({ query: normalizedQuery, topK: query.topK }, user),
+        ]
+      : [
+          this.searchQuery.searchDocuments(searchInput),
+          this.ragQuery.search({ query: normalizedQuery, topK: query.topK }),
+        ]);
     const candidates = this.mergeResults(keywordResult.items, semanticResult.items);
     const reranked = this.rerank.rerank(normalizedQuery, candidates, {
       topK: query.topK,

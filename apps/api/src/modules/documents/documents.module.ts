@@ -22,6 +22,7 @@ import { DocumentWorkflowService } from './document-workflow.service';
 import { DocumentPipelinePublisher } from './document-pipeline.publisher';
 import { DocumentPublishService } from './document-publish.service';
 import { MessageQueueModule } from '../message-queue/message-queue.module';
+import { AuthorizationModule } from '../authorization/authorization.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MessageQueueModule } from '../message-queue/message-queue.module';
     ]),
     StorageModule,
     MessageQueueModule,
+    AuthorizationModule,
   ],
   controllers: [DocumentsController],
   providers: [

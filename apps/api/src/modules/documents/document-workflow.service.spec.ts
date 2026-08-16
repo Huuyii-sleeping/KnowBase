@@ -34,7 +34,7 @@ describe('DocumentWorkflowService', () => {
       findOne: vi.fn(async () => document),
       save: vi.fn(async (value) => value),
     };
-    const service = new DocumentWorkflowService(repository as any);
+    const service = new DocumentWorkflowService(repository as any, { assertCanEdit: vi.fn() } as any);
 
     await service.submitForReview('document-1');
 
@@ -46,7 +46,7 @@ describe('DocumentWorkflowService', () => {
   it('rejects a document that has not finished parsing', async () => {
     const document = makeDocument({ parseStatus: DocumentParseStatus.PENDING });
     const repository = { findOne: vi.fn(async () => document), save: vi.fn() };
-    const service = new DocumentWorkflowService(repository as any);
+    const service = new DocumentWorkflowService(repository as any, { assertCanEdit: vi.fn() } as any);
 
     await expect(service.submitForReview('document-1')).rejects.toThrow('document parsing is not ready');
     expect(repository.save).not.toHaveBeenCalled();
@@ -55,12 +55,11 @@ describe('DocumentWorkflowService', () => {
   it('requires a reason when an administrator rejects a document', async () => {
     const document = makeDocument({ status: DocumentStatus.PENDING_REVIEW });
     const repository = { findOne: vi.fn(async () => document), save: vi.fn() };
-    const service = new DocumentWorkflowService(repository as any);
+    const service = new DocumentWorkflowService(repository as any, { assertCanReview: vi.fn() } as any);
 
     await expect(service.review('document-1', {
       approved: false,
-      reviewerId: 'admin-1',
-    })).rejects.toThrow('reason is required');
+    }, { id: 'admin-1', role: 'ADMIN' } as any)).rejects.toThrow('reason is required');
   });
 
   it('publishes an approved document and records the reviewer', async () => {
@@ -69,12 +68,11 @@ describe('DocumentWorkflowService', () => {
       findOne: vi.fn(async () => document),
       save: vi.fn(async (value) => value),
     };
-    const service = new DocumentWorkflowService(repository as any);
+    const service = new DocumentWorkflowService(repository as any, { assertCanReview: vi.fn() } as any);
 
     await service.review('document-1', {
       approved: true,
-      reviewerId: 'admin-1',
-    });
+    }, { id: 'admin-1', role: 'ADMIN' } as any);
 
     expect(document.status).toBe(DocumentStatus.PUBLISHED);
     expect(document.reviewedBy).toBe('admin-1');
