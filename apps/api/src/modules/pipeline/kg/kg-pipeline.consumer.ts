@@ -18,7 +18,7 @@ export class KgPipelineConsumer {
     return this.messageQueue.consume<DocumentPipelineCommand>(
       MESSAGE_QUEUE_NAMES.KG,
       MESSAGE_ROUTING_KEYS.KG_REBUILD,
-      (message) => this.pipeline.rebuildDocument(message.documentId).then(() => undefined),
+      (message) => this.pipeline.rebuildDocument(message.documentId, message.version).then(() => undefined),
     );
   }
 }

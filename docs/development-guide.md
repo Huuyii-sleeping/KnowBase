@@ -68,6 +68,16 @@ The answer module is organized around these responsibilities:
 
 The answer service must not access Elasticsearch, MongoDB, or Ollama directly. Replaceable providers are injected through explicit tokens.
 
+The knowledge graph module follows the same pipeline boundary:
+
+- `pipeline/kg/ollama-graph-extractor.service.ts`: Ollama extraction adapter; returns constrained JSON data only.
+- `pipeline/kg/graph-extraction.service.ts`: extraction orchestration, entity normalization, cross-Chunk deduplication, and mention generation.
+- `pipeline/kg/graph-index.service.ts`: Neo4j transaction, idempotent document replacement, and graph path query.
+- `pipeline/kg/kg-pipeline.service.ts`: published-document workflow coordinator.
+- `graph/knowledge-graph-query.service.ts`: user-facing graph query use case with document visibility filtering.
+
+The extraction provider is injected through `GRAPH_EXTRACTION_PROVIDER`, so tests can use a fake provider and a future model can replace Ollama without changing the pipeline.
+
 ## Parser Contract
 
 Every format parser implements the shared `FormatParser` contract and returns a `ParsedDocument`:
@@ -162,7 +172,7 @@ Do not add the following to the document module unless the relevant milestone is
 - OCR for scanned PDFs;
 - audio and video transcription;
 - Chunking and retrieval indexes;
-- Neo4j graph extraction;
+- advanced graph reasoning, entity resolution, and graph-based answer generation beyond the current extraction/query MVP;
 - fine-grained organization-level roles, groups, and audit trails beyond the current JWT/RBAC MVP;
 - Mem0 long-term memory;
 - Agentic RAG orchestration.

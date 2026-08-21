@@ -4,8 +4,10 @@ import { MessageQueueModule } from '../message-queue/message-queue.module';
 import { MarkdownChunkerService } from './chunk/markdown-chunker.service';
 import { EmbeddingService } from './embedding/embedding.service';
 import { GraphIndexService } from './kg/graph-index.service';
+import { GraphExtractionService } from './kg/graph-extraction.service';
 import { KgPipelineConsumer } from './kg/kg-pipeline.consumer';
 import { KgPipelineService } from './kg/kg-pipeline.service';
+import { OllamaGraphExtractorService } from './kg/ollama-graph-extractor.service';
 import { PipelineWorkerService } from './pipeline-worker.service';
 import { RagPipelineConsumer } from './rag/rag-pipeline.consumer';
 import { RagPipelineService } from './rag/rag-pipeline.service';
@@ -20,6 +22,12 @@ import { VectorIndexService } from './vector-index/vector-index.service';
     EmbeddingService,
     VectorIndexService,
     GraphIndexService,
+    GraphExtractionService,
+    OllamaGraphExtractorService,
+    {
+      provide: 'GRAPH_EXTRACTION_PROVIDER',
+      useExisting: OllamaGraphExtractorService,
+    },
     SearchPipelineService,
     RagPipelineService,
     KgPipelineService,
@@ -28,6 +36,6 @@ import { VectorIndexService } from './vector-index/vector-index.service';
     KgPipelineConsumer,
     PipelineWorkerService,
   ],
-  exports: [EmbeddingService, VectorIndexService],
+  exports: [EmbeddingService, VectorIndexService, GraphIndexService],
 })
 export class PipelineModule {}

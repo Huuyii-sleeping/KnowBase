@@ -6,6 +6,7 @@ import { DocumentContentStore } from '../../documents/document-content.store';
 import { DocumentQueryService } from '../../documents/document-query.service';
 import { DocumentStatus } from '../../documents/entities/document.entity';
 import { MarkdownChunkerService } from '../chunk/markdown-chunker.service';
+import { GraphExtractionService } from './graph-extraction.service';
 import { GraphIndexService } from './graph-index.service';
 
 @Injectable()
@@ -14,11 +15,18 @@ export class KgPipelineService {
     private readonly documentQuery: DocumentQueryService,
     private readonly contentStore: DocumentContentStore,
     private readonly chunker: MarkdownChunkerService,
+    private readonly extractor: GraphExtractionService,
     private readonly graphIndex: GraphIndexService,
   ) {}
 
-  async rebuildDocument(documentId: string): Promise<{ chunks: number }> {
+  async rebuildDocument(
+    documentId: string,
+    expectedVersion?: number,
+  ): Promise<{ chunks: number; entities: number; relations: number; skipped?: boolean }> {
     const document = await this.documentQuery.findEntity(documentId);
+    if (expectedVersion !== undefined && document.version !== expectedVersion) {
+      return { chunks: 0, entities: 0, relations: 0, skipped: true };
+    }
     if (document.status !== DocumentStatus.PUBLISHED) {
       throw new UnprocessableEntityException(
         'only published documents can build the knowledge graph',
@@ -31,17 +39,26 @@ export class KgPipelineService {
     }
 
     const chunks = await this.chunker.split(content.markdown);
-    await this.graphIndex.replaceDocument(
-      document.id,
-      document.version,
-      chunks.map((chunk, index) => ({
+    const graphChunks = chunks.map((chunk, index) => ({
         id: `${document.id}:v${document.version}:c${index}`,
         documentId: document.id,
         version: document.version,
         chunkIndex: index,
         content: chunk,
-      })),
+      }));
+    const extraction = await this.extractor.extract(graphChunks);
+    await this.graphIndex.replaceDocument(
+      document.id,
+      document.version,
+      graphChunks,
+      extraction.entities,
+      extraction.mentions,
+      extraction.relations,
     );
-    return { chunks: chunks.length };
+    return {
+      chunks: graphChunks.length,
+      entities: extraction.entities.length,
+      relations: extraction.relations.length,
+    };
   }
 }

@@ -63,12 +63,14 @@ PUBLISHED
    +--> RabbitMQ document.index ------> SearchConsumer --> Elasticsearch kh_document
    |
    +--> RabbitMQ document.rag.rebuild -> RagConsumer ------> Markdown Chunk
-   |                                                    -> OpenAI Embeddings
+   |                                                    -> Ollama Embeddings
    |                                                    -> Elasticsearch kh_chunk
    |
-   +--> RabbitMQ document.kg.rebuild --> KgConsumer ------> Neo4j Document/Chunk graph
+   +--> RabbitMQ document.kg.rebuild --> KgConsumer ------> Markdown Chunk
+                                                               -> Ollama entity/relation extraction
+                                                               -> Neo4j graph
 ```
 
 Search 消息携带整篇文档元数据和 Markdown；RAG、KG 消息只携带文档 ID 和版本，消费者重新从 PostgreSQL/MongoDB 读取正文。三条队列相互独立，单条管线失败不会阻塞其他管线。
 
-当前 KG 管线已经完成文档和 chunk 节点的幂等重建，实体/关系抽取作为下一步接入 LLM 的独立组件。
+KG 管线通过 `OllamaGraphExtractorService` 调用模型，通过 `GraphExtractionService` 做跨 Chunk 的实体归一化和关系去重，通过 `GraphIndexService` 幂等重建 Neo4j。图谱查询由独立的 `KnowledgeGraphModule` 提供，并复用文档权限过滤。

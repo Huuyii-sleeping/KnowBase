@@ -15,6 +15,7 @@ import { ObservabilityModule } from './modules/observability/observability.modul
 import { User } from './modules/users/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthorizationModule } from './modules/authorization/authorization.module';
+import { KnowledgeGraphModule } from './modules/graph/knowledge-graph.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AuthorizationModule } from './modules/authorization/authorization.modul
     ObservabilityModule,
     AuthModule,
     AuthorizationModule,
+    KnowledgeGraphModule,
   ],
   controllers: [HealthController],
 })

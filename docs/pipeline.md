@@ -4,7 +4,7 @@
 
 - `document.index`：携带完整元数据和 Markdown，写入 Elasticsearch `kh_document`。
 - `document.rag.rebuild`：携带 `documentId` 和 `version`，读取正文后分块、Embedding，写入 `kh_chunk`。
-- `document.kg.rebuild`：携带 `documentId` 和 `version`，读取正文后分块，写入 Neo4j 文档和 chunk 节点。
+- `document.kg.rebuild`：携带 `documentId` 和 `version`，读取正文后分块，使用 Ollama 抽取实体和关系，写入 Neo4j 文档、Chunk、实体和关系节点。
 
 RabbitMQ 使用持久化 topic exchange `knowbase.pipeline`，三个消费者使用独立 durable queue。消费成功 ack，失败按 `RABBITMQ_REQUEUE_ON_ERROR` 决定是否重新入队。
 
@@ -42,6 +42,37 @@ Content-Type: application/json
 {"query":"How do I search the knowledge base?","topK":5}
 ```
 
+## 知识图谱管线
+
+KG 管线和 Search、RAG 一样由 RabbitMQ 异步触发。消费者收到文档 ID 后执行固定步骤：
+
+```text
+读取已发布文档
+  -> MongoDB 读取 Markdown
+  -> RecursiveCharacterTextSplitter 分块
+  -> OllamaGraphExtractorService 逐 Chunk 抽取 JSON
+  -> GraphExtractionService 归一化、去重、生成 mentions
+  -> GraphIndexService 在 Neo4j 中幂等重建
+```
+
+Neo4j 中的核心结构是：
+
+```text
+(Document)-[:HAS_CHUNK]->(DocumentChunk)-[:MENTIONS]->(Entity)
+(Entity)-[:RELATED_TO {type, documentId, chunkId}]->(Entity)
+```
+
+同一文档重建时会先删除该文档的旧关系和 Chunk，再删除不再被 Chunk 引用的孤立实体，最后重新写入。实体使用 `type:normalizedName` 作为 key，跨文档共享；关系保留来源文档和 Chunk，便于溯源和权限过滤。
+
+图谱查询接口：
+
+```http
+GET /api/v1/graph/search?query=Ollama&maxHops=2&limit=20
+Authorization: Bearer <token>
+```
+
+查询前先通过 PostgreSQL 计算当前用户可见的已发布文档 ID，Neo4j 查询会限制种子实体和路径关系必须来自这些文档，避免图谱查询绕过文档权限。
+
 ## RAG 配置
 
 ```env
@@ -54,6 +85,9 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 OLLAMA_CHAT_MODEL=qwen2.5:0.5b
 OLLAMA_CHAT_TEMPERATURE=0
 OLLAMA_CHAT_SEED=42
+OLLAMA_KG_MODEL=qwen2.5:0.5b
+OLLAMA_KG_TEMPERATURE=0
+OLLAMA_KG_SEED=42
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
