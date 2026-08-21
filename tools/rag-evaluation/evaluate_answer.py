@@ -14,6 +14,8 @@ from typing import Any
 
 import requests
 
+from knowbase_client import KnowBaseClient
+
 
 REFUSAL = "知识库中没有找到足够信息"
 
@@ -100,26 +102,22 @@ def evaluate_case(
     }
 
 
-def evaluate(base_url: str, dataset: Path, top_k: int, timeout: float) -> dict[str, Any]:
-    session = requests.Session()
-    documents_response = session.get(
-        f"{base_url.rstrip('/')}/documents",
-        params={"page": 1, "pageSize": 100},
-        timeout=timeout,
-    )
-    documents_response.raise_for_status()
-    lookup = document_lookup(documents_response.json().get("items", []))
+def evaluate(
+    base_url: str,
+    dataset: Path,
+    top_k: int,
+    timeout: float,
+    username: str | None = None,
+    password: str | None = None,
+    access_token: str | None = None,
+) -> dict[str, Any]:
+    client = KnowBaseClient(base_url, timeout)
+    client.login(username, password, access_token)
+    lookup = document_lookup(client.list_documents())
     rows: list[dict[str, Any]] = []
     for case in load_cases(dataset):
-        started = time.perf_counter()
-        response = session.post(
-            f"{base_url.rstrip('/')}/rag/answer",
-            json={"question": case["question"], "topK": top_k},
-            timeout=timeout,
-        )
-        response.raise_for_status()
-        latency_ms = round((time.perf_counter() - started) * 1000, 2)
-        rows.append(evaluate_case(case, response.json(), lookup, latency_ms))
+        response, latency_ms = client.answer(case["question"], top_k)
+        rows.append(evaluate_case(case, response, lookup, latency_ms))
 
     answerable_rows = [row for row in rows if row["type"] == "answerable"]
     summary = {
@@ -164,13 +162,24 @@ def write_report(payload: dict[str, Any], output_dir: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate grounded answers with KnowBase.")
     parser.add_argument("--base-url", default=os.getenv("KNOWBASE_API_URL", "http://localhost:3000/api/v1"))
+    parser.add_argument("--username", default=os.getenv("KNOWBASE_USERNAME", "admin"))
+    parser.add_argument("--password", default=os.getenv("KNOWBASE_PASSWORD", "knowbase-admin"))
+    parser.add_argument("--token", default=os.getenv("KNOWBASE_TOKEN"))
     parser.add_argument("--dataset", type=Path, default=Path("benchmarks/ragbench-cn/questions/answers_zh.json"))
     parser.add_argument("--output-dir", type=Path, default=Path("reports/answer"))
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--timeout", type=float, default=60)
     args = parser.parse_args()
     try:
-        payload = evaluate(args.base_url, args.dataset, args.top_k, args.timeout)
+        payload = evaluate(
+            args.base_url,
+            args.dataset,
+            args.top_k,
+            args.timeout,
+            args.username,
+            args.password,
+            args.token,
+        )
         write_report(payload, args.output_dir)
     except (OSError, ValueError, requests.RequestException) as error:
         print(f"answer evaluation failed: {error}", file=sys.stderr)

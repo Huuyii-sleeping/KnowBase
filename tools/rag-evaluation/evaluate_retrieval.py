@@ -67,6 +67,9 @@ def parse_args() -> EvaluationConfig:
         "--base-url",
         default=os.getenv("KNOWBASE_API_URL", "http://localhost:3000/api/v1"),
     )
+    parser.add_argument("--username", default=os.getenv("KNOWBASE_USERNAME", "admin"))
+    parser.add_argument("--password", default=os.getenv("KNOWBASE_PASSWORD", "knowbase-admin"))
+    parser.add_argument("--token", default=os.getenv("KNOWBASE_TOKEN"))
     parser.add_argument(
         "--questions",
         type=Path,
@@ -86,13 +89,18 @@ def parse_args() -> EvaluationConfig:
         top_k=args.top_k,
         mode=args.mode,
         timeout_seconds=args.timeout,
+        username=args.username,
+        password=args.password,
+        access_token=args.token,
     )
 
 
 def main() -> int:
     config = parse_args()
     try:
-        payload = evaluate(config, KnowBaseClient(config.base_url, config.timeout_seconds))
+        client = KnowBaseClient(config.base_url, config.timeout_seconds)
+        client.login(config.username, config.password, config.access_token)
+        payload = evaluate(config, client)
         write_outputs(payload, config.output_dir)
         write_trec_files(payload, config.output_dir)
     except (OSError, ValueError, requests.RequestException) as error:

@@ -19,6 +19,14 @@ python3 -m venv .venv-rag-eval
 pip install -r tools/rag-evaluation/requirements.txt
 ```
 
+评测接口受 JWT 保护。默认使用本地初始化的 `admin / knowbase-admin`，生产或其他环境请通过环境变量覆盖；也可以使用已有 Token：
+
+```bash
+export KNOWBASE_USERNAME=admin
+export KNOWBASE_PASSWORD=knowbase-admin
+# 或：export KNOWBASE_TOKEN=<existing-jwt>
+```
+
 ## 准备测评文档
 
 将 `benchmarks/ragbench-cn/docs/rag_basics.md` 和 `retrieval_noise.md` 分别上传到 KnowBase，审核并发布。原始文件名必须保持不变，确保问题集中的 `gold_doc` 可以映射到已发布文档。

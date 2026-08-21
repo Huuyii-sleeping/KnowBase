@@ -12,3 +12,6 @@ class EvaluationConfig:
     top_k: int
     mode: str
     timeout_seconds: float
+    username: str | None = None
+    password: str | None = None
+    access_token: str | None = None
