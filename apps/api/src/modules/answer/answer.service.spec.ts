@@ -12,10 +12,9 @@ const observability = {
 
 describe('AnswerService', () => {
   it('retrieves context, generates a grounded answer, and returns citations', async () => {
-    const hybridSearch = {
-      search: vi.fn().mockResolvedValue({
-        query: '如何搜索？',
-        topK: 2,
+    const retrieval = {
+      retrieve: vi.fn().mockResolvedValue({
+        graphUsed: false,
         items: [{
           documentId: 'doc-1',
           chunkId: 'chunk-1',
@@ -43,7 +42,7 @@ describe('AnswerService', () => {
     }]) };
 
     const service = new AnswerService(
-      hybridSearch as any,
+      retrieval as any,
       prompt as any,
       chatModel as any,
       citations as any,
@@ -78,7 +77,7 @@ describe('AnswerService', () => {
 
   it('does not call the model when no context is returned', async () => {
     const service = new AnswerService(
-      { search: vi.fn().mockResolvedValue({ items: [] }) } as any,
+      { retrieve: vi.fn().mockResolvedValue({ items: [], graphUsed: false }) } as any,
       { build: vi.fn().mockReturnValue([]) } as any,
       { generate: vi.fn() } as any,
       { build: vi.fn().mockReturnValue([]) } as any,
@@ -94,7 +93,7 @@ describe('AnswerService', () => {
   });
 
   it('returns no citation or context for an unsupported question', async () => {
-    const search = { search: vi.fn().mockResolvedValue({ items: [{
+    const search = { retrieve: vi.fn().mockResolvedValue({ items: [{
       documentId: 'doc-1',
       title: 'RAG 基础',
       content: 'RAG 是检索增强生成。',
@@ -140,7 +139,7 @@ describe('AnswerService', () => {
       rerankScore: 0.8,
     };
     const service = new AnswerService(
-      { search: vi.fn().mockResolvedValue({ items: [item] }) } as any,
+      { retrieve: vi.fn().mockResolvedValue({ items: [item], graphUsed: false }) } as any,
       { build: vi.fn().mockReturnValue('prompt') } as any,
       { generate: vi.fn().mockResolvedValue('知识库中没有找到足够信息 [S1]') } as any,
       { build: vi.fn() } as any,

@@ -27,8 +27,9 @@ export class AnswerPromptService {
   private formatSource(item: HybridSearchItem, index: number): string {
     const sourceId = `S${index + 1}`;
     const location = item.chunkIndex === undefined ? '' : `，Chunk ${item.chunkIndex}`;
+    const sourceType = item.sources.includes('graph') ? '图谱路径' : '文档';
     return [
-      `[${sourceId}] 文档：${item.title}${location}`,
+      `[${sourceId}] ${sourceType}：${item.title}${location}`,
       `documentId=${item.documentId}`,
       item.content?.trim() || '该来源仅提供文档元数据。',
     ].join('\n');

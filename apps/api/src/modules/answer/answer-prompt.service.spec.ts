@@ -26,4 +26,23 @@ describe('AnswerPromptService', () => {
     expect(prompt).toContain('documentId=doc-1');
     expect(prompt).toContain('不要猜测或编造');
   });
+
+  it('labels graph paths separately from document chunks', () => {
+    const prompt = new AnswerPromptService().build('RAG 和 Ollama 有什么关系？', [{
+      documentId: 'doc-1',
+      chunkId: 'chunk-1',
+      title: '知识图谱路径：RAG',
+      content: '实体路径：RAG -> Ollama\n关系：使用',
+      category: null,
+      team: null,
+      tags: ['knowledge-graph'],
+      score: 1,
+      keywordScore: 1,
+      semanticScore: null,
+      sources: ['graph'],
+      rerankScore: 1,
+    }]);
+
+    expect(prompt).toContain('[S1] 图谱路径：知识图谱路径：RAG');
+  });
 });

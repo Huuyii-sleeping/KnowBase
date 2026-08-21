@@ -9,7 +9,7 @@ export interface RerankableCandidate {
   score: number;
   keywordScore: number | null;
   semanticScore: number | null;
-  sources: Array<'keyword' | 'semantic'>;
+  sources: Array<'keyword' | 'semantic' | 'graph'>;
 }
 
 export interface RerankOptions {

@@ -8,5 +8,6 @@ import { KnowledgeGraphQueryService } from './knowledge-graph-query.service';
   imports: [DocumentsModule, PipelineModule],
   controllers: [KnowledgeGraphController],
   providers: [KnowledgeGraphQueryService],
+  exports: [KnowledgeGraphQueryService],
 })
 export class KnowledgeGraphModule {}

@@ -4,9 +4,10 @@ import { AnswerPromptService } from './answer-prompt.service';
 import { AnswerGroundingService } from './answer-grounding.service';
 import { ChatModelProvider } from './chat-model.types';
 import { AnswerQuestionDto } from './dto/answer-question.dto';
-import { HybridSearchItem, HybridSearchService } from '../search/hybrid-search.service';
+import { HybridSearchItem } from '../search/hybrid-search.service';
 import { ObservabilityService } from '../observability/observability.service';
 import { AuthUser } from '../auth/auth.types';
+import { AnswerRetrievalService } from './answer-retrieval.service';
 
 export interface AnswerResult {
   question: string;
@@ -27,7 +28,7 @@ export class AnswerService {
   private static readonly REFUSAL = '知识库中没有找到足够信息';
 
   constructor(
-    private readonly hybridSearch: HybridSearchService,
+    private readonly retrieval: AnswerRetrievalService,
     private readonly prompt: AnswerPromptService,
     @Inject('CHAT_MODEL_PROVIDER')
     private readonly chatModel: ChatModelProvider,
@@ -41,15 +42,12 @@ export class AnswerService {
     const trace = this.observability.startAnswerTrace(question, query.topK);
     try {
       const retrievalStartedAt = Date.now();
-      const retrieval = await this.hybridSearch.search({
-        query: question,
-        topK: query.topK,
-      }, user);
+      const retrieval = await this.retrieval.retrieve(question, query.topK, user);
       const items = retrieval.items.filter((item) => item.content?.trim());
       this.observability.recordRetrieval(
         trace,
         { query: question, topK: query.topK },
-        { itemCount: items.length, items: this.toTraceItems(items) },
+        { itemCount: items.length, items: this.toTraceItems(items), graphUsed: retrieval.graphUsed },
         Date.now() - retrievalStartedAt,
       );
 

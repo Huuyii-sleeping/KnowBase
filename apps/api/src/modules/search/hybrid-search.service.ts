@@ -6,7 +6,7 @@ import { SearchQueryService } from './search-query.service';
 import { HybridSearchDto } from './dto/hybrid-search.dto';
 import { AuthUser } from '../auth/auth.types';
 
-export type HybridSearchSource = 'keyword' | 'semantic';
+export type HybridSearchSource = 'keyword' | 'semantic' | 'graph';
 
 export interface HybridSearchItem {
   documentId: string;

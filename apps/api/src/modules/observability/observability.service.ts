@@ -61,7 +61,7 @@ export class ObservabilityService implements OnModuleDestroy {
   recordRetrieval(
     context: AnswerTraceContext,
     input: { query: string; topK: number },
-    output: { itemCount: number; items: unknown[] },
+    output: { itemCount: number; items: unknown[]; graphUsed?: boolean },
     latencyMs: number,
   ): void {
     this.endSpan(context.trace?.span({

@@ -62,11 +62,15 @@ Do not add format-specific parsing logic back into `FileParserService` or docume
 The answer module is organized around these responsibilities:
 
 - `answer/answer.service.ts`: coordinates retrieval, prompt construction, model invocation, and response projection.
+- `answer/answer-retrieval.service.ts`: coordinates hybrid retrieval and graph retrieval, including graph fallback and relationship grounding rules.
+- `answer/graph-intent.service.ts`: detects graph-oriented questions and extracts candidate entity terms; it does not query a database.
 - `answer/answer-prompt.service.ts`: builds the grounded Chinese prompt and stable `[S1]` source labels.
 - `answer/answer-citation.service.ts`: parses model source labels into structured citations.
 - `answer/chat-model.service.ts`: Ollama chat model adapter only.
 
 The answer service must not access Elasticsearch, MongoDB, or Ollama directly. Replaceable providers are injected through explicit tokens.
+
+For multi-entity relationship questions, ordinary document chunks are not sufficient evidence for inferring a relationship. The retrieval coordinator only passes a graph path to the model when it covers the candidate entities; when no such path exists, it returns no context so the answer flow produces the standard knowledge-insufficient response. Graph failures remain isolated and ordinary questions continue to use hybrid retrieval.
 
 The knowledge graph module follows the same pipeline boundary:
 
