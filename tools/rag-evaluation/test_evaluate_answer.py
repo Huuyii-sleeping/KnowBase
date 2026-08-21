@@ -59,6 +59,46 @@ class AnswerEvaluationTest(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertEqual(result["citation_correctness"], 0.0)
 
+    def test_graph_case_requires_a_graph_context(self):
+        case = {
+            "id": "a4",
+            "question": "RAG 和离线建库链路有什么关系？",
+            "type": "answerable",
+            "gold_docs": ["guide.md"],
+            "required_facts": ["RAG", "离线建库链路"],
+            "expected_context_source": "graph",
+        }
+        response = {
+            "answer": "RAG 与离线建库链路存在关系。[S1]",
+            "citations": [{"documentId": "doc-1", "sourceType": "graph"}],
+            "contexts": [{"content": "实体路径：RAG -> 离线建库链路", "sourceType": "graph"}],
+        }
+
+        result = evaluate_case(case, response, {"guide.md": "doc-1"}, 10.0)
+
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["context_source_correctness"], 1.0)
+
+    def test_graph_case_fails_when_only_document_context_is_used(self):
+        case = {
+            "id": "a5",
+            "question": "RAG 和离线建库链路有什么关系？",
+            "type": "answerable",
+            "gold_docs": ["guide.md"],
+            "required_facts": ["RAG"],
+            "expected_context_source": "graph",
+        }
+        response = {
+            "answer": "RAG 是检索增强生成。[S1]",
+            "citations": [{"documentId": "doc-1", "sourceType": "semantic"}],
+            "contexts": [{"content": "RAG 是检索增强生成。", "sourceType": "semantic"}],
+        }
+
+        result = evaluate_case(case, response, {"guide.md": "doc-1"}, 10.0)
+
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["context_source_correctness"], 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -95,6 +95,35 @@ export interface DocumentListResult {
   total: number;
 }
 
+export type AnswerSourceType = 'keyword' | 'semantic' | 'graph';
+
+export interface AnswerCitation {
+  sourceId: string;
+  documentId: string;
+  chunkId?: string;
+  chunkIndex?: number;
+  title: string;
+  score: number;
+  sourceType: AnswerSourceType;
+}
+
+export interface AnswerContext {
+  sourceId: string;
+  documentId: string;
+  chunkId?: string;
+  title: string;
+  content?: string;
+  score: number;
+  sourceType: AnswerSourceType;
+}
+
+export interface AnswerResult {
+  question: string;
+  answer: string;
+  citations: AnswerCitation[];
+  contexts: AnswerContext[];
+}
+
 export interface ListDocumentsQuery {
   keyword?: string;
   status?: DocumentStatus;
@@ -212,5 +241,15 @@ export const authApi = {
   },
   logout() {
     authStorage.clear();
+  },
+};
+
+export const answerApi = {
+  answer(question: string, topK: number): Promise<AnswerResult> {
+    return request('/rag/answer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, topK }),
+    });
   },
 };

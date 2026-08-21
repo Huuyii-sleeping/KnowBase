@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { AnswerCitationService } from './answer-citation.service';
 
-const item = (documentId: string, title: string) => ({
+const item = (documentId: string, title: string, source: 'semantic' | 'graph' = 'semantic') => ({
   documentId,
   title,
   category: null,
@@ -10,7 +10,7 @@ const item = (documentId: string, title: string) => ({
   score: 0.8,
   keywordScore: null,
   semanticScore: 0.8,
-  sources: ['semantic'] as const,
+  sources: [source] as const,
   rerankScore: 0.7,
 });
 
@@ -24,6 +24,7 @@ describe('AnswerCitationService', () => {
       documentId: 'doc-2',
       title: '第二篇',
       score: 0.7,
+      sourceType: 'semantic',
     }]);
   });
 
@@ -35,6 +36,13 @@ describe('AnswerCitationService', () => {
       documentId: 'doc-1',
       title: '第一篇',
       score: 0.7,
+      sourceType: 'semantic',
     }]);
+  });
+
+  it('preserves graph as an explicit citation source type', () => {
+    expect(new AnswerCitationService().build('关系见 [S1]', [
+      item('doc-1', 'RAG 关系路径', 'graph'),
+    ])).toMatchObject([{ sourceId: 'S1', sourceType: 'graph' }]);
   });
 });

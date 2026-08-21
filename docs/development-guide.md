@@ -70,6 +70,8 @@ The answer module is organized around these responsibilities:
 
 The answer service must not access Elasticsearch, MongoDB, or Ollama directly. Replaceable providers are injected through explicit tokens.
 
+Answer contexts and citations expose `sourceType` (`keyword`, `semantic`, or `graph`) so clients and evaluators can distinguish ordinary document evidence from graph paths. The web answer workspace should render these sources separately and link citations back to the authorized document detail page.
+
 For multi-entity relationship questions, ordinary document chunks are not sufficient evidence for inferring a relationship. The retrieval coordinator only passes a graph path to the model when it covers the candidate entities; when no such path exists, it returns no context so the answer flow produces the standard knowledge-insufficient response. Graph failures remain isolated and ordinary questions continue to use hybrid retrieval.
 
 The knowledge graph module follows the same pipeline boundary:

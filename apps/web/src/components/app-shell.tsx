@@ -12,6 +12,7 @@ export function AppShell() {
   useEffect(() => authStorage.subscribe(() => setUser(authStorage.getUser())), []);
   const navItems = [
     { to: '/documents', label: '文档库' },
+    { to: '/ask', label: 'AI 问答' },
     ...(user?.role === 'ADMIN' ? [{ to: '/review', label: '审核队列' }] : []),
   ];
   const crumb =
@@ -19,6 +20,8 @@ export function AppShell() {
       ? '审核队列'
       : location.pathname.startsWith('/documents/')
         ? '文档详情'
+        : location.pathname.startsWith('/ask')
+          ? 'AI 问答'
         : '文档库';
 
   return (
@@ -50,10 +53,6 @@ export function AppShell() {
           <span className="flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13.5px] text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
             分类与标签
-          </span>
-          <span className="flex items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13.5px] text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-            检索与问答（预留）
           </span>
         </div>
         <div className="mt-auto border-t border-border pt-3">

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HybridSearchItem } from '../search/hybrid-search.service';
+import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.service';
 
 export interface AnswerCitation {
   sourceId: string;
@@ -8,6 +8,7 @@ export interface AnswerCitation {
   chunkIndex?: number;
   title: string;
   score: number;
+  sourceType: HybridSearchSource;
 }
 
 @Injectable()
@@ -31,7 +32,12 @@ export class AnswerCitationService {
         chunkIndex: item.chunkIndex,
         title: item.title,
         score: item.rerankScore,
+        sourceType: this.sourceType(item),
       };
     });
+  }
+
+  private sourceType(item: HybridSearchItem): HybridSearchSource {
+    return item.sources.includes('graph') ? 'graph' : item.sources[0] ?? 'semantic';
   }
 }

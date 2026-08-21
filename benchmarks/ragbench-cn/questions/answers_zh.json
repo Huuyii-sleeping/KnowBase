@@ -64,5 +64,42 @@
     "reference_answer": "知识库中没有足够信息，不能确定公司的海外差旅预算。",
     "required_facts": [],
     "must_refuse": true
+  },
+  {
+    "id": "a009",
+    "question": "RAG 和离线建库链路有什么关系？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "RAG 包含离线建库链路，离线链路负责解析文档、切分 chunk、向量化并写入知识库。",
+    "required_facts": ["RAG", "离线建库链路", "文档", "向量"],
+    "expected_context_source": "graph"
+  },
+  {
+    "id": "a010",
+    "question": "RAG 和在线问答链路有什么关系？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "RAG 包含在线问答链路，在线链路负责将问题向量化、检索上下文并交给大模型生成回答。",
+    "required_facts": ["RAG", "在线问答链路", "检索", "回答"],
+    "expected_context_source": "graph"
+  },
+  {
+    "id": "a011",
+    "question": "离线建库链路和在线问答链路之间有什么关系？",
+    "type": "answerable",
+    "gold_docs": ["rag_basics.md"],
+    "reference_answer": "两者都是 RAG 的组成链路：离线链路准备知识，在线链路检索知识并生成回答。",
+    "required_facts": ["离线建库链路", "在线问答链路", "知识", "回答"],
+    "expected_context_source": "graph"
+  },
+  {
+    "id": "a012",
+    "question": "RAG 和 Ollama 有什么关系？",
+    "type": "unanswerable",
+    "gold_docs": [],
+    "reference_answer": "知识库中没有找到覆盖 RAG 与 Ollama 关系的图谱证据。",
+    "required_facts": [],
+    "expected_context_source": "none",
+    "must_refuse": true
   }
 ]

@@ -4,7 +4,7 @@ import { AnswerPromptService } from './answer-prompt.service';
 import { AnswerGroundingService } from './answer-grounding.service';
 import { ChatModelProvider } from './chat-model.types';
 import { AnswerQuestionDto } from './dto/answer-question.dto';
-import { HybridSearchItem } from '../search/hybrid-search.service';
+import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.service';
 import { ObservabilityService } from '../observability/observability.service';
 import { AuthUser } from '../auth/auth.types';
 import { AnswerRetrievalService } from './answer-retrieval.service';
@@ -20,6 +20,7 @@ export interface AnswerResult {
     title: string;
     content?: string;
     score: number;
+    sourceType: HybridSearchSource;
   }>;
 }
 
@@ -109,6 +110,7 @@ export class AnswerService {
       title: item.title,
       content: item.content,
       score: item.rerankScore,
+      sourceType: item.sources.includes('graph') ? 'graph' : item.sources[0] ?? 'semantic',
     }));
   }
 

@@ -4,6 +4,7 @@ import { DocumentsPage } from '@/pages/documents-page';
 import { DocumentDetailPage } from '@/pages/document-detail-page';
 import { ReviewQueuePage } from '@/pages/review-queue-page';
 import { LoginPage } from '@/pages/login-page';
+import { AskPage } from '@/pages/ask-page';
 import { RequireAuth, RequireRole } from '@/components/require-auth';
 
 const router = createBrowserRouter([
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Navigate to="/documents" replace /> },
       { path: '/documents', element: <DocumentsPage /> },
       { path: '/documents/:id', element: <DocumentDetailPage /> },
+      { path: '/ask', element: <AskPage /> },
       { path: '/review', element: <RequireRole role="ADMIN"><ReviewQueuePage /></RequireRole> },
     ],
   },

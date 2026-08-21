@@ -29,6 +29,8 @@ def load_cases(path: Path) -> list[dict[str, Any]]:
             raise ValueError("every answer case must contain id and question")
         if case.get("type") not in {"answerable", "unanswerable"}:
             raise ValueError(f"invalid case type: {case.get('type')}")
+        if case.get("expected_context_source") not in {None, "none", "document", "semantic", "keyword", "graph"}:
+            raise ValueError(f"invalid expected_context_source: {case.get('expected_context_source')}")
     return cases
 
 
@@ -59,6 +61,14 @@ def citation_ids(response: dict[str, Any]) -> set[str]:
     }
 
 
+def context_source_types(response: dict[str, Any]) -> set[str]:
+    return {
+        str(context.get("sourceType"))
+        for context in response.get("contexts", [])
+        if context.get("sourceType")
+    }
+
+
 def evaluate_case(
     case: dict[str, Any], response: dict[str, Any], lookup: dict[str, str], latency_ms: float
 ) -> dict[str, Any]:
@@ -67,9 +77,19 @@ def evaluate_case(
     context_text = "\n".join(str(item.get("content", "")) for item in contexts)
     gold_ids = {lookup[name] for name in case.get("gold_docs", []) if name in lookup}
     cited_ids = citation_ids(response)
+    source_types = context_source_types(response)
     answerable = case["type"] == "answerable"
     refusal = answer.strip() == REFUSAL
     facts = [str(fact) for fact in case.get("required_facts", [])]
+    expected_source = case.get("expected_context_source")
+    source_correctness = (
+        1.0
+        if expected_source is None
+        else float(
+            (expected_source == "none" and not source_types)
+            or (expected_source != "none" and expected_source in source_types)
+        )
+    )
 
     if answerable:
         citation_correctness = 1.0 if cited_ids & gold_ids else 0.0
@@ -87,17 +107,21 @@ def evaluate_case(
         "answer": answer,
         "citations": response.get("citations", []),
         "context_count": len(contexts),
+        "context_source_types": sorted(source_types),
+        "expected_context_source": expected_source,
         "latency_ms": latency_ms,
         "answer_fact_coverage": round(contains_all(answer, facts), 4),
         "context_fact_support": round(contains_all(context_text, facts), 4),
         "citation_correctness": citation_correctness,
         "citation_completeness": citation_completeness,
         "refusal_accuracy": refusal_accuracy,
+        "context_source_correctness": source_correctness,
         "passed": (
             (not answerable or contains_all(answer, facts) >= 0.5)
             and (not answerable or citation_correctness == 1.0)
             and (not answerable or not refusal)
             and (answerable or refusal)
+            and source_correctness == 1.0
         ),
     }
 
@@ -120,6 +144,7 @@ def evaluate(
         rows.append(evaluate_case(case, response, lookup, latency_ms))
 
     answerable_rows = [row for row in rows if row["type"] == "answerable"]
+    source_rows = [row for row in rows if row["expected_context_source"] is not None]
     summary = {
         "cases": len(rows),
         "answerable_cases": len(answerable_rows),
@@ -130,6 +155,7 @@ def evaluate(
         "citation_correctness": round(mean(row["citation_correctness"] for row in rows), 4),
         "citation_completeness": round(mean(row["citation_completeness"] for row in rows), 4),
         "refusal_accuracy": round(mean(row["refusal_accuracy"] for row in rows), 4),
+        "context_source_accuracy": round(mean(row["context_source_correctness"] for row in source_rows), 4) if source_rows else 1.0,
         "average_latency_ms": round(mean(row["latency_ms"] for row in rows), 2),
     }
     return {"summary": summary, "results": rows}
@@ -149,12 +175,12 @@ def write_report(payload: dict[str, Any], output_dir: Path) -> None:
     ]
     for key, value in summary.items():
         lines.append(f"- {key}: {value}")
-    lines.extend(["", "## Results", "", "| ID | Type | Pass | Facts | Citation | Refusal | Latency (ms) |", "| --- | --- | --- | ---: | ---: | ---: | ---: |"])
+    lines.extend(["", "## Results", "", "| ID | Type | Pass | Facts | Citation | Source | Refusal | Latency (ms) |", "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |"])
     for row in payload["results"]:
         lines.append(
             f"| {row['id']} | {row['type']} | {'yes' if row['passed'] else 'no'} | "
             f"{row['answer_fact_coverage']:.2f} | {row['citation_correctness']:.2f} | "
-            f"{row['refusal_accuracy']:.2f} | {row['latency_ms']:.2f} |"
+            f"{row['context_source_correctness']:.2f} | {row['refusal_accuracy']:.2f} | {row['latency_ms']:.2f} |"
         )
     (output_dir / "answer-report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

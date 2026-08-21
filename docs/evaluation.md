@@ -77,7 +77,10 @@ python tools/rag-evaluation/evaluate_retrieval.py \
 - `citation_correctness`：引用是否指向标准来源，拒答问题要求没有引用；
 - `citation_completeness`：是否存在引用且没有引用非标准来源；
 - `refusal_accuracy`：无答案问题是否正确拒答；
+- `context_source_accuracy`：图谱问题是否真的使用 `graph` 上下文，而不是仅依赖普通文档片段；
 - `pass_rate` 和平均延迟。
+
+其中 `a009`-`a011` 覆盖单跳关系和两跳关系，`a012` 是没有图谱关系的负样本。图谱样本通过 `expected_context_source=graph` 标注，避免只看最终答案文字而漏掉检索路径错误。
 
 ```bash
 python tools/rag-evaluation/evaluate_answer.py \
