@@ -9,6 +9,8 @@ import type {
   DocumentMeta,
   DocumentParseStatus,
   DocumentStatus,
+  GraphSearchResult,
+  GraphSearchPath,
   ListDocumentsQuery,
 } from './api';
 
@@ -92,6 +94,43 @@ const store: DocumentMeta[] = [
   makeDoc({ title: '客服 SOP v2.md', status: 'REJECTED', parseStatus: 'READY', mimeType: 'text/markdown', fileSize: 22 * 1024, version: 2, category: '客服', uploaderId: 'lily', updatedAt: minutesAgo(60 * 30), submittedAt: minutesAgo(60 * 40), reviewedBy: 'admin', reviewedAt: minutesAgo(60 * 32), rejectionReason: '第 3 章退款流程与财务新规冲突，请修订后重提。' }),
   makeDoc({ title: '数据字典-订单域.xlsx', status: 'PUBLISHED', parseStatus: 'READY', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileSize: 512 * 1024, category: '研发', team: '数据组', tags: ['数据字典'], updatedAt: minutesAgo(60 * 200), reviewedBy: 'admin', reviewedAt: minutesAgo(60 * 198), submittedAt: minutesAgo(60 * 199) }),
   makeDoc({ title: '市场投放复盘.pptx', status: 'PENDING_REVIEW', parseStatus: 'READY', mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', fileSize: 5.6 * 1024 * 1024, category: '市场', team: '增长组', tags: ['投放', '复盘'], uploaderId: 'tom', updatedAt: minutesAgo(60 * 8), submittedAt: minutesAgo(60 * 7) }),
+];
+
+const graphPaths: GraphSearchPath[] = [
+  {
+    seed: { key: '技术:ollama', name: 'Ollama', type: '技术' },
+    entities: [
+      { key: '技术:ollama', name: 'Ollama', type: '技术' },
+      { key: '模型:qwen2.5', name: 'qwen2.5:0.5b', type: '模型' },
+      { key: '项目:knowbase', name: 'KnowBase', type: '产品' },
+    ],
+    relations: [
+      { key: 'm1', type: '调用', documentId: store[4].id, chunkId: `${store[4].id}:v1:c0` },
+      { key: 'm2', type: '支撑', documentId: store[0].id, chunkId: `${store[0].id}:v3:c1` },
+    ],
+  },
+  {
+    seed: { key: '系统:rabbitmq', name: 'RabbitMQ', type: '系统' },
+    entities: [
+      { key: '系统:rabbitmq', name: 'RabbitMQ', type: '系统' },
+      { key: '流程:pipeline', name: '发布索引流水线', type: '流程' },
+      { key: '存储:neo4j', name: 'Neo4j', type: '存储' },
+    ],
+    relations: [
+      { key: 'm3', type: '触发', documentId: store[0].id, chunkId: `${store[0].id}:v3:c2` },
+      { key: 'm4', type: '落库', documentId: store[10].id, chunkId: `${store[10].id}:v1:c1` },
+    ],
+  },
+  {
+    seed: { key: '产品:knowbase', name: 'KnowBase', type: '产品' },
+    entities: [
+      { key: '产品:knowbase', name: 'KnowBase', type: '产品' },
+      { key: '流程:kg', name: '知识图谱', type: '流程' },
+    ],
+    relations: [
+      { key: 'm5', type: '包含', documentId: store[4].id, chunkId: `${store[4].id}:v1:c2` },
+    ],
+  },
 ];
 
 function latency(ms = 220) {
@@ -210,5 +249,29 @@ export const mockDocumentsApi = {
     await latency();
     const index = store.findIndex((d) => d.id === id);
     if (index >= 0) store.splice(index, 1);
+  },
+};
+
+function matchesGraphPath(path: GraphSearchPath, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const haystack = [
+    path.seed.name,
+    path.seed.type,
+    ...path.entities.map((entity) => `${entity.name} ${entity.type}`),
+    ...path.relations.map((relation) => relation.type),
+  ].join(' ').toLowerCase();
+  return haystack.includes(q);
+}
+
+export const mockGraphApi = {
+  async search(query: string, maxHops: number, limit: number): Promise<GraphSearchResult> {
+    await latency(180);
+    const items = graphPaths.filter((path) => matchesGraphPath(path, query)).slice(0, limit);
+    return {
+      query,
+      maxHops,
+      items,
+    };
   },
 };

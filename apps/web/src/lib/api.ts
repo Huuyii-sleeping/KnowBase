@@ -173,6 +173,31 @@ export interface HybridSearchResult {
   items: HybridSearchItem[];
 }
 
+export interface GraphSearchEntity {
+  key: string;
+  name: string;
+  type: string;
+}
+
+export interface GraphSearchRelation {
+  key: string;
+  type: string;
+  documentId: string;
+  chunkId: string;
+}
+
+export interface GraphSearchPath {
+  seed: GraphSearchEntity;
+  entities: GraphSearchEntity[];
+  relations: GraphSearchRelation[];
+}
+
+export interface GraphSearchResult {
+  query: string;
+  maxHops: number;
+  items: GraphSearchPath[];
+}
+
 export interface SemanticSearchItem {
   chunkId: string;
   documentId: string;
@@ -284,7 +309,7 @@ const httpDocumentsApi = {
 };
 
 // Mock 模式（?mock=1 开启）下使用内存数据源，便于无后端环境演示。
-import { isMockEnabled, mockDocumentsApi } from './mock-api';
+import { isMockEnabled, mockDocumentsApi, mockGraphApi } from './mock-api';
 
 export const documentsApi = isMockEnabled() ? mockDocumentsApi : httpDocumentsApi;
 
@@ -340,3 +365,16 @@ export const searchApi = {
     });
   },
 };
+
+const httpGraphApi = {
+  search(query: string, maxHops: number, limit: number): Promise<GraphSearchResult> {
+    const params = new URLSearchParams({
+      query,
+      maxHops: String(maxHops),
+      limit: String(limit),
+    });
+    return request(`/graph/search?${params.toString()}`);
+  },
+};
+
+export const graphApi = isMockEnabled() ? mockGraphApi : httpGraphApi;

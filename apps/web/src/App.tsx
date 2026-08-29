@@ -6,6 +6,7 @@ import { ReviewQueuePage } from '@/pages/review-queue-page';
 import { LoginPage } from '@/pages/login-page';
 import { AskPage } from '@/pages/ask-page';
 import { SearchPage } from '@/pages/search-page';
+import { GraphPage } from '@/pages/graph-page';
 import { RequireAuth, RequireRole } from '@/components/require-auth';
 import { Button } from '@/components/ui/button';
 
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: '/documents/:id', element: <DocumentDetailPage /> },
       { path: '/ask', element: <AskPage /> },
       { path: '/search', element: <SearchPage /> },
+      { path: '/graph', element: <GraphPage /> },
       { path: '/review', element: <RequireRole role="ADMIN"><ReviewQueuePage /></RequireRole> },
     ],
   },

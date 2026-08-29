@@ -15,6 +15,7 @@ export function AppShell() {
     { to: '/documents', label: '文档库' },
     { to: '/ask', label: 'AI 问答' },
     { to: '/search', label: '检索工作台' },
+    { to: '/graph', label: '知识图谱' },
     ...(user?.role === 'ADMIN' ? [{ to: '/review', label: '审核队列' }] : []),
   ];
   const crumb =
@@ -26,6 +27,8 @@ export function AppShell() {
           ? 'AI 问答'
           : location.pathname.startsWith('/search')
             ? '检索工作台'
+            : location.pathname.startsWith('/graph')
+              ? '知识图谱'
         : '文档库';
 
   const [searchInput, setSearchInput] = useState(() => new URLSearchParams(location.search).get('q') ?? '');
