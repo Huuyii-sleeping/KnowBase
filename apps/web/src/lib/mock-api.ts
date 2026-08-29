@@ -293,7 +293,9 @@ const entityGraphIndex = makeEntity('服务', 'GraphIndexService');
 const entityNeo4j = makeEntity('图数据库', 'Neo4j');
 const entityOllama = makeEntity('模型服务', 'Ollama');
 const entityQwen = makeEntity('模型', 'qwen2.5:0.5b');
+const entityNomicEmbed = makeEntity('模型', 'nomic-embed-text');
 const entityStructuredOutput = makeEntity('抽取约束', 'structured output');
+const entityElasticsearch = makeEntity('搜索引擎', 'Elasticsearch');
 const entityKnowledgeDocument = makeEntity('概念', 'KnowledgeDocument');
 const entityDocumentChunk = makeEntity('概念', 'DocumentChunk');
 const entityKnowledgeEntity = makeEntity('概念', 'KnowledgeEntity');
@@ -358,6 +360,24 @@ const graphPaths: GraphSearchPath[] = [
     ],
   },
   {
+    seed: entityOllama,
+    entities: [entityOllama, entityNomicEmbed],
+    relations: [makeRelation(docDeployGuide, 2, entityOllama, entityNomicEmbed, '加载')],
+  },
+  {
+    seed: entityOllama,
+    entities: [entityOllama, entityGraphIndex],
+    relations: [makeRelation(docArchitectureReview, 3, entityOllama, entityGraphIndex, '支持')],
+  },
+  {
+    seed: entityOllama,
+    entities: [entityOllama, entityStructuredOutput, entityGraphIndex],
+    relations: [
+      makeRelation(docKgGuide, 4, entityOllama, entityStructuredOutput, '约束'),
+      makeRelation(docKgGuide, 4, entityStructuredOutput, entityGraphIndex, '规范'),
+    ],
+  },
+  {
     seed: entityKnowBase,
     entities: [entityKnowBase, entityGraphPath],
     relations: [makeRelation(docPrd, 0, entityKnowBase, entityGraphPath, '包含')],
@@ -382,6 +402,11 @@ const graphPaths: GraphSearchPath[] = [
       makeRelation(docKgGuide, 2, entityKnowledgeDocument, entityDocumentChunk, '包含'),
       makeRelation(docKgGuide, 2, entityDocumentChunk, entityKnowledgeEntity, '提及'),
     ],
+  },
+  {
+    seed: entityKnowledgeDocument,
+    entities: [entityKnowledgeDocument, entityElasticsearch],
+    relations: [makeRelation(docPipelineGuide, 5, entityKnowledgeDocument, entityElasticsearch, '索引')],
   },
   {
     seed: entityMarkdownChunk,

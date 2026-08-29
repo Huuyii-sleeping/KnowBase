@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { graphApi, type GraphSearchPath } from '@/lib/api';
 import { getGraphPathDocumentIds, getGraphPathNodeCount, getGraphPathRelationCount } from '@/lib/graph-result.utils';
 import { isMockEnabled } from '@/lib/mock-api';
+import { KnowledgeGraphDiagram } from '@/components/knowledge-graph-diagram';
 import { cn } from '@/lib/utils';
 
 const EXAMPLES = ['RAG', 'Ollama', 'RabbitMQ', 'KnowBase', 'Neo4j'];
@@ -176,56 +177,49 @@ export function GraphPage() {
             ))}
           </section>
 
-          <section className="rounded-lg border border-border bg-background">
+          <section className="space-y-4">
+            <KnowledgeGraphDiagram paths={items} activePath={activePath} />
+
             {activePath && (
-              <>
-                <div className="border-b border-border px-4 py-3">
-                  <div className="text-[13px] font-medium">{activePath.seed.name}</div>
-                  <div className="mt-0.5 text-[12px] text-muted-foreground">{activePath.seed.type} · {getGraphPathRelationCount(activePath)} 条关系</div>
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+                <div className="rounded-lg border border-border bg-background p-4">
+                  <div className="text-[12px] font-medium text-muted-foreground">当前路径</div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {activePath.entities.map((entity, index) => (
+                      <span key={entity.key} className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1.5 text-[12px]">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">{index + 1}</span>
+                        <span className="font-medium">{entity.name}</span>
+                        <span className="text-muted-foreground">{entity.type}</span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="grid gap-4 p-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-                  <div className="rounded-md border border-border p-4">
-                    <div className="mb-3 text-[12px] font-medium text-muted-foreground">路径</div>
-                    <div className="space-y-3">
-                      {activePath.entities.map((entity, index) => (
-                        <div key={entity.key} className="flex items-center gap-2">
-                          <span className="flex h-7 min-w-7 items-center justify-center rounded-md bg-primary/10 px-2 text-[11px] font-semibold text-primary">{index + 1}</span>
-                          <div className="min-w-0">
-                            <div className="text-[13px] font-medium">{entity.name}</div>
-                            <div className="text-[11px] text-muted-foreground">{entity.type}</div>
-                          </div>
-                        </div>
+                <div className="space-y-4">
+                  <div className="rounded-lg border border-border bg-background p-4">
+                    <div className="text-[12px] font-medium text-muted-foreground">来源文档</div>
+                    <div className="mt-2 flex flex-col gap-2">
+                      {getGraphPathDocumentIds(activePath).map((documentId) => (
+                        <Link key={documentId} to={`/documents/${documentId}`} className="rounded-md border border-border px-3 py-2 text-[12.5px] hover:bg-accent">
+                          {documentId}
+                        </Link>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="rounded-md border border-border p-4">
-                      <div className="text-[12px] font-medium text-muted-foreground">来源文档</div>
-                      <div className="mt-2 flex flex-col gap-2">
-                        {getGraphPathDocumentIds(activePath).map((documentId) => (
-                          <Link key={documentId} to={`/documents/${documentId}`} className="rounded-md border border-border px-3 py-2 text-[12.5px] hover:bg-accent">
-                            {documentId}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="rounded-md border border-border p-4">
-                      <div className="text-[12px] font-medium text-muted-foreground">关系</div>
-                      <div className="mt-2 space-y-2">
-                        {activePath.relations.map((relation) => (
-                          <div key={relation.key} className="rounded-md bg-secondary px-3 py-2 text-[12px]">
-                            <div className="font-medium">{relation.type}</div>
-                            <div className="mt-0.5 text-muted-foreground">{relation.documentId} · {relation.chunkId}</div>
-                          </div>
-                        ))}
-                      </div>
+                  <div className="rounded-lg border border-border bg-background p-4">
+                    <div className="text-[12px] font-medium text-muted-foreground">关系</div>
+                    <div className="mt-2 space-y-2">
+                      {activePath.relations.map((relation) => (
+                        <div key={relation.key} className="rounded-md bg-secondary px-3 py-2 text-[12px]">
+                          <div className="font-medium">{relation.type}</div>
+                          <div className="mt-0.5 text-muted-foreground">{relation.documentId} · {relation.chunkId}</div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             )}
           </section>
         </div>
