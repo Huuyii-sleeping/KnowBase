@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 const VIEWPORT = { width: 960, height: 640 };
 const CENTER = { x: VIEWPORT.width / 2, y: VIEWPORT.height / 2 };
+const RING_BASE_ANGLES = [-Math.PI / 2, -Math.PI / 6, Math.PI / 3, (Math.PI * 5) / 6];
 
 export interface GraphNodeView {
   key: string;
@@ -82,8 +83,8 @@ function pickNodeColors(type: string, isSeed: boolean): { fill: string; stroke: 
   return { fill: '#D9A9CF', stroke: '#B87CAE', text: '#4a2443' };
 }
 
-function toPathId(value: string): string {
-  return `edge-${value.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+function ringBaseAngle(level: number): number {
+  return RING_BASE_ANGLES[(level - 1) % RING_BASE_ANGLES.length] ?? -Math.PI / 2;
 }
 
 export function buildGraph(paths: GraphSearchPath[], activePath: GraphSearchPath | null): KnowledgeGraphView {
@@ -150,8 +151,8 @@ export function buildGraph(paths: GraphSearchPath[], activePath: GraphSearchPath
       continue;
     }
 
-    const radius = 160 + (level - 1) * 88;
-    const startAngle = -Math.PI / 2 + level * 0.28;
+    const radius = 160 + (level - 1) * 92;
+    const startAngle = ringBaseAngle(level);
     const step = nodes.length > 1 ? (Math.PI * 2) / nodes.length : 0;
 
     nodes.forEach((node, index) => {
@@ -259,7 +260,7 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
         >
           <defs>
             <marker id="kg-arrow" viewBox="0 0 10 10" refX="7.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill="#a3a3a3" />
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b8b95" />
             </marker>
           </defs>
 
@@ -268,21 +269,31 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
               <path
                 d={edge.d}
                 fill="none"
-                stroke={edge.active ? '#7c8cf7' : '#c9c9d6'}
-                strokeWidth={edge.active ? 2.4 : 1.7}
+                stroke={edge.active ? '#6d72f7' : '#b9bac8'}
+                strokeWidth={edge.active ? 2.8 : 2}
+                strokeLinecap="round"
                 markerEnd="url(#kg-arrow)"
               />
-              <path id={toPathId(edge.key)} d={edge.d} fill="none" stroke="transparent" />
-              <text
-                className={cn('select-none text-[11px] font-medium', edge.active ? 'fill-primary' : 'fill-muted-foreground')}
-              >
-                <textPath href={`#${toPathId(edge.key)}`} startOffset="50%" textAnchor="middle">
-                  {edge.type}
-                </textPath>
-              </text>
             </g>
           ))}
         </svg>
+
+        {graph.edges.map((edge) => (
+          <div
+            key={`${edge.key}-label`}
+            className={cn(
+              'pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-2.5 py-1 text-[11px] font-medium shadow-sm',
+              edge.active ? 'border-primary/25 bg-primary/10 text-primary' : 'border-border bg-white/90 text-muted-foreground',
+            )}
+            style={{
+              left: `${(edge.labelX / VIEWPORT.width) * 100}%`,
+              top: `${(edge.labelY / VIEWPORT.height) * 100}%`,
+              transform: `translate(-50%, -50%) rotate(${edge.labelAngle > 90 || edge.labelAngle < -90 ? edge.labelAngle + 180 : edge.labelAngle}deg)`,
+            }}
+          >
+            {edge.type}
+          </div>
+        ))}
 
         {graph.nodes.map((node) => (
           <GraphNode key={node.key} node={node} />
