@@ -5,7 +5,7 @@ import {
   type SearchDocumentItem,
   type SemanticSearchItem,
 } from '@/lib/api';
-import { formatScore, getKeywordHighlight } from '@/lib/search-result.utils';
+import { formatScore, getHybridSources, getKeywordHighlight } from '@/lib/search-result.utils';
 import { cn } from '@/lib/utils';
 
 const SOURCE_META: Record<AnswerSourceType, { label: string; className: string }> = {
@@ -92,6 +92,8 @@ export function SemanticResultCard({ item }: { item: SemanticSearchItem }) {
 }
 
 export function HybridResultCard({ item }: { item: HybridSearchItem }) {
+  const sources = getHybridSources(item);
+
   return (
     <article className="group border-b border-border py-4 last:border-0">
       <div className="flex items-start gap-3">
@@ -99,7 +101,7 @@ export function HybridResultCard({ item }: { item: HybridSearchItem }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <Link to={`/documents/${item.documentId}`} className="text-[14px] font-medium group-hover:text-primary hover:underline">{item.title}</Link>
-            {item.sources.map((source) => <SourceBadge key={source} type={source} />)}
+            {sources.map((source) => <SourceBadge key={source} type={source} />)}
           </div>
           <div className="mt-1 text-[12px] text-muted-foreground">{item.chunkId ? `Chunk ${item.chunkIndex ?? 0}` : '文档级结果'}{item.category ? ` · ${item.category}` : ''}{item.team ? ` · ${item.team}` : ''}</div>
           {item.content && <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-[13px] leading-6 text-muted-foreground">{item.content}</p>}

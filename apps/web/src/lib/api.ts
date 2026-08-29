@@ -163,7 +163,7 @@ export interface HybridSearchItem {
   score: number;
   keywordScore: number | null;
   semanticScore: number | null;
-  sources: AnswerSourceType[];
+  sources?: AnswerSourceType[];
   rerankScore: number;
 }
 

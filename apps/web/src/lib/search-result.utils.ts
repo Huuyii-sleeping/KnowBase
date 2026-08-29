@@ -1,4 +1,9 @@
-import type { SearchDocumentItem, SearchMode } from '@/lib/api';
+import type {
+  AnswerSourceType,
+  HybridSearchItem,
+  SearchDocumentItem,
+  SearchMode,
+} from '@/lib/api';
 
 export const SEARCH_MODES: Array<{ value: SearchMode; label: string; description: string }> = [
   { value: 'hybrid', label: '混合检索', description: '全文 + 向量 + 重排' },
@@ -18,4 +23,24 @@ export function formatScore(value: number | null | undefined): string {
 
 export function getKeywordHighlight(item: SearchDocumentItem): string | undefined {
   return item.highlights?.content?.[0] ?? item.highlights?.title?.[0];
+}
+
+const SOURCE_TYPES: AnswerSourceType[] = ['keyword', 'semantic', 'graph'];
+
+function isSourceType(value: unknown): value is AnswerSourceType {
+  return typeof value === 'string' && SOURCE_TYPES.includes(value as AnswerSourceType);
+}
+
+export function getHybridSources(item: HybridSearchItem): AnswerSourceType[] {
+  const sources = (item as HybridSearchItem & { sources?: unknown }).sources;
+  if (Array.isArray(sources)) {
+    const validSources = sources.filter(isSourceType);
+    if (validSources.length > 0) return validSources;
+  }
+
+  // Older API responses may omit `sources`; infer a useful badge from scores.
+  const inferred: AnswerSourceType[] = [];
+  if (item.keywordScore !== null && item.keywordScore !== undefined) inferred.push('keyword');
+  if (item.semanticScore !== null && item.semanticScore !== undefined) inferred.push('semantic');
+  return inferred.length > 0 ? inferred : ['semantic'];
 }

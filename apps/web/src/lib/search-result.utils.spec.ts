@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatScore, getKeywordHighlight, normalizeSearchMode } from './search-result.utils';
+import { formatScore, getHybridSources, getKeywordHighlight, normalizeSearchMode } from './search-result.utils';
 
 describe('search result utilities', () => {
   it('normalizes unsupported URL modes to hybrid retrieval', () => {
@@ -32,5 +32,30 @@ describe('search result utilities', () => {
       title: '无高亮结果',
       score: null,
     })).toBeUndefined();
+  });
+
+  it('recovers source badges when an older hybrid response omits sources', () => {
+    expect(getHybridSources({
+      documentId: 'doc-1',
+      title: '混合结果',
+      category: null,
+      team: null,
+      tags: [],
+      score: 1,
+      keywordScore: 0.8,
+      semanticScore: 0.7,
+      rerankScore: 0.9,
+    })).toEqual(['keyword', 'semantic']);
+    expect(getHybridSources({
+      documentId: 'doc-2',
+      title: '无来源结果',
+      category: null,
+      team: null,
+      tags: [],
+      score: 1,
+      keywordScore: null,
+      semanticScore: null,
+      rerankScore: 0.1,
+    })).toEqual(['semantic']);
   });
 });
