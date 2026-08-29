@@ -12,6 +12,7 @@ import { FileParserService } from './parsing/file-parser.service';
 import { DocumentContentStore } from './document-content.store';
 import { AuthUser } from '../auth/auth.types';
 import { DocumentAccessService, DocumentVisibility } from '../authorization/document-access.service';
+import { DocumentPipelinePublisher } from './document-pipeline.publisher';
 
 @Injectable()
 export class DocumentCommandService {
@@ -22,6 +23,7 @@ export class DocumentCommandService {
     private readonly storage: StorageService,
     private readonly fileParser: FileParserService,
     @Optional() private readonly access?: DocumentAccessService,
+    @Optional() private readonly pipelinePublisher?: DocumentPipelinePublisher,
   ) {}
 
   async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto, user: AuthUser): Promise<string> {
@@ -164,6 +166,7 @@ export class DocumentCommandService {
   async remove(id: string, user?: AuthUser): Promise<void> {
     const document = await this.getEntity(id);
     if (user) this.access?.assertCanEdit(document, user);
+    await this.pipelinePublisher?.deleteGraph(id);
     await this.contentStore.deleteByDocumentId(id);
     await this.documentRepository.delete(id);
     await this.storage.removeObject(document.storageKey).catch(() => undefined);

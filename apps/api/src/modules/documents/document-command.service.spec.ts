@@ -74,17 +74,24 @@ function makeService(overrides: Record<string, unknown> = {}) {
     })),
     ...overrides.fileParser,
   };
+  const pipelinePublisher = {
+    deleteGraph: vi.fn(async () => undefined),
+    ...overrides.pipelinePublisher,
+  };
   return {
     service: new DocumentCommandService(
       repository as any,
       contentStore as any,
       storage as any,
       fileParser as any,
+      undefined,
+      pipelinePublisher as any,
     ),
     repository,
     contentStore,
     storage,
     fileParser,
+    pipelinePublisher,
   };
 }
 
@@ -147,5 +154,22 @@ describe('DocumentCommandService', () => {
     expect(document.rejectionReason).toBeNull();
     expect(document.reviewedBy).toBeNull();
     expect(repository.save).toHaveBeenCalledWith(document);
+  });
+
+  it('removes the document, its content, and its KG graph message', async () => {
+    const document = makeDocument({ storageKey: 'original/document-1/notes.txt' });
+    const { service, repository, contentStore, storage, pipelinePublisher } = makeService({
+      repository: {
+        findOne: vi.fn(async () => document),
+        delete: vi.fn(async () => undefined),
+      },
+    });
+
+    await service.remove('document-1', { id: 'user-1' } as any);
+
+    expect(pipelinePublisher.deleteGraph).toHaveBeenCalledWith('document-1');
+    expect(contentStore.deleteByDocumentId).toHaveBeenCalledWith('document-1');
+    expect(repository.delete).toHaveBeenCalledWith('document-1');
+    expect(storage.removeObject).toHaveBeenCalledWith('original/document-1/notes.txt');
   });
 });

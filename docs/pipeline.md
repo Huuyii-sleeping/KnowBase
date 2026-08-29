@@ -5,6 +5,7 @@
 - `document.index`：携带完整元数据和 Markdown，写入 Elasticsearch `kh_document`。
 - `document.rag.rebuild`：携带 `documentId` 和 `version`，读取正文后分块、Embedding，写入 `kh_chunk`。
 - `document.kg.rebuild`：携带 `documentId` 和 `version`，读取正文后分块，使用 Ollama 抽取实体和关系，写入 Neo4j 文档、Chunk、实体和关系节点。
+- `document.kg.delete`：携带 `documentId`，删除该文档对应的图谱节点、Chunk、关系，并回收不再被任何 Chunk 引用的孤立实体。
 
 RabbitMQ 使用持久化 topic exchange `knowbase.pipeline`，三个消费者使用独立 durable queue。消费成功 ack，失败按 `RABBITMQ_REQUEUE_ON_ERROR` 决定是否重新入队。
 
@@ -58,11 +59,11 @@ KG 管线和 Search、RAG 一样由 RabbitMQ 异步触发。消费者收到文�
 Neo4j 中的核心结构是：
 
 ```text
-(Document)-[:HAS_CHUNK]->(DocumentChunk)-[:MENTIONS]->(Entity)
-(Entity)-[:RELATED_TO {type, documentId, chunkId}]->(Entity)
+(KnowledgeDocument)-[:HAS_CHUNK]->(DocumentChunk)-[:MENTIONS]->(KnowledgeEntity)
+(KnowledgeEntity)-[:RELATED_TO {type, documentId, chunkId}]->(KnowledgeEntity)
 ```
 
-同一文档重建时会先删除该文档的旧关系和 Chunk，再删除不再被 Chunk 引用的孤立实体，最后重新写入。实体使用 `type:normalizedName` 作为 key，跨文档共享；关系保留来源文档和 Chunk，便于溯源和权限过滤。
+同一文档重建时会先删除该文档的旧关系和 Chunk，再删除不再被 Chunk 引用的孤立实体，最后重新写入。删除文档时也走同一套清理规则。实体使用 `type:normalizedName` 作为 key，跨文档共享；关系保留来源文档和 Chunk，便于溯源和权限过滤。
 
 图谱查询接口：
 

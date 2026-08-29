@@ -29,6 +29,25 @@ export interface GraphExtractionProvider {
   extract(markdownChunk: string): Promise<RawGraphExtraction>;
 }
 
+export interface KnowledgeDocumentInput {
+  id: string;
+  version: number;
+}
+
+export interface KnowledgeChunkInput {
+  id: string;
+  documentId: string;
+  version: number;
+  chunkIndex: number;
+  content: string;
+}
+
+export interface KnowledgeEntityInput {
+  key: string;
+  name: string;
+  type: string;
+}
+
 export class GraphExtractionParseError extends Error {
   constructor(message = 'graph extraction model returned invalid JSON') {
     super(message);

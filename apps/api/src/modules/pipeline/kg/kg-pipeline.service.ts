@@ -1,4 +1,5 @@
 import {
+  NotFoundException,
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -23,7 +24,15 @@ export class KgPipelineService {
     documentId: string,
     expectedVersion?: number,
   ): Promise<{ chunks: number; entities: number; relations: number; skipped?: boolean }> {
-    const document = await this.documentQuery.findEntity(documentId);
+    let document;
+    try {
+      document = await this.documentQuery.findEntity(documentId);
+    } catch (error) {
+      if (expectedVersion !== undefined && error instanceof NotFoundException) {
+        return { chunks: 0, entities: 0, relations: 0, skipped: true };
+      }
+      throw error;
+    }
     if (expectedVersion !== undefined && document.version !== expectedVersion) {
       return { chunks: 0, entities: 0, relations: 0, skipped: true };
     }
@@ -60,5 +69,9 @@ export class KgPipelineService {
       entities: extraction.entities.length,
       relations: extraction.relations.length,
     };
+  }
+
+  async deleteDocument(documentId: string): Promise<void> {
+    await this.graphIndex.deleteDocument(documentId);
   }
 }

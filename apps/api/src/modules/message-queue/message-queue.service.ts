@@ -42,13 +42,15 @@ export class MessageQueueService implements OnModuleDestroy {
 
   async consume<T>(
     queueName: (typeof MESSAGE_QUEUE_NAMES)[keyof typeof MESSAGE_QUEUE_NAMES],
-    routingKey: string,
+    routingKey: string | string[],
     handler: MessageHandler<T>,
   ): Promise<void> {
     const channel = await this.getChannel();
     await this.assertExchange(channel);
     await channel.assertQueue(queueName, { durable: true });
-    await channel.bindQueue(queueName, MESSAGE_QUEUE_EXCHANGE, routingKey);
+    for (const key of Array.isArray(routingKey) ? routingKey : [routingKey]) {
+      await channel.bindQueue(queueName, MESSAGE_QUEUE_EXCHANGE, key);
+    }
     await channel.prefetch(
       Number(this.config.get<string | number>('RABBITMQ_PREFETCH', 1)),
     );

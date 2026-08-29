@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { transaction, session, driver } = vi.hoisted(() => {
   const transaction = { run: vi.fn().mockResolvedValue({ records: [] }) };
@@ -25,6 +25,10 @@ vi.mock('neo4j-driver', () => ({
 import { GraphIndexService } from './graph-index.service';
 
 describe('GraphIndexService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('replaces chunks, mentions, entities, and relations in one write transaction', async () => {
     const service = new GraphIndexService({
       get: vi.fn((_key: string, fallback: unknown) => fallback),
@@ -65,5 +69,27 @@ describe('GraphIndexService', () => {
       limit: 20,
     })).resolves.toEqual([]);
     expect(session.executeRead).not.toHaveBeenCalled();
+  });
+
+  it('deletes a document graph and orphaned knowledge entities', async () => {
+    const service = new GraphIndexService({
+      get: vi.fn((_key: string, fallback: unknown) => fallback),
+    } as any);
+
+    await service.deleteDocument('document-1');
+
+    expect(session.executeWrite).toHaveBeenCalledOnce();
+    expect(transaction.run).toHaveBeenCalledWith(
+      expect.stringContaining('MATCH ()-[r:RELATED_TO {documentId: $documentId}]-()'),
+      { documentId: 'document-1' },
+    );
+    expect(transaction.run).toHaveBeenCalledWith(
+      expect.stringContaining('MATCH (c:DocumentChunk {documentId: $documentId})'),
+      { documentId: 'document-1' },
+    );
+    expect(transaction.run).toHaveBeenCalledWith(
+      expect.stringContaining('MATCH (d:KnowledgeDocument {id: $documentId})'),
+      { documentId: 'document-1' },
+    );
   });
 });

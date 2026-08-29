@@ -10,4 +10,5 @@ export const MESSAGE_ROUTING_KEYS = {
   SEARCH_INDEX: 'document.index',
   RAG_REBUILD: 'document.rag.rebuild',
   KG_REBUILD: 'document.kg.rebuild',
+  KG_DELETE: 'document.kg.delete',
 } as const;

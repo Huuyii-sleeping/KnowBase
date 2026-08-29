@@ -10,7 +10,7 @@
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 - RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
 - 提供基于检索上下文的 Ollama AI 问答接口，并返回引用来源
-- 支持基于 Ollama 实体关系抽取的 Neo4j 知识图谱重建和权限过滤查询
+- 支持基于 Ollama 实体关系抽取的 Neo4j 知识图谱重建、删除清理和权限过滤查询
 - 支持通过 Langfuse Self-hosted 记录 RAG 问答链路
 
 开发约定：

@@ -1,28 +1,10 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import neo4j, { type Driver } from 'neo4j-driver';
-
-export interface GraphChunkInput {
-  id: string;
-  documentId: string;
-  version: number;
-  chunkIndex: number;
-  content: string;
-}
-
-export interface GraphEntityInput {
-  key: string;
-  name: string;
-  type: string;
-}
-
-export interface GraphRelationInput {
-  key: string;
-  sourceKey: string;
-  targetKey: string;
-  type: string;
-  chunkId: string;
-}
+import neo4j, { type Driver, type ManagedTransaction } from 'neo4j-driver';
+import {
+  KnowledgeChunkInput,
+  KnowledgeEntityInput,
+} from './graph-extractor.types';
 
 export interface GraphMentionInput {
   chunkId: string;
@@ -64,33 +46,29 @@ export class GraphIndexService implements OnModuleDestroy {
   async replaceDocument(
     documentId: string,
     version: number,
-    chunks: GraphChunkInput[],
-    entities: GraphEntityInput[] = [],
+    chunks: KnowledgeChunkInput[],
+    entities: KnowledgeEntityInput[] = [],
     mentions: GraphMentionInput[] = [],
-    relations: GraphRelationInput[] = [],
+    relations: Array<{
+      key: string;
+      sourceKey: string;
+      targetKey: string;
+      type: string;
+      chunkId: string;
+    }> = [],
   ): Promise<void> {
     const session = this.driver.session();
     try {
       await session.executeWrite(async (transaction) => {
+        await this.clearDocumentGraph(transaction, documentId);
         await transaction.run(
-          `MATCH ()-[r:RELATED_TO {documentId: $documentId}]-()
-           DELETE r`,
-          { documentId },
-        );
-        await transaction.run(
-          'MATCH (d:Document {id: $documentId}) DETACH DELETE d',
-          { documentId },
-        );
-        await transaction.run(
-          'MATCH (e:Entity) WHERE NOT (e)<-[:MENTIONS]-() DETACH DELETE e',
-        );
-        await transaction.run(
-          'MERGE (d:Document {id: $documentId}) SET d.version = $version',
+          `MERGE (d:KnowledgeDocument {id: $documentId})
+           SET d.version = $version`,
           { documentId, version: neo4j.int(version) },
         );
         await transaction.run(
           `UNWIND $chunks AS chunk
-           MATCH (d:Document {id: $documentId})
+           MATCH (d:KnowledgeDocument {id: $documentId})
            CREATE (c:DocumentChunk {
              id: chunk.id,
              documentId: $documentId,
@@ -111,21 +89,21 @@ export class GraphIndexService implements OnModuleDestroy {
         );
         await transaction.run(
           `UNWIND $entities AS entity
-           MERGE (e:Entity {key: entity.key})
+           MERGE (e:KnowledgeEntity {key: entity.key})
            SET e.name = entity.name, e.type = entity.type`,
           { entities },
         );
         await transaction.run(
           `UNWIND $mentions AS mention
            MATCH (c:DocumentChunk {id: mention.chunkId})
-           MATCH (e:Entity {key: mention.entityKey})
+           MATCH (e:KnowledgeEntity {key: mention.entityKey})
            MERGE (c)-[:MENTIONS]->(e)`,
           { mentions },
         );
         await transaction.run(
           `UNWIND $relations AS relation
-           MATCH (source:Entity {key: relation.sourceKey})
-           MATCH (target:Entity {key: relation.targetKey})
+           MATCH (source:KnowledgeEntity {key: relation.sourceKey})
+           MATCH (target:KnowledgeEntity {key: relation.targetKey})
            MERGE (source)-[r:RELATED_TO {key: relation.key}]->(target)
            SET r.type = relation.type,
                r.documentId = $documentId,
@@ -138,19 +116,30 @@ export class GraphIndexService implements OnModuleDestroy {
     }
   }
 
+  async deleteDocument(documentId: string): Promise<void> {
+    const session = this.driver.session();
+    try {
+      await session.executeWrite(async (transaction) => {
+        await this.clearDocumentGraph(transaction, documentId);
+      });
+    } finally {
+      await session.close();
+    }
+  }
+
   async searchRelated(input: GraphSearchInput): Promise<GraphSearchPath[]> {
     if (!input.allowedDocumentIds.length) return [];
     const maxHops = Math.min(Math.max(Math.trunc(input.maxHops), 1), 3);
     const session = this.driver.session();
     try {
       const result = await session.executeRead((transaction) => transaction.run(
-        `MATCH (seed:Entity)
+        `MATCH (seed:KnowledgeEntity)
          WHERE toLower(seed.name) CONTAINS toLower($query)
            AND EXISTS {
              MATCH (seed)<-[:MENTIONS]-(seedChunk:DocumentChunk)
              WHERE seedChunk.documentId IN $allowedDocumentIds
            }
-         MATCH path=(seed)-[:RELATED_TO*1..${maxHops}]-(related:Entity)
+         MATCH path=(seed)-[:RELATED_TO*1..${maxHops}]-(related:KnowledgeEntity)
          WHERE ALL(relation IN relationships(path)
            WHERE relation.documentId IN $allowedDocumentIds)
          RETURN
@@ -178,6 +167,33 @@ export class GraphIndexService implements OnModuleDestroy {
     } finally {
       await session.close();
     }
+  }
+
+  private async clearDocumentGraph(
+    transaction: ManagedTransaction,
+    documentId: string,
+  ): Promise<void> {
+    await transaction.run(
+      `MATCH ()-[r:RELATED_TO {documentId: $documentId}]-()
+       DELETE r`,
+      { documentId },
+    );
+    await transaction.run(
+      `MATCH (c:DocumentChunk {documentId: $documentId})
+       DETACH DELETE c`,
+      { documentId },
+    );
+    await transaction.run(
+      `MATCH (d:KnowledgeDocument {id: $documentId})
+       DETACH DELETE d`,
+      { documentId },
+    );
+    await transaction.run(
+      `MATCH (entity:KnowledgeEntity)
+       WHERE NOT (entity)<-[:MENTIONS]-(:DocumentChunk)
+         AND NOT (entity)-[:RELATED_TO]-(:KnowledgeEntity)
+       DETACH DELETE entity`,
+    );
   }
 
   async onModuleDestroy(): Promise<void> {

@@ -45,4 +45,23 @@ describe('DocumentPipelinePublisher', () => {
       expect.objectContaining({ documentId: 'document-1', version: 2 }),
     );
   });
+
+  it('publishes a KG delete message for document removal', async () => {
+    const messageQueue = { publish: vi.fn().mockResolvedValue(undefined) };
+    const service = new DocumentPipelinePublisher(
+      messageQueue as any,
+      { findOne: vi.fn() } as any,
+      { findByContentId: vi.fn() } as any,
+    );
+
+    await service.deleteGraph('document-1');
+
+    expect(messageQueue.publish).toHaveBeenCalledWith(
+      MESSAGE_ROUTING_KEYS.KG_DELETE,
+      expect.objectContaining({
+        type: 'DOCUMENT_GRAPH_DELETE',
+        documentId: 'document-1',
+      }),
+    );
+  });
 });

@@ -3,6 +3,7 @@ import { MESSAGE_ROUTING_KEYS } from '../message-queue/message-queue.constants';
 import { MessageQueueService } from '../message-queue/message-queue.service';
 import type {
   DocumentIndexMessage,
+  DocumentGraphDeleteMessage,
   DocumentPipelineCommand,
 } from '../message-queue/message-queue.types';
 import { DocumentContentStore } from './document-content.store';
@@ -42,5 +43,13 @@ export class DocumentPipelinePublisher {
       this.messageQueue.publish(MESSAGE_ROUTING_KEYS.RAG_REBUILD, pipelineCommand),
       this.messageQueue.publish(MESSAGE_ROUTING_KEYS.KG_REBUILD, pipelineCommand),
     ]);
+  }
+
+  async deleteGraph(documentId: string): Promise<void> {
+    const message: DocumentGraphDeleteMessage = {
+      type: 'DOCUMENT_GRAPH_DELETE',
+      documentId,
+    };
+    await this.messageQueue.publish(MESSAGE_ROUTING_KEYS.KG_DELETE, message);
   }
 }

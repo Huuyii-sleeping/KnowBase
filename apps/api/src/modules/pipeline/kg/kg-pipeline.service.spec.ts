@@ -97,4 +97,19 @@ describe('KgPipelineService', () => {
     await expect(service.rebuildDocument('document-1', 1)).rejects.toThrow('invalid extraction');
     expect(graphIndex.replaceDocument).not.toHaveBeenCalled();
   });
+
+  it('deletes a document graph from Neo4j', async () => {
+    const graphIndex = { deleteDocument: vi.fn().mockResolvedValue(undefined) };
+    const service = new KgPipelineService(
+      {} as any,
+      {} as any,
+      {} as any,
+      {} as any,
+      graphIndex as any,
+    );
+
+    await service.deleteDocument('document-1');
+
+    expect(graphIndex.deleteDocument).toHaveBeenCalledWith('document-1');
+  });
 });

@@ -12,8 +12,14 @@ export interface DocumentPipelineCommand {
   version: number;
 }
 
+export interface DocumentGraphDeleteMessage {
+  type: 'DOCUMENT_GRAPH_DELETE';
+  documentId: string;
+}
+
 export type PipelineMessage =
   | DocumentIndexMessage
-  | DocumentPipelineCommand;
+  | DocumentPipelineCommand
+  | DocumentGraphDeleteMessage;
 
 export type MessageHandler<T> = (message: T) => Promise<void>;
