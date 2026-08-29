@@ -11,7 +11,7 @@ import {
   type SearchMode,
   type SemanticSearchItem,
 } from '@/lib/api';
-import { normalizeSearchMode, SEARCH_MODES } from '@/lib/search-result.utils';
+import { isSearchResultCurrent, normalizeSearchMode, SEARCH_MODES } from '@/lib/search-result.utils';
 import { useSearchParams } from 'react-router-dom';
 
 type SearchResult = SearchDocumentItem | SemanticSearchItem | HybridSearchItem;
@@ -25,6 +25,7 @@ export function SearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [resultMode, setResultMode] = useState<SearchMode | null>(null);
   const [total, setTotal] = useState<number | null>(null);
   const requestSequence = useRef(0);
 
@@ -44,21 +45,25 @@ export function SearchPage() {
         const result = await searchApi.documents(query);
         if (requestId !== requestSequence.current) return;
         setResults(result.items);
+        setResultMode(selectedMode);
         setTotal(result.total);
       } else if (selectedMode === 'semantic') {
         const result = await searchApi.semantic(query, Number(topK));
         if (requestId !== requestSequence.current) return;
         setResults(result.items);
+        setResultMode(selectedMode);
         setTotal(result.items.length);
       } else {
         const result = await searchApi.hybrid(query, Number(topK));
         if (requestId !== requestSequence.current) return;
         setResults(result.items);
+        setResultMode(selectedMode);
         setTotal(result.items.length);
       }
     } catch (reason) {
       if (requestId !== requestSequence.current) return;
       setResults([]);
+      setResultMode(null);
       setTotal(null);
       setError((reason as Error).message);
     } finally {
@@ -74,6 +79,7 @@ export function SearchPage() {
     if (!query) {
       setSearched('');
       setResults([]);
+      setResultMode(null);
       setTotal(null);
       return;
     }
@@ -89,8 +95,16 @@ export function SearchPage() {
   };
 
   const changeMode = (nextMode: SearchMode) => {
+    if (nextMode === mode) return;
     setMode(nextMode);
-    if (searched) setParams({ q: searched, mode: nextMode });
+    setResults([]);
+    setResultMode(null);
+    setTotal(null);
+    setError(null);
+    if (searched) {
+      setLoading(true);
+      setParams({ q: searched, mode: nextMode });
+    }
   };
 
   return (
@@ -138,7 +152,7 @@ export function SearchPage() {
           <div className="mt-2 text-[12.5px] text-muted-foreground">尝试换一种说法，或切换检索模式。</div>
         </div>
       )}
-      {!loading && !error && searched && results.length > 0 && (
+      {!loading && !error && searched && results.length > 0 && isSearchResultCurrent(resultMode, mode) && (
         <section className="overflow-hidden rounded-lg border border-border bg-background">
           <div className="flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
             <span className="text-[13px] font-medium">“{searched}”</span>

@@ -73,17 +73,20 @@ export function KeywordResultCard({ item }: { item: SearchDocumentItem }) {
 }
 
 export function SemanticResultCard({ item }: { item: SemanticSearchItem }) {
+  const documentTitle = item.document?.title || item.documentId || '未命名文档';
+  const category = item.document?.category || '未分类';
+
   return (
     <article className="group border-b border-border py-4 last:border-0">
       <div className="flex items-start gap-3">
         <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-violet-50 text-[11px] font-semibold text-violet-700">VEC</div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <Link to={`/documents/${item.documentId}`} className="text-[14px] font-medium group-hover:text-primary hover:underline">{item.document.title}</Link>
+            <Link to={`/documents/${item.documentId}`} className="text-[14px] font-medium group-hover:text-primary hover:underline">{documentTitle}</Link>
             <SourceBadge type="semantic" />
           </div>
-          <div className="mt-1 text-[12px] text-muted-foreground">Chunk {item.chunkIndex} · v{item.documentVersion} · {item.document.category || '未分类'}</div>
-          <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-[13px] leading-6 text-muted-foreground">{item.content}</p>
+          <div className="mt-1 text-[12px] text-muted-foreground">Chunk {item.chunkIndex ?? 0} · v{item.documentVersion ?? 0} · {category}</div>
+          <p className="mt-2 line-clamp-4 whitespace-pre-wrap text-[13px] leading-6 text-muted-foreground">{item.content || '该结果未返回片段内容。'}</p>
         </div>
         <div className="hidden shrink-0 text-right text-[11px] text-muted-foreground sm:block">相似度<br /><span className="font-mono text-foreground">{formatScore(item.score)}</span></div>
       </div>

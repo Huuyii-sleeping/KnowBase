@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { formatScore, getHybridSources, getKeywordHighlight, normalizeSearchMode } from './search-result.utils';
+import { formatScore, getHybridSources, getKeywordHighlight, isSearchResultCurrent, normalizeSearchMode } from './search-result.utils';
 
 describe('search result utilities', () => {
   it('normalizes unsupported URL modes to hybrid retrieval', () => {
     expect(normalizeSearchMode('semantic')).toBe('semantic');
     expect(normalizeSearchMode('unsupported')).toBe('hybrid');
     expect(normalizeSearchMode(null)).toBe('hybrid');
+  });
+
+  it('only renders results for the currently selected retrieval mode', () => {
+    expect(isSearchResultCurrent('semantic', 'semantic')).toBe(true);
+    expect(isSearchResultCurrent('hybrid', 'semantic')).toBe(false);
+    expect(isSearchResultCurrent(null, 'hybrid')).toBe(false);
   });
 
   it('formats missing and numeric scores consistently', () => {

@@ -25,6 +25,10 @@ export function getKeywordHighlight(item: SearchDocumentItem): string | undefine
   return item.highlights?.content?.[0] ?? item.highlights?.title?.[0];
 }
 
+export function isSearchResultCurrent(resultMode: SearchMode | null, activeMode: SearchMode): boolean {
+  return resultMode === activeMode;
+}
+
 const SOURCE_TYPES: AnswerSourceType[] = ['keyword', 'semantic', 'graph'];
 
 function isSourceType(value: unknown): value is AnswerSourceType {
@@ -32,7 +36,7 @@ function isSourceType(value: unknown): value is AnswerSourceType {
 }
 
 export function getHybridSources(item: HybridSearchItem): AnswerSourceType[] {
-  const sources = (item as HybridSearchItem & { sources?: unknown }).sources;
+  const sources = item.sources;
   if (Array.isArray(sources)) {
     const validSources = sources.filter(isSourceType);
     if (validSources.length > 0) return validSources;

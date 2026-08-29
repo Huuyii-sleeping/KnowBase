@@ -180,7 +180,7 @@ export interface SemanticSearchItem {
   chunkIndex: number;
   content: string;
   score: number | null;
-  document: {
+  document?: {
     title: string;
     category: string | null;
     team: string | null;
