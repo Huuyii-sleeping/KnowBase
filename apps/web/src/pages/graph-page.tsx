@@ -5,9 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { graphApi, type GraphSearchPath } from '@/lib/api';
 import { getGraphPathDocumentIds, getGraphPathNodeCount, getGraphPathRelationCount } from '@/lib/graph-result.utils';
+import { isMockEnabled } from '@/lib/mock-api';
 import { cn } from '@/lib/utils';
 
-const EXAMPLES = ['Ollama', 'RabbitMQ', 'KnowBase', 'Neo4j'];
+const EXAMPLES = ['RAG', 'Ollama', 'RabbitMQ', 'KnowBase', 'Neo4j'];
 
 function PathCard({ path, active, onClick }: { path: GraphSearchPath; active: boolean; onClick: () => void }) {
   const entityNames = path.entities.map((entity) => entity.name).join(' → ');
@@ -88,7 +89,7 @@ export function GraphPage() {
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const value = query.trim();
-    setParams(value ? { q: value, maxHops, limit } : {});
+    setParams(value ? { ...(isMockEnabled() ? { mock: '1' } : {}), q: value, maxHops, limit } : {});
   };
 
   return (
@@ -145,7 +146,7 @@ export function GraphPage() {
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => setParams({ q: example, maxHops, limit })}
+            onClick={() => setParams({ ...(isMockEnabled() ? { mock: '1' } : {}), q: example, maxHops, limit })}
           >
             {example}
           </Button>

@@ -311,7 +311,43 @@ const httpDocumentsApi = {
 // Mock 模式（?mock=1 开启）下使用内存数据源，便于无后端环境演示。
 import { isMockEnabled, mockDocumentsApi, mockGraphApi } from './mock-api';
 
-export const documentsApi = isMockEnabled() ? mockDocumentsApi : httpDocumentsApi;
+function activeDocumentsApi() {
+  return isMockEnabled() ? mockDocumentsApi : httpDocumentsApi;
+}
+
+export const documentsApi = {
+  list(query?: ListDocumentsQuery): Promise<DocumentListResult> {
+    return activeDocumentsApi().list(query);
+  },
+
+  detail(id: string): Promise<DocumentDetail> {
+    return activeDocumentsApi().detail(id);
+  },
+
+  create(file: File, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+    return activeDocumentsApi().create(file, meta);
+  },
+
+  update(id: string, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+    return activeDocumentsApi().update(id, meta);
+  },
+
+  updateContent(id: string, markdown: string): Promise<DocumentDetail> {
+    return activeDocumentsApi().updateContent(id, markdown);
+  },
+
+  submitReview(id: string): Promise<DocumentDetail> {
+    return activeDocumentsApi().submitReview(id);
+  },
+
+  review(id: string, approved: boolean, reason?: string): Promise<DocumentDetail> {
+    return activeDocumentsApi().review(id, approved, reason);
+  },
+
+  remove(id: string): Promise<void> {
+    return activeDocumentsApi().remove(id);
+  },
+};
 
 export const authApi = {
   async login(username: string, password: string) {
@@ -377,4 +413,8 @@ const httpGraphApi = {
   },
 };
 
-export const graphApi = isMockEnabled() ? mockGraphApi : httpGraphApi;
+export const graphApi = {
+  search(query: string, maxHops: number, limit: number): Promise<GraphSearchResult> {
+    return (isMockEnabled() ? mockGraphApi : httpGraphApi).search(query, maxHops, limit);
+  },
+};

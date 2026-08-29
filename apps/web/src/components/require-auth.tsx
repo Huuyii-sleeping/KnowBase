@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { authStorage, type AuthUser } from '@/lib/api';
+import { isMockEnabled } from '@/lib/mock-api';
 
 export function RequireAuth({ children }: { children: ReactNode }) {
   const location = useLocation();
@@ -10,8 +11,9 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   useEffect(() => authStorage.subscribe(() => {
     setAuthenticated(Boolean(authStorage.getToken() && authStorage.getUser()));
   }), []);
+  if (isMockEnabled()) return children;
   if (!authenticated) {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+    return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
   }
   return children;
 }
