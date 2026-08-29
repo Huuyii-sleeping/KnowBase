@@ -132,6 +132,68 @@ export interface ListDocumentsQuery {
   pageSize?: number;
 }
 
+export interface SearchDocumentItem {
+  id: string;
+  title: string;
+  fileName?: string;
+  category?: string | null;
+  team?: string | null;
+  tags?: string[];
+  version?: number;
+  score: number | null;
+  highlights?: Record<string, string[]>;
+}
+
+export interface SearchDocumentResult {
+  items: SearchDocumentItem[];
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
+export interface HybridSearchItem {
+  documentId: string;
+  chunkId?: string;
+  chunkIndex?: number;
+  title: string;
+  content?: string;
+  category: string | null;
+  team: string | null;
+  tags: string[];
+  score: number;
+  keywordScore: number | null;
+  semanticScore: number | null;
+  sources: AnswerSourceType[];
+  rerankScore: number;
+}
+
+export interface HybridSearchResult {
+  query: string;
+  topK: number;
+  items: HybridSearchItem[];
+}
+
+export interface SemanticSearchItem {
+  chunkId: string;
+  documentId: string;
+  documentVersion: number;
+  chunkIndex: number;
+  content: string;
+  score: number | null;
+  document: {
+    title: string;
+    category: string | null;
+    team: string | null;
+    tags: string[];
+  };
+}
+
+export interface SemanticSearchResult {
+  query: string;
+  topK: number;
+  items: SemanticSearchItem[];
+}
+
 const BASE = '/api/v1';
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -250,6 +312,31 @@ export const answerApi = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, topK }),
+    });
+  },
+};
+
+export type SearchMode = 'hybrid' | 'keyword' | 'semantic';
+
+export const searchApi = {
+  documents(query: string, pageSize = 20): Promise<SearchDocumentResult> {
+    const params = new URLSearchParams({ keyword: query, page: '1', pageSize: String(pageSize) });
+    return request(`/search/documents?${params.toString()}`);
+  },
+
+  hybrid(query: string, topK: number): Promise<HybridSearchResult> {
+    return request('/search/hybrid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, topK }),
+    });
+  },
+
+  semantic(query: string, topK: number): Promise<SemanticSearchResult> {
+    return request('/search/semantic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, topK }),
     });
   },
 };

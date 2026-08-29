@@ -84,6 +84,19 @@ The knowledge graph module follows the same pipeline boundary:
 
 The extraction provider is injected through `GRAPH_EXTRACTION_PROVIDER`, so tests can use a fake provider and a future model can replace Ollama without changing the pipeline.
 
+## Frontend Module Boundaries
+
+The web application keeps route-level orchestration separate from reusable UI and API code:
+
+- `pages/*.tsx`: page state, URL synchronization, and use-case orchestration only.
+- `components/*`: reusable interaction and presentation units. Search mode tabs live in `search-mode-tabs.tsx`; keyword, semantic, and hybrid result rendering lives in `search-result-card.tsx`.
+- `lib/api.ts`: typed HTTP client and API response contracts.
+- `lib/*.utils.ts`: pure formatting and normalization helpers that can be unit tested without a browser.
+
+The retrieval workspace is available at `/search`. The query is represented by `q` and the selected mode by `mode` (`hybrid`, `keyword`, or `semantic`), so searches can be refreshed, linked, and reproduced. The global header search input only navigates to this route; the page owns the actual request and result state.
+
+When adding a new retrieval mode or result shape, update the typed API contract, the mode control, and the dedicated result component separately. Do not add provider-specific response parsing to `AppShell` or place all result variants back into the page component.
+
 ## Parser Contract
 
 Every format parser implements the shared `FormatParser` contract and returns a `ParsedDocument`:
@@ -166,6 +179,7 @@ Run these checks before completing a change:
 ```bash
 pnpm --filter @knowbase/api test
 pnpm --filter @knowbase/api build
+pnpm --filter @knowbase/web test
 pnpm --filter @knowbase/web build
 docker compose -f deploy/docker-compose.yml config
 git diff --check
