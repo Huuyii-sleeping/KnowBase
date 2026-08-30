@@ -40,9 +40,25 @@ describe('knowledge graph data', () => {
     expect(nodes.find((node) => node.id === '概念:rag')?.states).toContain('active');
     expect(nodes.find((node) => node.id === '概念:rag')?.data?.isSeed).toBe(true);
     expect(nodes.find((node) => node.id === '能力:graph')?.data?.depth).toBe(1);
-    expect(nodes.find((node) => node.id === '存储:neo4j')?.data?.size).toBeGreaterThan(0);
+    expect(nodes.find((node) => node.id === '存储:neo4j')?.type).toBe('rect');
+    expect(nodes.find((node) => node.id === '存储:neo4j')?.data?.size).toEqual(expect.arrayContaining([expect.any(Number), expect.any(Number)]));
+    expect(nodes.find((node) => node.id === '概念:rag')?.data?.pathCount).toBe(2);
+    expect(nodes.find((node) => node.id === '概念:rag')?.data?.relationCount).toBe(2);
+    expect(graph.nodeOrder[0]).toBe('概念:rag');
     expect(edges.find((edge) => edge.id === '概念:rag::策略:hybrid::依赖')?.data?.documentIds).toEqual(['doc-1']);
+    expect(edges.find((edge) => edge.id === '概念:rag::策略:hybrid::依赖')?.type).toBe('polyline');
     expect(edges.find((edge) => edge.id === '概念:rag::策略:hybrid::依赖')?.states).toContain('active');
     expect(edges.find((edge) => edge.id === '概念:rag::能力:graph::追加')?.states).toEqual([]);
+  });
+
+  it('uses the queried entity as the visual anchor when it appears inside returned paths', () => {
+    const graph = buildKnowledgeGraphData(paths, paths[1], 'Neo4j');
+    const nodes = graph.data.nodes ?? [];
+
+    expect(graph.seedId).toBe('存储:neo4j');
+    expect(graph.seedLabel).toBe('Neo4j');
+    expect(nodes.find((node) => node.id === '存储:neo4j')?.data?.isSeed).toBe(true);
+    expect(nodes.find((node) => node.id === '存储:neo4j')?.data?.depth).toBe(0);
+    expect(nodes.find((node) => node.id === '能力:graph')?.data?.depth).toBe(1);
   });
 });

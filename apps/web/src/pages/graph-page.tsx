@@ -178,7 +178,7 @@ export function GraphPage() {
           </section>
 
           <section className="space-y-4">
-            <KnowledgeGraphDiagram paths={items} activePath={activePath} />
+            <KnowledgeGraphDiagram paths={items} activePath={activePath} query={searched} />
 
             {activePath && (
               <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">

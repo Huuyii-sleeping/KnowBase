@@ -22,24 +22,25 @@ function getNodePalette(node: KnowledgeGraphNodeData) {
   return NODE_PALETTES[node.group as PaletteName] ?? NODE_PALETTES.other;
 }
 
-function makeLayout(maxHops: number) {
+function makeLayout(nodeOrder: string[], maxDepth: number) {
   return {
-    type: 'concentric',
-    sortBy: (node: NodeData) => {
-      const data = node.data as KnowledgeGraphNodeData | undefined;
-      if (data?.isSeed) return 10_000;
-      return 10_000 - Number(data?.depth ?? 0) * 1000 - Number(data?.order ?? 0);
-    },
-    startAngle: -Math.PI / 2,
-    sweep: Math.PI * 2 * 0.92,
-    clockwise: true,
-    equidistant: true,
-    preventOverlap: true,
-    nodeSize: (node: NodeData) => Number(node.data?.size ?? 72),
-    maxLevelDiff: 500,
-    width: 960,
-    height: Math.max(560, 440 + maxHops * 36),
+    type: 'antv-dagre',
+    rankdir: 'LR',
+    align: 'UL',
+    ranker: 'tight-tree',
+    nodeOrder,
+    begin: [36, 36],
+    nodesep: 62,
+    ranksep: Math.max(126, 112 + maxDepth * 6),
+    edgeLabelSpace: true,
+    controlPoints: true,
+    nodeSize: (node: NodeData) => (node.data?.size as [number, number] | undefined) ?? [140, 56],
+    nodeSpacing: 32,
   } as const;
+}
+
+function getMaxDepth(nodes: NodeData[] | undefined) {
+  return Math.max(1, ...(nodes ?? []).map((node) => Number(node.data?.depth ?? 0)));
 }
 
 function getNodeStyle(datum: NodeData) {
@@ -47,31 +48,40 @@ function getNodeStyle(datum: NodeData) {
   const palette = data ? getNodePalette(data) : NODE_PALETTES.other;
   const isSeed = Boolean(data?.isSeed);
   const isActive = Boolean(data?.isActive);
-  const size = Number(data?.size ?? 76);
+  const size = data?.size ?? [140, 56];
 
   return {
     size,
     fill: palette.fill,
     stroke: isSeed ? palette.stroke : palette.stroke,
-    lineWidth: isSeed ? 2.5 : 1.8,
+    radius: 8,
+    lineWidth: isSeed ? 2.8 : 1.6,
+    opacity: isActive || isSeed ? 1 : 0.94,
     labelText: data?.label ?? datum.id,
     labelFill: palette.label,
     labelFontSize: isSeed ? 14 : 12,
     labelFontWeight: isSeed ? 700 : 600,
-    labelWordWrap: false,
+    labelLineHeight: isSeed ? 18 : 16,
+    labelWordWrap: true,
+    labelMaxWidth: '82%',
+    labelMaxLines: 2,
+    labelPlacement: 'center' as const,
+    labelBackground: false,
     labelOffsetX: 0,
-    labelOffsetY: 12,
+    labelOffsetY: 3,
     badge: true,
     badges: data?.entityType
       ? [
           {
             text: data.entityType,
-            placement: 'top-right' as const,
+            placement: 'top' as const,
             backgroundFill: palette.badgeFill,
             fill: palette.badgeText,
-            fontSize: 10,
-            padding: [2, 7, 2, 7],
-            backgroundRadius: 999,
+            fontSize: 9,
+            fontWeight: 600,
+            padding: [1, 6, 1, 6],
+            offsetY: 8,
+            backgroundRadius: 6,
             backgroundOpacity: 1,
           },
         ]
@@ -87,35 +97,40 @@ function getEdgeStyle(datum: EdgeData) {
 
   return {
     stroke: isActive ? '#4f46e5' : '#B9BECA',
-    lineWidth: isActive ? 2.8 : 1.8,
-    opacity: isActive ? 1 : 0.82,
+    lineWidth: isActive ? 2.4 : 1.4,
+    opacity: isActive ? 1 : 0.72,
+    radius: 8,
     endArrow: true,
     endArrowType: 'vee' as const,
     endArrowSize: 8,
     label: true,
     labelText: data?.relationType ?? '',
     labelFill: isActive ? '#312E81' : '#5F6778',
-    labelFontSize: 11,
+    labelFontSize: 10,
     labelFontWeight: 600,
+    labelPlacement: 'center' as const,
+    labelAutoRotate: false,
     labelWordWrap: false,
-    labelPadding: [2, 8, 2, 8],
+    labelOffsetY: -8,
+    labelPadding: [2, 7, 2, 7],
     labelBackground: true,
     labelBackgroundFill: isActive ? '#EEF2FF' : '#FFFFFF',
     labelBackgroundOpacity: 0.95,
-    labelBackgroundRadius: 999,
+    labelBackgroundRadius: 6,
     labelBackgroundLineWidth: 0,
   };
 }
 
-function useKnowledgeGraph(paths: GraphSearchPath[], activePath: GraphSearchPath | null) {
-  return useMemo(() => buildKnowledgeGraphData(paths, activePath), [paths, activePath]);
+function useKnowledgeGraph(paths: GraphSearchPath[], activePath: GraphSearchPath | null, query: string) {
+  return useMemo(() => buildKnowledgeGraphData(paths, activePath, query), [paths, activePath, query]);
 }
 
-export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearchPath[]; activePath: GraphSearchPath | null }) {
+export function KnowledgeGraphDiagram({ paths, activePath, query = '' }: { paths: GraphSearchPath[]; activePath: GraphSearchPath | null; query?: string }) {
   const graphRef = useRef<G6Graph | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [renderError, setRenderError] = useState<string | null>(null);
-  const graph = useKnowledgeGraph(paths, activePath);
+  const graph = useKnowledgeGraph(paths, activePath, query);
+  const maxDepth = getMaxDepth(graph.data.nodes);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -135,9 +150,9 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
         padding: [32, 28, 32, 28],
         background: '#FBFCFF',
         data: { nodes: [], edges: [] },
-        layout: makeLayout(activePath?.entities.length ?? 2),
+        layout: makeLayout(graph.nodeOrder, maxDepth),
         node: {
-          type: 'circle',
+          type: 'rect',
           style: getNodeStyle,
           state: {
             active: {
@@ -154,7 +169,7 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
           },
         },
         edge: {
-          type: 'cubic',
+          type: 'polyline',
           style: getEdgeStyle,
           state: {
             active: {
@@ -189,7 +204,7 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
             enable: true,
           },
         ],
-        transforms: [],
+        transforms: [{ type: 'process-parallel-edges', mode: 'bundle', distance: 18 }],
       });
 
       graphRef.current = instance;
@@ -221,8 +236,8 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
     try {
       instance.setData(graph.data);
       instance.setOptions({
-        layout: makeLayout(activePath?.entities.length ?? 2),
-        transforms: [],
+        layout: makeLayout(graph.nodeOrder, maxDepth),
+        transforms: [{ type: 'process-parallel-edges', mode: 'bundle', distance: 18 }],
       });
       void instance.render().catch((error: unknown) => {
         if (cancelled || graphRef.current !== instance) return;
@@ -237,7 +252,7 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
     return () => {
       cancelled = true;
     };
-  }, [activePath?.entities.length, graph]);
+  }, [graph, maxDepth]);
 
   if (!paths.length) {
     return (
@@ -257,7 +272,7 @@ export function KnowledgeGraphDiagram({ paths, activePath }: { paths: GraphSearc
           </div>
         </div>
         <div className="ml-auto flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-          <span className="rounded-full border border-border bg-secondary px-2 py-1">中心实体</span>
+          <span className="rounded-full border border-border bg-secondary px-2 py-1">层级布局</span>
           <span className="rounded-full border border-border bg-secondary px-2 py-1">关系箭头</span>
           <span className="rounded-full border border-border bg-secondary px-2 py-1">悬停高亮</span>
         </div>

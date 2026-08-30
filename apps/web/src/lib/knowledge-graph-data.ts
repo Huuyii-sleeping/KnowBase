@@ -9,7 +9,9 @@ export interface KnowledgeGraphNodeData extends Record<string, unknown> {
   group: EntityGroup;
   depth: number;
   order: number;
-  size: number;
+  size: [number, number];
+  pathCount: number;
+  relationCount: number;
   isSeed: boolean;
   isActive: boolean;
   documentIds: string[];
@@ -28,6 +30,7 @@ export interface KnowledgeGraphDataset {
   seedLabel: string;
   nodeCount: number;
   edgeCount: number;
+  nodeOrder: string[];
   data: GraphData;
 }
 
@@ -37,6 +40,12 @@ function normalizeKey(value: string): string {
 
 function uniqueSorted(values: Iterable<string>): string[] {
   return [...new Set([...values].filter(Boolean))].sort((a, b) => a.localeCompare(b));
+}
+
+function matchesFocus(entity: GraphSearchPath['entities'][number], focusQuery: string): boolean {
+  const query = normalizeKey(focusQuery);
+  if (!query) return false;
+  return [entity.key, entity.name, entity.type].some((value) => normalizeKey(value).includes(query));
 }
 
 function classifyEntityGroup(type: string, name: string, isSeed: boolean): EntityGroup {
@@ -52,18 +61,21 @@ function classifyEntityGroup(type: string, name: string, isSeed: boolean): Entit
   return 'other';
 }
 
-function estimateNodeSize(name: string, group: EntityGroup): number {
+function estimateNodeSize(name: string, group: EntityGroup): [number, number] {
   const length = [...name].length;
-  if (group === 'seed') return 96;
-  if (length <= 4) return 68;
-  if (length <= 8) return 76;
-  if (length <= 14) return 84;
-  return 92;
+  const width = Math.min(Math.max(128, length * 12 + 54), group === 'seed' ? 190 : 176);
+  return [width, group === 'seed' ? 62 : 56];
 }
 
-export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: GraphSearchPath | null): KnowledgeGraphDataset {
+function pickAnchor(paths: GraphSearchPath[], activePath: GraphSearchPath | null, focusQuery = '') {
+  const candidates = [activePath, ...paths].filter((path): path is GraphSearchPath => Boolean(path));
+  const focusedEntity = candidates.flatMap((path) => path.entities).find((entity) => matchesFocus(entity, focusQuery));
+  return focusedEntity ?? activePath?.seed ?? paths[0]?.seed ?? null;
+}
+
+export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: GraphSearchPath | null, focusQuery = ''): KnowledgeGraphDataset {
   const basePath = activePath ?? paths[0] ?? null;
-  const seed = basePath?.seed ?? paths[0]?.seed ?? null;
+  const seed = pickAnchor(paths, basePath, focusQuery);
   const seedId = seed?.key ?? '';
   const seedLabel = seed?.name ?? '';
 
@@ -71,7 +83,7 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
     string,
     NodeData & {
       id: string;
-      type: 'circle';
+      type: 'rect';
       data: KnowledgeGraphNodeData;
       states: NodeData['states'];
     }
@@ -83,13 +95,15 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       states: EdgeData['states'];
     }
   >();
+  const relationCountByNode = new Map<string, number>();
 
   let order = 0;
+  const activeEntityKeys = new Set(activePath?.entities.map((entity) => entity.key) ?? []);
+  const activeRelationKeys = new Set(activePath?.relations.map((relation) => relation.key) ?? []);
 
   for (const path of paths) {
     const documentIds = uniqueSorted(path.relations.map((relation) => relation.documentId));
-    const activeEntityKeys = new Set(activePath?.entities.map((entity) => entity.key) ?? []);
-    const activeRelationKeys = new Set(activePath?.relations.map((relation) => relation.key) ?? []);
+    const seedIndex = Math.max(0, path.entities.findIndex((entity) => entity.key === seedId));
 
     path.entities.forEach((entity, index) => {
       const existing = nodeMap.get(entity.key);
@@ -97,18 +111,21 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       const size = estimateNodeSize(entity.name, group);
       const nextDocumentIds = new Set(existing?.data.documentIds ?? []);
       documentIds.forEach((documentId) => nextDocumentIds.add(documentId));
+      const depth = Math.abs(index - seedIndex);
 
       if (!existing) {
         nodeMap.set(entity.key, {
           id: entity.key,
-          type: 'circle',
+          type: 'rect',
           data: {
             label: entity.name,
             entityType: entity.type,
             group,
-            depth: index,
+            depth,
             order: order++,
             size,
+            pathCount: 1,
+            relationCount: 0,
             isSeed: entity.key === seedId,
             isActive: activeEntityKeys.has(entity.key),
             documentIds: [...nextDocumentIds],
@@ -121,8 +138,12 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       existing.data.label = entity.name;
       existing.data.entityType = entity.type;
       existing.data.group = classifyEntityGroup(entity.type, entity.name, existing.data.isSeed || entity.key === seedId);
-      existing.data.depth = Math.min(existing.data.depth, index);
-      existing.data.size = Math.max(existing.data.size, size);
+      existing.data.depth = Math.min(existing.data.depth, depth);
+      existing.data.size = [
+        Math.max(existing.data.size[0], size[0]),
+        Math.max(existing.data.size[1], size[1]),
+      ];
+      existing.data.pathCount += 1;
       existing.data.isSeed = existing.data.isSeed || entity.key === seedId;
       existing.data.isActive = activeEntityKeys.has(entity.key);
       existing.data.documentIds = [...nextDocumentIds];
@@ -143,13 +164,15 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       nextDocumentIds.add(relation.documentId);
       nextChunkIds.add(relation.chunkId);
       nextRelationIds.add(relation.key);
+      relationCountByNode.set(source.key, (relationCountByNode.get(source.key) ?? 0) + 1);
+      relationCountByNode.set(target.key, (relationCountByNode.get(target.key) ?? 0) + 1);
 
       const isActive = activeRelationKeys.has(relation.key) || existing?.data.isActive === true;
       edgeMap.set(edgeKey, {
         id: edgeKey,
         source: source.key,
         target: target.key,
-        type: 'cubic-radial',
+        type: 'polyline',
         data: {
           relationType: relation.type,
           documentIds: [...nextDocumentIds],
@@ -165,9 +188,19 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
   const nodes = [...nodeMap.values()].map((node) => ({
     id: node.id,
     type: node.type,
-    data: node.data,
+    data: {
+      ...node.data,
+      relationCount: relationCountByNode.get(node.id) ?? 0,
+    },
     states: node.states,
-  }));
+  })).sort((a, b) => {
+    const aData = a.data as KnowledgeGraphNodeData;
+    const bData = b.data as KnowledgeGraphNodeData;
+    return aData.depth - bData.depth
+      || bData.pathCount - aData.pathCount
+      || bData.relationCount - aData.relationCount
+      || aData.order - bData.order;
+  });
 
   const edges = [...edgeMap.values()].map((edge) => ({
     id: edge.id,
@@ -183,6 +216,7 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
     seedLabel,
     nodeCount: nodes.length,
     edgeCount: edges.length,
+    nodeOrder: nodes.map((node) => String(node.id)),
     data: { nodes, edges },
   };
 }
