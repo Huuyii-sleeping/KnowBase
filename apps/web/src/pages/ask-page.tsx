@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { requestFailure } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 
 const EXAMPLES = [
   'RAG 的基本流程是什么？',
@@ -74,31 +76,37 @@ export function AskPage() {
   const [conversation, setConversation] = useState<ConversationItem[]>([]);
   const [latest, setLatest] = useState<AnswerResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failure, setFailure] = useState<{
+    message: string;
+    retryable: boolean;
+    question: string;
+    topK: number;
+  } | null>(null);
 
-  const submit = async (
-    event?: FormEvent<HTMLFormElement>,
-    preset?: string,
-  ) => {
-    event?.preventDefault();
-    const value = (preset ?? question).trim();
+  const send = async (value: string, recall: number, retry = false) => {
     if (!value || loading) return;
-    setQuestion('');
-    setError(null);
+    if (!retry) setQuestion('');
+    setFailure(null);
     setLoading(true);
-    setConversation((items) => [...items, { role: 'user', text: value }]);
+    if (!retry)
+      setConversation((items) => [...items, { role: 'user', text: value }]);
     try {
-      const result = await answerApi.answer(value, Number(topK));
+      const result = await answerApi.answer(value, recall);
       setLatest(result);
       setConversation((items) => [
         ...items,
         { role: 'assistant', text: result.answer, result },
       ]);
     } catch (reason) {
-      setError((reason as Error).message);
+      setFailure({ ...requestFailure(reason), question: value, topK: recall });
     } finally {
       setLoading(false);
     }
+  };
+
+  const submit = (event?: FormEvent<HTMLFormElement>, preset?: string) => {
+    event?.preventDefault();
+    return send((preset ?? question).trim(), Number(topK));
   };
 
   return (
@@ -214,10 +222,16 @@ export function AskPage() {
                   正在检索并组织回答…
                 </div>
               )}
-              {error && (
-                <div className="rounded-md border border-red-200 bg-red-50 px-3.5 py-3 text-[13px] text-red-700">
-                  回答失败：{error}
-                </div>
+              {failure && (
+                <RequestFailure
+                  title="这次没能生成回答"
+                  message={failure.message}
+                  onRetry={
+                    failure.retryable
+                      ? () => void send(failure.question, failure.topK, true)
+                      : undefined
+                  }
+                />
               )}
             </div>
 

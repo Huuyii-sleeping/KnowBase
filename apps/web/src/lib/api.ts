@@ -1,3 +1,5 @@
+import { requestJson } from './http-request';
+
 /**
  * Knowbase 文档模块 API 客户端。
  * 与 apps/api 的 NestJS 接口契约对齐（全局前缀 /api/v1）。
@@ -225,22 +227,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
   const token = authStorage.getToken();
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  const res = await fetch(`${BASE}${path}`, { ...init, headers });
-  if (!res.ok) {
-    if (res.status === 401) authStorage.clear();
-    let message = `请求失败（${res.status}）`;
-    try {
-      const body = await res.json();
-      if (body?.message) {
-        message = Array.isArray(body.message) ? body.message.join('；') : body.message;
-      }
-    } catch {
-      // 保留默认错误信息
-    }
-    throw new Error(message);
-  }
-  if (res.status === 204) return undefined as T;
-  return (await res.json()) as T;
+  return requestJson<T>(
+    `${BASE}${path}`,
+    { ...init, headers },
+    authStorage.clear,
+  );
 }
 
 const httpDocumentsApi = {
