@@ -87,6 +87,8 @@ The extraction provider is injected through `GRAPH_EXTRACTION_PROVIDER`, so test
 
 ## Frontend Module Boundaries
 
+Frontend visual tokens, reusable presentation components, responsive behavior, and preview instructions are maintained in [frontend-design.md](frontend-design.md).
+
 The web application keeps route-level orchestration separate from reusable UI and API code:
 
 - `pages/*.tsx`: page state, URL synchronization, and use-case orchestration only.

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -12,22 +12,30 @@ import {
 } from '@/components/ui/table';
 import { ParseBadge, StatusBadge } from '@/components/status-badges';
 import { UploadDialog } from '@/components/upload-dialog';
-import { documentsApi, type DocumentMeta, type DocumentStatus } from '@/lib/api';
+import {
+  documentsApi,
+  type DocumentMeta,
+  type DocumentStatus,
+} from '@/lib/api';
 import { formatBytes, formatRelative } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { PageHeader } from '@/components/page-header';
+import { EmptyState } from '@/components/empty-state';
+import { FileSymbol } from '@/components/file-symbol';
+import { Icon } from '@/components/ui/icon';
 
-const STATUS_FILTERS: Array<{ value: DocumentStatus | 'ALL'; label: string }> = [
-  { value: 'ALL', label: '全部' },
-  { value: 'DRAFT', label: '草稿' },
-  { value: 'PENDING_REVIEW', label: '待审核' },
-  { value: 'PUBLISHED', label: '已发布' },
-  { value: 'REJECTED', label: '已驳回' },
-];
+const STATUS_FILTERS: Array<{ value: DocumentStatus | 'ALL'; label: string }> =
+  [
+    { value: 'ALL', label: '全部' },
+    { value: 'DRAFT', label: '草稿' },
+    { value: 'PENDING_REVIEW', label: '待审核' },
+    { value: 'PUBLISHED', label: '已发布' },
+    { value: 'REJECTED', label: '已驳回' },
+  ];
 
 const PAGE_SIZE = 20;
 
 export function DocumentsPage() {
-  const navigate = useNavigate();
   const [items, setItems] = useState<DocumentMeta[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -67,101 +75,223 @@ export function DocumentsPage() {
 
   return (
     <div>
-      <div className="mb-5 flex items-center gap-4">
-        <h1 className="text-[22px] font-semibold tracking-tight">文档库</h1>
-        <div className="flex-1" />
-        <Button onClick={() => setUploadOpen(true)}>＋ 上传文档</Button>
-      </div>
+      <PageHeader
+        eyebrow="Document library"
+        title="文档库"
+        description="让团队的每一份经验，都成为可复用的知识。"
+        actions={
+          <Button onClick={() => setUploadOpen(true)}>
+            <Icon name="upload" width={16} height={16} />
+            上传文档
+          </Button>
+        }
+      />
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <div className="flex gap-1">
-          {STATUS_FILTERS.map((f) => (
-            <button
-              key={f.value}
-              className={cn(
-                'rounded-full px-3.5 py-1 text-[13px] text-muted-foreground transition-colors hover:bg-accent',
-                status === f.value && 'bg-foreground text-background hover:bg-foreground',
-              )}
-              onClick={() => { setStatus(f.value); setPage(1); }}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-        <form
-          className="ml-auto"
-          onSubmit={(e) => { e.preventDefault(); setKeyword(keywordInput.trim()); setPage(1); }}
-        >
-          <Input
-            className="w-[200px]"
-            placeholder="搜索标题 / 文件名…"
-            value={keywordInput}
-            onChange={(e) => setKeywordInput(e.target.value)}
-          />
-        </form>
-      </div>
-
-      <div className="overflow-hidden rounded-lg border border-border bg-background">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="w-[38%]">标题</TableHead>
-              <TableHead>分类 / 标签</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead>解析</TableHead>
-              <TableHead className="text-right">更新时间</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.map((doc) => (
-              <TableRow
-                key={doc.id}
-                className="cursor-pointer"
-                onClick={() => navigate(`/documents/${doc.id}`)}
-              >
-                <TableCell>
-                  <div className="truncate text-[13.5px] font-medium">{doc.title}</div>
-                  <div className="text-[12px] text-muted-foreground/70">
-                    {formatBytes(doc.fileSize)} · v{doc.version}
-                  </div>
-                </TableCell>
-                <TableCell className="text-[12.5px] text-muted-foreground">
-                  {[doc.category, doc.tags.join(', ')].filter(Boolean).join(' · ') || '—'}
-                </TableCell>
-                <TableCell><StatusBadge status={doc.status} /></TableCell>
-                <TableCell><ParseBadge status={doc.parseStatus} /></TableCell>
-                <TableCell className="text-right text-[12.5px] text-muted-foreground">
-                  {formatRelative(doc.updatedAt)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {!loading && !error && items.length === 0 && (
-          <div className="py-14 text-center text-[13px] text-muted-foreground/70">
-            暂无文档，点击右上角「上传文档」开始
+      <section className="knowledge-banner mb-7">
+        <div className="flex items-center gap-5">
+          <div className="knowledge-map hidden lg:block" aria-hidden="true">
+            <span className="left-1 top-6">
+              <Icon name="file" />
+            </span>
+            <span className="left-14 top-0">
+              <Icon name="spark" />
+            </span>
+            <span className="bottom-0 right-0">
+              <Icon name="graph" />
+            </span>
           </div>
+          <div>
+            <h2 className="text-[17px] font-semibold tracking-tight">
+              知识不止于收藏，更在于连接。
+            </h2>
+            <p className="mt-1.5 text-[12px] leading-6 text-muted-foreground">
+              上传、整理、发布，让文档成为问答与探索的起点。
+            </p>
+          </div>
+        </div>
+        <Link
+          to="/ask"
+          className="inline-flex items-center gap-2 text-[12px] font-semibold text-primary hover:underline"
+        >
+          向知识库提问
+          <Icon name="arrow" width={16} height={16} />
+        </Link>
+      </section>
+
+      <section className="panel overflow-hidden">
+        <div className="flex flex-wrap items-center gap-4 border-b border-border px-5 py-4">
+          <div className="flex flex-wrap gap-1" aria-label="按文档状态筛选">
+            {STATUS_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                type="button"
+                aria-pressed={status === f.value}
+                className={cn(
+                  'rounded-md px-3 py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-accent',
+                  status === f.value &&
+                    'bg-accent text-primary hover:bg-accent',
+                )}
+                onClick={() => {
+                  setStatus(f.value);
+                  setPage(1);
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <form
+            className="relative ml-auto w-full sm:w-[210px]"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setKeyword(keywordInput.trim());
+              setPage(1);
+            }}
+          >
+            <Icon
+              name="search"
+              width={15}
+              height={15}
+              className="pointer-events-none absolute left-3 top-2.5 text-muted-foreground"
+            />
+            <Input
+              aria-label="搜索文档标题或文件名"
+              className="pl-9"
+              placeholder="搜索标题 / 文件名…"
+              value={keywordInput}
+              onChange={(e) => setKeywordInput(e.target.value)}
+            />
+          </form>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table className="min-w-[720px]">
+            <TableHeader>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[38%]">标题</TableHead>
+                <TableHead>分类 / 标签</TableHead>
+                <TableHead>状态</TableHead>
+                <TableHead>解析</TableHead>
+                <TableHead className="text-right">更新时间</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((doc) => (
+                <TableRow key={doc.id} className="group">
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <FileSymbol fileName={doc.fileName} />
+                      <div className="min-w-0">
+                        <Link
+                          to={`/documents/${doc.id}`}
+                          className="line-clamp-2 text-[13px] font-semibold transition-colors group-hover:text-primary hover:underline"
+                        >
+                          {doc.title}
+                        </Link>
+                        <div className="mt-1 text-[11px] text-muted-foreground">
+                          {formatBytes(doc.fileSize)}
+                          <span className="mx-2 text-border">/</span>版本{' '}
+                          {doc.version}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-[12.5px] text-muted-foreground">
+                    <div>{doc.category || '未分类'}</div>
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {doc.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={doc.status} />
+                  </TableCell>
+                  <TableCell>
+                    <ParseBadge status={doc.parseStatus} />
+                  </TableCell>
+                  <TableCell className="text-right text-[12.5px] text-muted-foreground">
+                    {formatRelative(doc.updatedAt)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        {!loading && !error && items.length === 0 && (
+          <EmptyState
+            title={
+              keyword || status !== 'ALL'
+                ? '没有匹配的文档'
+                : '从第一份文档开始'
+            }
+            description={
+              keyword || status !== 'ALL'
+                ? '试试其他关键词，或切换文档状态。'
+                : '上传团队文档，整理并发布后即可用于检索和问答。'
+            }
+            action={
+              <Button variant="outline" onClick={() => setUploadOpen(true)}>
+                <Icon name="upload" width={15} height={15} />
+                上传文档
+              </Button>
+            }
+          />
         )}
         {error && (
-          <div className="py-14 text-center text-[13px]">
-            <span className="text-destructive">加载失败：{error}</span>
-            <div className="mt-1 text-muted-foreground/70">请确认后端服务已启动（localhost:3000）</div>
+          <div role="alert" className="px-5 py-14 text-center">
+            <p className="text-[13px] text-destructive">加载失败：{error}</p>
+            <Button className="mt-4" variant="outline" onClick={load}>
+              重新加载
+            </Button>
           </div>
         )}
         {loading && (
-          <div className="py-14 text-center text-[13px] text-muted-foreground/70">加载中…</div>
+          <div
+            role="status"
+            className="px-5 py-14 text-center text-[13px] text-muted-foreground"
+          >
+            正在加载文档…
+          </div>
         )}
-        <div className="flex items-center border-t border-border px-4 py-2.5 text-[12.5px] text-muted-foreground">
+        <div className="flex items-center border-t border-border px-5 py-3 text-[12.5px] text-muted-foreground">
           <span>共 {total} 篇文档</span>
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>‹</Button>
-            <span>{page} / {totalPages}</span>
-            <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>›</Button>
+            <Button
+              aria-label="上一页"
+              variant="outline"
+              size="sm"
+              disabled={page <= 1}
+              onClick={() => setPage(page - 1)}
+            >
+              ‹
+            </Button>
+            <span>
+              {page} / {totalPages}
+            </span>
+            <Button
+              aria-label="下一页"
+              variant="outline"
+              size="sm"
+              disabled={page >= totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              ›
+            </Button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <UploadDialog open={uploadOpen} onOpenChange={setUploadOpen} onCreated={load} />
+      <UploadDialog
+        open={uploadOpen}
+        onOpenChange={setUploadOpen}
+        onCreated={load}
+      />
     </div>
   );
 }
