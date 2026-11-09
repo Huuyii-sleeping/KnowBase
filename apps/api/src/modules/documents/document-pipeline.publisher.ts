@@ -1,55 +1,54 @@
 import { Injectable } from '@nestjs/common';
+import { EntityManager } from 'typeorm';
 import { MESSAGE_ROUTING_KEYS } from '../message-queue/message-queue.constants';
-import { MessageQueueService } from '../message-queue/message-queue.service';
-import type {
-  DocumentIndexMessage,
-  DocumentGraphDeleteMessage,
-  DocumentPipelineCommand,
-} from '../message-queue/message-queue.types';
+import { OutboxStore } from '../delivery/outbox.store';
 import { DocumentContentStore } from './document-content.store';
-import { DocumentQueryService } from './document-query.service';
+import { Document } from './entities/document.entity';
 
 @Injectable()
 export class DocumentPipelinePublisher {
   constructor(
-    private readonly messageQueue: MessageQueueService,
-    private readonly documentQuery: DocumentQueryService,
+    private readonly outbox: OutboxStore,
     private readonly contentStore: DocumentContentStore,
   ) {}
 
-  async publishDocument(documentId: string): Promise<void> {
-    const document = await this.documentQuery.findOne(documentId, false);
+  async publishDocument(
+    document: Document,
+    manager: EntityManager,
+  ): Promise<void> {
     const content = await this.contentStore.findByContentId(document.contentId);
-
-    if (!content) {
+    if (!content)
       throw new Error(`document content not found: ${document.contentId}`);
-    }
-
-    const indexMessage: DocumentIndexMessage = {
+    const command = {
+      type: 'DOCUMENT_PIPELINE_COMMAND',
+      documentId: document.id,
+      version: document.version,
+    };
+    // Use the same transaction manager as the document state update. No broker
+    // connection is required for a successful publication transaction.
+    await this.outbox.enqueue(manager, MESSAGE_ROUTING_KEYS.SEARCH_INDEX, {
       type: 'DOCUMENT_INDEX',
       documentId: document.id,
       version: document.version,
       metadata: document,
       markdown: content.markdown,
-    };
-    const pipelineCommand: DocumentPipelineCommand = {
-      type: 'DOCUMENT_PIPELINE_COMMAND',
-      documentId: document.id,
-      version: document.version,
-    };
-
-    await Promise.all([
-      this.messageQueue.publish(MESSAGE_ROUTING_KEYS.SEARCH_INDEX, indexMessage),
-      this.messageQueue.publish(MESSAGE_ROUTING_KEYS.RAG_REBUILD, pipelineCommand),
-      this.messageQueue.publish(MESSAGE_ROUTING_KEYS.KG_REBUILD, pipelineCommand),
-    ]);
+    });
+    await this.outbox.enqueue(
+      manager,
+      MESSAGE_ROUTING_KEYS.RAG_REBUILD,
+      command,
+    );
+    await this.outbox.enqueue(
+      manager,
+      MESSAGE_ROUTING_KEYS.KG_REBUILD,
+      command,
+    );
   }
 
   async deleteGraph(documentId: string): Promise<void> {
-    const message: DocumentGraphDeleteMessage = {
+    await this.outbox.enqueueStandalone(MESSAGE_ROUTING_KEYS.KG_DELETE, {
       type: 'DOCUMENT_GRAPH_DELETE',
       documentId,
-    };
-    await this.messageQueue.publish(MESSAGE_ROUTING_KEYS.KG_DELETE, message);
+    });
   }
 }

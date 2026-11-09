@@ -1,67 +1,62 @@
 import { describe, expect, it, vi } from 'vitest';
+vi.mock('./entities/document.entity', () => ({ Document: class Document {} }));
 import { DocumentPipelinePublisher } from './document-pipeline.publisher';
-import { MESSAGE_ROUTING_KEYS } from '../message-queue/message-queue.constants';
+
+function fixture() {
+  const outbox = { enqueue: vi.fn(), enqueueStandalone: vi.fn() };
+  const content = {
+    findByContentId: vi.fn().mockResolvedValue({ markdown: '# Content' }),
+  };
+  const service = new DocumentPipelinePublisher(outbox as any, content as any);
+  return { outbox, content, service };
+}
 
 describe('DocumentPipelinePublisher', () => {
-  it('publishes search, RAG and KG messages for the same document version', async () => {
-    const messageQueue = { publish: vi.fn().mockResolvedValue(undefined) };
-    const documentQuery = {
-      findOne: vi.fn().mockResolvedValue({
-        id: 'document-1',
-        contentId: 'content-1',
-        version: 2,
-        title: 'Knowledge',
-      }),
-    };
-    const contentStore = {
-      findByContentId: vi.fn().mockResolvedValue({ markdown: '# Content' }),
-    };
-    const service = new DocumentPipelinePublisher(
-      messageQueue as any,
-      documentQuery as any,
-      contentStore as any,
+  it('writes three versioned tasks with the supplied transaction manager', async () => {
+    const { service, outbox } = fixture();
+    const manager = {} as any;
+    await service.publishDocument(
+      { id: 'doc-1', contentId: 'content-1', version: 2 } as any,
+      manager,
     );
-
-    await service.publishDocument('document-1');
-
-    expect(messageQueue.publish).toHaveBeenCalledTimes(3);
-    expect(messageQueue.publish).toHaveBeenNthCalledWith(
+    expect(outbox.enqueue).toHaveBeenCalledTimes(3);
+    expect(outbox.enqueue).toHaveBeenNthCalledWith(
       1,
-      MESSAGE_ROUTING_KEYS.SEARCH_INDEX,
+      manager,
+      'document.index',
       expect.objectContaining({
-        documentId: 'document-1',
+        documentId: 'doc-1',
         version: 2,
         markdown: '# Content',
       }),
     );
-    expect(messageQueue.publish).toHaveBeenNthCalledWith(
+    expect(outbox.enqueue).toHaveBeenNthCalledWith(
       2,
-      MESSAGE_ROUTING_KEYS.RAG_REBUILD,
-      expect.objectContaining({ documentId: 'document-1', version: 2 }),
+      manager,
+      'document.rag.rebuild',
+      expect.objectContaining({ documentId: 'doc-1', version: 2 }),
     );
-    expect(messageQueue.publish).toHaveBeenNthCalledWith(
+    expect(outbox.enqueue).toHaveBeenNthCalledWith(
       3,
-      MESSAGE_ROUTING_KEYS.KG_REBUILD,
-      expect.objectContaining({ documentId: 'document-1', version: 2 }),
+      manager,
+      'document.kg.rebuild',
+      expect.objectContaining({ documentId: 'doc-1', version: 2 }),
     );
   });
-
-  it('publishes a KG delete message for document removal', async () => {
-    const messageQueue = { publish: vi.fn().mockResolvedValue(undefined) };
-    const service = new DocumentPipelinePublisher(
-      messageQueue as any,
-      { findOne: vi.fn() } as any,
-      { findByContentId: vi.fn() } as any,
-    );
-
-    await service.deleteGraph('document-1');
-
-    expect(messageQueue.publish).toHaveBeenCalledWith(
-      MESSAGE_ROUTING_KEYS.KG_DELETE,
-      expect.objectContaining({
-        type: 'DOCUMENT_GRAPH_DELETE',
-        documentId: 'document-1',
-      }),
+  it('does not enqueue when the source content is missing', async () => {
+    const { service, outbox, content } = fixture();
+    content.findByContentId.mockResolvedValueOnce(null);
+    await expect(
+      service.publishDocument({ contentId: 'missing' } as any, {} as any),
+    ).rejects.toThrow('document content not found');
+    expect(outbox.enqueue).not.toHaveBeenCalled();
+  });
+  it('persists KG deletion in the outbox', async () => {
+    const { service, outbox } = fixture();
+    await service.deleteGraph('doc-1');
+    expect(outbox.enqueueStandalone).toHaveBeenCalledWith(
+      'document.kg.delete',
+      { type: 'DOCUMENT_GRAPH_DELETE', documentId: 'doc-1' },
     );
   });
 });

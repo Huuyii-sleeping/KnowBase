@@ -19,7 +19,11 @@ export class DocumentsService {
     private readonly publishService: DocumentPublishService,
   ) {}
 
-  async create(file: Express.Multer.File | undefined, dto: CreateDocumentDto, user: AuthUser) {
+  async create(
+    file: Express.Multer.File | undefined,
+    dto: CreateDocumentDto,
+    user: AuthUser,
+  ) {
     const id = await this.commandService.create(file, dto, user);
     return this.queryService.findOneForUser(id, user, true);
   }
@@ -49,9 +53,6 @@ export class DocumentsService {
 
   async review(id: string, dto: ReviewDocumentDto, user: AuthUser) {
     await this.workflowService.review(id, dto, user);
-    if (dto.approved) {
-      await this.publishService.dispatch(id, user);
-    }
     return this.queryService.findOneForUser(id, user);
   }
 

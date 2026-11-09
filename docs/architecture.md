@@ -25,7 +25,7 @@ metadata     markdown      original file
 - `content_id` 是 PostgreSQL 当前正文版本和 MongoDB 正文的关联键。
 - 文档正文更新创建新的 `content_id`，历史正文暂不删除，为后续版本历史保留空间。
 - 文档列表默认只查询 PostgreSQL，文档详情才读取 MongoDB 正文。
-- 所有已发布文档通过 `POST /documents/:id/publish` 或审核通过入口触发三条独立的 RabbitMQ 管线。
+- `POST /documents/:id/publish` 和审核通过入口在 PostgreSQL 事务中同时保存发布状态与三条 Outbox 任务，再由 Relay 确认投递到三条独立的 RabbitMQ 管线。可靠性和恢复契约见 [pipeline.md](pipeline.md#发布与投递可靠性)。
 
 ## 解析流水线
 

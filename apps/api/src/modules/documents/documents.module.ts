@@ -5,7 +5,10 @@ import { StorageModule } from '../storage/storage.module';
 import { Document } from './entities/document.entity';
 import { DocumentsController } from './documents.controller';
 import { DocumentsService } from './documents.service';
-import { DocumentContent, DocumentContentSchema } from './schemas/document-content.schema';
+import {
+  DocumentContent,
+  DocumentContentSchema,
+} from './schemas/document-content.schema';
 import { FileParserService } from './parsing/file-parser.service';
 import { AssetUploaderService } from './parsing/asset-uploader.service';
 import { TextParser } from './parsing/parsers/text.parser';
@@ -23,6 +26,7 @@ import { DocumentPipelinePublisher } from './document-pipeline.publisher';
 import { DocumentPublishService } from './document-publish.service';
 import { MessageQueueModule } from '../message-queue/message-queue.module';
 import { AuthorizationModule } from '../authorization/authorization.module';
+import { DeliveryModule } from '../delivery/delivery.module';
 
 @Module({
   imports: [
@@ -32,6 +36,7 @@ import { AuthorizationModule } from '../authorization/authorization.module';
     ]),
     StorageModule,
     MessageQueueModule,
+    DeliveryModule,
     AuthorizationModule,
   ],
   controllers: [DocumentsController],

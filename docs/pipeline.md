@@ -7,7 +7,105 @@
 - `document.kg.rebuild`：携带 `documentId` 和 `version`，读取正文后分块，使用 Ollama 抽取实体和关系，写入 Neo4j 文档、Chunk、实体和关系节点。
 - `document.kg.delete`：携带 `documentId`，删除该文档对应的图谱节点、Chunk、关系，并回收不再被任何 Chunk 引用的孤立实体。
 
-RabbitMQ 使用持久化 topic exchange `knowbase.pipeline`，三个消费者使用独立 durable queue。消费成功 ack，失败按 `RABBITMQ_REQUEUE_ON_ERROR` 决定是否重新入队。
+RabbitMQ 使用持久化 topic exchange `knowbase.pipeline`，三个消费者使用独立 durable queue。发布可靠性、确认和重试契约见下节；旧配置 `RABBITMQ_REQUEUE_ON_ERROR` 不再使用。
+
+## 发布与投递可靠性
+
+采用 PostgreSQL 事务 Outbox + RabbitMQ publisher confirms + 手动消费确认，实现至少一次投递。数据库中“文档已发布”和“三条待投递任务”在同一事务提交。审核通过和显式发布复用同一入口，校验审核权限、待审核状态和 `parseStatus=READY`，锁定文档后更新状态并写入三条 Outbox 记录。读取 MongoDB 正文或任意 Outbox 插入失败会回滚该事务。
+
+```text
+发布请求
+  -> PostgreSQL 事务：PUBLISHED + 三条 kh_pipeline_outbox
+  -> 返回发布成功（表示任务已持久化，不表示索引全部就绪）
+
+OutboxRelayService
+  -> 查询到期的待投递记录，FOR UPDATE SKIP LOCKED
+  -> 声明交换机、业务队列、死信队列和 binding
+  -> persistent + mandatory + messageId + publisher confirm
+  -> broker 确认且未退回消息后，记录 published_at
+```
+
+每轮最多发送 `OUTBOX_BATCH_SIZE` 条；本轮不会重入。Relay 在确认期间持有单条 Outbox 行锁，确认等待有超时，多实例通过 `SKIP LOCKED` 分摊任务。Broker 不可用、nack、无路由退回、确认超时都会保留待投递记录并指数退避，最多延迟 60 秒。投递层不会因暂时故障耗尽业务重试次数。
+
+如果 broker 已接收，但应用在记录 `published_at` 前崩溃，Relay 会重新发送相同 `messageId`。因此该设计允许重复，不承诺端到端 exactly-once。
+
+### 消费完成、重试与死信
+
+每个业务队列使用独立 channel。`kh_pipeline_receipt` 按 `(consumer, event_id)` 记录完成状态和最近一次处理序号，行锁串行化同一事件的并发重复投递。重投已完成消息或旧的失败序号时直接跳过业务处理；只有数据库提交后才 `ack`。
+
+业务处理失败时，在同一个数据库事务内：
+
+1. 保存失败原因和本次处理序号。
+2. 通过 Outbox 安排延迟重试；默认共尝试 3 次，间隔为 5 秒、10 秒。
+3. 超过次数则将 receipt 标记 `DEAD`，并通过 Outbox 投递到 `<原 routing key>.dead`。
+
+三个死信队列为 `knowbase.pipeline.search.dead`、`knowbase.pipeline.rag.dead`、`knowbase.pipeline.kg.dead`。死信保留原始消息体和稳定事件 ID，业务失败原因保存在 receipt 中；Outbox 的 `last_error` 记录待投递错误，投递确认后清空。JSON 格式错误也纳入有限次数重试。旧版无 `messageId` 的队列消息使用 routing key 与原始内容的摘要作为兼容 ID。
+
+消费数据库不可用、写入重试失败或提交失败时，不确认原消息，而是关闭消费 channel，交给 broker 重新入队，之后按重连周期恢复。启动时 RabbitMQ 不可用不会阻止已持久化的发布请求；消费者会持续尝试连接。定时 Relay 同样会在连接恢复后重试。进程监听正常关闭信号以停止定时任务和关闭连接。
+
+### 幂等的边界
+
+receipt 能避免已经记录完成的重复业务处理，但不能让 PostgreSQL、Elasticsearch、Neo4j 共享事务。若索引写成功后进程在 receipt 提交前崩溃，仍会重新执行索引操作。当前全文使用文档 ID 覆盖，向量使用确定性 Chunk ID 和整文档替换，图谱在 Neo4j 事务内整文档替换，适合重做；ES bulk 的部分失败会抛错并进入重试。
+
+receipt 记录不表示跨版本的索引一致性已经解决。旧版本任务与新版本任务并发、重建期间的可见性、删除与重建竞争、向量原子切换仍属于下一轮索引一致性加固。不要在这些消费者中加入无幂等键的付款、通知等不可重做副作用。
+
+receipt 的锁会跨越索引处理过程，长时间模型调用会占用数据库连接；当前适合低并发 MVP。扩大吞吐前应评测连接池容量，并考虑带续租和 fencing 的任务租约方案。
+
+### 配置与迁移
+
+```dotenv
+OUTBOX_RELAY_ENABLED=true
+OUTBOX_POLL_INTERVAL_MS=1000
+OUTBOX_BATCH_SIZE=20
+RABBITMQ_CONNECT_TIMEOUT_MS=5000
+RABBITMQ_CONFIRM_TIMEOUT_MS=10000
+RABBITMQ_RECONNECT_INTERVAL_MS=5000
+PIPELINE_MAX_ATTEMPTS=3
+PIPELINE_RETRY_DELAY_MS=5000
+```
+
+首次创建数据卷会执行 `deploy/postgres/init/004_pipeline_delivery.sql`。已有数据库在启动新代码前执行（从仓库根目录）：
+
+```bash
+psql "$KNOWBASE_DATABASE_URL" -v ON_ERROR_STOP=1 -f deploy/postgres/migrations/004_pipeline_delivery.sql
+```
+
+该迁移通过 psql 的 `\ir` 引用同一份初始化 SQL；使用 `-f` 执行以保留相对路径。SQL 编辑器可直接执行 `deploy/postgres/init/004_pipeline_delivery.sql` 内容。表结构可重复创建；Outbox/receipt 不设置关联文档的级联删除，删除文档后仍需保留未投递事件和处理记录。
+
+运维查询示例：
+
+```sql
+SELECT id, event_id, routing_key, attempt, publish_attempts, available_at, last_error
+FROM kh_pipeline_outbox WHERE published_at IS NULL ORDER BY available_at;
+
+SELECT consumer, event_id, status, attempt, last_error, updated_at
+FROM kh_pipeline_receipt WHERE status IN ('RETRY', 'DEAD') ORDER BY updated_at DESC;
+```
+
+修复失败原因后，可明确选择一个死信事件，通过创建新事件恢复处理。使用新的 event ID 保留原失败历史，不能直接在 RabbitMQ 重投原 messageId，因为 receipt 会跳过已标记 DEAD 的事件：
+
+```sql
+INSERT INTO kh_pipeline_outbox (id, event_id, routing_key, body, attempt)
+SELECT gen_random_uuid(), gen_random_uuid()::text,
+       regexp_replace(routing_key, '\.dead$', ''), body, 0
+FROM kh_pipeline_outbox
+WHERE id = '<待恢复的死信 Outbox UUID>' AND routing_key LIKE '%.dead';
+```
+
+重放前确认文档仍存在且状态与版本适用。死信队列没有自动消费者，避免持续失败形成无限循环。原死信需按运维流程处理。当前不自动清理 Outbox/receipt：完成记录必须覆盖消息可能重投的时间范围，过早清理会失去去重能力；保留周期和归档应在后续运维迭代中确定。
+
+### 故障验收
+
+在隔离开发环境完成迁移后：
+
+1. 暂停 RabbitMQ，审核通过一份文档；应成功保存发布状态，出现三条待投递 Outbox，索引尚未就绪。
+2. 恢复 RabbitMQ；无需重启 API，三条 Outbox 应陆续记录 `published_at`，消费者恢复连接。
+3. 重投同一 `messageId` 与 attempt；已有 COMPLETED receipt 时不再调用索引服务。
+4. 令 ES 或模型提供方持续失败；应先出现 RETRY，达到次数后为 DEAD，并最终投递到对应 `.dead` 队列。
+5. 在重试安排后重启 API；重试时间与状态来自数据库，应继续执行。
+6. 模拟消费完成但 ack 丢失，以及发送确认后 Outbox 提交失败；两种情况下均允许重复投递，重复处理受 receipt 和索引可重做语义约束。
+
+以上验收要求实际 PostgreSQL 与 RabbitMQ 服务。单元故障测试验证确认、回滚、去重、重试和重连分支，不能替代真实 broker 重启测试。
 
 ## Search 全文检索
 

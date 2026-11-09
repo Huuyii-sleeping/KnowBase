@@ -32,17 +32,22 @@ export class PipelineWorkerService implements OnModuleInit {
 
     if (failures.length > 0) {
       this.logger.error(
-        `Failed to start ${failures.length} pipeline consumer(s). RabbitMQ must be available before API startup.`,
+        `Failed to register ${failures.length} pipeline consumer(s).`,
         failures.map((failure) => String(failure.reason)).join('\n'),
       );
       return;
     }
 
-    this.logger.log('Search, RAG and KG pipeline consumers are running');
+    this.logger.log(
+      'Search, RAG and KG pipeline consumers registered; unavailable connections reconnect automatically',
+    );
   }
 
   private isEnabled(): boolean {
-    const raw = this.config.get<string | boolean>('PIPELINE_WORKERS_ENABLED', true);
+    const raw = this.config.get<string | boolean>(
+      'PIPELINE_WORKERS_ENABLED',
+      true,
+    );
     return raw === true || raw === 'true';
   }
 }

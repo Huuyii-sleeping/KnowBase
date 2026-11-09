@@ -49,6 +49,7 @@ The document module is organized around these responsibilities:
 - `document-command.service.ts`: create, update, version, and delete commands.
 - `document-query.service.ts`: PostgreSQL list/detail queries and response projection.
 - `document-workflow.service.ts`: draft, review, publish, and reject transitions.
+- `document-publish.service.ts`: row-locked publication and durable pipeline task creation in one PostgreSQL transaction; approvals delegate here.
 - `document-content.store.ts`: MongoDB Markdown persistence.
 - `parsing/file-parser.service.ts`: parser dispatch and fallback only.
 - `parsing/parsers/*.parser.ts`: one parser per file format.
@@ -158,6 +159,8 @@ Only `PUBLISHED` documents may later trigger Chunking, Elasticsearch indexing, v
 ## Error Handling and Consistency
 
 The three stores do not share a distributed transaction. New code must persist in a recoverable order and clean up already-created resources when a later step fails.
+
+Publication and pipeline task creation share a PostgreSQL transaction. The `delivery` module owns Outbox persistence, consumer receipts, and durable retry decisions; the `message-queue` module owns RabbitMQ topology, confirms, reconnects, and the Outbox relay. Keep broker transport separate from document workflow and database delivery state. Delivery guarantees, configuration, migration, and recovery instructions are maintained in [pipeline.md](pipeline.md#发布与投递可靠性).
 
 Do not silently publish failed or pending parses. Preserve parser warnings and `parse_error` in the document record.
 

@@ -75,8 +75,14 @@ export class VectorIndexService implements OnModuleDestroy {
         ? { apiKey: config.getOrThrow<string>('ELASTICSEARCH_API_KEY') }
         : undefined,
     });
-    this.documentIndex = config.get<string>('ELASTICSEARCH_DOCUMENT_INDEX', 'kh_document');
-    this.chunkIndex = config.get<string>('ELASTICSEARCH_CHUNK_INDEX', 'kh_chunk');
+    this.documentIndex = config.get<string>(
+      'ELASTICSEARCH_DOCUMENT_INDEX',
+      'kh_document',
+    );
+    this.chunkIndex = config.get<string>(
+      'ELASTICSEARCH_CHUNK_INDEX',
+      'kh_chunk',
+    );
     this.embeddingDimensions = Number(
       config.get<string | number>('RAG_EMBEDDING_DIMENSIONS', 768),
     );
@@ -92,15 +98,19 @@ export class VectorIndexService implements OnModuleDestroy {
     });
   }
 
-  async searchDocuments(input: DocumentSearchInput): Promise<DocumentSearchResult> {
+  async searchDocuments(
+    input: DocumentSearchInput,
+  ): Promise<DocumentSearchResult> {
     const must = input.keyword
-      ? [{
-          multi_match: {
-            query: input.keyword,
-            fields: ['title^3', 'content', 'tags^2', 'category', 'team'],
-            type: 'best_fields' as const,
+      ? [
+          {
+            multi_match: {
+              query: input.keyword,
+              fields: ['title^3', 'content', 'tags^2', 'category', 'team'],
+              type: 'best_fields' as const,
+            },
           },
-        }]
+        ]
       : [{ match_all: {} }];
     const filter = [
       { term: { status: 'PUBLISHED' } },
@@ -130,9 +140,10 @@ export class VectorIndexService implements OnModuleDestroy {
         : { sort: [{ updatedAt: 'desc' }] }),
     });
 
-    const total = typeof response.hits.total === 'number'
-      ? response.hits.total
-      : response.hits.total?.value ?? 0;
+    const total =
+      typeof response.hits.total === 'number'
+        ? response.hits.total
+        : (response.hits.total?.value ?? 0);
 
     return {
       items: response.hits.hits.map((hit) => {
@@ -155,7 +166,9 @@ export class VectorIndexService implements OnModuleDestroy {
     };
   }
 
-  async searchChunks(input: VectorChunkSearchInput): Promise<VectorChunkSearchItem[]> {
+  async searchChunks(
+    input: VectorChunkSearchInput,
+  ): Promise<VectorChunkSearchItem[]> {
     await this.ensureChunkIndex();
     const response = await this.client.search<Record<string, unknown>>({
       index: this.chunkIndex,
@@ -184,7 +197,10 @@ export class VectorIndexService implements OnModuleDestroy {
     });
   }
 
-  async replaceChunks(documentId: string, chunks: VectorChunkInput[]): Promise<void> {
+  async replaceChunks(
+    documentId: string,
+    chunks: VectorChunkInput[],
+  ): Promise<void> {
     await this.ensureChunkIndex();
     await this.client.deleteByQuery({
       index: this.chunkIndex,
@@ -197,7 +213,7 @@ export class VectorIndexService implements OnModuleDestroy {
       return;
     }
 
-    await this.client.bulk({
+    const result = await this.client.bulk({
       refresh: 'wait_for',
       operations: chunks.flatMap((chunk) => [
         { index: { _index: this.chunkIndex, _id: chunk.id } },
@@ -210,6 +226,9 @@ export class VectorIndexService implements OnModuleDestroy {
         },
       ]),
     });
+    if (result.errors) {
+      throw new Error('Elasticsearch failed to index one or more chunks');
+    }
   }
 
   async onModuleDestroy(): Promise<void> {
