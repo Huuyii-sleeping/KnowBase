@@ -10,6 +10,7 @@ from statistics import mean
 
 from benchmark_dataset import validate_dataset
 from metrics import normalized
+from recall_acceptance import assess, select_development_budget
 from question_set import load_questions
 
 
@@ -158,7 +159,14 @@ def analyze(directory: Path, output: Path) -> dict:
                     "p95_ms": round(latency[math.ceil(len(latency) * 0.95) - 1], 2),
                 }
             )
+    protocol_path = directory / "protocol.json"
+    if protocol_path.exists():
+        protocol = json.loads(protocol_path.read_text())
+        for summary in summaries:
+            summary["acceptance"] = assess(summary, rows, protocol)
     payload = {"metadata": metadata, "summaries": summaries, "results": rows}
+    if protocol_path.exists():
+        payload["selected_development_budget"] = select_development_budget(summaries)
     (output / "recall-audit.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
     )
