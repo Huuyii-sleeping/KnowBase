@@ -1,0 +1,62 @@
+{
+  "version": "knowbase-retrieval-v1",
+  "provenance": "Original synthetic KnowBase evaluation corpus; the current/archive upload policies are fictional benchmark rules.",
+  "documents": [
+    {
+      "file": "kb_access.md",
+      "title": "KnowBase 文档访问控制"
+    },
+    {
+      "file": "kb_deletion.md",
+      "title": "KnowBase 文档删除与异步清理"
+    },
+    {
+      "file": "kb_delivery.md",
+      "title": "KnowBase 发布任务可靠投递"
+    },
+    {
+      "file": "kb_generations.md",
+      "title": "KnowBase 索引批次与可见性"
+    },
+    {
+      "file": "kb_graph.md",
+      "title": "KnowBase 知识图谱管线"
+    },
+    {
+      "file": "kb_noise.md",
+      "title": "RAG 实验讨论与待办"
+    },
+    {
+      "file": "kb_policy_archive.md",
+      "title": "上传审批策略：历史归档版"
+    },
+    {
+      "file": "kb_policy_current.md",
+      "title": "上传审批策略：当前生效版"
+    },
+    {
+      "file": "kb_ports.md",
+      "title": "KnowBase 本地依赖端口表"
+    },
+    {
+      "file": "kb_rag.md",
+      "title": "KnowBase 语义检索与问答"
+    },
+    {
+      "file": "kb_review.md",
+      "title": "KnowBase 审核发布流程"
+    },
+    {
+      "file": "kb_search.md",
+      "title": "KnowBase 全文与混合检索"
+    },
+    {
+      "file": "kb_storage.md",
+      "title": "KnowBase 分层存储说明"
+    },
+    {
+      "file": "kb_upload.md",
+      "title": "KnowBase 文件上传与解析"
+    }
+  ]
+}
