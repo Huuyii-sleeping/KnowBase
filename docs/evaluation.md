@@ -83,6 +83,8 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 
 输出 `indexed-corpus.json`（实际索引正文）、`recall-traces.json`（原始候选）、`recall-audit.json/md`（阶段与题型指标）以及元数据、API 日志和运行状态。证据损失分为：索引中不存在或被切断、未进入原始候选、路由过滤或预算截断、合并丢失、最终选择淘汰。候选命中使用原文证据检查，无法代替人工语义相关性判断；原始候选可能包含需要过滤的过期记录，不能直接用于问答。
 
+本轮实测、冻结验证失败、迁移条件与剩余召回问题见 [召回层排查报告](../benchmarks/knowbase-recall-v2/experiments/recall-audit-v2.md)。
+
 ## 对已有 API 单独评测
 
 评测接口受 JWT 保护。默认使用本地初始化的 `admin / knowbase-admin`，生产或其他环境请通过环境变量覆盖；也可以使用已有 Token：
