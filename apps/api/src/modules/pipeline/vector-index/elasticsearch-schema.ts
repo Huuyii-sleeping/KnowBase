@@ -33,6 +33,10 @@ export class ElasticsearchSchema {
         type: 'text',
         fields: { cjk: { type: 'text', analyzer: 'cjk' } },
       },
+      retrieval_text: {
+        type: 'text',
+        fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+      },
       embedding: {
         type: 'dense_vector',
         dims: this.dimensions,
@@ -81,7 +85,10 @@ export class ElasticsearchSchema {
       properties: {
         generation_id: { type: 'keyword' },
         ...(properties.content && index === this.chunkIndex
-          ? { content: properties.content }
+          ? {
+              content: properties.content,
+              retrieval_text: properties.retrieval_text,
+            }
           : {}),
       },
     });

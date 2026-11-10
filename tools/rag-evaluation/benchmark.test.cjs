@@ -94,9 +94,16 @@ test('environment starts an isolated retrieval API and always tears down after s
     calls.push(args);
     return '127.0.0.1:30000';
   };
-  await environment.launchApi(directory, 'http://127.0.0.1:11434');
+  await environment.launchApi(
+    directory,
+    'http://127.0.0.1:11434',
+    'plain',
+    'cjk',
+    'title-heading',
+  );
   assert.equal(launch.env.PIPELINE_WORKERS_ENABLED, 'false');
   assert.equal(launch.env.POSTGRES_DB, 'test');
+  assert.equal(launch.env.RAG_RETRIEVAL_CONTEXT, 'title-heading');
   assert.equal(launch.cwd, directory);
   assert.equal(environment.baseUrl, 'http://127.0.0.1:34567/api/v1');
   await environment.close();
@@ -120,6 +127,13 @@ test('cleanup still removes containers when the API shutdown operation fails', a
 });
 
 test('CLI rejects unsupported options before starting external services', () => {
+  assert.throws(() => options(['--context', 'unknown']), /Invalid/);
+  assert.equal(options([]).context, 'body');
+  assert.equal(options(['--context', 'title']).context, 'title');
+  assert.equal(
+    options(['--context', 'title-heading']).context,
+    'title-heading',
+  );
   assert.throws(() => options(['--unknown', 'value']), /Usage/);
   assert.throws(() => options(['--python']), /Usage/);
   assert.equal(

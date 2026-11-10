@@ -59,6 +59,7 @@ async function collectMetadata({
     embedding_digest: model?.digest || null,
     embedding_encoding: config.encoding,
     keyword_analyzer: config.lexical,
+    retrieval_context: config.context,
     dimensions: 768,
     chunk_size: 1000,
     chunk_overlap: 150,

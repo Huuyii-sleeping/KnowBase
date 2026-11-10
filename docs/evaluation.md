@@ -169,3 +169,9 @@ python tools/rag-evaluation/evaluate_answer.py \
 ```
 
 该基线不依赖 OpenAI Key，也不把评测逻辑放进 API。后续可在相同数据采集结果上增加 Ragas/DeepEval 的模型评判指标，例如 Faithfulness 和 Answer Relevancy。
+
+## 标题与章节上下文实验
+
+在 recall 命令中添加 `--context body|title|title-heading`，分别建立独立索引，对比正文、标题加正文、标题与起始章节路径加正文。原始证据字段 `content` 与分块保持一致；辅助字段只用于关键词和向量召回，计分不允许用辅助标题代替正文。模式及映射/重建约束见 [检索设计](retrieval.md)。
+
+本轮冻结参数位于 `benchmarks/knowbase-recall-v3/experiments/context-protocol.json`：三种上下文、每种 10:10 / 15:15 / 30:10，模型/编码/分块/重排固定，`--split all` 同时报告开发与已暴露回归组；只按 development 比较配置，旧 validation 不再称未见验证。不得根据已测结果修改题目或答案。

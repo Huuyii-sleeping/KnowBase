@@ -22,6 +22,24 @@ function fixture() {
 }
 
 describe('ElasticsearchGenerationWriter', () => {
+  it('persists retrieval context separately from the original evidence', async () => {
+    const { client, writer } = fixture();
+    await writer.stageChunks('doc', 'new', [
+      {
+        id: 'chunk',
+        documentId: 'doc',
+        version: 1,
+        chunkIndex: 0,
+        content: '24 minutes',
+        retrievalText: 'Purchasing > Window\n24 minutes',
+        embedding: [0.1],
+      },
+    ]);
+    expect(client.bulk.mock.calls[0][0].operations[1]).toMatchObject({
+      content: '24 minutes',
+      retrieval_text: 'Purchasing > Window\n24 minutes',
+    });
+  });
   it('isolates document generations while preserving the business document ID', async () => {
     const { client, schema, writer } = fixture();
     await writer.indexDocument({
@@ -65,6 +83,7 @@ describe('ElasticsearchGenerationWriter', () => {
           document_version: 2,
           chunk_index: 0,
           content: 'body',
+          retrieval_text: 'body',
           embedding: [0.1],
         },
       ],

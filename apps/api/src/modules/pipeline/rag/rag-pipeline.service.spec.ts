@@ -12,6 +12,7 @@ function fixture() {
     version: 3,
     contentId: 'body',
     status: 'PUBLISHED',
+    title: 'Source',
   };
   const generations = {
     capture: vi.fn().mockResolvedValue(document),
@@ -20,7 +21,12 @@ function fixture() {
   const content = {
     findByContentId: vi.fn().mockResolvedValue({ markdown: '# Source' }),
   };
-  const chunker = { split: vi.fn().mockResolvedValue(['One', 'Two']) };
+  const chunker = {
+    prepare: vi.fn().mockResolvedValue([
+      { content: 'One', retrievalText: 'Source\nOne' },
+      { content: 'Two', retrievalText: 'Source\nTwo' },
+    ]),
+  };
   const embedding = {
     embedDocuments: vi.fn().mockResolvedValue([[0.1], [0.2]]),
   };
@@ -40,9 +46,28 @@ function fixture() {
   return { service, generations, content, chunker, embedding, index };
 }
 describe('RagPipelineService generations', () => {
+  it('does not write or activate when context preparation or embedding fails', async () => {
+    const { service, content, chunker, embedding, index, generations } =
+      fixture();
+    content.findByContentId.mockResolvedValueOnce(null);
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'content not found',
+    );
+    expect(chunker.prepare).not.toHaveBeenCalled();
+    chunker.prepare.mockRejectedValueOnce(new Error('context failed'));
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'context failed',
+    );
+    embedding.embedDocuments.mockRejectedValueOnce(new Error('model failed'));
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'model failed',
+    );
+    expect(index.stageChunks).not.toHaveBeenCalled();
+    expect(generations.activate).not.toHaveBeenCalled();
+  });
   it('activates an empty batch without calling the embedding provider', async () => {
     const { service, chunker, embedding, index } = fixture();
-    chunker.split.mockResolvedValueOnce([]);
+    chunker.prepare.mockResolvedValueOnce([]);
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 0 });
     expect(embedding.embedDocuments).not.toHaveBeenCalled();
     expect(index.stageChunks).toHaveBeenCalledWith(
@@ -52,11 +77,21 @@ describe('RagPipelineService generations', () => {
     );
   });
   it('stages all embeddings before activating a complete generation', async () => {
-    const { service, index, generations } = fixture();
+    const { service, index, generations, chunker, embedding } = fixture();
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 2 });
     expect(generations.capture).toHaveBeenCalledWith('doc', 3);
+    expect(chunker.prepare).toHaveBeenCalledWith('# Source', 'Source');
+    expect(embedding.embedDocuments).toHaveBeenCalledWith([
+      'Source\nOne',
+      'Source\nTwo',
+    ]);
     expect(index.stageChunks).toHaveBeenCalledWith('doc', expect.any(String), [
-      expect.objectContaining({ id: 'doc:v3:c0', embedding: [0.1] }),
+      expect.objectContaining({
+        id: 'doc:v3:c0',
+        content: 'One',
+        retrievalText: 'Source\nOne',
+        embedding: [0.1],
+      }),
       expect.objectContaining({ id: 'doc:v3:c1', embedding: [0.2] }),
     ]);
     expect(generations.activate).toHaveBeenCalledWith(

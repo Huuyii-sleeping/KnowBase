@@ -57,6 +57,7 @@ async function main(args) {
       ollamaUrl,
       config.encoding,
       config.lexical,
+      config.context,
     );
     const client = new BenchmarkApiClient(environment.baseUrl);
     await client.login();

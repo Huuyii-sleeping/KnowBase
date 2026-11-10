@@ -15,6 +15,7 @@ export class ElasticsearchChunkReader {
     private readonly schema: ElasticsearchSchema,
     private readonly generations: IndexGenerationStore,
     private readonly keywordAnalyzer: 'standard' | 'cjk' = 'standard',
+    private readonly contextual = false,
   ) {}
 
   async semantic(
@@ -59,9 +60,10 @@ export class ElasticsearchChunkReader {
           must: [
             {
               match: {
-                [this.keywordAnalyzer === 'cjk' ? 'content.cjk' : 'content']: {
-                  query,
-                },
+                [`${this.contextual ? 'retrieval_text' : 'content'}${this.keywordAnalyzer === 'cjk' ? '.cjk' : ''}`]:
+                  {
+                    query,
+                  },
               },
             },
           ],

@@ -47,6 +47,10 @@ describe('ElasticsearchSchema', () => {
           type: 'text',
           fields: { cjk: { type: 'text', analyzer: 'cjk' } },
         },
+        retrieval_text: {
+          type: 'text',
+          fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+        },
       },
     });
     expect(indices.create).not.toHaveBeenCalled();

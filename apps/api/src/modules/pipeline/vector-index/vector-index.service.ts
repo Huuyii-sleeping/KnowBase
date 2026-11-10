@@ -5,6 +5,7 @@ import { ElasticsearchGenerationWriter } from './elasticsearch-generation.writer
 import { ElasticsearchSchema } from './elasticsearch-schema';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
+import { retrievalContext } from '../chunk/retrieval-context';
 
 export interface SearchDocumentInput {
   id: string;
@@ -68,6 +69,7 @@ export interface VectorChunkInput {
   version: number;
   chunkIndex: number;
   content: string;
+  retrievalText?: string;
   embedding: number[];
 }
 
@@ -125,6 +127,8 @@ export class VectorIndexService implements OnModuleDestroy {
       this.schema,
       this.generations,
       keywordAnalyzer,
+      retrievalContext(config.get<string>('RAG_RETRIEVAL_CONTEXT', 'body')) !==
+        'body',
     );
   }
 

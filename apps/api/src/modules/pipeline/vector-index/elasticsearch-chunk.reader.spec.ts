@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 
-function fixture(analyzer: 'standard' | 'cjk' = 'standard') {
+function fixture(
+  analyzer: 'standard' | 'cjk' = 'standard',
+  contextual = false,
+) {
   const search = vi.fn().mockResolvedValue({
     hits: {
       hits: [
@@ -13,6 +16,7 @@ function fixture(analyzer: 'standard' | 'cjk' = 'standard') {
             document_version: 2,
             chunk_index: 1,
             content: '关键证据',
+            retrieval_text: '辅助标题\n关键证据',
           },
         },
       ],
@@ -30,11 +34,33 @@ function fixture(analyzer: 'standard' | 'cjk' = 'standard') {
       { chunks } as any,
       { active } as any,
       analyzer,
+      contextual,
     ),
   };
 }
 
 describe('ElasticsearchChunkReader', () => {
+  it.each(['standard', 'cjk'] as const)(
+    'searches enriched %s text but only returns original evidence',
+    async (analyzer) => {
+      const { reader, search } = fixture(analyzer, true);
+      const results = await reader.keyword({ query: '辅助标题', topK: 5 });
+      expect(results[0].content).toBe('关键证据');
+      expect(results[0]).not.toHaveProperty('retrievalText');
+      expect(search.mock.calls[0][0].query.bool).toEqual({
+        must: [
+          {
+            match: {
+              [analyzer === 'cjk' ? 'retrieval_text.cjk' : 'retrieval_text']: {
+                query: '辅助标题',
+              },
+            },
+          },
+        ],
+        filter: [{ terms: { generation_id: ['active'] } }],
+      });
+    },
+  );
   it('returns original chunk bodies and identities from keyword matches in allowed active batches', async () => {
     const { reader, search, active } = fixture();
     expect(
