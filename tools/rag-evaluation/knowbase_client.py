@@ -43,26 +43,46 @@ class KnowBaseClient:
         self.headers = {"Authorization": f"Bearer {token}"}
 
     def list_documents(self) -> list[dict[str, Any]]:
-        response = self.request_get(
-            f"{self.base_url}/documents",
-            params={"page": 1, "pageSize": 100},
-            timeout=self.timeout_seconds,
-            headers=self.headers,
-        )
-        response.raise_for_status()
-        return list(response.json().get("items", []))
+        documents = []
+        page = 1
+        while True:
+            response = self.request_get(
+                f"{self.base_url}/documents",
+                params={"page": page, "pageSize": 100, "status": "PUBLISHED"},
+                timeout=self.timeout_seconds,
+                headers=self.headers,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            items = list(payload.get("items", []))
+            documents.extend(items)
+            if len(documents) >= payload.get("total", len(documents)):
+                return documents
+            if not items:
+                raise ValueError("document pagination ended before the reported total")
+            page += 1
 
     def search(
         self, query: str, top_k: int, mode: str
     ) -> tuple[list[dict[str, Any]], float]:
         started = time.perf_counter()
-        path = "/search/semantic" if mode == "semantic" else "/search/hybrid"
-        response = self.request_post(
-            f"{self.base_url}{path}",
-            json={"query": query, "topK": top_k},
-            timeout=self.timeout_seconds,
-            headers=self.headers,
-        )
+        if mode == "keyword":
+            response = self.request_get(
+                f"{self.base_url}/search/documents",
+                params={"keyword": query, "page": 1, "pageSize": top_k},
+                timeout=self.timeout_seconds,
+                headers=self.headers,
+            )
+        elif mode in {"semantic", "hybrid"}:
+            path = "/search/semantic" if mode == "semantic" else "/search/hybrid"
+            response = self.request_post(
+                f"{self.base_url}{path}",
+                json={"query": query, "topK": top_k},
+                timeout=self.timeout_seconds,
+                headers=self.headers,
+            )
+        else:
+            raise ValueError(f"unsupported retrieval mode: {mode}")
         response.raise_for_status()
         return list(response.json().get("items", [])), round(
             (time.perf_counter() - started) * 1000, 2

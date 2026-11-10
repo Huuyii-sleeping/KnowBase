@@ -1,15 +1,20 @@
 # 检索评测
 
-当前阶段先评测 `Search/RAG` 的检索结果，不评测大模型回答。数据集采用 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) 的中文问题集格式，指标由成熟的 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。仓库中的示例问题和文档来自 RAGBench-CN 的 MIT 许可示例。
+检索评测的主集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算，当前检索策略保持不变。
+
+原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
 ## 目录
 
-- `benchmarks/ragbench-cn/questions/questions_zh.json`：中文问题集、关键词和标准来源文档。
-- `benchmarks/ragbench-cn/docs/`：可复现实验的 RAG 文档和相似噪声文档。
+- `benchmarks/knowbase-retrieval-v1/manifest.json`：冻结的语料清单。
+- `benchmarks/knowbase-retrieval-v1/questions.json`：题型、参考答案、标准来源和证据原句。
+- `benchmarks/knowbase-retrieval-v1/docs/`：原创项目文档与模拟业务规则、历史规则、相似噪声。
+- `benchmarks/ragbench-cn/`：保留的外部许可演示集。
 - `tools/rag-evaluation/evaluate_retrieval.py`：KnowBase 检索适配器和评测命令。
-- `reports/retrieval/`：运行后生成的 JSON、Markdown、TREC qrels 和 run 文件，不提交到 Git。
+- `tools/rag-evaluation/run_baseline.cjs`：隔离环境、真实上传/审核/索引和评测矩阵入口。
+- `reports/retrieval-knowbase-v1/<运行时间与进程号>/`：每轮独立的完整输出，不提交到 Git。
 
-当前 qrels 是文档级标注：问题对应 `gold_doc`，运行器从已发布文档的 `fileName` 映射到内部 `documentId`。当前混合检索接口返回的是文档/Chunk 混合结果，因此先按文档去重后评测。后续固定 chunk 级标注后，可以把 qrels 直接切换为 Chunk ID。
+qrels 是文档级相关性标注，支持 `gold_doc` 或 `gold_docs`。运行器分页读取所有已发布文档，将 `fileName` 映射到内部 `documentId`；同名来源存在歧义时直接报错。旧 RAGBench-CN 字段保持兼容。
 
 ## 安装
 
@@ -19,6 +24,39 @@ python3 -m venv .venv-rag-eval
 pip install -r tools/rag-evaluation/requirements.txt
 ```
 
+## 一键运行项目基线
+
+需要 Docker、Node/pnpm、已安装评测依赖的 Python，以及可访问的 Ollama `nomic-embed-text` 模型：
+
+```bash
+ollama pull nomic-embed-text
+pnpm --filter @knowbase/api benchmark:retrieval \
+  --python "$PWD/.venv-rag-eval/bin/python"
+```
+
+缓存镜像已经齐全、镜像仓库暂不可访问时，在命令前加 `DELIVERY_TEST_PULL_POLICY=never`。可用 `KNOWBASE_BENCHMARK_OLLAMA_URL` 指定本地模型服务地址，用 `--output-dir` 指定输出根目录。
+
+命令构建 API，在独立 `knowbase-retrieval-<进程号>` Compose 项目中启动 PostgreSQL、MongoDB、RustFS、RabbitMQ、Elasticsearch 和 Neo4j，执行数据库初始化，再通过真实 HTTP 接口上传全部语料、提交审核和批准发布。等待每篇文档的全文与向量批次激活后，分别运行 keyword、semantic、hybrid 在 K=1/3/5 的 9 组评测，共 360 次计分请求；每种模式另有一次不计分的预热。
+
+评测使用真实解析、存储、权限、消息投递和 Ollama Embedding。只启动 Search/RAG 消费者，KG 消息留在隔离队列中，不执行图谱抽取，也不调用对话模型，避免争抢模型计算资源。图谱与答案质量不属于本轮测量范围。
+
+整个过程不读取 API `.env`，不使用业务数据库、业务索引或业务存储卷。正常完成和受控失败后清理本轮容器与卷；中断或强制终止进程可能需要按 Compose 项目名手动清理。`run-status.json` 标识当前轮是否完整结束，每次运行都创建新目录，避免把旧结果误认为本轮输出。
+
+输出包括总览 `comparison.md/json`、配置与语料 SHA-256、模型摘要、每组的逐题 JSON/Markdown、TREC qrels/run 和 API 日志。报告不包含认证 Token。
+
+## 指标口径
+
+- 文档 Precision@K、Recall@K、MRR@K、nDCG@K 和命中率，只统计 36 道可回答问题。多来源 Recall 按每道题的标准来源数计算，再宏平均；“全部来源命中率”要求该题所有标准来源都找到。
+- K 是生产接口实际返回的候选数量。对前 K 个候选按文档去重计算文档指标，不额外扩大召回，因此语义/混合接口的多个 Chunk 可能占用同一文档的名额。三种模式并非相同的唯一文档预算。
+- 排名指标按 API 实际返回顺序计算，TREC score 由排名转换，避免评测工具根据原始分数进行第二次排序；原始候选与分数仍保存在逐题 JSON。
+- 证据召回检查前 K 个实际返回正文中是否包含对应来源的标注原句，统一 Unicode 和空白后匹配。先按每题证据条数计算，再宏平均；不会把文档命中直接当成证据命中。关键词接口只有元数据和高亮，证据指标记为 N/A，不伪装成 0 或 100%。
+- 4 道无答案题单独统计“空候选率”。向量近邻通常会返回候选，返回了候选不代表模型已经编造答案；该指标不是问答拒答准确率，也不混入正样本的召回分母。
+- 延迟只包含检索 HTTP 请求，不含上传、建索引、登录和预热；报告包含平均与 P95。当前为本机单次串行测量，不是并发或生产性能结论。
+
+这是一套手工编写并可见的开发集，不是独立用户问题盲测。它适合定位问题和比较固定配置，不能据此宣称整体检索质量。后续需要加入真实用户问题和独立保留集；标注遗漏或合理替代证据应人工复核并升级数据集版本，不能为了当前配置的分数随意改答案。
+
+## 对已有 API 单独评测
+
 评测接口受 JWT 保护。默认使用本地初始化的 `admin / knowbase-admin`，生产或其他环境请通过环境变量覆盖；也可以使用已有 Token：
 
 ```bash
@@ -27,11 +65,11 @@ export KNOWBASE_PASSWORD=knowbase-admin
 # 或：export KNOWBASE_TOKEN=<existing-jwt>
 ```
 
-## 准备测评文档
+### 保留的 RAGBench-CN 演示集
 
 将 `benchmarks/ragbench-cn/docs/rag_basics.md` 和 `retrieval_noise.md` 分别上传到 KnowBase，审核并发布。原始文件名必须保持不变，确保问题集中的 `gold_doc` 可以映射到已发布文档。
 
-## 执行
+### 执行
 
 启动 API 后运行混合检索评测：
 
@@ -50,11 +88,13 @@ python tools/rag-evaluation/evaluate_retrieval.py \
   --output-dir reports/retrieval-semantic
 ```
 
+关键词检索可使用 `--mode keyword`。评测项目主集时，用 `--questions benchmarks/knowbase-retrieval-v1/questions.json`，并确保 manifest 中的全部文档均已上传发布且相关索引就绪。
+
 输出指标：
 
 - `Precision@K`
 - `Recall@K`
-- `MRR`
+- `MRR@K`
 - `NDCG@K`
 - `hit_rate`
 - 平均检索延迟

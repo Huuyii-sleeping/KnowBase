@@ -1,0 +1,590 @@
+[
+  {
+    "id": "kb001",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "PDF、XLSX、DOCX 和 PPTX 分别由什么解析器处理？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "分别使用 pdf-parse、exceljs、mammoth 和 jszip。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "PDF 使用 pdf-parse 提取文字，XLSX 使用 exceljs 读取工作表，DOCX 使用 mammoth 转 HTML 后再转 Markdown，PPTX 使用 jszip 读取幻灯片 XML"
+      }
+    ]
+  },
+  {
+    "id": "kb002",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "kh_document、document_content 和 RustFS 分别保存什么？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "分别保存结构化元数据、标准化长正文、原始文件和提取资源。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "PostgreSQL 的 kh_document 保存标题、文件名、版本、审核状态、权限和当前 content_id。MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。RustFS 通过 S3 兼容接口保存原始文件和提取出的图片等资源。"
+      }
+    ]
+  },
+  {
+    "id": "kb003",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "为什么发布任务要先写 Outbox 再发送到 RabbitMQ？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "让发布状态与任务原子保存，Broker 停机时任务仍可持久化等待投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ]
+  },
+  {
+    "id": "kb004",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "SKIP LOCKED 在多个 Relay 投递任务时有什么作用？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "避免多个 Relay 争抢同一条 Outbox 记录。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "Relay 轮询 Outbox，使用 SKIP LOCKED 避免多个 Relay 争抢同一条记录"
+      }
+    ]
+  },
+  {
+    "id": "kb005",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "version 和 generation 有什么区别？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "version 标识业务修订，generation 标识一次独立的索引构建。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "version 是文档的业务修订号，generation 是一次索引构建的唯一批次号。同一个文档版本可以多次重建，每次得到不同的 generation。"
+      }
+    ]
+  },
+  {
+    "id": "kb006",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "PRIVATE、TEAM、PUBLIC 是什么，空权限默认怎么处理？",
+    "gold_docs": ["kb_access.md"],
+    "reference_answer": "三者是文档可见性，空权限默认私有。",
+    "evidence": [
+      {
+        "doc": "kb_access.md",
+        "quote": "文档的可见性为 PRIVATE、TEAM 或 PUBLIC。"
+      },
+      {
+        "doc": "kb_access.md",
+        "quote": "旧记录或空权限配置默认按 PRIVATE 处理。"
+      }
+    ]
+  },
+  {
+    "id": "kb007",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "语义检索默认使用哪个 Embedding 模型和多少维向量？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "使用 nomic-embed-text，向量维度为 768。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+      }
+    ]
+  },
+  {
+    "id": "kb008",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "Neo4j 中的实体 key 由哪两部分组成？",
+    "gold_docs": ["kb_graph.md"],
+    "reference_answer": "由实体类型和归一化名称组成。",
+    "evidence": [
+      {
+        "doc": "kb_graph.md",
+        "quote": "实体 key 由实体类型和归一化名称组成。"
+      }
+    ]
+  },
+  {
+    "id": "kb009",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "文件明明上传成功了，为什么其他人还搜不到？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "上传只是接入，需要后续发布并完成索引才能被检索。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "上传成功不表示文档已经发布或可检索。"
+      }
+    ]
+  },
+  {
+    "id": "kb010",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "当前不支持 OCR，扫描图片里的文字无法直接提取。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+      }
+    ]
+  },
+  {
+    "id": "kb011",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表只取元数据，长正文在打开详情时再读取。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      }
+    ]
+  },
+  {
+    "id": "kb012",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "不必失败，任务先保存在数据库，Broker 恢复后投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ]
+  },
+  {
+    "id": "kb013",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "同一条消息收到了两遍，怎么避免重复执行已经完成的工作？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "按 event_id 查询 receipt，已完成的事件跳过副作用。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+      }
+    ]
+  },
+  {
+    "id": "kb014",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "重新建索引建到一半报错，会不会把原来可以查到的内容弄没了？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "同版本重建失败不会替换原来的完整批次。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+      }
+    ]
+  },
+  {
+    "id": "kb015",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "永久删除标记会阻止旧任务重新激活。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+      }
+    ]
+  },
+  {
+    "id": "kb016",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "文档命中不代表取到了含关键证据的 Chunk。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      }
+    ]
+  },
+  {
+    "id": "kb017",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "解析必须为 READY，由管理员审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+      }
+    ]
+  },
+  {
+    "id": "kb018",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "审核发布接口成功返回，能否认为全文、向量和图谱已经同时就绪？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "不能，发布成功只代表状态和异步任务已持久化。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "HTTP 发布成功表示发布状态和任务已经持久化，不表示三路索引已经全部就绪。"
+      }
+    ]
+  },
+  {
+    "id": "kb019",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "只改了标题和标签，正文没有改，还需要重新审核吗？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "有意义的元数据变更增加修订并回到草稿，需要重新审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      }
+    ]
+  },
+  {
+    "id": "kb020",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "锁定文档检查发布状态、版本和正文引用后切换可见指针。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+      }
+    ]
+  },
+  {
+    "id": "kb021",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "删除文档的四条清理任务分别清理哪些内容？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "分别清理全文、向量、图谱和源数据。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+      }
+    ]
+  },
+  {
+    "id": "kb022",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "问答接口没有足够证据时会怎么做，会继续请求对话模型吗？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "返回知识不足提示，不调用对话模型。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "没有足够的可用上下文时，系统返回“知识库中没有找到足够信息”，不调用对话模型。"
+      }
+    ]
+  },
+  {
+    "id": "kb023",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "RabbitMQ 的消息连接和管理页面分别使用哪个宿主机端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "消息连接为 15672，管理页面为 15673。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ AMQP | 15672 | 应用连接消息 Broker |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ Management | 15673 | 消息管理界面 |"
+      }
+    ]
+  },
+  {
+    "id": "kb024",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "从宿主机连接 PostgreSQL 和 MongoDB，分别应该使用什么端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "PostgreSQL 为 15432，MongoDB 为 17017。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| MongoDB | 17017 | Markdown 正文 |"
+      }
+    ]
+  },
+  {
+    "id": "kb025",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "图数据库的 Bolt 连接与浏览器管理界面分别在哪个端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Bolt 为 17687，Browser 为 17474。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Bolt | 17687 | 应用访问图数据库 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Browser | 17474 | 图数据库管理界面 |"
+      }
+    ]
+  },
+  {
+    "id": "kb026",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "Elasticsearch HTTP 和 RustFS 的对象读写 API 各使用哪个端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Elasticsearch 为 19200，RustFS S3 API 为 19000。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Elasticsearch HTTP | 19200 | 全文和向量查询 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RustFS S3 API | 19000 | 二进制对象读写 |"
+      }
+    ]
+  },
+  {
+    "id": "kb027",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+    "gold_docs": ["kb_storage.md", "kb_rag.md"],
+    "reference_answer": "正文在 MongoDB document_content，向量索引是 Elasticsearch kh_chunk。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+      },
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+      }
+    ]
+  },
+  {
+    "id": "kb028",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+    "gold_docs": ["kb_delivery.md", "kb_generations.md"],
+    "reference_answer": "Outbox 与发布原子保存防丢任务，索引最终版本校验与批次可见性阻止旧任务覆盖。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+      }
+    ]
+  },
+  {
+    "id": "kb029",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "修改已发布正文时，审核状态如何变化，旧索引还能继续作为当前修订查询吗？",
+    "gold_docs": ["kb_review.md", "kb_generations.md"],
+    "reference_answer": "修改正文增加修订并回到草稿；查询仅接受当前已发布修订的有效批次。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "查询只使用当前已发布修订对应的有效 generation。"
+      }
+    ]
+  },
+  {
+    "id": "kb030",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "文档级与段落级命中为什么都要检查，关键词候选能直接作为 AI 正文证据吗？",
+    "gold_docs": ["kb_rag.md", "kb_search.md"],
+    "reference_answer": "正确文档可能对应错误 Chunk，仅元数据的关键词候选不能作为正文证据。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      },
+      {
+        "doc": "kb_search.md",
+        "quote": "关键词候选如果没有正文，只包含文档元数据，不能直接作为 AI 回答的正文证据。"
+      }
+    ]
+  },
+  {
+    "id": "kb031",
+    "type": "answerable",
+    "category": "version",
+    "question": "评测知识库中当前生效的上传审批策略，单文件上限是多少？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "当前生效上限为 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      }
+    ]
+  },
+  {
+    "id": "kb032",
+    "type": "answerable",
+    "category": "version",
+    "question": "已失效的 KB-UPLOAD-2024 历史策略里，单文件上限是多少？",
+    "gold_docs": ["kb_policy_archive.md"],
+    "reference_answer": "历史上限为 20 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ]
+  },
+  {
+    "id": "kb033",
+    "type": "answerable",
+    "category": "version",
+    "question": "当前策略与历史归档策略的上传上限有什么变化？",
+    "gold_docs": ["kb_policy_current.md", "kb_policy_archive.md"],
+    "reference_answer": "从历史的 20 MiB 变为当前的 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      },
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ]
+  },
+  {
+    "id": "kb034",
+    "type": "answerable",
+    "category": "version",
+    "question": "当前生效的上传审批责任人是谁，可以自动批准吗？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "责任人为知识库管理员，要求人工审核，没有自动批准或免审。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前审批责任人为知识库管理员，审批要求为人工审核。该策略没有规定自动批准或免审流程。"
+      }
+    ]
+  },
+  {
+    "id": "kb035",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "任务持续失败默认最多处理几次，人工恢复死信之前和之后分别要做什么？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "默认最多 3 次；先修复原因并核对文档状态版本，再创建新的投递事件。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+      },
+      {
+        "doc": "kb_delivery.md",
+        "quote": "恢复死信前先修复失败原因，再确认文档仍存在且版本适用，最后人工创建新的投递事件。"
+      }
+    ]
+  },
+  {
+    "id": "kb036",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "文档列表和详情分别如何读取，跨存储故障应该按什么顺序核对？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表读取 PostgreSQL，详情按 content_id 读取 MongoDB；先核对元数据引用、正文和对象键，再决定补偿。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      },
+      {
+        "doc": "kb_storage.md",
+        "quote": "定位跨存储故障时，排查顺序是核对元数据引用、确认正文记录、检查对象键，再判断是否需要补偿"
+      }
+    ]
+  },
+  {
+    "id": "kb037",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "KnowBase 生产环境数据库的真实密码是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供生产密码。",
+    "evidence": []
+  },
+  {
+    "id": "kb038",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "评测公司的 2027 年销售收入目标是多少？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供财务收入目标。",
+    "evidence": []
+  },
+  {
+    "id": "kb039",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "系统已经配置好的 OCR 服务地址与 API Key 是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料只说明 OCR 尚未提供，没有 OCR 地址或密钥。",
+    "evidence": []
+  },
+  {
+    "id": "kb040",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "知识库音视频转写服务的负责人姓名和联系电话是多少？",
+    "gold_docs": [],
+    "reference_answer": "评测语料没有转写服务的负责人和联系电话。",
+    "evidence": []
+  }
+]
