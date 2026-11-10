@@ -134,6 +134,12 @@ async function main(args) {
       chunk_size: 1000,
       chunk_overlap: 150,
       reranking: 'existing rule-based implementation; unchanged',
+      hybrid_retrieval: require(
+        path.join(
+          root,
+          'apps/api/dist/src/modules/search/hybrid-candidates.js',
+        ),
+      ).HYBRID_RETRIEVAL_POLICY,
       scope:
         'Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.',
       top_k: [1, 3, 5],

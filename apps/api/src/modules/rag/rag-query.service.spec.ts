@@ -131,4 +131,76 @@ describe('RagQueryService', () => {
       service.search({ query: 'question', topK: 5 }),
     ).rejects.toThrow('embedding provider returned no query vector');
   });
+
+  it('loads keyword evidence with ACLs and rejects missing, draft and obsolete versions without embedding', async () => {
+    const embedding = { embedDocuments: vi.fn() };
+    const vectorIndex = {
+      searchKeywordChunks: vi.fn().mockResolvedValue([
+        {
+          id: 'old',
+          documentId: 'doc',
+          version: 1,
+          chunkIndex: 0,
+          content: 'old',
+        },
+        {
+          id: 'draft',
+          documentId: 'draft',
+          version: 1,
+          chunkIndex: 0,
+          content: 'draft',
+        },
+        {
+          id: 'missing',
+          documentId: 'missing',
+          version: 1,
+          chunkIndex: 0,
+          content: 'missing',
+        },
+        {
+          id: 'current',
+          documentId: 'doc',
+          version: 2,
+          chunkIndex: 1,
+          content: 'evidence',
+          score: 7,
+        },
+      ]),
+    };
+    const documentQuery = {
+      findVisiblePublishedIds: vi.fn().mockResolvedValue(['doc']),
+      findEntity: vi.fn(async (id) => {
+        if (id === 'missing') throw new NotFoundException();
+        return {
+          status:
+            id === 'draft' ? DocumentStatus.DRAFT : DocumentStatus.PUBLISHED,
+          version: 2,
+          title: 'Title',
+          category: null,
+          team: null,
+          tags: [],
+        };
+      }),
+    };
+    const user = { id: 'user', role: 'MEMBER' as const };
+    const service = new RagQueryService(
+      embedding as any,
+      vectorIndex as any,
+      documentQuery as any,
+    );
+    expect(
+      await service.searchKeywordChunks({ query: ' evidence ', topK: 1 }, user),
+    ).toMatchObject({
+      query: 'evidence',
+      topK: 1,
+      items: [{ chunkId: 'current', content: 'evidence', documentVersion: 2 }],
+    });
+    expect(vectorIndex.searchKeywordChunks).toHaveBeenCalledWith({
+      query: 'evidence',
+      topK: 3,
+      allowedDocumentIds: ['doc'],
+    });
+    expect(documentQuery.findVisiblePublishedIds).toHaveBeenCalledWith(user);
+    expect(embedding.embedDocuments).not.toHaveBeenCalled();
+  });
 });
