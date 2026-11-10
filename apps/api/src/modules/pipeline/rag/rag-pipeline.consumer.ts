@@ -4,7 +4,10 @@ import {
   MESSAGE_ROUTING_KEYS,
 } from '../../message-queue/message-queue.constants';
 import { MessageQueueService } from '../../message-queue/message-queue.service';
-import type { DocumentPipelineCommand } from '../../message-queue/message-queue.types';
+import type {
+  DocumentPipelineCommand,
+  DocumentIndexDeleteMessage,
+} from '../../message-queue/message-queue.types';
 import { RagPipelineService } from './rag-pipeline.service';
 
 @Injectable()
@@ -15,10 +18,17 @@ export class RagPipelineConsumer {
   ) {}
 
   consume(): Promise<void> {
-    return this.messageQueue.consume<DocumentPipelineCommand>(
+    return this.messageQueue.consume<
+      DocumentPipelineCommand | DocumentIndexDeleteMessage
+    >(
       MESSAGE_QUEUE_NAMES.RAG,
-      MESSAGE_ROUTING_KEYS.RAG_REBUILD,
-      (message) => this.pipeline.rebuildDocument(message.documentId).then(() => undefined),
+      [MESSAGE_ROUTING_KEYS.RAG_REBUILD, MESSAGE_ROUTING_KEYS.RAG_DELETE],
+      (message) =>
+        message.type === 'DOCUMENT_INDEX_DELETE'
+          ? this.pipeline.deleteDocument(message.documentId)
+          : this.pipeline
+              .rebuildDocument(message.documentId, message.version)
+              .then(() => undefined),
     );
   }
 }

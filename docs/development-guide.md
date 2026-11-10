@@ -46,7 +46,10 @@ The document module is organized around these responsibilities:
 
 - `documents.controller.ts`: HTTP transport only.
 - `documents.service.ts`: small application facade that composes use cases.
-- `document-command.service.ts`: create, update, version, and delete commands.
+- `document-command.service.ts`: upload/create orchestration and delegation of revision/deletion commands.
+- `document-revision.service.ts`: row-locked metadata/content revisions and review invalidation.
+- `document-deletion.service.ts`: atomic document deletion, index tombstones and durable cleanup task creation.
+- `document-source-cleanup.service.ts`: retriable MongoDB and original-object cleanup after committed deletion.
 - `document-query.service.ts`: PostgreSQL list/detail queries and response projection.
 - `document-workflow.service.ts`: draft, review, publish, and reject transitions.
 - `document-publish.service.ts`: row-locked publication and durable pipeline task creation in one PostgreSQL transaction; approvals delegate here.
@@ -79,7 +82,8 @@ The knowledge graph module follows the same pipeline boundary:
 
 - `pipeline/kg/ollama-graph-extractor.service.ts`: Ollama extraction adapter; returns constrained JSON data only.
 - `pipeline/kg/graph-extraction.service.ts`: extraction orchestration, entity normalization, cross-Chunk deduplication, and mention generation.
-- `pipeline/kg/graph-index.service.ts`: Neo4j transaction, idempotent document replacement, and graph path query.
+- `pipeline/kg/graph-index.service.ts`: graph visibility filtering and query facade.
+- `pipeline/kg/graph-generation.writer.ts`: generation-scoped Neo4j writes, constraints and cleanup.
 - `pipeline/kg/kg-pipeline.service.ts`: published-document workflow coordinator.
 - `graph/knowledge-graph-query.service.ts`: user-facing graph query use case with document visibility filtering.
 
@@ -161,6 +165,8 @@ Only `PUBLISHED` documents may later trigger Chunking, Elasticsearch indexing, v
 The three stores do not share a distributed transaction. New code must persist in a recoverable order and clean up already-created resources when a later step fails.
 
 Publication and pipeline task creation share a PostgreSQL transaction. The `delivery` module owns Outbox persistence, consumer receipts, and durable retry decisions; the `message-queue` module owns RabbitMQ topology, confirms, reconnects, and the Outbox relay. Keep broker transport separate from document workflow and database delivery state. Delivery guarantees, configuration, migration, and recovery instructions are maintained in [pipeline.md](pipeline.md#发布与投递可靠性).
+
+The `indexing` module owns the current generation pointer and final revision checks; pipeline services stage complete external generations before activation. All document revisions and lifecycle transitions serialize on the document row. Generation visibility, tombstones, upgrade/rebuild requirements and retention limits are maintained in [pipeline.md](pipeline.md#索引版本与可见批次).
 
 Do not silently publish failed or pending parses. Preserve parser warnings and `parse_error` in the document record.
 

@@ -11,6 +11,7 @@ vi.mock('@elastic/elasticsearch', () => ({
     indices = {
       exists: vi.fn(),
       create: vi.fn(),
+      putMapping: vi.fn(),
     };
 
     search = searchMock;
@@ -23,14 +24,34 @@ vi.mock('@elastic/elasticsearch', () => ({
 import { VectorIndexService } from './vector-index.service';
 
 describe('VectorIndexService document search', () => {
+  it('never queries external indexes when no current generation is visible', async () => {
+    searchMock.mockReset();
+    const service = new VectorIndexService(
+      { get: (_key: string, fallback: unknown) => fallback } as any,
+      { active: vi.fn().mockResolvedValue([]) } as any,
+    );
+    expect(
+      await service.searchDocuments({ page: 1, pageSize: 10 }),
+    ).toMatchObject({ items: [], total: 0 });
+    expect(await service.searchChunks({ queryVector: [1], topK: 1 })).toEqual(
+      [],
+    );
+    expect(searchMock).not.toHaveBeenCalled();
+  });
   it('reuses deterministic chunk IDs on retries and surfaces partial bulk failures', async () => {
     bulkMock
       .mockReset()
       .mockResolvedValueOnce({ errors: true })
       .mockResolvedValue({ errors: false });
-    const service = new VectorIndexService({
-      get: (_key: string, fallback: unknown) => fallback,
-    } as any);
+    const service = new VectorIndexService(
+      {
+        get: (_key: string, fallback: unknown) => fallback,
+      } as any,
+      {
+        active: vi.fn().mockResolvedValue(['gen']),
+        isDeleted: vi.fn().mockResolvedValue(true),
+      } as any,
+    );
     const chunks = [
       {
         id: 'doc:v1:c0',
@@ -41,16 +62,14 @@ describe('VectorIndexService document search', () => {
         embedding: [0.1],
       },
     ];
-    await expect(service.replaceChunks('doc', chunks)).rejects.toThrow(
+    await expect(service.stageChunks('doc', 'gen', chunks)).rejects.toThrow(
       'one or more chunks',
     );
-    await service.replaceChunks('doc', chunks);
+    await service.stageChunks('doc', 'gen', chunks);
     expect(bulkMock.mock.calls[0][0].operations).toEqual(
       bulkMock.mock.calls[1][0].operations,
     );
-    expect(deleteMock).toHaveBeenCalledWith(
-      expect.objectContaining({ query: { term: { document_id: 'doc' } } }),
-    );
+    expect(deleteMock).not.toHaveBeenCalled();
   });
   it('queries published documents with keyword, filters, pagination, and highlights', async () => {
     searchMock.mockResolvedValue({
@@ -76,9 +95,15 @@ describe('VectorIndexService document search', () => {
         ],
       },
     });
-    const service = new VectorIndexService({
-      get: vi.fn((_key: string, fallback: unknown) => fallback),
-    } as any);
+    const service = new VectorIndexService(
+      {
+        get: vi.fn((_key: string, fallback: unknown) => fallback),
+      } as any,
+      {
+        active: vi.fn().mockResolvedValue(['gen']),
+        isDeleted: vi.fn().mockResolvedValue(true),
+      } as any,
+    );
 
     await expect(
       service.searchDocuments({
@@ -126,6 +151,7 @@ describe('VectorIndexService document search', () => {
               },
             ],
             filter: [
+              { terms: { generation_id: ['gen'] } },
               { term: { status: 'PUBLISHED' } },
               { term: { category: 'platform' } },
               { term: { team: 'infra' } },
@@ -142,9 +168,15 @@ describe('VectorIndexService document search', () => {
     searchMock.mockResolvedValueOnce({
       hits: { total: 0, hits: [] },
     });
-    const service = new VectorIndexService({
-      get: vi.fn((_key: string, fallback: unknown) => fallback),
-    } as any);
+    const service = new VectorIndexService(
+      {
+        get: vi.fn((_key: string, fallback: unknown) => fallback),
+      } as any,
+      {
+        active: vi.fn().mockResolvedValue(['gen']),
+        isDeleted: vi.fn().mockResolvedValue(true),
+      } as any,
+    );
 
     await service.searchDocuments({
       page: 1,
@@ -156,7 +188,10 @@ describe('VectorIndexService document search', () => {
         query: {
           bool: {
             must: [{ match_all: {} }],
-            filter: [{ term: { status: 'PUBLISHED' } }],
+            filter: [
+              { terms: { generation_id: ['gen'] } },
+              { term: { status: 'PUBLISHED' } },
+            ],
           },
         },
         sort: [{ updatedAt: 'desc' }],
@@ -182,9 +217,15 @@ describe('VectorIndexService document search', () => {
         ],
       },
     });
-    const service = new VectorIndexService({
-      get: vi.fn((_key: string, fallback: unknown) => fallback),
-    } as any);
+    const service = new VectorIndexService(
+      {
+        get: vi.fn((_key: string, fallback: unknown) => fallback),
+      } as any,
+      {
+        active: vi.fn().mockResolvedValue(['gen']),
+        isDeleted: vi.fn().mockResolvedValue(true),
+      } as any,
+    );
 
     await expect(
       service.searchChunks({
@@ -210,6 +251,7 @@ describe('VectorIndexService document search', () => {
         query_vector: [0.1, 0.2],
         k: 3,
         num_candidates: 100,
+        filter: [{ terms: { generation_id: ['gen'] } }],
       },
     });
   });

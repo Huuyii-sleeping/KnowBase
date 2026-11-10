@@ -51,12 +51,28 @@ describe('DocumentPipelinePublisher', () => {
     ).rejects.toThrow('document content not found');
     expect(outbox.enqueue).not.toHaveBeenCalled();
   });
-  it('persists KG deletion in the outbox', async () => {
+  it('saves three index deletions and source cleanup in the deletion transaction', async () => {
     const { service, outbox } = fixture();
-    await service.deleteGraph('doc-1');
-    expect(outbox.enqueueStandalone).toHaveBeenCalledWith(
+    const manager = {} as any;
+    await service.deleteDocument(
+      { id: 'doc-1', storageKey: 'original/doc-1/a.md' } as any,
+      manager,
+    );
+    expect(outbox.enqueue).toHaveBeenCalledTimes(4);
+    expect(outbox.enqueue.mock.calls.map((call) => call[1])).toEqual([
+      'document.search.delete',
+      'document.rag.delete',
       'document.kg.delete',
-      { type: 'DOCUMENT_GRAPH_DELETE', documentId: 'doc-1' },
+      'document.source.delete',
+    ]);
+    expect(outbox.enqueue).toHaveBeenLastCalledWith(
+      manager,
+      'document.source.delete',
+      {
+        type: 'DOCUMENT_SOURCE_DELETE',
+        documentId: 'doc-1',
+        storageKey: 'original/doc-1/a.md',
+      },
     );
   });
 });

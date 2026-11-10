@@ -14,9 +14,10 @@ import { RagPipelineService } from './rag/rag-pipeline.service';
 import { SearchPipelineConsumer } from './search/search-pipeline.consumer';
 import { SearchPipelineService } from './search/search-pipeline.service';
 import { VectorIndexService } from './vector-index/vector-index.service';
+import { IndexingModule } from '../indexing/indexing.module';
 
 @Module({
-  imports: [DocumentsModule, MessageQueueModule],
+  imports: [DocumentsModule, MessageQueueModule, IndexingModule],
   providers: [
     MarkdownChunkerService,
     EmbeddingService,

@@ -38,6 +38,14 @@ describe('RagQueryService', () => {
           score: 0.88,
         },
         {
+          id: 'published:v1:c0',
+          documentId: 'published',
+          version: 1,
+          chunkIndex: 0,
+          content: 'obsolete version',
+          score: 0.85,
+        },
+        {
           id: 'missing:v1:c0',
           documentId: 'missing',
           version: 1,
@@ -61,6 +69,7 @@ describe('RagQueryService', () => {
         if (id === 'published') {
           return {
             status: DocumentStatus.PUBLISHED,
+            version: 2,
             title: 'Published',
             category: 'docs',
             team: 'platform',
@@ -76,29 +85,35 @@ describe('RagQueryService', () => {
       documentQuery as any,
     );
 
-    await expect(service.search({
-      query: '  how does retrieval work?  ',
-      topK: 1,
-    })).resolves.toEqual({
+    await expect(
+      service.search({
+        query: '  how does retrieval work?  ',
+        topK: 1,
+      }),
+    ).resolves.toEqual({
       query: 'how does retrieval work?',
       topK: 1,
-      items: [{
-        chunkId: 'published:v2:c1',
-        documentId: 'published',
-        documentVersion: 2,
-        chunkIndex: 1,
-        content: 'published content',
-        score: 0.88,
-        document: {
-          title: 'Published',
-          category: 'docs',
-          team: 'platform',
-          tags: ['rag'],
+      items: [
+        {
+          chunkId: 'published:v2:c1',
+          documentId: 'published',
+          documentVersion: 2,
+          chunkIndex: 1,
+          content: 'published content',
+          score: 0.88,
+          document: {
+            title: 'Published',
+            category: 'docs',
+            team: 'platform',
+            tags: ['rag'],
+          },
         },
-      }],
+      ],
     });
 
-    expect(embedding.embedDocuments).toHaveBeenCalledWith(['how does retrieval work?']);
+    expect(embedding.embedDocuments).toHaveBeenCalledWith([
+      'how does retrieval work?',
+    ]);
     expect(vectorIndex.searchChunks).toHaveBeenCalledWith({
       queryVector: [0.9, 0.8],
       topK: 3,
@@ -112,8 +127,8 @@ describe('RagQueryService', () => {
       { findEntity: vi.fn() } as any,
     );
 
-    await expect(service.search({ query: 'question', topK: 5 })).rejects.toThrow(
-      'embedding provider returned no query vector',
-    );
+    await expect(
+      service.search({ query: 'question', topK: 5 }),
+    ).rejects.toThrow('embedding provider returned no query vector');
   });
 });
