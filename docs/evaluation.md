@@ -1,10 +1,12 @@
 # 检索评测
 
-检索评测的主集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算，当前检索策略保持不变。
+检索评测的主集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。语料和计分口径固定，运行记录保存被测检索实现的提交与策略。
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
 已冻结的实测结果、失败样本和后续实验顺序见 [2026-11-10 基线报告](../benchmarks/knowbase-retrieval-v1/baseline.md)，完整汇总数据见 [baseline.json](../benchmarks/knowbase-retrieval-v1/baseline.json)。
+
+当前混合检索的候选与正文证据设计见 [检索设计](retrieval.md)。原始基线保持冻结，优化实验另存结果，不修改题目或标注来适配新实现。
 
 ## 目录
 

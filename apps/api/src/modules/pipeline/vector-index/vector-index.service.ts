@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Client, type estypes } from '@elastic/elasticsearch';
 import { ElasticsearchGenerationWriter } from './elasticsearch-generation.writer';
 import { ElasticsearchSchema } from './elasticsearch-schema';
+import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
 
 export interface SearchDocumentInput {
@@ -46,6 +47,12 @@ export interface VectorChunkSearchInput {
   allowedDocumentIds?: string[];
 }
 
+export interface KeywordChunkSearchInput {
+  query: string;
+  topK: number;
+  allowedDocumentIds?: string[];
+}
+
 export interface VectorChunkSearchItem {
   id: string;
   documentId: string;
@@ -71,6 +78,7 @@ export class VectorIndexService implements OnModuleDestroy {
   private readonly chunkIndex: string;
   private readonly schema: ElasticsearchSchema;
   private readonly writer: ElasticsearchGenerationWriter;
+  private readonly chunks: ElasticsearchChunkReader;
 
   constructor(
     config: ConfigService,
@@ -104,6 +112,12 @@ export class VectorIndexService implements OnModuleDestroy {
       this.documentIndex,
       this.chunkIndex,
       this.schema,
+    );
+    this.chunks = new ElasticsearchChunkReader(
+      this.client,
+      this.chunkIndex,
+      this.schema,
+      this.generations,
     );
   }
 
@@ -191,38 +205,16 @@ export class VectorIndexService implements OnModuleDestroy {
     };
   }
 
-  async searchChunks(
+  searchChunks(
     input: VectorChunkSearchInput,
   ): Promise<VectorChunkSearchItem[]> {
-    const generations = await this.generations.active(
-      'rag',
-      input.allowedDocumentIds,
-    );
-    if (!generations.length) return [];
-    await this.schema.chunks();
-    const response = await this.client.search<Record<string, unknown>>({
-      index: this.chunkIndex,
-      size: input.topK,
-      knn: {
-        field: 'embedding',
-        query_vector: input.queryVector,
-        k: input.topK,
-        num_candidates: Math.max(input.topK * 10, 100),
-        filter: [{ terms: { generation_id: generations } }],
-      },
-    });
+    return this.chunks.semantic(input);
+  }
 
-    return response.hits.hits.map((hit) => {
-      const source = hit._source ?? {};
-      return {
-        id: String(source.id ?? hit._id),
-        documentId: String(source.document_id ?? ''),
-        version: Number(source.document_version ?? 0),
-        chunkIndex: Number(source.chunk_index ?? 0),
-        content: String(source.content ?? ''),
-        score: hit._score ?? null,
-      };
-    });
+  searchKeywordChunks(
+    input: KeywordChunkSearchInput,
+  ): Promise<VectorChunkSearchItem[]> {
+    return this.chunks.keyword(input);
   }
 
   stageChunks(

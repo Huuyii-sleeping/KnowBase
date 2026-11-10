@@ -66,6 +66,25 @@ export class RagQueryService {
     };
   }
 
+  async searchKeywordChunks(
+    query: SemanticSearchDto,
+    user?: AuthUser,
+  ): Promise<SemanticSearchResult> {
+    const normalizedQuery = query.query.trim();
+    const candidates = await this.vectorIndex.searchKeywordChunks({
+      query: normalizedQuery,
+      topK: Math.min(query.topK * 3, 100),
+      allowedDocumentIds: user
+        ? await this.documentQuery.findVisiblePublishedIds(user)
+        : undefined,
+    });
+    return {
+      query: normalizedQuery,
+      topK: query.topK,
+      items: await this.keepPublishedCandidates(candidates, query.topK),
+    };
+  }
+
   private async keepPublishedCandidates(
     candidates: VectorChunkSearchItem[],
     topK: number,

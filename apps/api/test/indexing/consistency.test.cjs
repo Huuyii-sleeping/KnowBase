@@ -203,13 +203,24 @@ async function visible(pipeline, id) {
     ).items.map((item) => item.title);
   }
   if (pipeline === 'rag') {
-    return (
+    const contents = (
       await vector.searchChunks({
         queryVector: [1, 0],
         topK: 10,
         allowedDocumentIds: [id],
       })
     ).map((item) => item.content);
+    const lexical = await vector.searchKeywordChunks({
+      query: 'Original New Obsolete Incomplete Resurrected',
+      topK: 10,
+      allowedDocumentIds: [id],
+    });
+    assert.deepEqual(
+      lexical.map((item) => item.content).sort(),
+      [...contents].sort(),
+      'keyword chunks must obey the same publication, deletion and generation visibility as vectors',
+    );
+    return contents;
   }
   return (
     await graph.searchRelated({
@@ -447,4 +458,30 @@ test('concurrent metadata revisions serialize and preserve both changes with dis
   assert.equal(result.title, 'New title');
   assert.equal(result.category, 'New category');
   assert.equal(result.status, 'DRAFT');
+});
+
+test('keyword chunks restrict results to allowed documents and return no hits for unmatched terms', async () => {
+  const allowed = await document(),
+    hidden = await document();
+  await build('rag', allowed, 'AccessWord');
+  await build('rag', hidden, 'AccessWord');
+  const input = { query: 'AccessWord', topK: 10 };
+  const results = await vector.searchKeywordChunks({
+    ...input,
+    allowedDocumentIds: [allowed.id],
+  });
+  assert.equal(results.length, 2);
+  assert.ok(
+    results.every(
+      (item) => item.documentId === allowed.id && item.content === 'AccessWord',
+    ),
+  );
+  assert.deepEqual(
+    await vector.searchKeywordChunks({ ...input, allowedDocumentIds: [] }),
+    [],
+  );
+  assert.deepEqual(
+    await vector.searchKeywordChunks({ ...input, query: 'zzznomatchzzz' }),
+    [],
+  );
 });
