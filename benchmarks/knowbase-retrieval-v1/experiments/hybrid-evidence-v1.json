@@ -1,0 +1,1938 @@
+{
+  "baseline": "../baseline.json",
+  "experiments": [
+    {
+      "name": "chunk_keyword_same_budget",
+      "metadata": {
+        "dataset": "knowbase-retrieval-v1",
+        "started_at": "2026-11-10T09:04:22.146Z",
+        "api_git_commit": "85f8a9c12c5e814c0d77edbdc682961a0bc974dd",
+        "working_tree_dirty": false,
+        "document_count": 14,
+        "indexed_chunk_count": 16,
+        "question_count": 40,
+        "corpus_sha256": {
+          "manifest.json": "e3c6191fd3d36db4bd702da9aa0a88da9a64cd8965687c84b52a89e8d3fe8c7b",
+          "questions.json": "f5f23d63be751d4cdbc5f0c6ee2569b4942681ecfc7065eed3dad225e1312308",
+          "docs/kb_access.md": "7cfdc1382aad0a0067163a9dfaa5ff7f7384c91d76d2f1bc5c95e6d725762c91",
+          "docs/kb_deletion.md": "97281c405ffbb5e949b68101081ede36b263d1be377b53b279e09b97d0b0f4e9",
+          "docs/kb_delivery.md": "4de3a7438e75c7d79c8e881b38c87a65b1861b172f35d81d904abfa742e20234",
+          "docs/kb_generations.md": "6ed8d1feb87ac18167feca64e54ef50f73423247cbff77acc379e6d9b95397a2",
+          "docs/kb_graph.md": "b38f7a702d589f1ad9e11f082ad5112ba555a3d4fa671db77c6d779115f994fb",
+          "docs/kb_noise.md": "e56872b620f37aa1ba8f7fb502c585d1f7c01dbd008c3112ae16ac103e6fc6d2",
+          "docs/kb_policy_archive.md": "93bb8e7f495023bf86b6db715c745de13cc47a0a32c8095296cfad6c4cf27300",
+          "docs/kb_policy_current.md": "01e5868cd9c2703ba45c92a6e60ec55ba7dfb76a93f2fc78738efb5bf32b6c45",
+          "docs/kb_ports.md": "c7ebe11a5d867089918858622c70d66b45f4055de251af47602beb1aa4630c02",
+          "docs/kb_rag.md": "b58d4889d63cee640621a194cc68867389d28e61b174c4f50c85b5f3b71c90de",
+          "docs/kb_review.md": "4e54df26c5d7b437b8333921202dbff042a5dcf5687a59f9acc9b85350ceee03",
+          "docs/kb_search.md": "3362e06e877df472d83ede7cd80a65cc70f6116500d8e027604919755c1743ae",
+          "docs/kb_storage.md": "3b5adfaa1d7879a269de0a1b771ae4fa2e9c190925fb75f229782bdd70fa7ccf",
+          "docs/kb_upload.md": "1cde5e4373d32854ff0797b8ff95cb096ced0a7a844b43b27c6cb023db2bf925"
+        },
+        "embedding_model": "nomic-embed-text:latest",
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimensions": 768,
+        "chunk_size": 1000,
+        "chunk_overlap": 150,
+        "reranking": "existing rule-based implementation; unchanged",
+        "hybrid_retrieval": {
+          "keywordUnit": "active RAG chunk content",
+          "mergeUnit": "chunk ID",
+          "candidateMultiplier": 1,
+          "maxCandidatesPerRoute": 60
+        },
+        "scope": "Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.",
+        "top_k": [1, 3, 5],
+        "modes": ["keyword", "semantic", "hybrid"],
+        "warmup": "One untimed request per mode after corpus indexing; one measured pass per mode/K.",
+        "ranking_unit": "Deduplicate the first API TopK candidates by document; no extra candidate fetch. Evidence checks inspect all returned TopK contents.",
+        "python_version": "3.14.6",
+        "ir_measures_version": "0.4.3"
+      },
+      "raw_report_directory": "reports/retrieval-hybrid-chunks-v1/2026-11-10T09-03-39-650Z-35376",
+      "runs": [
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 1,
+          "precision_at_k": 0.8889,
+          "recall_at_k": 0.8194,
+          "mrr": 0.8889,
+          "ndcg_at_k": 0.8889,
+          "hit_rate": 0.8889,
+          "all_gold_hit_rate": 0.75,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 14.09,
+          "p95_latency_ms": 16.55
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 3,
+          "precision_at_k": 0.3704,
+          "recall_at_k": 0.9861,
+          "mrr": 0.9398,
+          "ndcg_at_k": 0.9446,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 0.9722,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 12.32,
+          "p95_latency_ms": 15.91
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 5,
+          "precision_at_k": 0.2278,
+          "recall_at_k": 1.0,
+          "mrr": 0.9398,
+          "ndcg_at_k": 0.9519,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 15.95,
+          "p95_latency_ms": 21.35
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 1,
+          "precision_at_k": 0.5833,
+          "recall_at_k": 0.5556,
+          "mrr": 0.5833,
+          "ndcg_at_k": 0.5833,
+          "hit_rate": 0.5833,
+          "all_gold_hit_rate": 0.5278,
+          "evidence_recall": 0.4583,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 61.92,
+          "p95_latency_ms": 75.1
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 3,
+          "precision_at_k": 0.25,
+          "recall_at_k": 0.6806,
+          "mrr": 0.6435,
+          "ndcg_at_k": 0.6394,
+          "hit_rate": 0.7222,
+          "all_gold_hit_rate": 0.6389,
+          "evidence_recall": 0.5833,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 61.92,
+          "p95_latency_ms": 70.73
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 5,
+          "precision_at_k": 0.1667,
+          "recall_at_k": 0.7361,
+          "mrr": 0.656,
+          "ndcg_at_k": 0.6645,
+          "hit_rate": 0.7778,
+          "all_gold_hit_rate": 0.6944,
+          "evidence_recall": 0.6528,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 64.06,
+          "p95_latency_ms": 73.16
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 1,
+          "precision_at_k": 0.5833,
+          "recall_at_k": 0.5556,
+          "mrr": 0.5833,
+          "ndcg_at_k": 0.5833,
+          "hit_rate": 0.5833,
+          "all_gold_hit_rate": 0.5278,
+          "evidence_recall": 0.4583,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 53.08,
+          "p95_latency_ms": 69.03
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 3,
+          "precision_at_k": 0.25,
+          "recall_at_k": 0.6806,
+          "mrr": 0.6944,
+          "ndcg_at_k": 0.6734,
+          "hit_rate": 0.7222,
+          "all_gold_hit_rate": 0.6389,
+          "evidence_recall": 0.5833,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 56.57,
+          "p95_latency_ms": 69.76
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.1667,
+          "recall_at_k": 0.7361,
+          "mrr": 0.7315,
+          "ndcg_at_k": 0.7151,
+          "hit_rate": 0.7778,
+          "all_gold_hit_rate": 0.6944,
+          "evidence_recall": 0.6528,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 60.02,
+          "p95_latency_ms": 70.48
+        }
+      ],
+      "hybrid_top5_categories": {
+        "cross_chunk": {
+          "questions": 2,
+          "answerable_questions": 2,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 0.5,
+          "negative_empty_rate": null,
+          "average_latency_ms": 59.84,
+          "p95_latency_ms": 60.57
+        },
+        "exact_term": {
+          "questions": 8,
+          "answerable_questions": 8,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 60.73,
+          "p95_latency_ms": 69.06
+        },
+        "multi_document": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.25,
+          "recall_at_k": 0.625,
+          "mrr": 0.875,
+          "ndcg_at_k": 0.6533,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 0.25,
+          "evidence_recall": 0.375,
+          "negative_empty_rate": null,
+          "average_latency_ms": 63.45,
+          "p95_latency_ms": 66.25
+        },
+        "parameter_table": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 52.84,
+          "p95_latency_ms": 56.29
+        },
+        "paraphrase": {
+          "questions": 8,
+          "answerable_questions": 8,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.075,
+          "recall_at_k": 0.375,
+          "mrr": 0.2917,
+          "ndcg_at_k": 0.3125,
+          "hit_rate": 0.375,
+          "all_gold_hit_rate": 0.375,
+          "evidence_recall": 0.25,
+          "negative_empty_rate": null,
+          "average_latency_ms": 64.71,
+          "p95_latency_ms": 73.16
+        },
+        "unanswerable": {
+          "questions": 4,
+          "answerable_questions": 0,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": null,
+          "recall_at_k": null,
+          "mrr": null,
+          "ndcg_at_k": null,
+          "hit_rate": null,
+          "all_gold_hit_rate": null,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 53.28,
+          "p95_latency_ms": 55.43
+        },
+        "version": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.25,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 50.74,
+          "p95_latency_ms": 54.59
+        },
+        "workflow": {
+          "questions": 6,
+          "answerable_questions": 6,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.1,
+          "recall_at_k": 0.5,
+          "mrr": 0.4167,
+          "ndcg_at_k": 0.4385,
+          "hit_rate": 0.5,
+          "all_gold_hit_rate": 0.5,
+          "evidence_recall": 0.5,
+          "negative_empty_rate": null,
+          "average_latency_ms": 66.07,
+          "p95_latency_ms": 73.04
+        }
+      },
+      "hybrid_top5_cases": [
+        {
+          "id": "kb001",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_upload.md",
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_noise.md",
+            "kb_rag.md"
+          ]
+        },
+        {
+          "id": "kb002",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_search.md",
+            "kb_generations.md",
+            "kb_deletion.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb003",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_upload.md",
+            "kb_ports.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb004",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_search.md",
+            "kb_noise.md",
+            "kb_ports.md",
+            "kb_rag.md"
+          ]
+        },
+        {
+          "id": "kb005",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_generations.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_noise.md",
+            "kb_ports.md"
+          ]
+        },
+        {
+          "id": "kb006",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_access.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_access.md",
+            "kb_graph.md",
+            "kb_ports.md",
+            "kb_noise.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb007",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_rag.md",
+            "kb_search.md",
+            "kb_noise.md",
+            "kb_generations.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb008",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_graph.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_graph.md",
+            "kb_noise.md",
+            "kb_rag.md",
+            "kb_deletion.md",
+            "kb_ports.md"
+          ]
+        },
+        {
+          "id": "kb009",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_access.md"
+          ]
+        },
+        {
+          "id": "kb010",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_upload.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_policy_current.md",
+            "kb_policy_archive.md"
+          ]
+        },
+        {
+          "id": "kb011",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 3,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_search.md",
+            "kb_storage.md",
+            "kb_review.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb012",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_upload.md",
+            "kb_policy_current.md",
+            "kb_access.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb013",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb014",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_storage.md",
+            "kb_deletion.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb015",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_deletion.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_noise.md",
+            "kb_policy_archive.md"
+          ]
+        },
+        {
+          "id": "kb016",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_search.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb017",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb018",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_access.md",
+            "kb_ports.md"
+          ]
+        },
+        {
+          "id": "kb019",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_policy_current.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb020",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 2,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb021",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_deletion.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_deletion.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb022",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_noise.md",
+            "kb_ports.md",
+            "kb_delivery.md",
+            "kb_access.md"
+          ]
+        },
+        {
+          "id": "kb023",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb024",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_deletion.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb025",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_search.md",
+            "kb_delivery.md",
+            "kb_rag.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb026",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_search.md",
+            "kb_rag.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb027",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 2,
+          "gold_documents": ["kb_storage.md", "kb_rag.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_search.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_review.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb028",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md", "kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 0.5,
+          "retrieved_files": [
+            "kb_generations.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_noise.md",
+            "kb_policy_archive.md"
+          ]
+        },
+        {
+          "id": "kb029",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md", "kb_generations.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.5,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_policy_current.md",
+            "kb_policy_archive.md"
+          ]
+        },
+        {
+          "id": "kb030",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_rag.md", "kb_search.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.5,
+          "retrieved_files": [
+            "kb_search.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_review.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb031",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_storage.md",
+            "kb_access.md",
+            "kb_upload.md"
+          ]
+        },
+        {
+          "id": "kb032",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_archive.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_archive.md",
+            "kb_policy_current.md",
+            "kb_upload.md",
+            "kb_access.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb033",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md", "kb_policy_archive.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_archive.md",
+            "kb_policy_current.md",
+            "kb_storage.md",
+            "kb_access.md",
+            "kb_delivery.md"
+          ]
+        },
+        {
+          "id": "kb034",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_access.md"
+          ]
+        },
+        {
+          "id": "kb035",
+          "type": "answerable",
+          "category": "cross_chunk",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 0.5,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_storage.md",
+            "kb_policy_archive.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb036",
+          "type": "answerable",
+          "category": "cross_chunk",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 0.5,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_deletion.md",
+            "kb_access.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb037",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_graph.md",
+            "kb_access.md",
+            "kb_search.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb038",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_delivery.md",
+            "kb_policy_archive.md",
+            "kb_generations.md",
+            "kb_noise.md"
+          ]
+        },
+        {
+          "id": "kb039",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_noise.md",
+            "kb_graph.md",
+            "kb_ports.md",
+            "kb_rag.md",
+            "kb_upload.md"
+          ]
+        },
+        {
+          "id": "kb040",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_policy_archive.md",
+            "kb_access.md"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "chunk_keyword_expanded_pool",
+      "metadata": {
+        "dataset": "knowbase-retrieval-v1",
+        "started_at": "2026-11-10T09:12:39.559Z",
+        "api_git_commit": "8aadbd24a3f10a65c4b61e7618856d07bdd5e4e0",
+        "working_tree_dirty": false,
+        "document_count": 14,
+        "indexed_chunk_count": 16,
+        "question_count": 40,
+        "corpus_sha256": {
+          "manifest.json": "e3c6191fd3d36db4bd702da9aa0a88da9a64cd8965687c84b52a89e8d3fe8c7b",
+          "questions.json": "f5f23d63be751d4cdbc5f0c6ee2569b4942681ecfc7065eed3dad225e1312308",
+          "docs/kb_access.md": "7cfdc1382aad0a0067163a9dfaa5ff7f7384c91d76d2f1bc5c95e6d725762c91",
+          "docs/kb_deletion.md": "97281c405ffbb5e949b68101081ede36b263d1be377b53b279e09b97d0b0f4e9",
+          "docs/kb_delivery.md": "4de3a7438e75c7d79c8e881b38c87a65b1861b172f35d81d904abfa742e20234",
+          "docs/kb_generations.md": "6ed8d1feb87ac18167feca64e54ef50f73423247cbff77acc379e6d9b95397a2",
+          "docs/kb_graph.md": "b38f7a702d589f1ad9e11f082ad5112ba555a3d4fa671db77c6d779115f994fb",
+          "docs/kb_noise.md": "e56872b620f37aa1ba8f7fb502c585d1f7c01dbd008c3112ae16ac103e6fc6d2",
+          "docs/kb_policy_archive.md": "93bb8e7f495023bf86b6db715c745de13cc47a0a32c8095296cfad6c4cf27300",
+          "docs/kb_policy_current.md": "01e5868cd9c2703ba45c92a6e60ec55ba7dfb76a93f2fc78738efb5bf32b6c45",
+          "docs/kb_ports.md": "c7ebe11a5d867089918858622c70d66b45f4055de251af47602beb1aa4630c02",
+          "docs/kb_rag.md": "b58d4889d63cee640621a194cc68867389d28e61b174c4f50c85b5f3b71c90de",
+          "docs/kb_review.md": "4e54df26c5d7b437b8333921202dbff042a5dcf5687a59f9acc9b85350ceee03",
+          "docs/kb_search.md": "3362e06e877df472d83ede7cd80a65cc70f6116500d8e027604919755c1743ae",
+          "docs/kb_storage.md": "3b5adfaa1d7879a269de0a1b771ae4fa2e9c190925fb75f229782bdd70fa7ccf",
+          "docs/kb_upload.md": "1cde5e4373d32854ff0797b8ff95cb096ced0a7a844b43b27c6cb023db2bf925"
+        },
+        "embedding_model": "nomic-embed-text:latest",
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "dimensions": 768,
+        "chunk_size": 1000,
+        "chunk_overlap": 150,
+        "reranking": "existing rule-based implementation; unchanged",
+        "hybrid_retrieval": {
+          "keywordUnit": "active RAG chunk content",
+          "mergeUnit": "chunk ID",
+          "candidateMultiplier": 3,
+          "maxCandidatesPerRoute": 60
+        },
+        "scope": "Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.",
+        "top_k": [1, 3, 5],
+        "modes": ["keyword", "semantic", "hybrid"],
+        "warmup": "One untimed request per mode after corpus indexing; one measured pass per mode/K.",
+        "ranking_unit": "Deduplicate the first API TopK candidates by document; no extra candidate fetch. Evidence checks inspect all returned TopK contents.",
+        "python_version": "3.14.6",
+        "ir_measures_version": "0.4.3"
+      },
+      "raw_report_directory": "reports/retrieval-hybrid-pool-v1/2026-11-10T09-12-07-745Z-36156",
+      "runs": [
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 1,
+          "precision_at_k": 0.8889,
+          "recall_at_k": 0.8194,
+          "mrr": 0.8889,
+          "ndcg_at_k": 0.8889,
+          "hit_rate": 0.8889,
+          "all_gold_hit_rate": 0.75,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 14.44,
+          "p95_latency_ms": 17.41
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 3,
+          "precision_at_k": 0.3704,
+          "recall_at_k": 0.9861,
+          "mrr": 0.9398,
+          "ndcg_at_k": 0.9446,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 0.9722,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 12.43,
+          "p95_latency_ms": 17.26
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "keyword",
+          "top_k": 5,
+          "precision_at_k": 0.2278,
+          "recall_at_k": 1.0,
+          "mrr": 0.9398,
+          "ndcg_at_k": 0.9519,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 14.38,
+          "p95_latency_ms": 17.6
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 1,
+          "precision_at_k": 0.5833,
+          "recall_at_k": 0.5556,
+          "mrr": 0.5833,
+          "ndcg_at_k": 0.5833,
+          "hit_rate": 0.5833,
+          "all_gold_hit_rate": 0.5278,
+          "evidence_recall": 0.4583,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 57.47,
+          "p95_latency_ms": 70.81
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 3,
+          "precision_at_k": 0.25,
+          "recall_at_k": 0.6806,
+          "mrr": 0.6435,
+          "ndcg_at_k": 0.6394,
+          "hit_rate": 0.7222,
+          "all_gold_hit_rate": 0.6389,
+          "evidence_recall": 0.5833,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 65.98,
+          "p95_latency_ms": 82.92
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "semantic",
+          "top_k": 5,
+          "precision_at_k": 0.1667,
+          "recall_at_k": 0.7361,
+          "mrr": 0.656,
+          "ndcg_at_k": 0.6645,
+          "hit_rate": 0.7778,
+          "all_gold_hit_rate": 0.6944,
+          "evidence_recall": 0.6528,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 64.57,
+          "p95_latency_ms": 78.27
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 1,
+          "precision_at_k": 0.6667,
+          "recall_at_k": 0.625,
+          "mrr": 0.6667,
+          "ndcg_at_k": 0.6667,
+          "hit_rate": 0.6667,
+          "all_gold_hit_rate": 0.5833,
+          "evidence_recall": 0.5694,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 54.3,
+          "p95_latency_ms": 67.41
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 3,
+          "precision_at_k": 0.3148,
+          "recall_at_k": 0.8611,
+          "mrr": 0.8565,
+          "ndcg_at_k": 0.8433,
+          "hit_rate": 0.8889,
+          "all_gold_hit_rate": 0.8333,
+          "evidence_recall": 0.7917,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 57.57,
+          "p95_latency_ms": 67.35
+        },
+        {
+          "questions": 40,
+          "answerable_questions": 36,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2222,
+          "recall_at_k": 0.9722,
+          "mrr": 0.9005,
+          "ndcg_at_k": 0.9181,
+          "hit_rate": 0.9722,
+          "all_gold_hit_rate": 0.9722,
+          "evidence_recall": 0.9444,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 63.03,
+          "p95_latency_ms": 72.43
+        }
+      ],
+      "hybrid_top5_categories": {
+        "cross_chunk": {
+          "questions": 2,
+          "answerable_questions": 2,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 70.2,
+          "p95_latency_ms": 72.43
+        },
+        "exact_term": {
+          "questions": 8,
+          "answerable_questions": 8,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 64.36,
+          "p95_latency_ms": 75.31
+        },
+        "multi_document": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.4,
+          "recall_at_k": 1.0,
+          "mrr": 0.8125,
+          "ndcg_at_k": 0.8552,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 66.6,
+          "p95_latency_ms": 72.64
+        },
+        "parameter_table": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 61.41,
+          "p95_latency_ms": 66.97
+        },
+        "paraphrase": {
+          "questions": 8,
+          "answerable_questions": 8,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.175,
+          "recall_at_k": 0.875,
+          "mrr": 0.7083,
+          "ndcg_at_k": 0.75,
+          "hit_rate": 0.875,
+          "all_gold_hit_rate": 0.875,
+          "evidence_recall": 0.75,
+          "negative_empty_rate": null,
+          "average_latency_ms": 59.93,
+          "p95_latency_ms": 67.05
+        },
+        "unanswerable": {
+          "questions": 4,
+          "answerable_questions": 0,
+          "unanswerable_questions": 4,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": null,
+          "recall_at_k": null,
+          "mrr": null,
+          "ndcg_at_k": null,
+          "hit_rate": null,
+          "all_gold_hit_rate": null,
+          "evidence_recall": null,
+          "negative_empty_rate": 0,
+          "average_latency_ms": 68.0,
+          "p95_latency_ms": 69.69
+        },
+        "version": {
+          "questions": 4,
+          "answerable_questions": 4,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.25,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_k": 1.0,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 57.36,
+          "p95_latency_ms": 62.07
+        },
+        "workflow": {
+          "questions": 6,
+          "answerable_questions": 6,
+          "unanswerable_questions": 0,
+          "mode": "hybrid",
+          "top_k": 5,
+          "precision_at_k": 0.2,
+          "recall_at_k": 1.0,
+          "mrr": 0.9167,
+          "ndcg_at_k": 0.9385,
+          "hit_rate": 1,
+          "all_gold_hit_rate": 1,
+          "evidence_recall": 1.0,
+          "negative_empty_rate": null,
+          "average_latency_ms": 62.2,
+          "p95_latency_ms": 71.3
+        }
+      },
+      "hybrid_top5_cases": [
+        {
+          "id": "kb001",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_upload.md",
+            "kb_deletion.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_policy_current.md"
+          ]
+        },
+        {
+          "id": "kb002",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_search.md",
+            "kb_generations.md",
+            "kb_deletion.md",
+            "kb_ports.md"
+          ]
+        },
+        {
+          "id": "kb003",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_noise.md",
+            "kb_review.md"
+          ]
+        },
+        {
+          "id": "kb004",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_storage.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb005",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_generations.md",
+            "kb_delivery.md",
+            "kb_review.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb006",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_access.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_access.md",
+            "kb_delivery.md",
+            "kb_graph.md",
+            "kb_storage.md",
+            "kb_ports.md"
+          ]
+        },
+        {
+          "id": "kb007",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_rag.md",
+            "kb_search.md",
+            "kb_noise.md",
+            "kb_delivery.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb008",
+          "type": "answerable",
+          "category": "exact_term",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_graph.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_graph.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb009",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": null,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": false,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_policy_current.md",
+            "kb_policy_archive.md"
+          ]
+        },
+        {
+          "id": "kb010",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_upload.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": ["kb_upload.md", "kb_storage.md", "kb_delivery.md"]
+        },
+        {
+          "id": "kb011",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": ["kb_storage.md", "kb_delivery.md", "kb_upload.md"]
+        },
+        {
+          "id": "kb012",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 0.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb013",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb014",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 3,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_noise.md",
+            "kb_generations.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb015",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_deletion.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_deletion.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_review.md"
+          ]
+        },
+        {
+          "id": "kb016",
+          "type": "answerable",
+          "category": "paraphrase",
+          "first_relevant_rank": 3,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_search.md",
+            "kb_rag.md",
+            "kb_delivery.md"
+          ]
+        },
+        {
+          "id": "kb017",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_policy_current.md",
+            "kb_upload.md",
+            "kb_policy_archive.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb018",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb019",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb020",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 2,
+          "gold_documents": ["kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb021",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_deletion.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_deletion.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb022",
+          "type": "answerable",
+          "category": "workflow",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_rag.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_rag.md",
+            "kb_noise.md",
+            "kb_storage.md",
+            "kb_ports.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb023",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_deletion.md"
+          ]
+        },
+        {
+          "id": "kb024",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_deletion.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb025",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_search.md"
+          ]
+        },
+        {
+          "id": "kb026",
+          "type": "answerable",
+          "category": "parameter_table",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_ports.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_search.md",
+            "kb_rag.md",
+            "kb_delivery.md"
+          ]
+        },
+        {
+          "id": "kb027",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 4,
+          "gold_documents": ["kb_storage.md", "kb_rag.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_search.md",
+            "kb_generations.md",
+            "kb_noise.md",
+            "kb_rag.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb028",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md", "kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_generations.md",
+            "kb_delivery.md",
+            "kb_deletion.md",
+            "kb_review.md"
+          ]
+        },
+        {
+          "id": "kb029",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_review.md", "kb_generations.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_review.md",
+            "kb_delivery.md",
+            "kb_generations.md",
+            "kb_storage.md"
+          ]
+        },
+        {
+          "id": "kb030",
+          "type": "answerable",
+          "category": "multi_document",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_rag.md", "kb_search.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_search.md",
+            "kb_rag.md",
+            "kb_storage.md",
+            "kb_access.md"
+          ]
+        },
+        {
+          "id": "kb031",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_access.md"
+          ]
+        },
+        {
+          "id": "kb032",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_archive.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_archive.md",
+            "kb_policy_current.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb033",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md", "kb_policy_archive.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_archive.md",
+            "kb_policy_current.md",
+            "kb_storage.md",
+            "kb_noise.md",
+            "kb_upload.md"
+          ]
+        },
+        {
+          "id": "kb034",
+          "type": "answerable",
+          "category": "version",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_policy_current.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_policy_archive.md",
+            "kb_storage.md",
+            "kb_generations.md",
+            "kb_delivery.md"
+          ]
+        },
+        {
+          "id": "kb035",
+          "type": "answerable",
+          "category": "cross_chunk",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_delivery.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_delivery.md",
+            "kb_storage.md",
+            "kb_policy_current.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb036",
+          "type": "answerable",
+          "category": "cross_chunk",
+          "first_relevant_rank": 1,
+          "gold_documents": ["kb_storage.md"],
+          "all_gold_found": true,
+          "evidence_recall": 1.0,
+          "retrieved_files": [
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_deletion.md",
+            "kb_upload.md"
+          ]
+        },
+        {
+          "id": "kb037",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_ports.md",
+            "kb_storage.md",
+            "kb_delivery.md",
+            "kb_rag.md",
+            "kb_graph.md"
+          ]
+        },
+        {
+          "id": "kb038",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_policy_current.md",
+            "kb_delivery.md",
+            "kb_policy_archive.md",
+            "kb_generations.md"
+          ]
+        },
+        {
+          "id": "kb039",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_noise.md",
+            "kb_storage.md",
+            "kb_graph.md",
+            "kb_ports.md",
+            "kb_delivery.md"
+          ]
+        },
+        {
+          "id": "kb040",
+          "type": "unanswerable",
+          "category": "unanswerable",
+          "first_relevant_rank": null,
+          "gold_documents": [],
+          "all_gold_found": false,
+          "evidence_recall": null,
+          "retrieved_files": [
+            "kb_noise.md",
+            "kb_rag.md",
+            "kb_policy_current.md",
+            "kb_graph.md",
+            "kb_delivery.md"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,8 @@
 
 当前混合检索的候选与正文证据设计见 [检索设计](retrieval.md)。原始基线保持冻结，优化实验另存结果，不修改题目或标注来适配新实现。
 
+正文 Chunk 与候选池的分步实测见 [混合检索优化实验](../benchmarks/knowbase-retrieval-v1/experiments/hybrid-evidence-v1.md)。
+
 ## 目录
 
 - `benchmarks/knowbase-retrieval-v1/manifest.json`：冻结的语料清单。
