@@ -36,7 +36,7 @@ describe('HybridSearchService', () => {
       sources: ['keyword', 'semantic'],
     });
     for (const route of [ragQuery.search, ragQuery.searchKeywordChunks]) {
-      expect(route).toHaveBeenCalledWith({ query: '证据', topK: 2 }, user);
+      expect(route).toHaveBeenCalledWith({ query: '证据', topK: 6 }, user);
     }
   });
 
@@ -53,6 +53,24 @@ describe('HybridSearchService', () => {
     expect(
       (await service.search({ query: '证据', topK: 1 })).items[0],
     ).toMatchObject({ content: '正文证据', sources: ['keyword'] });
+  });
+
+  it('bounds expanded route budgets even at the largest public TopK', async () => {
+    const ragQuery = {
+      searchKeywordChunks: vi.fn().mockResolvedValue({ items: [] }),
+      search: vi.fn().mockResolvedValue({ items: [] }),
+    };
+    const result = await new HybridSearchService(
+      ragQuery as any,
+      new RerankService(),
+    ).search({ query: '证据', topK: 20 });
+    expect(result).toEqual({ query: '证据', topK: 20, items: [] });
+    for (const route of [ragQuery.search, ragQuery.searchKeywordChunks]) {
+      expect(route).toHaveBeenCalledWith(
+        { query: '证据', topK: 60 },
+        undefined,
+      );
+    }
   });
 
   it('surfaces route failures and does not return unvalidated fallback metadata', async () => {

@@ -5,7 +5,7 @@ import type { HybridSearchItem } from './hybrid-search.service';
 export const HYBRID_RETRIEVAL_POLICY = {
   keywordUnit: 'active RAG chunk content',
   mergeUnit: 'chunk ID',
-  candidateMultiplier: 1,
+  candidateMultiplier: 3,
   maxCandidatesPerRoute: 60,
 } as const;
 
