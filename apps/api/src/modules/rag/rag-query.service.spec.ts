@@ -75,14 +75,12 @@ describe('RagQueryService', () => {
         searchKeywordChunks: vi.fn().mockResolvedValue([stale, current]),
       } as any,
       {
-        findEntity: vi
-          .fn()
-          .mockResolvedValue({
-            status: DocumentStatus.PUBLISHED,
-            version: 2,
-            title: 'Title',
-            tags: [],
-          }),
+        findEntity: vi.fn().mockResolvedValue({
+          status: DocumentStatus.PUBLISHED,
+          version: 2,
+          title: 'Title',
+          tags: [],
+        }),
       } as any,
     );
     const trace = await service.recall(
