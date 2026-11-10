@@ -23,6 +23,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 先用 development 比较配置，冻结方案后才运行 validation；旧 regression 可独立重跑。随着验证结果被查看或用于优化，该组就变成回归资料，后续验收必须另建未用于调参的问题。v1/v2 原文件保持不变。
 
+当前开发预算矩阵及一次固定配置验证已经完成，结果见[预算对照报告](experiments/budget-audit-v3.md)。30:10 提升了总体候选池召回，但验证组标题依赖题未通过门槛，线上预算保持现行配置。本组 validation 已被查看，后续使用需按已暴露的回归资料处理。
+
 预算实验示例：
 
 ```bash
