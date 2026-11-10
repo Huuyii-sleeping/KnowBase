@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools/rag-evaluation"))
 from recall_audit import analyze, grade
+from recall_report import render_report
 from benchmark_dataset import validate_dataset
 
 
@@ -115,6 +116,23 @@ class RecallAuditTests(unittest.TestCase):
             path.write_text(json.dumps(traces[:1]))
             with self.assertRaisesRegex(ValueError, "incomplete"):
                 analyze(root, root)
+
+    def test_markdown_report_handles_negative_only_metrics_and_selected_budget(self):
+        stages = {
+            stage: {"evidence_recall": None, "mean_candidate_count": 2}
+            for stage in ("keyword", "semantic", "pool", "selected")
+        }
+        summary = {
+            "split": "validation",
+            "budget_per_route": 10,
+            "stages": stages,
+            "mean_ms": 3,
+            "p95_ms": 4,
+        }
+        text = render_report([summary], [], [10], 10)
+        self.assertIn("N/A", text)
+        self.assertIn("每路 10 候选", text)
+        self.assertNotIn("默认 15", text)
 
     def test_expanded_corpus_has_valid_evidence_and_disjoint_question_identifiers(self):
         directory = ROOT / "benchmarks/knowbase-recall-v2"
