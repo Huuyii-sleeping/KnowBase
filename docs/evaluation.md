@@ -48,6 +48,8 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 
 整个过程不读取 API `.env`，不使用业务数据库、业务索引或业务存储卷。正常完成和受控失败后清理本轮容器与卷；中断或强制终止进程可能需要按 Compose 项目名手动清理。`run-status.json` 标识当前轮是否完整结束，每次运行都创建新目录，避免把旧结果误认为本轮输出。
 
+启动失败时，运行器会在清理容器前尽量保留 `infrastructure.log`。测试 RabbitMQ 的健康检查以 broker 用户运行，防止 root 诊断进程在首次启动时创建 broker 无法读取的 Erlang cookie。
+
 输出包括总览 `comparison.md/json`、配置与语料 SHA-256、模型摘要、每组的逐题 JSON/Markdown、TREC qrels/run 和 API 日志。报告不包含认证 Token。
 
 ## 指标口径
