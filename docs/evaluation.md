@@ -4,6 +4,8 @@
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
+已冻结的实测结果、失败样本和后续实验顺序见 [2026-11-10 基线报告](../benchmarks/knowbase-retrieval-v1/baseline.md)，完整汇总数据见 [baseline.json](../benchmarks/knowbase-retrieval-v1/baseline.json)。
+
 ## 目录
 
 - `benchmarks/knowbase-retrieval-v1/manifest.json`：冻结的语料清单。
@@ -38,7 +40,7 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 
 命令构建 API，在独立 `knowbase-retrieval-<进程号>` Compose 项目中启动 PostgreSQL、MongoDB、RustFS、RabbitMQ、Elasticsearch 和 Neo4j，执行数据库初始化，再通过真实 HTTP 接口上传全部语料、提交审核和批准发布。等待每篇文档的全文与向量批次激活后，分别运行 keyword、semantic、hybrid 在 K=1/3/5 的 9 组评测，共 360 次计分请求；每种模式另有一次不计分的预热。
 
-评测使用真实解析、存储、权限、消息投递和 Ollama Embedding。只启动 Search/RAG 消费者，KG 消息留在隔离队列中，不执行图谱抽取，也不调用对话模型，避免争抢模型计算资源。图谱与答案质量不属于本轮测量范围。
+评测使用真实解析、存储、登录鉴权、消息投递和 Ollama Embedding。只启动 Search/RAG 消费者，KG 消息留在隔离队列中，不执行图谱抽取，也不调用对话模型，避免争抢模型计算资源。语料均为 PUBLIC Markdown、请求身份为管理员；PDF/Office 解析质量、权限隔离、图谱与答案质量不属于本轮测量范围。
 
 整个过程不读取 API `.env`，不使用业务数据库、业务索引或业务存储卷。正常完成和受控失败后清理本轮容器与卷；中断或强制终止进程可能需要按 Compose 项目名手动清理。`run-status.json` 标识当前轮是否完整结束，每次运行都创建新目录，避免把旧结果误认为本轮输出。
 
