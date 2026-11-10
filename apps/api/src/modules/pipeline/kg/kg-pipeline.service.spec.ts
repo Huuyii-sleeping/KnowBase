@@ -1,115 +1,95 @@
 import { describe, expect, it, vi } from 'vitest';
-
 vi.mock('../../documents/entities/document.entity', () => ({
-  Document: class Document {},
+  Document: class {},
   DocumentStatus: { PUBLISHED: 'PUBLISHED' },
 }));
-
 import { KgPipelineService } from './kg-pipeline.service';
+import { IndexBuildService } from '../../indexing/index-build.service';
 
-describe('KgPipelineService', () => {
-  it('runs the published document through chunking, extraction, and graph indexing', async () => {
-    const document = {
-      id: 'document-1',
-      version: 3,
-      contentId: 'content-3',
-      status: 'PUBLISHED',
-    };
-    const graphChunks = [{
-      id: 'document-1:v3:c0',
-      documentId: 'document-1',
-      version: 3,
-      chunkIndex: 0,
-      content: '# KnowBase',
-    }];
-    const extraction = {
-      entities: [{ key: '产品:knowbase', name: 'KnowBase', type: '产品' }],
-      mentions: [{ chunkId: graphChunks[0].id, entityKey: '产品:knowbase' }],
-      relations: [],
-    };
-    const graphIndex = { replaceDocument: vi.fn().mockResolvedValue(undefined) };
-    const service = new KgPipelineService(
-      { findEntity: vi.fn().mockResolvedValue(document) } as any,
-      { findByContentId: vi.fn().mockResolvedValue({ markdown: '# KnowBase' }) } as any,
-      { split: vi.fn().mockResolvedValue(['# KnowBase']) } as any,
-      { extract: vi.fn().mockResolvedValue(extraction) } as any,
-      graphIndex as any,
-    );
-
-    await expect(service.rebuildDocument('document-1')).resolves.toEqual({
+function fixture() {
+  const document = {
+    id: 'doc',
+    version: 3,
+    contentId: 'body',
+    status: 'PUBLISHED',
+  };
+  const generations = {
+    capture: vi.fn().mockResolvedValue(document),
+    activate: vi.fn().mockResolvedValue(true),
+  };
+  const content = {
+    findByContentId: vi.fn().mockResolvedValue({ markdown: '# Source' }),
+  };
+  const chunker = { split: vi.fn().mockResolvedValue(['One']) };
+  const extractor = {
+    extract: vi
+      .fn()
+      .mockResolvedValue({ entities: [], mentions: [], relations: [] }),
+  };
+  const index = {
+    stageDocument: vi.fn(),
+    discardGeneration: vi.fn(),
+    deleteDocument: vi.fn(),
+  };
+  const service = new KgPipelineService(
+    content as any,
+    chunker as any,
+    extractor as any,
+    index as any,
+    generations as any,
+    new IndexBuildService(generations as any),
+  );
+  return { service, generations, extractor, index };
+}
+describe('KgPipelineService generations', () => {
+  it('uses generation-specific chunk IDs and activates only after the Neo4j transaction', async () => {
+    const { service, index, extractor, generations } = fixture();
+    expect(await service.rebuildDocument('doc', 3)).toEqual({
       chunks: 1,
-      entities: 1,
-      relations: 0,
-    });
-    expect(graphIndex.replaceDocument).toHaveBeenCalledWith(
-      'document-1',
-      3,
-      graphChunks,
-      extraction.entities,
-      extraction.mentions,
-      extraction.relations,
-    );
-  });
-
-  it('does not build a graph for an unpublished document', async () => {
-    const service = new KgPipelineService(
-      { findEntity: vi.fn().mockResolvedValue({ status: 'DRAFT' }) } as any,
-      {} as any,
-      {} as any,
-      {} as any,
-      {} as any,
-    );
-
-    await expect(service.rebuildDocument('document-1')).rejects.toThrow(
-      'only published documents can build the knowledge graph',
-    );
-  });
-
-  it('skips a stale rebuild message before changing Neo4j', async () => {
-    const graphIndex = { replaceDocument: vi.fn() };
-    const service = new KgPipelineService(
-      { findEntity: vi.fn().mockResolvedValue({ status: 'PUBLISHED', version: 2 }) } as any,
-      {} as any,
-      {} as any,
-      {} as any,
-      graphIndex as any,
-    );
-
-    await expect(service.rebuildDocument('document-1', 1)).resolves.toEqual({
-      chunks: 0,
       entities: 0,
       relations: 0,
+    });
+    const generation = index.stageDocument.mock.calls[0][2];
+    expect(extractor.extract).toHaveBeenCalledWith([
+      expect.objectContaining({ id: `doc:v3:c0:${generation}` }),
+    ]);
+    expect(generations.activate).toHaveBeenCalledWith(
+      expect.objectContaining({ version: 3 }),
+      'kg',
+      generation,
+    );
+  });
+  it('skips stale, deleted or unpublished source without extraction', async () => {
+    const { service, generations, extractor } = fixture();
+    generations.capture.mockResolvedValueOnce(null);
+    expect(await service.rebuildDocument('doc', 2)).toMatchObject({
       skipped: true,
     });
-    expect(graphIndex.replaceDocument).not.toHaveBeenCalled();
+    expect(extractor.extract).not.toHaveBeenCalled();
   });
-
-  it('does not replace an existing graph when extraction fails', async () => {
-    const graphIndex = { replaceDocument: vi.fn() };
-    const service = new KgPipelineService(
-      { findEntity: vi.fn().mockResolvedValue({ id: 'document-1', version: 1, contentId: 'content-1', status: 'PUBLISHED' }) } as any,
-      { findByContentId: vi.fn().mockResolvedValue({ markdown: '# source' }) } as any,
-      { split: vi.fn().mockResolvedValue(['# source']) } as any,
-      { extract: vi.fn().mockRejectedValue(new Error('invalid extraction')) } as any,
-      graphIndex as any,
+  it('preserves the current head if extraction fails', async () => {
+    const { service, extractor, generations, index } = fixture();
+    extractor.extract.mockRejectedValueOnce(new Error('invalid extraction'));
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'invalid extraction',
     );
-
-    await expect(service.rebuildDocument('document-1', 1)).rejects.toThrow('invalid extraction');
-    expect(graphIndex.replaceDocument).not.toHaveBeenCalled();
+    expect(index.stageDocument).not.toHaveBeenCalled();
+    expect(generations.activate).not.toHaveBeenCalled();
   });
-
-  it('deletes a document graph from Neo4j', async () => {
-    const graphIndex = { deleteDocument: vi.fn().mockResolvedValue(undefined) };
-    const service = new KgPipelineService(
-      {} as any,
-      {} as any,
-      {} as any,
-      {} as any,
-      graphIndex as any,
+  it('discards obsolete staged graphs after the final version check', async () => {
+    const { service, generations, index } = fixture();
+    generations.activate.mockResolvedValueOnce(false);
+    expect(await service.rebuildDocument('doc', 3)).toMatchObject({
+      skipped: true,
+    });
+    expect(index.discardGeneration).toHaveBeenCalledWith(
+      'doc',
+      index.stageDocument.mock.calls[0][2],
     );
-
-    await service.deleteDocument('document-1');
-
-    expect(graphIndex.deleteDocument).toHaveBeenCalledWith('document-1');
+  });
+  it('delegates deletion to the guarded graph adapter', async () => {
+    const { service, index } = fixture();
+    await service.deleteDocument('doc');
+    expect(index.deleteDocument).toHaveBeenCalledWith('doc');
   });
 });

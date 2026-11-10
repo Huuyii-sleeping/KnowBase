@@ -1,0 +1,48 @@
+import { describe, expect, it, vi } from 'vitest';
+import { ElasticsearchSchema } from './elasticsearch-schema';
+function fixture() {
+  const indices = {
+    exists: vi.fn().mockResolvedValue(false),
+    create: vi.fn(),
+    putMapping: vi.fn(),
+  };
+  return {
+    indices,
+    schema: new ElasticsearchSchema({ indices } as any, 'docs', 'chunks', 2),
+  };
+}
+describe('ElasticsearchSchema', () => {
+  it('creates keyword generation fields and the configured vector dimension', async () => {
+    const { schema, indices } = fixture();
+    await schema.chunks();
+    expect(indices.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mappings: {
+          properties: expect.objectContaining({
+            generation_id: { type: 'keyword' },
+            embedding: expect.objectContaining({ dims: 2 }),
+          }),
+        },
+      }),
+    );
+  });
+  it('updates existing installations before writing generation identifiers', async () => {
+    const { schema, indices } = fixture();
+    indices.exists.mockResolvedValueOnce(true);
+    await schema.document();
+    expect(indices.putMapping).toHaveBeenCalledWith({
+      index: 'docs',
+      properties: { generation_id: { type: 'keyword' } },
+    });
+  });
+  it('accepts concurrent index creation but propagates unrelated failures', async () => {
+    const { schema, indices } = fixture();
+    indices.create.mockRejectedValueOnce({
+      meta: { body: { error: { type: 'resource_already_exists_exception' } } },
+    });
+    await schema.chunks();
+    expect(indices.putMapping).toHaveBeenCalledOnce();
+    indices.create.mockRejectedValueOnce(new Error('cluster down'));
+    await expect(schema.document()).rejects.toThrow('cluster down');
+  });
+});

@@ -7,7 +7,9 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:delivery": "pnpm build && node --test --test-concurrency=1 test/delivery/reliability.test.cjs",
+    "test:index-consistency": "pnpm build && node --test --test-concurrency=1 test/indexing/consistency.test.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",

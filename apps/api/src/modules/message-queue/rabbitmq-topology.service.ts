@@ -13,11 +13,21 @@ export class RabbitMqTopologyService {
       durable: true,
     });
     const bindings = [
-      [MESSAGE_QUEUE_NAMES.SEARCH, [MESSAGE_ROUTING_KEYS.SEARCH_INDEX]],
-      [MESSAGE_QUEUE_NAMES.RAG, [MESSAGE_ROUTING_KEYS.RAG_REBUILD]],
+      [
+        MESSAGE_QUEUE_NAMES.SEARCH,
+        [MESSAGE_ROUTING_KEYS.SEARCH_INDEX, MESSAGE_ROUTING_KEYS.SEARCH_DELETE],
+      ],
+      [
+        MESSAGE_QUEUE_NAMES.RAG,
+        [MESSAGE_ROUTING_KEYS.RAG_REBUILD, MESSAGE_ROUTING_KEYS.RAG_DELETE],
+      ],
       [
         MESSAGE_QUEUE_NAMES.KG,
-        [MESSAGE_ROUTING_KEYS.KG_REBUILD, MESSAGE_ROUTING_KEYS.KG_DELETE],
+        [
+          MESSAGE_ROUTING_KEYS.KG_REBUILD,
+          MESSAGE_ROUTING_KEYS.KG_DELETE,
+          MESSAGE_ROUTING_KEYS.SOURCE_DELETE,
+        ],
       ],
     ] as const;
     for (const [queue, keys] of bindings) {

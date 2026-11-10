@@ -73,6 +73,6 @@ PUBLISHED
 
 Search 消息携带整篇文档元数据和 Markdown；RAG、KG 消息只携带文档 ID 和版本，消费者重新从 PostgreSQL/MongoDB 读取正文。三条队列相互独立，单条管线失败不会阻塞其他管线。
 
-KG 管线通过 `OllamaGraphExtractorService` 调用模型，通过 `GraphExtractionService` 做跨 Chunk 的实体归一化和关系去重，通过 `GraphIndexService` 幂等重建 Neo4j。图谱查询由独立的 `KnowledgeGraphModule` 提供，并复用文档权限过滤。
+KG 管线通过 `OllamaGraphExtractorService` 调用模型，通过 `GraphExtractionService` 做跨 Chunk 的实体归一化和关系去重，通过 `GraphGenerationWriter` 写入独立 Neo4j 批次；`GraphIndexService` 负责可见性过滤和查询。图谱查询由独立的 `KnowledgeGraphModule` 提供，并复用文档权限过滤。
 
-删除文档时，Documents 模块会向 KG 队列投递 `document.kg.delete`，由 `KgConsumer` 清理 Neo4j 中的 `KnowledgeDocument`、`DocumentChunk`、该文档来源的 `RELATED_TO` 关系，并回收无引用的 `KnowledgeEntity`。
+删除文档时，Documents 模块在同一 PostgreSQL 事务中保存三路删除标记、清理 Outbox 并删除元数据；全文、向量、图谱和源文件随后异步清理。三路索引按独立 generation 构建，完整写入后锁定文档复查修订号，再切换 PostgreSQL 可见指针。查询同时限制当前发布版本、文档权限和有效 generation，旧任务不能激活已过期或已删除文档。协议、升级与重建步骤见 [pipeline.md](pipeline.md#索引版本与可见批次)。

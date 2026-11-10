@@ -45,10 +45,24 @@ export class DocumentPipelinePublisher {
     );
   }
 
-  async deleteGraph(documentId: string): Promise<void> {
-    await this.outbox.enqueueStandalone(MESSAGE_ROUTING_KEYS.KG_DELETE, {
-      type: 'DOCUMENT_GRAPH_DELETE',
-      documentId,
+  async deleteDocument(
+    document: Document,
+    manager: EntityManager,
+  ): Promise<void> {
+    for (const route of [
+      MESSAGE_ROUTING_KEYS.SEARCH_DELETE,
+      MESSAGE_ROUTING_KEYS.RAG_DELETE,
+      MESSAGE_ROUTING_KEYS.KG_DELETE,
+    ]) {
+      await this.outbox.enqueue(manager, route, {
+        type: 'DOCUMENT_INDEX_DELETE',
+        documentId: document.id,
+      });
+    }
+    await this.outbox.enqueue(manager, MESSAGE_ROUTING_KEYS.SOURCE_DELETE, {
+      type: 'DOCUMENT_SOURCE_DELETE',
+      documentId: document.id,
+      storageKey: document.storageKey,
     });
   }
 }

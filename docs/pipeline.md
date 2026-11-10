@@ -5,7 +5,8 @@
 - `document.index`：携带完整元数据和 Markdown，写入 Elasticsearch `kh_document`。
 - `document.rag.rebuild`：携带 `documentId` 和 `version`，读取正文后分块、Embedding，写入 `kh_chunk`。
 - `document.kg.rebuild`：携带 `documentId` 和 `version`，读取正文后分块，使用 Ollama 抽取实体和关系，写入 Neo4j 文档、Chunk、实体和关系节点。
-- `document.kg.delete`：携带 `documentId`，删除该文档对应的图谱节点、Chunk、关系，并回收不再被任何 Chunk 引用的孤立实体。
+- `document.search.delete`、`document.rag.delete`、`document.kg.delete`：携带 `documentId`，只有存在已提交的删除标记且源文档已不存在时才清理对应索引。KG 消费者兼容旧的 `DOCUMENT_GRAPH_DELETE` 消息类型。
+- `document.source.delete`：携带 `documentId` 和原文件 `storageKey`，通过 KG 队列重试清理 MongoDB 正文和原始文件。删除元数据、三路删除标记和四条清理任务在同一 PostgreSQL 事务提交。
 
 RabbitMQ 使用持久化 topic exchange `knowbase.pipeline`，三个消费者使用独立 durable queue。发布可靠性、确认和重试契约见下节；旧配置 `RABBITMQ_REQUEUE_ON_ERROR` 不再使用。
 
@@ -45,9 +46,9 @@ OutboxRelayService
 
 ### 幂等的边界
 
-receipt 能避免已经记录完成的重复业务处理，但不能让 PostgreSQL、Elasticsearch、Neo4j 共享事务。若索引写成功后进程在 receipt 提交前崩溃，仍会重新执行索引操作。当前全文使用文档 ID 覆盖，向量使用确定性 Chunk ID 和整文档替换，图谱在 Neo4j 事务内整文档替换，适合重做；ES bulk 的部分失败会抛错并进入重试。
+receipt 能避免已经记录完成的重复业务处理，但不能让 PostgreSQL、Elasticsearch、Neo4j 共享事务。若索引写成功后进程在 receipt 提交前崩溃，仍会重新执行索引操作。当前三路索引按独立 generation 写入，完整构建后才切换 PostgreSQL 可见指针。重做会生成新批次，未激活的数据不可检索；ES bulk 的部分失败会抛错并进入重试。具体版本及删除保护见下节。
 
-receipt 记录不表示跨版本的索引一致性已经解决。旧版本任务与新版本任务并发、重建期间的可见性、删除与重建竞争、向量原子切换仍属于下一轮索引一致性加固。不要在这些消费者中加入无幂等键的付款、通知等不可重做副作用。
+receipt 负责事件处理记录；索引版本与可见性由独立的 `indexing` 模块控制。不要在这些消费者中加入无幂等键的付款、通知等不可重做副作用。
 
 receipt 的锁会跨越索引处理过程，长时间模型调用会占用数据库连接；当前适合低并发 MVP。扩大吞吐前应评测连接池容量，并考虑带续租和 fencing 的任务租约方案。
 
@@ -107,6 +108,84 @@ WHERE id = '<待恢复的死信 Outbox UUID>' AND routing_key LIKE '%.dead';
 
 以上验收要求实际 PostgreSQL 与 RabbitMQ 服务。单元故障测试验证确认、回滚、去重、重试和重连分支，不能替代真实 broker 重启测试。
 
+### 自动化真实服务验收
+
+Docker 启动后，从仓库根目录运行：
+
+```bash
+pnpm --filter @knowbase/api test:delivery
+```
+
+该命令先构建 API，再通过 Node.js 测试运行器执行 `apps/api/test/delivery/reliability.test.cjs`。测试使用 `deploy/docker-compose.delivery-test.yml` 创建带进程 ID 的独立 Compose 项目，启动 PostgreSQL 16 和 RabbitMQ 4；首次使用需要能拉取对应镜像。端口选择本机空闲端口并在本轮重启期间固定，避免影响现有开发服务。
+
+测试通过真实 TypeORM 连接执行文档表初始化和 `004_pipeline_delivery.sql` 迁移，并重复执行迁移验证可重入性。测试结束（包括断言失败）后删除本轮容器和数据卷，不读取 API 的 `.env`，也不修改开发数据库。若测试进程本身被强制终止，需根据 `docker compose ls` 中的 `knowbase-delivery-test-<进程 ID>`，使用同一 Compose 文件执行 `down -v` 清理残留项目。
+
+自动化覆盖以下七种情况：
+
+| 场景 | 验证结果 |
+| --- | --- |
+| 第二条 Outbox 插入失败 | 文档发布状态、审核信息和已插入任务一起回滚 |
+| RabbitMQ 停机时发布，随后恢复 | 发布状态和三条任务保存成功；原 Relay 和三路消费者自动恢复，无需重新创建应用服务 |
+| Broker 确认后 Outbox 标记事务失败 | 待投递行保留；以相同事件 ID 重投，业务副作用只执行一次 |
+| 两个 Relay 同时领取任务 | `SKIP LOCKED` 允许领取不同任务，不重复领取也不等待另一条行锁 |
+| 完成记录提交后连接关闭，未发送 ACK | Broker 重投消息，消费者根据完成记录跳过副作用 |
+| 消费子进程被 `SIGKILL` | 未提交 receipt 回滚，未确认消息被另一消费者接管并完成 |
+| 重试期间重建 Worker 服务实例，最终持续失败 | 数据库重试时间和处理次数保留；第三次失败后进入死信；死信在 Broker 重启后仍存在 |
+
+这套测试验证发布服务、Outbox、Relay、确认、receipt 和消费者与真实 PostgreSQL/RabbitMQ 的集成。正文适配器使用固定 Markdown，索引处理器使用独立数据库记录计数，不启动 HTTP API、MongoDB、Elasticsearch、Neo4j 或模型服务，因此不代表三路索引内容正确性或完整上传到检索流程已经验收。生产配置的重试间隔保持 5 秒、10 秒；测试缩短间隔以控制运行时间。
+
+## 索引版本与可见批次
+
+三路索引共用 PostgreSQL `kh_index_head`：每个 `(document_id, pipeline)` 保存唯一可见的 generation UUID、文档版本和删除标记。该表不设置文档级联删除，删除标记永久保留；文档 ID 不允许复用。业务文档的 `version` 是内容、标题、分类、标签和权限等有意义修改的统一修订号；仅修改元数据也会递增。正文未修改时沿用原 `content_id`，MongoDB 正文版本表示该正文创建时的修订号，不要求与后来仅修改元数据的版本相同。
+
+```text
+任务携带 documentId + version
+  -> 检查文档仍存在、已发布且版本相同
+  -> 生成唯一 generation，完成全部正文读取、分块、模型调用和索引写入
+  -> PostgreSQL 短事务锁定文档，复查状态、version、content_id 和删除标记
+  -> 条件成立才切换该管线的可见 generation
+```
+
+元数据修改、内容修改、提交审核、驳回、发布、删除和索引切换均使用文档行锁。切换事务不跨越模型调用或外部索引写入；delivery receipt 的处理事务仍有上文说明的连接占用限制。
+
+- **全文**：ES `_id` 为 `documentId:generation`，业务 `id` 字段仍为文档 UUID；`generation_id` 为 keyword。
+- **向量**：ES Chunk ID 在原文档版本与 Chunk 序号后增加 generation；写新批次前不删除旧 Chunk，所有 bulk 项成功且 refresh 完成后才允许激活。空正文可以激活空批次，旧 Chunk 不会继续可见。
+- **图谱**：Neo4j 文档、Chunk、关系按 generation 隔离，整个批次在一个 Neo4j 事务内写入；最终可见性仍取决于 PostgreSQL 指针。
+- **查询**：先从 PostgreSQL 取得当前用户可见、仍发布且版本匹配的有效 generation，再在 ES 全文、KNN 和 Neo4j 路径查询中强制过滤，暂存和旧批次不能占用 TopK。RAG 返回前再校验候选版本与源文档版本一致。
+
+同一版本重新构建期间，原有完整批次继续可见；失败只清理本次 generation。新修订进入草稿后，旧版索引立即失去查询资格；新版本重新发布后，各管线构建完成才分别可见，不会回退查询上一修订。三路指针独立切换，不承诺全文、向量和图谱同时就绪。单次查询使用读取指针时的快照，已经开始的请求不提供跨数据库的线性一致性保证。
+
+删除在同一事务内清空三路可见指针、写入三个永久删除标记、保存三路索引清理及一条源文件清理 Outbox、删除文档元数据。HTTP 删除成功表示文档已不可见且清理任务已持久化，物理清理异步完成。旧任务即使在清理之后才写入，也无法激活，并会尝试清理自己的批次。原始文件和 MongoDB 清理失败会按 Outbox 消费规则重试，不会静默丢失。当前源文件清理范围为正文和原始 `storageKey`，提取资源的回收策略仍需单独完善。
+
+若激活事务 COMMIT 的结果不明确，保留本次批次，不能立即删除，因为数据库可能已成功提交指针。已被替换的完整批次也暂时保留，以支持读取旧指针的在途查询。进程崩溃、清理服务不可用可能留下不可见批次；当前不自动回收，后续需加入带宽限期、任务状态核对和激活互斥的回收机制，不能只按“当前未引用”立即删除，否则会误删正在构建或查询中的批次。当前查询把可见 generation 列表作为过滤条件，适用于 MVP；文档规模增大后需要评估过滤列表长度、ES terms 限制与查询成本。
+
+### 升级和重建
+
+首次初始化自动执行 `005_index_generations.sql`。已有数据库需在停止旧版本 API/Worker 后，先完成 004，再执行：
+
+```bash
+psql "$KNOWBASE_DATABASE_URL" -v ON_ERROR_STOP=1 -f deploy/postgres/migrations/005_index_generations.sql
+```
+
+**旧索引没有 generation，也没有可见指针，升级后不会自动作为回退结果返回。** 在维护窗口部署新代码后，管理员对现有每个已发布文档调用：
+
+```http
+POST /api/v1/documents/<document-uuid>/rebuild-indexes
+Authorization: Bearer <admin-token>
+```
+
+接口返回 HTTP 202 和 `{"queued":true}`，表示当前版本三路重建任务已保存到 Outbox，不表示索引全部就绪；非管理员、草稿和不存在的文档会被拒绝。该入口也支持同一版本人工重建。新旧 Worker 不支持混合运行：旧 Worker 会绕过 generation 协议，必须先停止再升级。ES 现有索引会补充 `generation_id` keyword 映射；如已有同名但类型不兼容的字段，应创建新的索引名并完整重建。
+
+### 自动化版本一致性验收
+
+```bash
+pnpm --filter @knowbase/api test:index-consistency
+```
+
+已有全部镜像但镜像仓库暂不可访问时，可使用 `DELIVERY_TEST_PULL_POLICY=never` 前缀运行上述命令或 `test:delivery`，只使用本机缓存。
+
+测试将索引专用 Compose 文件叠加到隔离投递环境，使用真实 PostgreSQL、Elasticsearch 8 和 Neo4j 5，自动执行迁移并在完成后清理容器与数据卷。对全文、向量、图谱分别验证乱序完成、暂存不可见、失败保留原批次、删除后旧任务无法恢复索引；另外验证真实 ES bulk 部分失败、空批次切换、并发元数据修订和删除事务回滚。正文与模型使用小型固定数据，不调用真实模型或上传接口；验证的是版本、持久化和可见性，不是模型生成质量。
+
 ## Search 全文检索
 
 Search 管线消费 `document.index` 后，将已发布文档写入 Elasticsearch `kh_document`。查询接口只返回 `status=PUBLISHED` 的文档：
@@ -151,7 +230,8 @@ KG 管线和 Search、RAG 一样由 RabbitMQ 异步触发。消费者收到文�
   -> RecursiveCharacterTextSplitter 分块
   -> OllamaGraphExtractorService 逐 Chunk 抽取 JSON
   -> GraphExtractionService 归一化、去重、生成 mentions
-  -> GraphIndexService 在 Neo4j 中幂等重建
+  -> GraphGenerationWriter 在 Neo4j 中写入独立批次
+  -> PostgreSQL 复查版本并切换 kg 可见批次
 ```
 
 Neo4j 中的核心结构是：
@@ -161,7 +241,7 @@ Neo4j 中的核心结构是：
 (KnowledgeEntity)-[:RELATED_TO {type, documentId, chunkId}]->(KnowledgeEntity)
 ```
 
-同一文档重建时会先删除该文档的旧关系和 Chunk，再删除不再被 Chunk 引用的孤立实体，最后重新写入。删除文档时也走同一套清理规则。实体使用 `type:normalizedName` 作为 key，跨文档共享；关系保留来源文档和 Chunk，便于溯源和权限过滤。
+同一文档重建会创建独立的 Document、Chunk 和关系批次，完整写入后才切换可见指针。实体使用 `type:normalizedName` 作为 key 跨文档共享，名称和类型只在首次创建时设置，避免暂存批次修改当前批次的展示；关系与 Chunk 都带 `generationId`，查询种子和每条路径关系同时限制可见文档及已激活批次。首次写入前创建实体 key、Chunk ID 和文档批次的唯一约束；已有重复实体时需先修复重复数据再重建。
 
 图谱查询接口：
 

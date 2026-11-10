@@ -17,9 +17,22 @@ export interface DocumentGraphDeleteMessage {
   documentId: string;
 }
 
+export interface DocumentIndexDeleteMessage {
+  type: 'DOCUMENT_INDEX_DELETE';
+  documentId: string;
+}
+
+export interface DocumentSourceDeleteMessage {
+  type: 'DOCUMENT_SOURCE_DELETE';
+  documentId: string;
+  storageKey: string;
+}
+
 export type PipelineMessage =
   | DocumentIndexMessage
   | DocumentPipelineCommand
-  | DocumentGraphDeleteMessage;
+  | DocumentGraphDeleteMessage
+  | DocumentIndexDeleteMessage
+  | DocumentSourceDeleteMessage;
 
 export type MessageHandler<T> = (message: T) => Promise<void>;

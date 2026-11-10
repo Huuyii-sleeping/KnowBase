@@ -4,7 +4,10 @@ import {
   MESSAGE_ROUTING_KEYS,
 } from '../../message-queue/message-queue.constants';
 import { MessageQueueService } from '../../message-queue/message-queue.service';
-import type { DocumentIndexMessage } from '../../message-queue/message-queue.types';
+import type {
+  DocumentIndexMessage,
+  DocumentIndexDeleteMessage,
+} from '../../message-queue/message-queue.types';
 import { SearchPipelineService } from './search-pipeline.service';
 
 @Injectable()
@@ -15,10 +18,15 @@ export class SearchPipelineConsumer {
   ) {}
 
   consume(): Promise<void> {
-    return this.messageQueue.consume<DocumentIndexMessage>(
+    return this.messageQueue.consume<
+      DocumentIndexMessage | DocumentIndexDeleteMessage
+    >(
       MESSAGE_QUEUE_NAMES.SEARCH,
-      MESSAGE_ROUTING_KEYS.SEARCH_INDEX,
-      (message) => this.pipeline.indexDocument(message),
+      [MESSAGE_ROUTING_KEYS.SEARCH_INDEX, MESSAGE_ROUTING_KEYS.SEARCH_DELETE],
+      (message) =>
+        message.type === 'DOCUMENT_INDEX_DELETE'
+          ? this.pipeline.deleteDocument(message.documentId)
+          : this.pipeline.indexDocument(message),
     );
   }
 }

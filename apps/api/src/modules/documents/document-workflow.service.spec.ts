@@ -39,7 +39,7 @@ describe('DocumentWorkflowService', () => {
       save: vi.fn(async (value) => value),
     };
     const service = new DocumentWorkflowService(
-      repository as any,
+      { transaction: async (work: any) => work(repository) } as any,
       {} as any,
       { assertCanEdit: vi.fn() } as any,
     );
@@ -48,14 +48,14 @@ describe('DocumentWorkflowService', () => {
 
     expect(document.status).toBe(DocumentStatus.PENDING_REVIEW);
     expect(document.submittedAt).toBeInstanceOf(Date);
-    expect(repository.save).toHaveBeenCalledWith(document);
+    expect(repository.save).toHaveBeenCalledWith(expect.anything(), document);
   });
 
   it('rejects a document that has not finished parsing', async () => {
     const document = makeDocument({ parseStatus: DocumentParseStatus.PENDING });
     const repository = { findOne: vi.fn(async () => document), save: vi.fn() };
     const service = new DocumentWorkflowService(
-      repository as any,
+      { transaction: async (work: any) => work(repository) } as any,
       {} as any,
       { assertCanEdit: vi.fn() } as any,
     );
@@ -70,7 +70,7 @@ describe('DocumentWorkflowService', () => {
     const document = makeDocument({ status: DocumentStatus.PENDING_REVIEW });
     const repository = { findOne: vi.fn(async () => document), save: vi.fn() };
     const service = new DocumentWorkflowService(
-      repository as any,
+      { transaction: async (work: any) => work(repository) } as any,
       {} as any,
       { assertCanReview: vi.fn() } as any,
     );
@@ -90,7 +90,7 @@ describe('DocumentWorkflowService', () => {
     const publisher = { publish: vi.fn() };
     const repository = { findOne: vi.fn(), save: vi.fn() };
     const service = new DocumentWorkflowService(
-      repository as any,
+      { transaction: async (work: any) => work(repository) } as any,
       publisher as any,
     );
     const user = { id: 'admin-1', role: 'ADMIN' } as any;

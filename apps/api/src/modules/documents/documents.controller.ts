@@ -30,8 +30,14 @@ export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 100 * 1024 * 1024 } }))
-  create(@UploadedFile() file: Express.Multer.File | undefined, @Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser) {
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 100 * 1024 * 1024 } }),
+  )
+  create(
+    @UploadedFile() file: Express.Multer.File | undefined,
+    @Body() dto: CreateDocumentDto,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.documentsService.create(file, dto, user);
   }
 
@@ -41,7 +47,10 @@ export class DocumentsController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser) {
+  findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.documentsService.findOne(id, user);
   }
 
@@ -64,7 +73,10 @@ export class DocumentsController {
   }
 
   @Post(':id/submit-review')
-  submitForReview(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser) {
+  submitForReview(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.documentsService.submitForReview(id, user);
   }
 
@@ -88,7 +100,19 @@ export class DocumentsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser): Promise<void> {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ): Promise<void> {
     await this.documentsService.remove(id, user);
+  }
+
+  @Post(':id/rebuild-indexes')
+  @HttpCode(HttpStatus.ACCEPTED)
+  rebuildIndexes(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.documentsService.rebuildIndexes(id, user);
   }
 }

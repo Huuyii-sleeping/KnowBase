@@ -19,6 +19,11 @@ export class DocumentsService {
     private readonly publishService: DocumentPublishService,
   ) {}
 
+  async rebuildIndexes(id: string, user: AuthUser) {
+    await this.publishService.dispatch(id, user);
+    return { queued: true };
+  }
+
   async create(
     file: Express.Multer.File | undefined,
     dto: CreateDocumentDto,

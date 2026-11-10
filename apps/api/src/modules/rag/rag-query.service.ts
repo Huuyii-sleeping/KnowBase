@@ -38,9 +38,14 @@ export class RagQueryService {
     private readonly documentQuery: DocumentQueryService,
   ) {}
 
-  async search(query: SemanticSearchDto, user?: AuthUser): Promise<SemanticSearchResult> {
+  async search(
+    query: SemanticSearchDto,
+    user?: AuthUser,
+  ): Promise<SemanticSearchResult> {
     const normalizedQuery = query.query.trim();
-    const [queryVector] = await this.embedding.embedDocuments([normalizedQuery]);
+    const [queryVector] = await this.embedding.embedDocuments([
+      normalizedQuery,
+    ]);
     if (!queryVector) {
       throw new Error('embedding provider returned no query vector');
     }
@@ -66,14 +71,20 @@ export class RagQueryService {
     topK: number,
   ): Promise<SemanticSearchItem[]> {
     const items: SemanticSearchItem[] = [];
-    const documents = new Map<string, Awaited<ReturnType<DocumentQueryService['findEntity']>> | null>();
+    const documents = new Map<
+      string,
+      Awaited<ReturnType<DocumentQueryService['findEntity']>> | null
+    >();
 
     for (const candidate of candidates) {
       if (!documents.has(candidate.documentId)) {
-        documents.set(candidate.documentId, await this.findPublishedDocument(candidate.documentId));
+        documents.set(
+          candidate.documentId,
+          await this.findPublishedDocument(candidate.documentId),
+        );
       }
       const document = documents.get(candidate.documentId);
-      if (!document) {
+      if (!document || document.version !== candidate.version) {
         continue;
       }
 
