@@ -39,6 +39,12 @@ export interface RecallTrace extends SemanticSearchResult {
   route: RecallRoute;
   rawCandidates: VectorChunkSearchItem[];
   elapsedMs: number;
+  timings: {
+    visibilityMs: number;
+    embeddingMs: number;
+    indexMs: number;
+    metadataMs: number;
+  };
 }
 
 @Injectable()
@@ -90,9 +96,18 @@ export class RagQueryService {
       throw new BadRequestException(
         'recall requires a non-empty query and a candidate budget of 1..100',
       );
+    if (route !== 'keyword' && route !== 'semantic')
+      throw new BadRequestException('unsupported recall route');
+    const visibilityStarted = performance.now();
     const allowedDocumentIds = user
       ? await this.documentQuery.findVisiblePublishedIds(user)
       : undefined;
+    const timings = {
+      visibilityMs: performance.now() - visibilityStarted,
+      embeddingMs: 0,
+      indexMs: 0,
+      metadataMs: 0,
+    };
     if (allowedDocumentIds?.length === 0)
       return {
         query: normalizedQuery,
@@ -101,6 +116,7 @@ export class RagQueryService {
         rawCandidates: [],
         route,
         elapsedMs: performance.now() - started,
+        timings,
       };
     const input = {
       topK: Math.min(query.topK * 3, 100),
@@ -108,28 +124,38 @@ export class RagQueryService {
     };
     let candidates: VectorChunkSearchItem[];
     if (route === 'keyword') {
+      const indexStarted = performance.now();
       candidates = await this.vectorIndex.searchKeywordChunks({
         ...input,
         query: normalizedQuery,
       });
+      timings.indexMs = performance.now() - indexStarted;
     } else if (route === 'semantic') {
+      const embeddingStarted = performance.now();
       const queryVector = await this.embedding.embedQuery(normalizedQuery);
+      timings.embeddingMs = performance.now() - embeddingStarted;
       if (!queryVector?.length)
         throw new Error('embedding provider returned no query vector');
+      const indexStarted = performance.now();
       candidates = await this.vectorIndex.searchChunks({
         ...input,
         queryVector,
       });
+      timings.indexMs = performance.now() - indexStarted;
     } else {
       throw new BadRequestException('unsupported recall route');
     }
+    const metadataStarted = performance.now();
+    const items = await this.keepPublishedCandidates(candidates, query.topK);
+    timings.metadataMs = performance.now() - metadataStarted;
     return {
       query: normalizedQuery,
       topK: query.topK,
-      items: await this.keepPublishedCandidates(candidates, query.topK),
+      items,
       rawCandidates: candidates,
       route,
       elapsedMs: performance.now() - started,
+      timings,
     };
   }
 
