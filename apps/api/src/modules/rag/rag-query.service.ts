@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DocumentQueryService } from '../documents/document-query.service';
 import { DocumentStatus } from '../documents/entities/document.entity';
 import { EmbeddingService } from '../pipeline/embedding/embedding.service';
@@ -30,6 +34,13 @@ export interface SemanticSearchResult {
   items: SemanticSearchItem[];
 }
 
+export type RecallRoute = 'keyword' | 'semantic';
+export interface RecallTrace extends SemanticSearchResult {
+  route: RecallRoute;
+  rawCandidates: VectorChunkSearchItem[];
+  elapsedMs: number;
+}
+
 @Injectable()
 export class RagQueryService {
   constructor(
@@ -42,46 +53,83 @@ export class RagQueryService {
     query: SemanticSearchDto,
     user?: AuthUser,
   ): Promise<SemanticSearchResult> {
-    const normalizedQuery = query.query.trim();
-    const [queryVector] = await this.embedding.embedDocuments([
-      normalizedQuery,
-    ]);
-    if (!queryVector) {
-      throw new Error('embedding provider returned no query vector');
-    }
-
-    const candidates = await this.vectorIndex.searchChunks({
-      queryVector,
-      topK: Math.min(query.topK * 3, 100),
-      allowedDocumentIds: user
-        ? await this.documentQuery.findVisiblePublishedIds(user)
-        : undefined,
-    });
-    const items = await this.keepPublishedCandidates(candidates, query.topK);
-
-    return {
-      query: normalizedQuery,
-      topK: query.topK,
+    const {
+      query: text,
+      topK,
       items,
-    };
+    } = await this.recall(query, 'semantic', user);
+    return { query: text, topK, items };
   }
 
   async searchKeywordChunks(
     query: SemanticSearchDto,
     user?: AuthUser,
   ): Promise<SemanticSearchResult> {
+    const {
+      query: text,
+      topK,
+      items,
+    } = await this.recall(query, 'keyword', user);
+    return { query: text, topK, items };
+  }
+
+  /** Internal diagnostics; public controllers expose only the filtered items. */
+  async recall(
+    query: SemanticSearchDto,
+    route: RecallRoute,
+    user?: AuthUser,
+  ): Promise<RecallTrace> {
+    const started = performance.now();
     const normalizedQuery = query.query.trim();
-    const candidates = await this.vectorIndex.searchKeywordChunks({
-      query: normalizedQuery,
+    if (
+      !normalizedQuery ||
+      !Number.isInteger(query.topK) ||
+      query.topK < 1 ||
+      query.topK > 100
+    )
+      throw new BadRequestException(
+        'recall requires a non-empty query and a candidate budget of 1..100',
+      );
+    const allowedDocumentIds = user
+      ? await this.documentQuery.findVisiblePublishedIds(user)
+      : undefined;
+    if (allowedDocumentIds?.length === 0)
+      return {
+        query: normalizedQuery,
+        topK: query.topK,
+        items: [],
+        rawCandidates: [],
+        route,
+        elapsedMs: performance.now() - started,
+      };
+    const input = {
       topK: Math.min(query.topK * 3, 100),
-      allowedDocumentIds: user
-        ? await this.documentQuery.findVisiblePublishedIds(user)
-        : undefined,
-    });
+      allowedDocumentIds,
+    };
+    let candidates: VectorChunkSearchItem[];
+    if (route === 'keyword') {
+      candidates = await this.vectorIndex.searchKeywordChunks({
+        ...input,
+        query: normalizedQuery,
+      });
+    } else if (route === 'semantic') {
+      const queryVector = await this.embedding.embedQuery(normalizedQuery);
+      if (!queryVector?.length)
+        throw new Error('embedding provider returned no query vector');
+      candidates = await this.vectorIndex.searchChunks({
+        ...input,
+        queryVector,
+      });
+    } else {
+      throw new BadRequestException('unsupported recall route');
+    }
     return {
       query: normalizedQuery,
       topK: query.topK,
       items: await this.keepPublishedCandidates(candidates, query.topK),
+      rawCandidates: candidates,
+      route,
+      elapsedMs: performance.now() - started,
     };
   }
 

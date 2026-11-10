@@ -15,9 +15,92 @@ import { DocumentStatus } from '../documents/entities/document.entity';
 import { RagQueryService } from './rag-query.service';
 
 describe('RagQueryService', () => {
+  it('rejects invalid internal budgets and empty questions before querying stores', async () => {
+    const embedding = { embedQuery: vi.fn() };
+    const index = { searchChunks: vi.fn() };
+    const service = new RagQueryService(
+      embedding as any,
+      index as any,
+      {} as any,
+    );
+    for (const topK of [0, -1, 101, 1.5])
+      await expect(
+        service.recall({ query: '问题', topK }, 'semantic'),
+      ).rejects.toThrow('candidate budget');
+    await expect(
+      service.recall({ query: '  ', topK: 5 }, 'semantic'),
+    ).rejects.toThrow('non-empty');
+    expect(embedding.embedQuery).not.toHaveBeenCalled();
+    expect(index.searchChunks).not.toHaveBeenCalled();
+  });
+
+  it('does no embedding or index work when the user has no visible published documents', async () => {
+    const embedding = { embedQuery: vi.fn() };
+    const index = { searchChunks: vi.fn(), searchKeywordChunks: vi.fn() };
+    const query = { findVisiblePublishedIds: vi.fn().mockResolvedValue([]) };
+    const service = new RagQueryService(
+      embedding as any,
+      index as any,
+      query as any,
+    );
+    const user = { id: 'user' } as any;
+    for (const route of ['keyword', 'semantic'] as const) {
+      expect(
+        await service.recall({ query: '问题', topK: 5 }, route, user),
+      ).toMatchObject({ items: [], rawCandidates: [] });
+    }
+    expect(embedding.embedQuery).not.toHaveBeenCalled();
+    expect(index.searchChunks).not.toHaveBeenCalled();
+    expect(index.searchKeywordChunks).not.toHaveBeenCalled();
+  });
+
+  it('retains raw candidates only in internal traces and keeps public responses filtered', async () => {
+    const stale = {
+      id: 'stale',
+      documentId: 'doc',
+      version: 1,
+      chunkIndex: 0,
+      content: 'old',
+      score: 9,
+    };
+    const current = {
+      ...stale,
+      id: 'current',
+      version: 2,
+      content: 'evidence',
+    };
+    const service = new RagQueryService(
+      {} as any,
+      {
+        searchKeywordChunks: vi.fn().mockResolvedValue([stale, current]),
+      } as any,
+      {
+        findEntity: vi
+          .fn()
+          .mockResolvedValue({
+            status: DocumentStatus.PUBLISHED,
+            version: 2,
+            title: 'Title',
+            tags: [],
+          }),
+      } as any,
+    );
+    const trace = await service.recall(
+      { query: 'evidence', topK: 1 },
+      'keyword',
+    );
+    expect(trace.rawCandidates).toEqual([stale, current]);
+    expect(trace.items.map((item) => item.chunkId)).toEqual(['current']);
+    expect(trace.elapsedMs).toBeGreaterThanOrEqual(0);
+    const response = await service.searchKeywordChunks({
+      query: 'evidence',
+      topK: 1,
+    });
+    expect(Object.keys(response).sort()).toEqual(['items', 'query', 'topK']);
+  });
   it('embeds the question and returns only chunks from published documents', async () => {
     const embedding = {
-      embedDocuments: vi.fn().mockResolvedValue([[0.9, 0.8]]),
+      embedQuery: vi.fn().mockResolvedValue([0.9, 0.8]),
     };
     const vectorIndex = {
       searchChunks: vi.fn().mockResolvedValue([
@@ -111,9 +194,9 @@ describe('RagQueryService', () => {
       ],
     });
 
-    expect(embedding.embedDocuments).toHaveBeenCalledWith([
+    expect(embedding.embedQuery).toHaveBeenCalledWith(
       'how does retrieval work?',
-    ]);
+    );
     expect(vectorIndex.searchChunks).toHaveBeenCalledWith({
       queryVector: [0.9, 0.8],
       topK: 3,
@@ -122,7 +205,7 @@ describe('RagQueryService', () => {
 
   it('fails when the embedding provider returns no vector', async () => {
     const service = new RagQueryService(
-      { embedDocuments: vi.fn().mockResolvedValue([]) } as any,
+      { embedQuery: vi.fn().mockResolvedValue([]) } as any,
       { searchChunks: vi.fn() } as any,
       { findEntity: vi.fn() } as any,
     );

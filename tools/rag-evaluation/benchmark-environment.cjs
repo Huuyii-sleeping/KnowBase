@@ -20,7 +20,7 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
     ];
   }
 
-  async launchApi(outputDirectory, ollamaUrl) {
+  async launchApi(outputDirectory, ollamaUrl, encoding = 'plain') {
     const port = async (service, inner) =>
       (await this.compose('port', service, inner)).split(':').pop();
     const [mongoPort, storagePort, elasticPort, neo4jPort] = await Promise.all([
@@ -58,6 +58,9 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
       EMBEDDING_PROVIDER: 'ollama',
       OLLAMA_BASE_URL: ollamaUrl,
       OLLAMA_EMBEDDING_MODEL: 'nomic-embed-text',
+      EMBEDDING_DOCUMENT_PREFIX:
+        encoding === 'nomic-task' ? 'search_document: ' : '',
+      EMBEDDING_QUERY_PREFIX: encoding === 'nomic-task' ? 'search_query: ' : '',
       NEO4J_URI: `bolt://127.0.0.1:${neo4jPort}`,
       NEO4J_USER: 'neo4j',
       NEO4J_PASSWORD: 'index-test-password',

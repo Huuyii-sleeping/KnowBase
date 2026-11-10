@@ -41,6 +41,7 @@ class BenchmarkApiClient {
     if (!result.accessToken)
       throw new Error('Benchmark login did not return a token');
     this.token = result.accessToken;
+    this.user = result.user;
   }
 }
 

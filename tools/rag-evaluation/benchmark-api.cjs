@@ -29,6 +29,20 @@ const { RagPipelineConsumer } = require(
   await app.init();
   await app.get(SearchPipelineConsumer).consume();
   await app.get(RagPipelineConsumer).consume();
+  const { installRecallHandler } = require('./recall-ipc.cjs');
+  installRecallHandler(
+    process,
+    app.get(
+      require(path.join(modules, 'modules/rag/rag-query.service.js'))
+        .RagQueryService,
+    ),
+    app.get(
+      require(path.join(modules, 'modules/retrieval/rerank/rerank.service.js'))
+        .RerankService,
+    ),
+    require(path.join(modules, 'modules/search/hybrid-candidates.js'))
+      .mergeChunkCandidates,
+  );
   await app.listen(0, '127.0.0.1');
   process.send({ port: app.getHttpServer().address().port });
 })().catch((error) => {

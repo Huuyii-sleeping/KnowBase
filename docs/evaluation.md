@@ -61,6 +61,24 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 
 这是一套手工编写并可见的开发集，不是独立用户问题盲测。它适合定位问题和比较固定配置，不能据此宣称整体检索质量。后续需要加入真实用户问题和独立保留集；标注遗漏或合理替代证据应人工复核并升级数据集版本，不能为了当前配置的分数随意改答案。
 
+## 召回层逐阶段诊断
+
+`knowbase-recall-v2` 为 134 篇、80 题的合成扩展集，包含 v1 的 14 篇原文、120 篇模拟干扰资料、40 道原始开发题和 40 道冻结的新措辞验证题。其协议文件预设本轮工程验证阈值；验证措辞仍来自同一作者与同一事实，不是独立真实用户盲测。
+
+```bash
+pnpm --filter @knowbase/api benchmark:retrieval \
+  --python "$PWD/.venv-rag-eval/bin/python" \
+  --suite recall --dataset benchmarks/knowbase-recall-v2 \
+  --split development --encoding plain \
+  --output-dir reports/retrieval-recall-plain
+```
+
+在开发组上对比原始编码与 `--encoding nomic-task`（正文 `search_document: `、问题 `search_query: `），分别全新建索引。选定编码与预算后，再用 `--split validation --budgets 15`（预算按开发选择结果替换）验证。默认预算矩阵为每路 5/10/15/30/60，最终选择固定为 Top 5，重排规则和问答逻辑保持固定。
+
+诊断通过隔离 API 进程的内部服务 IPC 获取真实索引原始候选、过滤后路由候选、合并池和最终选择，并对一个样本与真实 HTTP 路径核对 Chunk 顺序。没有公开诊断 HTTP 接口。耗时为内部服务时间，不能和旧 HTTP 基线的延迟直接比较。
+
+输出 `indexed-corpus.json`（实际索引正文）、`recall-traces.json`（原始候选）、`recall-audit.json/md`（阶段与题型指标）以及元数据、API 日志和运行状态。证据损失分为：索引中不存在或被切断、未进入原始候选、路由过滤或预算截断、合并丢失、最终选择淘汰。候选命中使用原文证据检查，无法代替人工语义相关性判断；原始候选可能包含需要过滤的过期记录，不能直接用于问答。
+
 ## 对已有 API 单独评测
 
 评测接口受 JWT 保护。默认使用本地初始化的 `admin / knowbase-admin`，生产或其他环境请通过环境变量覆盖；也可以使用已有 Token：

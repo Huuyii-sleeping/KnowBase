@@ -14,15 +14,53 @@ function options(args) {
   const result = {
     python: process.env.KNOWBASE_EVAL_PYTHON || 'python3',
     output: path.join(root, 'reports/retrieval-knowbase-v1'),
+    dataset: path.join(root, 'benchmarks/knowbase-retrieval-v1'),
+    suite: 'baseline',
+    encoding: 'plain',
+    split: 'all',
+    budgets: [5, 10, 15, 30, 60],
   };
   for (let i = 0; i < args.length; i += 2) {
-    if (!['--python', '--output-dir'].includes(args[i]) || !args[i + 1])
+    if (
+      ![
+        '--python',
+        '--output-dir',
+        '--dataset',
+        '--suite',
+        '--encoding',
+        '--split',
+        '--budgets',
+      ].includes(args[i]) ||
+      !args[i + 1]
+    )
       throw new Error(
         'Usage: run_baseline.cjs [--python executable] [--output-dir directory]',
       );
     if (args[i] === '--python') result.python = args[i + 1];
-    else result.output = path.resolve(root, args[i + 1]);
+    else if (args[i] === '--output-dir')
+      result.output = path.resolve(root, args[i + 1]);
+    else if (args[i] === '--dataset')
+      result.dataset = path.resolve(root, args[i + 1]);
+    else if (args[i] === '--suite') result.suite = args[i + 1];
+    else if (args[i] === '--split') result.split = args[i + 1];
+    else if (args[i] === '--budgets')
+      result.budgets = args[i + 1].split(',').map(Number);
+    else result.encoding = args[i + 1];
   }
+  if (
+    !['baseline', 'recall'].includes(result.suite) ||
+    !['plain', 'nomic-task'].includes(result.encoding)
+  )
+    throw new Error('Invalid evaluation suite or encoding');
+  if (
+    !['all', 'development', 'validation'].includes(result.split) ||
+    !result.budgets.length ||
+    new Set(result.budgets).size !== result.budgets.length ||
+    result.budgets.some(
+      (value) => !Number.isInteger(value) || value < 1 || value > 100,
+    )
+  )
+    throw new Error('Invalid recall split or budgets');
   return result;
 }
 
@@ -44,7 +82,7 @@ async function python(executable, args, environment = {}) {
 
 async function main(args) {
   const config = options(args);
-  const directory = path.join(root, 'benchmarks/knowbase-retrieval-v1');
+  const directory = config.dataset;
   await python(config.python, [
     path.join(__dirname, 'benchmark_dataset.py'),
     directory,
@@ -66,7 +104,7 @@ async function main(args) {
     await environment.start();
     const ollamaUrl =
       process.env.KNOWBASE_BENCHMARK_OLLAMA_URL || 'http://127.0.0.1:11434';
-    await environment.launchApi(output, ollamaUrl);
+    await environment.launchApi(output, ollamaUrl, config.encoding);
     const client = new BenchmarkApiClient(environment.baseUrl);
     await client.login();
     const documents = await seedCorpus(
@@ -123,6 +161,7 @@ async function main(args) {
       api_git_commit: commit.trim(),
       working_tree_dirty: Boolean(status.trim()),
       document_count: documents.length,
+      document_mapping: documents,
       indexed_chunk_count: chunkCount,
       question_count: JSON.parse(
         await fs.readFile(path.join(directory, 'questions.json'), 'utf8'),
@@ -130,6 +169,7 @@ async function main(args) {
       corpus_sha256: hashes,
       embedding_model: model.name,
       embedding_digest: model?.digest || null,
+      embedding_encoding: config.encoding,
       dimensions: 768,
       chunk_size: 1000,
       chunk_overlap: 150,
@@ -151,22 +191,79 @@ async function main(args) {
     };
     const metadataPath = path.join(output, 'metadata.json');
     await fs.writeFile(metadataPath, JSON.stringify(metadata, null, 2) + '\n');
-    await python(
-      config.python,
-      [
-        path.join(__dirname, 'run_matrix.py'),
-        '--base-url',
-        environment.baseUrl,
+    if (config.suite === 'recall') {
+      const indexedResponse = await fetch(
+        `${environment.elasticsearchUrl}/kh_chunk/_search`,
+        {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            size: 10000,
+            track_total_hits: true,
+            _source: [
+              'document_id',
+              'document_version',
+              'chunk_index',
+              'content',
+            ],
+          }),
+        },
+      );
+      if (!indexedResponse.ok)
+        throw new Error(
+          'Cannot inspect benchmark evidence in actual indexed chunks',
+        );
+      const indexed = await indexedResponse.json();
+      if (indexed.hits.total.value > indexed.hits.hits.length)
+        throw new Error('Indexed corpus snapshot truncated');
+      await fs.writeFile(
+        path.join(output, 'indexed-corpus.json'),
+        JSON.stringify(
+          indexed.hits.hits.map((hit) => ({
+            id: hit._id,
+            documentId: hit._source.document_id,
+            content: hit._source.content,
+          })),
+        ) + '\n',
+      );
+      const { runRecallAudit } = require('./run_recall_audit.cjs');
+      metadata.recall_audit = await runRecallAudit(
+        environment,
+        client,
+        directory,
+        output,
+        { split: config.split, budgets: config.budgets },
+      );
+      await fs.writeFile(
+        metadataPath,
+        JSON.stringify(metadata, null, 2) + '\n',
+      );
+      await python(config.python, [
+        path.join(__dirname, 'recall_audit.py'),
         '--dataset',
         directory,
         '--output-dir',
         output,
-        '--metadata',
-        metadataPath,
-      ],
-      { KNOWBASE_TOKEN: client.token },
+      ]);
+    } else
+      await python(
+        config.python,
+        [
+          path.join(__dirname, 'run_matrix.py'),
+          '--base-url',
+          environment.baseUrl,
+          '--dataset',
+          directory,
+          '--output-dir',
+          output,
+          '--metadata',
+          metadataPath,
+        ],
+        { KNOWBASE_TOKEN: client.token },
+      );
+    console.log(
+      `Benchmark report: ${path.join(output, config.suite === 'recall' ? 'recall-audit.md' : 'comparison.md')}`,
     );
-    console.log(`Benchmark comparison: ${path.join(output, 'comparison.md')}`);
   } catch (error) {
     await fs.writeFile(
       statusPath,
