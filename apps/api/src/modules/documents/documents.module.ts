@@ -27,6 +27,10 @@ import { DocumentPublishService } from './document-publish.service';
 import { MessageQueueModule } from '../message-queue/message-queue.module';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { DeliveryModule } from '../delivery/delivery.module';
+import { IndexingModule } from '../indexing/indexing.module';
+import { DocumentRevisionService } from './document-revision.service';
+import { DocumentDeletionService } from './document-deletion.service';
+import { DocumentSourceCleanupService } from './document-source-cleanup.service';
 
 @Module({
   imports: [
@@ -37,6 +41,7 @@ import { DeliveryModule } from '../delivery/delivery.module';
     StorageModule,
     MessageQueueModule,
     DeliveryModule,
+    IndexingModule,
     AuthorizationModule,
   ],
   controllers: [DocumentsController],
@@ -45,6 +50,9 @@ import { DeliveryModule } from '../delivery/delivery.module';
     DocumentContentStore,
     DocumentQueryService,
     DocumentCommandService,
+    DocumentRevisionService,
+    DocumentDeletionService,
+    DocumentSourceCleanupService,
     DocumentWorkflowService,
     DocumentPipelinePublisher,
     DocumentPublishService,
@@ -58,6 +66,10 @@ import { DeliveryModule } from '../delivery/delivery.module';
     PptxParser,
     OfficeParserFallback,
   ],
-  exports: [DocumentContentStore, DocumentQueryService],
+  exports: [
+    DocumentContentStore,
+    DocumentQueryService,
+    DocumentSourceCleanupService,
+  ],
 })
 export class DocumentsModule {}

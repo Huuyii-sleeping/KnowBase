@@ -1,9 +1,13 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Client } from '@elastic/elasticsearch';
+import { Client, type estypes } from '@elastic/elasticsearch';
+import { ElasticsearchGenerationWriter } from './elasticsearch-generation.writer';
+import { ElasticsearchSchema } from './elasticsearch-schema';
+import { IndexGenerationStore } from '../../indexing/index-generation.store';
 
 export interface SearchDocumentInput {
   id: string;
+  generation: string;
   document: Record<string, unknown>;
 }
 
@@ -62,13 +66,16 @@ export interface VectorChunkInput {
 
 @Injectable()
 export class VectorIndexService implements OnModuleDestroy {
-  private readonly logger = new Logger(VectorIndexService.name);
   private readonly client: Client;
   private readonly documentIndex: string;
   private readonly chunkIndex: string;
-  private readonly embeddingDimensions: number;
+  private readonly schema: ElasticsearchSchema;
+  private readonly writer: ElasticsearchGenerationWriter;
 
-  constructor(config: ConfigService) {
+  constructor(
+    config: ConfigService,
+    private readonly generations: IndexGenerationStore,
+  ) {
     this.client = new Client({
       node: config.get<string>('ELASTICSEARCH_NODE', 'http://localhost:19200'),
       auth: config.get<string>('ELASTICSEARCH_API_KEY')
@@ -83,24 +90,41 @@ export class VectorIndexService implements OnModuleDestroy {
       'ELASTICSEARCH_CHUNK_INDEX',
       'kh_chunk',
     );
-    this.embeddingDimensions = Number(
+    const embeddingDimensions = Number(
       config.get<string | number>('RAG_EMBEDDING_DIMENSIONS', 768),
+    );
+    this.schema = new ElasticsearchSchema(
+      this.client,
+      this.documentIndex,
+      this.chunkIndex,
+      embeddingDimensions,
+    );
+    this.writer = new ElasticsearchGenerationWriter(
+      this.client,
+      this.documentIndex,
+      this.chunkIndex,
+      this.schema,
     );
   }
 
-  async indexDocument(input: SearchDocumentInput): Promise<void> {
-    await this.ensureDocumentIndex();
-    await this.client.index({
-      index: this.documentIndex,
-      id: input.id,
-      document: input.document,
-      refresh: 'wait_for',
-    });
+  indexDocument(input: SearchDocumentInput): Promise<void> {
+    return this.writer.indexDocument(input);
   }
 
   async searchDocuments(
     input: DocumentSearchInput,
   ): Promise<DocumentSearchResult> {
+    const generations = await this.generations.active(
+      'search',
+      input.allowedDocumentIds,
+    );
+    if (!generations.length)
+      return {
+        items: [],
+        total: 0,
+        page: input.page,
+        pageSize: input.pageSize,
+      };
     const must = input.keyword
       ? [
           {
@@ -112,7 +136,8 @@ export class VectorIndexService implements OnModuleDestroy {
           },
         ]
       : [{ match_all: {} }];
-    const filter = [
+    const filter: estypes.QueryDslQueryContainer[] = [
+      { terms: { generation_id: generations } },
       { term: { status: 'PUBLISHED' } },
       ...(input.allowedDocumentIds
         ? [{ terms: { id: input.allowedDocumentIds } }]
@@ -169,7 +194,12 @@ export class VectorIndexService implements OnModuleDestroy {
   async searchChunks(
     input: VectorChunkSearchInput,
   ): Promise<VectorChunkSearchItem[]> {
-    await this.ensureChunkIndex();
+    const generations = await this.generations.active(
+      'rag',
+      input.allowedDocumentIds,
+    );
+    if (!generations.length) return [];
+    await this.schema.chunks();
     const response = await this.client.search<Record<string, unknown>>({
       index: this.chunkIndex,
       size: input.topK,
@@ -178,9 +208,7 @@ export class VectorIndexService implements OnModuleDestroy {
         query_vector: input.queryVector,
         k: input.topK,
         num_candidates: Math.max(input.topK * 10, 100),
-        ...(input.allowedDocumentIds
-          ? { filter: [{ terms: { document_id: input.allowedDocumentIds } }] }
-          : {}),
+        filter: [{ terms: { generation_id: generations } }],
       },
     });
 
@@ -197,90 +225,31 @@ export class VectorIndexService implements OnModuleDestroy {
     });
   }
 
-  async replaceChunks(
+  stageChunks(
     documentId: string,
+    generation: string,
     chunks: VectorChunkInput[],
   ): Promise<void> {
-    await this.ensureChunkIndex();
-    await this.client.deleteByQuery({
-      index: this.chunkIndex,
-      query: { term: { document_id: documentId } },
-      refresh: true,
-      conflicts: 'proceed',
-    });
+    return this.writer.stageChunks(documentId, generation, chunks);
+  }
 
-    if (chunks.length === 0) {
-      return;
-    }
+  discardGeneration(
+    pipeline: 'search' | 'rag',
+    generation: string,
+  ): Promise<void> {
+    return this.writer.discardGeneration(pipeline, generation);
+  }
 
-    const result = await this.client.bulk({
-      refresh: 'wait_for',
-      operations: chunks.flatMap((chunk) => [
-        { index: { _index: this.chunkIndex, _id: chunk.id } },
-        {
-          document_id: chunk.documentId,
-          document_version: chunk.version,
-          chunk_index: chunk.chunkIndex,
-          content: chunk.content,
-          embedding: chunk.embedding,
-        },
-      ]),
-    });
-    if (result.errors) {
-      throw new Error('Elasticsearch failed to index one or more chunks');
-    }
+  async deleteDocument(
+    documentId: string,
+    pipeline: 'search' | 'rag',
+  ): Promise<void> {
+    if (!(await this.generations.isDeleted(documentId, pipeline))) return;
+    await this.writer.deleteDocument(documentId, pipeline);
   }
 
   async onModuleDestroy(): Promise<void> {
     await this.client.close();
-  }
-
-  private async ensureDocumentIndex(): Promise<void> {
-    if (await this.client.indices.exists({ index: this.documentIndex })) {
-      return;
-    }
-
-    await this.client.indices.create({
-      index: this.documentIndex,
-      mappings: {
-        properties: {
-          id: { type: 'keyword' },
-          title: { type: 'text' },
-          content: { type: 'text' },
-          status: { type: 'keyword' },
-          category: { type: 'keyword' },
-          team: { type: 'keyword' },
-          tags: { type: 'keyword' },
-          document_version: { type: 'integer' },
-        },
-      },
-    });
-    this.logger.log(`Created Elasticsearch index: ${this.documentIndex}`);
-  }
-
-  private async ensureChunkIndex(): Promise<void> {
-    if (await this.client.indices.exists({ index: this.chunkIndex })) {
-      return;
-    }
-
-    await this.client.indices.create({
-      index: this.chunkIndex,
-      mappings: {
-        properties: {
-          document_id: { type: 'keyword' },
-          document_version: { type: 'integer' },
-          chunk_index: { type: 'integer' },
-          content: { type: 'text' },
-          embedding: {
-            type: 'dense_vector',
-            dims: this.embeddingDimensions,
-            index: true,
-            similarity: 'cosine',
-          },
-        },
-      },
-    });
-    this.logger.log(`Created Elasticsearch index: ${this.chunkIndex}`);
   }
 
   private optionalString(value: unknown): string | undefined {
