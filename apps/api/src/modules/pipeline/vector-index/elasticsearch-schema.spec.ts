@@ -62,4 +62,16 @@ describe('ElasticsearchSchema', () => {
     indices.create.mockRejectedValueOnce(new Error('cluster down'));
     await expect(schema.document()).rejects.toThrow('cluster down');
   });
+  it('initializes once per index across concurrent readers and retries a failed initialization', async () => {
+    const { schema, indices } = fixture();
+    indices.exists.mockResolvedValue(true);
+    indices.putMapping.mockRejectedValueOnce(new Error('cluster unavailable'));
+    await expect(schema.chunks()).rejects.toThrow('cluster unavailable');
+    await Promise.all([schema.chunks(), schema.chunks(), schema.chunks()]);
+    await schema.chunks();
+    expect(indices.exists).toHaveBeenCalledTimes(2);
+    expect(indices.putMapping).toHaveBeenCalledTimes(2);
+    await schema.document();
+    expect(indices.exists).toHaveBeenCalledTimes(3);
+  });
 });

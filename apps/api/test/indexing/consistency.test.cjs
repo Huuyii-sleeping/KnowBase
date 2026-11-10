@@ -522,6 +522,37 @@ test('CJK recall requires a generation rebuild for old text and preserves visibi
       },
     });
     const current = await document();
+    const { DocumentQueryService } = load(
+      'documents/document-query.service.js',
+    );
+    const repository = env.source.getRepository(Document);
+    const metadata = new DocumentQueryService(
+      repository,
+      {},
+      new DocumentAccessService(repository),
+    );
+    const outsider = { id: 'outsider', role: 'MEMBER' };
+    await env.source.query(
+      `UPDATE kh_document SET permissions='{"visibility":"PRIVATE"}'::jsonb WHERE id=$1`,
+      [current.id],
+    );
+    assert.equal(
+      (await metadata.findPublishedByIds([current.id, current.id], admin))
+        .length,
+      1,
+    );
+    assert.deepEqual(
+      await metadata.findPublishedByIds([current.id], outsider),
+      [],
+    );
+    await env.source.query(
+      `UPDATE kh_document SET permissions='{"visibility":"PUBLIC"}'::jsonb WHERE id=$1`,
+      [current.id],
+    );
+    assert.equal(
+      (await metadata.findPublishedByIds([current.id], outsider)).length,
+      1,
+    );
     const legacy = randomUUID();
     await client.index({
       index,
@@ -582,6 +613,10 @@ test('CJK recall requires a generation rebuild for old text and preserves visibi
       [],
     );
     await revisions.updateMetadata(current.id, { title: 'Revised' }, admin);
+    assert.deepEqual(
+      await metadata.findPublishedByIds([current.id], admin),
+      [],
+    );
     assert.deepEqual(
       await cjk.searchKeywordChunks(input),
       [],

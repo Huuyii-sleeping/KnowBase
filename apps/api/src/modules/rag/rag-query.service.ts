@@ -1,10 +1,5 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { DocumentQueryService } from '../documents/document-query.service';
-import { DocumentStatus } from '../documents/entities/document.entity';
 import { EmbeddingService } from '../pipeline/embedding/embedding.service';
 import {
   VectorChunkSearchItem,
@@ -146,7 +141,11 @@ export class RagQueryService {
       throw new BadRequestException('unsupported recall route');
     }
     const metadataStarted = performance.now();
-    const items = await this.keepPublishedCandidates(candidates, query.topK);
+    const items = await this.keepPublishedCandidates(
+      candidates,
+      query.topK,
+      user,
+    );
     timings.metadataMs = performance.now() - metadataStarted;
     return {
       query: normalizedQuery,
@@ -162,20 +161,18 @@ export class RagQueryService {
   private async keepPublishedCandidates(
     candidates: VectorChunkSearchItem[],
     topK: number,
+    user?: AuthUser,
   ): Promise<SemanticSearchItem[]> {
     const items: SemanticSearchItem[] = [];
-    const documents = new Map<
-      string,
-      Awaited<ReturnType<DocumentQueryService['findEntity']>> | null
-    >();
-
+    if (!candidates.length) return items;
+    const visible = await this.documentQuery.findPublishedByIds(
+      candidates.map((candidate) => candidate.documentId),
+      user,
+    );
+    const documents = new Map(
+      visible.map((document) => [document.id, document]),
+    );
     for (const candidate of candidates) {
-      if (!documents.has(candidate.documentId)) {
-        documents.set(
-          candidate.documentId,
-          await this.findPublishedDocument(candidate.documentId),
-        );
-      }
       const document = documents.get(candidate.documentId);
       if (!document || document.version !== candidate.version) {
         continue;
@@ -201,17 +198,5 @@ export class RagQueryService {
     }
 
     return items;
-  }
-
-  private async findPublishedDocument(documentId: string) {
-    try {
-      const document = await this.documentQuery.findEntity(documentId);
-      return document.status === DocumentStatus.PUBLISHED ? document : null;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return null;
-      }
-      throw error;
-    }
   }
 }

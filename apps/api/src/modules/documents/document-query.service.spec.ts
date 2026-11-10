@@ -12,7 +12,10 @@ vi.mock('./entities/document.entity', () => ({
 }));
 
 import { DocumentQueryService } from './document-query.service';
-import { DocumentStatus, DocumentParseStatus } from './entities/document.entity';
+import {
+  DocumentStatus,
+  DocumentParseStatus,
+} from './entities/document.entity';
 
 describe('DocumentQueryService', () => {
   it('loads PostgreSQL metadata and MongoDB content for a detail view', async () => {
@@ -53,7 +56,11 @@ describe('DocumentQueryService', () => {
         characterCount: 11,
       })),
     };
-    const service = new DocumentQueryService(repository as any, contentStore as any, { assertCanView: vi.fn() } as any);
+    const service = new DocumentQueryService(
+      repository as any,
+      contentStore as any,
+      { assertCanView: vi.fn() } as any,
+    );
 
     const result = await service.findOne('document-1', true);
 
@@ -73,11 +80,49 @@ describe('DocumentQueryService', () => {
     const document = { id: 'document-1', contentId: 'content-1' };
     const repository = { findOne: vi.fn(async () => document) };
     const contentStore = { findByContentId: vi.fn() };
-    const service = new DocumentQueryService(repository as any, contentStore as any, { assertCanView: vi.fn() } as any);
+    const service = new DocumentQueryService(
+      repository as any,
+      contentStore as any,
+      { assertCanView: vi.fn() } as any,
+    );
 
     const result = await service.findOne('document-1');
 
     expect(result.content).toBeUndefined();
     expect(contentStore.findByContentId).not.toHaveBeenCalled();
+  });
+  it('batch-reads only published visible metadata, deduplicates IDs and avoids MongoDB', async () => {
+    const builder = {
+      where: vi.fn().mockReturnThis(),
+      andWhere: vi.fn().mockReturnThis(),
+      getMany: vi.fn().mockResolvedValue([{ id: 'one' }]),
+    };
+    const repository = { createQueryBuilder: vi.fn().mockReturnValue(builder) };
+    const content = { findByContentId: vi.fn() };
+    const access = { applyVisibilityFilter: vi.fn() };
+    const service = new DocumentQueryService(
+      repository as any,
+      content as any,
+      access as any,
+    );
+    const user = { id: 'user', role: 'MEMBER' as const };
+    expect(await service.findPublishedByIds([], user)).toEqual([]);
+    expect(repository.createQueryBuilder).not.toHaveBeenCalled();
+    expect(
+      await service.findPublishedByIds(['one', 'one', 'two'], user),
+    ).toEqual([{ id: 'one' }]);
+    expect(builder.where).toHaveBeenCalledWith('document.id IN (:...ids)', {
+      ids: ['one', 'two'],
+    });
+    expect(builder.andWhere).toHaveBeenCalledWith(
+      'document.status = :publishedStatus',
+      { publishedStatus: 'PUBLISHED' },
+    );
+    expect(access.applyVisibilityFilter).toHaveBeenCalledWith(builder, user);
+    expect(content.findByContentId).not.toHaveBeenCalled();
+    builder.getMany.mockRejectedValueOnce(new Error('database failed'));
+    await expect(service.findPublishedByIds(['one'], user)).rejects.toThrow(
+      'database failed',
+    );
   });
 });

@@ -1,6 +1,7 @@
 import type { Client, estypes } from '@elastic/elasticsearch';
 
 export class ElasticsearchSchema {
+  private readonly initialization = new Map<string, Promise<void>>();
   constructor(
     private readonly client: Client,
     private readonly documentIndex: string,
@@ -41,7 +42,22 @@ export class ElasticsearchSchema {
     });
   }
 
-  private async ensure(
+  private ensure(
+    index: string,
+    properties: Record<string, estypes.MappingProperty>,
+  ): Promise<void> {
+    let pending = this.initialization.get(index);
+    if (!pending) {
+      pending = this.initialize(index, properties).catch((error) => {
+        this.initialization.delete(index);
+        throw error;
+      });
+      this.initialization.set(index, pending);
+    }
+    return pending;
+  }
+
+  private async initialize(
     index: string,
     properties: Record<string, estypes.MappingProperty>,
   ): Promise<void> {
