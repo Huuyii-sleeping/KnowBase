@@ -1,78 +1,26 @@
-const fs = require('node:fs/promises');
-const path = require('node:path');
-const { spawn } = require('node:child_process');
-const { createHash } = require('node:crypto');
-const { promisify } = require('node:util');
-const { execFile } = require('node:child_process');
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { spawn } = require("node:child_process");
+const { options } = require("./benchmark-options.cjs");
+const {
+  collectMetadata,
+  snapshotIndexedCorpus,
+} = require("./benchmark-metadata.cjs");
 const {
   RetrievalBenchmarkEnvironment,
-} = require('./benchmark-environment.cjs');
-const { BenchmarkApiClient, seedCorpus } = require('./benchmark-corpus.cjs');
-const root = path.resolve(__dirname, '../..');
-
-function options(args) {
-  const result = {
-    python: process.env.KNOWBASE_EVAL_PYTHON || 'python3',
-    output: path.join(root, 'reports/retrieval-knowbase-v1'),
-    dataset: path.join(root, 'benchmarks/knowbase-retrieval-v1'),
-    suite: 'baseline',
-    encoding: 'plain',
-    split: 'all',
-    budgets: [5, 10, 15, 30, 60],
-  };
-  for (let i = 0; i < args.length; i += 2) {
-    if (
-      ![
-        '--python',
-        '--output-dir',
-        '--dataset',
-        '--suite',
-        '--encoding',
-        '--split',
-        '--budgets',
-      ].includes(args[i]) ||
-      !args[i + 1]
-    )
-      throw new Error(
-        'Usage: run_baseline.cjs [--python executable] [--output-dir directory]',
-      );
-    if (args[i] === '--python') result.python = args[i + 1];
-    else if (args[i] === '--output-dir')
-      result.output = path.resolve(root, args[i + 1]);
-    else if (args[i] === '--dataset')
-      result.dataset = path.resolve(root, args[i + 1]);
-    else if (args[i] === '--suite') result.suite = args[i + 1];
-    else if (args[i] === '--split') result.split = args[i + 1];
-    else if (args[i] === '--budgets')
-      result.budgets = args[i + 1].split(',').map(Number);
-    else result.encoding = args[i + 1];
-  }
-  if (
-    !['baseline', 'recall'].includes(result.suite) ||
-    !['plain', 'nomic-task'].includes(result.encoding)
-  )
-    throw new Error('Invalid evaluation suite or encoding');
-  if (
-    !['all', 'development', 'validation'].includes(result.split) ||
-    !result.budgets.length ||
-    new Set(result.budgets).size !== result.budgets.length ||
-    result.budgets.some(
-      (value) => !Number.isInteger(value) || value < 1 || value > 100,
-    )
-  )
-    throw new Error('Invalid recall split or budgets');
-  return result;
-}
+} = require("./benchmark-environment.cjs");
+const { BenchmarkApiClient, seedCorpus } = require("./benchmark-corpus.cjs");
+const root = path.resolve(__dirname, "../..");
 
 async function python(executable, args, environment = {}) {
   await new Promise((resolve, reject) => {
     const child = spawn(executable, args, {
       cwd: root,
       env: { ...process.env, ...environment },
-      stdio: 'inherit',
+      stdio: "inherit",
     });
-    child.once('error', reject);
-    child.once('exit', (code) =>
+    child.once("error", reject);
+    child.once("exit", (code) =>
       code === 0
         ? resolve()
         : reject(new Error(`Python evaluation exited with status ${code}`)),
@@ -84,26 +32,26 @@ async function main(args) {
   const config = options(args);
   const directory = config.dataset;
   await python(config.python, [
-    path.join(__dirname, 'benchmark_dataset.py'),
+    path.join(__dirname, "benchmark_dataset.py"),
     directory,
   ]);
   await fs.mkdir(config.output, { recursive: true });
   const output = path.join(
     config.output,
-    `${new Date().toISOString().replace(/[:.]/g, '-')}-${process.pid}`,
+    `${new Date().toISOString().replace(/[:.]/g, "-")}-${process.pid}`,
   );
   await fs.mkdir(output);
-  const statusPath = path.join(output, 'run-status.json');
-  await fs.writeFile(statusPath, JSON.stringify({ status: 'running' }) + '\n');
+  const statusPath = path.join(output, "run-status.json");
+  await fs.writeFile(statusPath, JSON.stringify({ status: "running" }) + "\n");
   const manifest = JSON.parse(
-    await fs.readFile(path.join(directory, 'manifest.json'), 'utf8'),
+    await fs.readFile(path.join(directory, "manifest.json"), "utf8"),
   );
   const environment = new RetrievalBenchmarkEnvironment();
   try {
-    console.log('Starting isolated retrieval benchmark services');
+    console.log("Starting isolated retrieval benchmark services");
     await environment.start();
     const ollamaUrl =
-      process.env.KNOWBASE_BENCHMARK_OLLAMA_URL || 'http://127.0.0.1:11434';
+      process.env.KNOWBASE_BENCHMARK_OLLAMA_URL || "http://127.0.0.1:11434";
     await environment.launchApi(output, ollamaUrl, config.encoding);
     const client = new BenchmarkApiClient(environment.baseUrl);
     await client.login();
@@ -116,117 +64,19 @@ async function main(args) {
     console.log(
       `Published and indexed ${documents.length} benchmark documents`,
     );
-    const files = [
-      'manifest.json',
-      'questions.json',
-      ...manifest.documents.map((item) => `docs/${item.file}`),
-    ];
-    const hashes = {};
-    for (const file of files)
-      hashes[file] = createHash('sha256')
-        .update(await fs.readFile(path.join(directory, file)))
-        .digest('hex');
-    const { stdout: commit } = await promisify(execFile)(
-      'git',
-      ['rev-parse', 'HEAD'],
-      { cwd: root },
-    );
-    const { stdout: status } = await promisify(execFile)(
-      'git',
-      ['status', '--porcelain'],
-      { cwd: root },
-    );
-    const modelResponse = await fetch(`${ollamaUrl}/api/tags`, {
-      signal: AbortSignal.timeout(10000),
+    const metadata = await collectMetadata({
+      directory,
+      manifest,
+      documents,
+      environment,
+      ollamaUrl,
+      config,
     });
-    if (!modelResponse.ok)
-      throw new Error('Cannot inspect local embedding model metadata');
-    const model = (await modelResponse.json()).models.find((item) =>
-      ['nomic-embed-text', 'nomic-embed-text:latest'].includes(item.name),
-    );
-    if (!model)
-      throw new Error(
-        'nomic-embed-text must be installed in the selected Ollama server',
-      );
-    const chunkResponse = await fetch(
-      `${environment.elasticsearchUrl}/kh_chunk/_count`,
-      { signal: AbortSignal.timeout(10000) },
-    );
-    if (!chunkResponse.ok)
-      throw new Error('Cannot inspect indexed benchmark chunk count');
-    const chunkCount = (await chunkResponse.json()).count;
-    const metadata = {
-      dataset: manifest.version,
-      started_at: new Date().toISOString(),
-      api_git_commit: commit.trim(),
-      working_tree_dirty: Boolean(status.trim()),
-      document_count: documents.length,
-      document_mapping: documents,
-      indexed_chunk_count: chunkCount,
-      question_count: JSON.parse(
-        await fs.readFile(path.join(directory, 'questions.json'), 'utf8'),
-      ).length,
-      corpus_sha256: hashes,
-      embedding_model: model.name,
-      embedding_digest: model?.digest || null,
-      embedding_encoding: config.encoding,
-      dimensions: 768,
-      chunk_size: 1000,
-      chunk_overlap: 150,
-      reranking: 'existing rule-based implementation; unchanged',
-      hybrid_retrieval: require(
-        path.join(
-          root,
-          'apps/api/dist/src/modules/search/hybrid-candidates.js',
-        ),
-      ).HYBRID_RETRIEVAL_POLICY,
-      scope:
-        'Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.',
-      top_k: [1, 3, 5],
-      modes: ['keyword', 'semantic', 'hybrid'],
-      warmup:
-        'One untimed request per mode after corpus indexing; one measured pass per mode/K.',
-      ranking_unit:
-        'Deduplicate the first API TopK candidates by document; no extra candidate fetch. Evidence checks inspect all returned TopK contents.',
-    };
-    const metadataPath = path.join(output, 'metadata.json');
-    await fs.writeFile(metadataPath, JSON.stringify(metadata, null, 2) + '\n');
-    if (config.suite === 'recall') {
-      const indexedResponse = await fetch(
-        `${environment.elasticsearchUrl}/kh_chunk/_search`,
-        {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            size: 10000,
-            track_total_hits: true,
-            _source: [
-              'document_id',
-              'document_version',
-              'chunk_index',
-              'content',
-            ],
-          }),
-        },
-      );
-      if (!indexedResponse.ok)
-        throw new Error(
-          'Cannot inspect benchmark evidence in actual indexed chunks',
-        );
-      const indexed = await indexedResponse.json();
-      if (indexed.hits.total.value > indexed.hits.hits.length)
-        throw new Error('Indexed corpus snapshot truncated');
-      await fs.writeFile(
-        path.join(output, 'indexed-corpus.json'),
-        JSON.stringify(
-          indexed.hits.hits.map((hit) => ({
-            id: hit._id,
-            documentId: hit._source.document_id,
-            content: hit._source.content,
-          })),
-        ) + '\n',
-      );
-      const { runRecallAudit } = require('./run_recall_audit.cjs');
+    const metadataPath = path.join(output, "metadata.json");
+    await fs.writeFile(metadataPath, JSON.stringify(metadata, null, 2) + "\n");
+    if (config.suite === "recall") {
+      await snapshotIndexedCorpus(environment, output);
+      const { runRecallAudit } = require("./run_recall_audit.cjs");
       metadata.recall_audit = await runRecallAudit(
         environment,
         client,
@@ -236,59 +86,59 @@ async function main(args) {
       );
       await fs.writeFile(
         metadataPath,
-        JSON.stringify(metadata, null, 2) + '\n',
+        JSON.stringify(metadata, null, 2) + "\n",
       );
       await python(config.python, [
-        path.join(__dirname, 'recall_audit.py'),
-        '--dataset',
+        path.join(__dirname, "recall_audit.py"),
+        "--dataset",
         directory,
-        '--output-dir',
+        "--output-dir",
         output,
       ]);
     } else
       await python(
         config.python,
         [
-          path.join(__dirname, 'run_matrix.py'),
-          '--base-url',
+          path.join(__dirname, "run_matrix.py"),
+          "--base-url",
           environment.baseUrl,
-          '--dataset',
+          "--dataset",
           directory,
-          '--output-dir',
+          "--output-dir",
           output,
-          '--metadata',
+          "--metadata",
           metadataPath,
         ],
         { KNOWBASE_TOKEN: client.token },
       );
     console.log(
-      `Benchmark report: ${path.join(output, config.suite === 'recall' ? 'recall-audit.md' : 'comparison.md')}`,
+      `Benchmark report: ${path.join(output, config.suite === "recall" ? "recall-audit.md" : "comparison.md")}`,
     );
   } catch (error) {
     await fs.writeFile(
       statusPath,
-      JSON.stringify({ status: 'failed', error: error.message }) + '\n',
+      JSON.stringify({ status: "failed", error: error.message }) + "\n",
     );
     throw error;
   } finally {
     try {
       await environment.close();
-      console.log('Removed isolated benchmark containers and volumes');
+      console.log("Removed isolated benchmark containers and volumes");
     } catch (error) {
       await fs.writeFile(
         statusPath,
         JSON.stringify({
-          status: 'failed',
-          phase: 'cleanup',
+          status: "failed",
+          phase: "cleanup",
           error: error.message,
-        }) + '\n',
+        }) + "\n",
       );
       throw error;
     }
   }
   await fs.writeFile(
     statusPath,
-    JSON.stringify({ status: 'completed' }) + '\n',
+    JSON.stringify({ status: "completed" }) + "\n",
   );
 }
 
