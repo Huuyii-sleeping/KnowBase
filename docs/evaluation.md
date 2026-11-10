@@ -73,7 +73,7 @@ pnpm --filter @knowbase/api benchmark:retrieval \
   --output-dir reports/retrieval-recall-plain
 ```
 
-在开发组上对比原始编码与 `--encoding nomic-task`（正文 `search_document: `、问题 `search_query: `），分别全新建索引。选定编码与预算后，再用 `--split validation --budgets 15`（预算按开发选择结果替换）验证。默认预算矩阵为每路 5/10/15/30/60，最终选择固定为 Top 5，重排规则和问答逻辑保持固定。
+在开发组上对比原始编码与 `--encoding nomic-task`（正文 `search_document: `、问题 `search_query: `），分别全新建索引。选定编码与预算后，再用 `--split validation --budgets 15`（预算按开发选择结果替换）验证。`--lexical standard|cjk` 选择正文关键词分词方式，默认 `standard`；对比 `cjk` 时使用同一语料与默认空任务前缀，全新建立索引。默认预算矩阵为每路 5/10/15/30/60，最终选择固定为 Top 5，重排规则和问答逻辑保持固定。
 
 诊断通过隔离 API 进程的内部服务 IPC 获取真实索引原始候选、过滤后路由候选、合并池和最终选择，并对一个样本与真实 HTTP 路径核对 Chunk 顺序。没有公开诊断 HTTP 接口。耗时为内部服务时间，不能和旧 HTTP 基线的延迟直接比较。
 

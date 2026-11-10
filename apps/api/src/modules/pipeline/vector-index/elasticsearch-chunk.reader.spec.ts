@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 
-function fixture() {
+function fixture(analyzer: 'standard' | 'cjk' = 'standard') {
   const search = vi.fn().mockResolvedValue({
     hits: {
       hits: [
@@ -29,6 +29,7 @@ function fixture() {
       'chunks',
       { chunks } as any,
       { active } as any,
+      analyzer,
     ),
   };
 }
@@ -63,6 +64,21 @@ describe('ElasticsearchChunkReader', () => {
         },
       },
     });
+  });
+
+  it('queries CJK bigrams only when explicitly enabled and retains the active generation filter', async () => {
+    const { reader, search } = fixture('cjk');
+    await reader.keyword({ query: '上传成功', topK: 10 });
+    expect(search).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: {
+          bool: {
+            must: [{ match: { 'content.cjk': { query: '上传成功' } } }],
+            filter: [{ terms: { generation_id: ['active'] } }],
+          },
+        },
+      }),
+    );
   });
 
   it('does not search for blank input or when the current revision or permissions leave no active batches', async () => {

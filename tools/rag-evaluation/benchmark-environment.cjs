@@ -20,7 +20,12 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
     ];
   }
 
-  async launchApi(outputDirectory, ollamaUrl, encoding = 'plain') {
+  async launchApi(
+    outputDirectory,
+    ollamaUrl,
+    encoding = 'plain',
+    lexical = 'standard',
+  ) {
     const port = async (service, inner) =>
       (await this.compose('port', service, inner)).split(':').pop();
     const [mongoPort, storagePort, elasticPort, neo4jPort] = await Promise.all([
@@ -55,6 +60,7 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
       RAG_CHUNK_SIZE: '1000',
       RAG_CHUNK_OVERLAP: '150',
       RAG_EMBEDDING_DIMENSIONS: '768',
+      RAG_KEYWORD_ANALYZER: lexical,
       EMBEDDING_PROVIDER: 'ollama',
       OLLAMA_BASE_URL: ollamaUrl,
       OLLAMA_EMBEDDING_MODEL: 'nomic-embed-text',

@@ -113,11 +113,18 @@ export class VectorIndexService implements OnModuleDestroy {
       this.chunkIndex,
       this.schema,
     );
+    const keywordAnalyzer = config.get<string>(
+      'RAG_KEYWORD_ANALYZER',
+      'standard',
+    );
+    if (keywordAnalyzer !== 'standard' && keywordAnalyzer !== 'cjk')
+      throw new Error('RAG_KEYWORD_ANALYZER must be standard or cjk');
     this.chunks = new ElasticsearchChunkReader(
       this.client,
       this.chunkIndex,
       this.schema,
       this.generations,
+      keywordAnalyzer,
     );
   }
 

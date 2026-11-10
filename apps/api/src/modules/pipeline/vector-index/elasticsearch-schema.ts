@@ -28,7 +28,10 @@ export class ElasticsearchSchema {
       generation_id: { type: 'keyword' },
       document_version: { type: 'integer' },
       chunk_index: { type: 'integer' },
-      content: { type: 'text' },
+      content: {
+        type: 'text',
+        fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+      },
       embedding: {
         type: 'dense_vector',
         dims: this.dimensions,
@@ -59,7 +62,12 @@ export class ElasticsearchSchema {
     // writes; dynamic text mappings would tokenize the generation UUID.
     await this.client.indices.putMapping({
       index,
-      properties: { generation_id: { type: 'keyword' } },
+      properties: {
+        generation_id: { type: 'keyword' },
+        ...(properties.content && index === this.chunkIndex
+          ? { content: properties.content }
+          : {}),
+      },
     });
   }
 }

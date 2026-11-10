@@ -35,6 +35,23 @@ describe('ElasticsearchSchema', () => {
       properties: { generation_id: { type: 'keyword' } },
     });
   });
+  it('adds the CJK subfield to existing chunk mappings without changing the original analyzer or vector dimensions', async () => {
+    const { schema, indices } = fixture();
+    indices.exists.mockResolvedValueOnce(true);
+    await schema.chunks();
+    expect(indices.putMapping).toHaveBeenCalledWith({
+      index: 'chunks',
+      properties: {
+        generation_id: { type: 'keyword' },
+        content: {
+          type: 'text',
+          fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+        },
+      },
+    });
+    expect(indices.create).not.toHaveBeenCalled();
+  });
+
   it('accepts concurrent index creation but propagates unrelated failures', async () => {
     const { schema, indices } = fixture();
     indices.create.mockRejectedValueOnce({

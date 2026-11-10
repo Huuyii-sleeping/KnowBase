@@ -485,3 +485,108 @@ test('keyword chunks restrict results to allowed documents and return no hits fo
     [],
   );
 });
+
+test('CJK recall requires a generation rebuild for old text and preserves visibility after migration', async () => {
+  const { Client } = require('@elastic/elasticsearch');
+  const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+    .split(':')
+    .pop();
+  const node = `http://127.0.0.1:${esPort}`;
+  const client = new Client({ node });
+  const index = `legacy_cjk_${randomUUID()}`;
+  const cjk = new VectorIndexService(
+    new ConfigService({
+      ELASTICSEARCH_NODE: node,
+      ELASTICSEARCH_CHUNK_INDEX: index,
+      RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER: 'cjk',
+    }),
+    heads,
+  );
+  try {
+    await client.indices.create({
+      index,
+      mappings: {
+        properties: {
+          generation_id: { type: 'keyword' },
+          content: { type: 'text' },
+          embedding: {
+            type: 'dense_vector',
+            dims: 2,
+            index: true,
+            similarity: 'cosine',
+          },
+        },
+      },
+    });
+    const current = await document();
+    const legacy = randomUUID();
+    await client.index({
+      index,
+      id: 'legacy',
+      refresh: 'wait_for',
+      document: {
+        generation_id: legacy,
+        document_id: current.id,
+        document_version: 1,
+        chunk_index: 0,
+        content: '上传成功后使用 RabbitMQ 和 kh_chunk 建立索引',
+        embedding: [1, 0],
+      },
+    });
+    assert.equal(await heads.activate(current, 'rag', legacy), true);
+    const input = {
+      query: '上传成功',
+      topK: 10,
+      allowedDocumentIds: [current.id],
+    };
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'adding a multi-field does not backfill existing indexed text',
+    );
+    const generation = randomUUID();
+    await cjk.stageChunks(current.id, generation, [
+      {
+        id: `${current.id}:v1:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '上传成功后使用 RabbitMQ 和 kh_chunk 建立索引',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'staged rebuilt chunks remain invisible',
+    );
+    assert.equal(await heads.activate(current, 'rag', generation), true);
+    for (const query of ['上传成功', 'RabbitMQ', 'kh_chunk']) {
+      const items = await cjk.searchKeywordChunks({ ...input, query });
+      assert.equal(items.length, 1);
+      assert.equal(items[0].documentId, current.id);
+      assert.equal(items[0].version, 1);
+    }
+    assert.deepEqual(
+      await cjk.searchKeywordChunks({ ...input, allowedDocumentIds: [] }),
+      [],
+    );
+    assert.deepEqual(
+      await cjk.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [randomUUID()],
+      }),
+      [],
+    );
+    await revisions.updateMetadata(current.id, { title: 'Revised' }, admin);
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'draft revision must hide even a matching rebuilt chunk',
+    );
+  } finally {
+    await cjk.onModuleDestroy();
+    await client.close();
+  }
+});
