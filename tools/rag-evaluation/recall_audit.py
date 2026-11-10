@@ -132,6 +132,10 @@ def analyze(directory: Path, output: Path) -> dict:
                 "elapsed_ms": trace["elapsedMs"],
                 "keyword_ms": trace["keyword"]["elapsedMs"],
                 "semantic_ms": trace["semantic"]["elapsedMs"],
+                "route_timings": {
+                    route: trace[route].get("timings")
+                    for route in ("keyword", "semantic")
+                },
             }
         )
     summaries = []
@@ -187,15 +191,18 @@ def analyze(directory: Path, output: Path) -> dict:
             + " | ".join(values)
             + f" | {stages['pool']['mean_candidate_count']:.2f} | {summary['mean_ms']:.2f}/{summary['p95_ms']:.2f} |"
         )
+    loss_budget = payload.get("selected_development_budget") or (
+        15 if 15 in budgets else budgets[0]
+    )
     lines += [
         "",
-        "## 默认 15 候选下的证据损失",
+        f"## 每路 {loss_budget} 候选下的证据损失",
         "",
         "| 问题 | 分组 | 阶段 | 来源 |",
         "| --- | --- | --- | --- |",
     ]
     for row in rows:
-        if row["budget"] == 15:
+        if row["budget"] == loss_budget:
             for loss in row["losses"]:
                 lines.append(
                     f"| {row['id']} | {row['split']} | {loss['cause']} | {loss['doc']} |"
