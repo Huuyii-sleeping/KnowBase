@@ -49,6 +49,8 @@ before(
       ELASTICSEARCH_DOCUMENT_INDEX: 'test_document',
       ELASTICSEARCH_CHUNK_INDEX: 'test_chunk',
       RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER:
+        process.env.INDEX_TEST_KEYWORD_ANALYZER || 'standard',
       NEO4J_URI: `bolt://127.0.0.1:${graphPort}`,
       NEO4J_USER: 'neo4j',
       NEO4J_PASSWORD: 'index-test-password',
