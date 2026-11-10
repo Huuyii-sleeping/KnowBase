@@ -98,6 +98,28 @@ describe('RagQueryService', () => {
     expect(Object.keys(result).sort()).toEqual(['items', 'query', 'topK']);
   });
 
+  it('uses index order even if batch rows arrive reversed and keeps the requested budget', async () => {
+    const { service, index, documents } = fixture();
+    index.searchKeywordChunks.mockResolvedValue([
+      chunk('first', 'one'),
+      chunk('second', 'two'),
+      chunk('third', 'one'),
+    ]);
+    documents.findPublishedByIds.mockResolvedValue([
+      { ...current, id: 'two' },
+      { ...current, id: 'one' },
+    ]);
+    const result = await service.searchKeywordChunks(
+      { query: 'body', topK: 2 },
+      user,
+    );
+    expect(result.items.map((item) => item.chunkId)).toEqual([
+      'first',
+      'second',
+    ]);
+    expect(documents.findPublishedByIds).toHaveBeenCalledTimes(1);
+  });
+
   it('keeps raw candidates internal and filters outdated, removed, draft and no-longer-visible documents', async () => {
     const { service, embedding, index, documents } = fixture();
     const raw = [
