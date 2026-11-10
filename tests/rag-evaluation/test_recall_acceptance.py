@@ -63,6 +63,7 @@ class RecallAcceptanceTests(unittest.TestCase):
             select_development_budget(
                 [
                     row("validation", 5, True),
+                    row("development", "k5-s15", True),
                     row("development", 15, True),
                     row("development", 10, True),
                 ]

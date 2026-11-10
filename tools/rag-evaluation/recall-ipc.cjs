@@ -1,4 +1,5 @@
 const { randomUUID } = require('node:crypto');
+const { resolveBudgets } = require('./recall-budget.cjs');
 
 // Parent/child IPC only. No debug HTTP route is installed in the application.
 function requestRecall(child, input, timeoutMs = 120000) {
@@ -41,13 +42,16 @@ function installRecallHandler(child, recall, rerank, merge) {
   const handler = async (message) => {
     if (message.kind !== 'recall-audit') return;
     try {
-      const { query, budget, user, finalK = 5 } = message.input;
+      const { query, user, finalK = 5 } = message.input;
+      let pair;
+      try {
+        pair = resolveBudgets(message.input);
+      } catch {
+        throw new Error('Invalid isolated recall audit input');
+      }
       if (
         !user?.id ||
         user.role !== 'ADMIN' ||
-        !Number.isInteger(budget) ||
-        budget < 1 ||
-        budget > 100 ||
         !Number.isInteger(finalK) ||
         finalK < 1 ||
         finalK > 20
@@ -55,14 +59,16 @@ function installRecallHandler(child, recall, rerank, merge) {
         throw new Error('Invalid isolated recall audit input');
       const started = performance.now();
       const [keyword, semantic] = await Promise.all([
-        recall.recall({ query, topK: budget }, 'keyword', user),
-        recall.recall({ query, topK: budget }, 'semantic', user),
+        recall.recall({ query, topK: pair.keyword }, 'keyword', user),
+        recall.recall({ query, topK: pair.semantic }, 'semantic', user),
       ]);
       const pool = merge(keyword.items, semantic.items);
       const selected = rerank.rerank(query, pool, { topK: finalK });
       child.send({
         id: message.id,
         trace: {
+          keywordBudget: pair.keyword,
+          semanticBudget: pair.semantic,
           keyword,
           semantic,
           pool,

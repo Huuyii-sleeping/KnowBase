@@ -189,3 +189,44 @@ test('indexed snapshot preserves actual evidence and rejects incomplete or faile
     /truncated/,
   );
 });
+
+test('recall runner preserves unequal allocations in trace identities and verifies the unmodified HTTP budget', async (t) => {
+  const directory = await fixture(t);
+  const inputs = [];
+  const request = async (_child, input) => {
+    inputs.push(input);
+    return {
+      keywordBudget: input.keywordBudget ?? input.budget,
+      semanticBudget: input.semanticBudget ?? input.budget,
+      selected: [{ chunkId: 'one' }],
+    };
+  };
+  const client = { request: async () => ({ items: [{ chunkId: 'one' }] }) };
+  const result = await runRecallAudit(
+    {},
+    client,
+    directory,
+    directory,
+    {
+      split: 'development',
+      routeBudgets: [
+        { id: 'k15-s5', keyword: 15, semantic: 5 },
+        { id: 10, keyword: 10, semantic: 10 },
+      ],
+    },
+    request,
+  );
+  const saved = JSON.parse(
+    await fs.readFile(path.join(directory, 'recall-traces.json')),
+  );
+  assert.deepEqual(
+    saved.map((r) => [r.budget, r.keywordBudget, r.semanticBudget]),
+    [
+      ['k15-s5', 15, 5],
+      [10, 10, 10],
+    ],
+  );
+  assert.equal(inputs.at(-1).budget, 15);
+  assert.equal(result.requests, 2);
+  assert.deepEqual(result.budgets, ['k15-s5', 10]);
+});

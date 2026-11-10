@@ -87,7 +87,11 @@ async function main(args) {
         client,
         directory,
         output,
-        { split: config.split, budgets: config.budgets },
+        {
+          split: config.split,
+          budgets: config.budgets,
+          routeBudgets: config.routeBudgets,
+        },
       );
       await fs.writeFile(
         metadataPath,

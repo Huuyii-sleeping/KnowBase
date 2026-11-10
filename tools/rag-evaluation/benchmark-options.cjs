@@ -1,4 +1,5 @@
 const path = require('node:path');
+const { parseRouteBudgets } = require('./recall-budget.cjs');
 const root = path.resolve(__dirname, '../..');
 
 function options(args) {
@@ -23,11 +24,12 @@ function options(args) {
         '--lexical',
         '--split',
         '--budgets',
+        '--route-budgets',
       ].includes(args[i]) ||
       !args[i + 1]
     )
       throw new Error(
-        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--split all|development|validation] [--budgets 5,10,15,30,60]',
+        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--split all|development|validation|regression] [--budgets 5,10,15,30,60 | --route-budgets 15:5,10:10,5:15]',
       );
     if (args[i] === '--python') result.python = args[i + 1];
     else if (args[i] === '--output-dir')
@@ -37,6 +39,8 @@ function options(args) {
     else if (args[i] === '--suite') result.suite = args[i + 1];
     else if (args[i] === '--lexical') result.lexical = args[i + 1];
     else if (args[i] === '--split') result.split = args[i + 1];
+    else if (args[i] === '--route-budgets')
+      result.routeBudgets = parseRouteBudgets(args[i + 1]);
     else if (args[i] === '--budgets')
       result.budgets = args[i + 1].split(',').map(Number);
     else result.encoding = args[i + 1];
@@ -48,7 +52,9 @@ function options(args) {
   )
     throw new Error('Invalid evaluation suite or encoding');
   if (
-    !['all', 'development', 'validation'].includes(result.split) ||
+    !['all', 'development', 'validation', 'regression'].includes(
+      result.split,
+    ) ||
     !result.budgets.length ||
     new Set(result.budgets).size !== result.budgets.length ||
     result.budgets.some(
@@ -56,6 +62,13 @@ function options(args) {
     )
   )
     throw new Error('Invalid recall split or budgets');
+  if (
+    result.routeBudgets &&
+    (args.includes('--budgets') || result.suite !== 'recall')
+  )
+    throw new Error(
+      'Route budgets require recall suite and cannot combine with --budgets',
+    );
   return result;
 }
 

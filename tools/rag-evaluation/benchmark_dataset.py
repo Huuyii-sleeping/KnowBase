@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from question_set import gold_documents, load_questions
+from dataset_contract import validate_contract, dataset_coverage
 
 
 def validate_dataset(directory: Path) -> dict:
@@ -54,14 +55,27 @@ def validate_dataset(directory: Path) -> dict:
                 raise ValueError(
                     f"{question['id']}: evidence quote does not exist verbatim"
                 )
+    protocol_path = directory / "protocol.json"
+    if protocol_path.exists():
+        protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+        if "dataset_contract" in protocol:
+            validate_contract(manifest, questions, protocol["dataset_contract"])
     return manifest
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
+    parser.add_argument("--coverage-output", type=Path)
     args = parser.parse_args()
     result = validate_dataset(args.directory)
+    if args.coverage_output:
+        coverage = dataset_coverage(
+            result, load_questions(args.directory / "questions.json")
+        )
+        args.coverage_output.write_text(
+            json.dumps(coverage, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
     print(
         json.dumps(
             {"version": result["version"], "documents": len(result["documents"])},

@@ -128,6 +128,8 @@ def analyze(directory: Path, output: Path) -> dict:
                 "category": q["category"],
                 "split": q.get("split", "development"),
                 "budget": trace["budget"],
+                "keyword_budget": trace.get("keywordBudget", trace["budget"]),
+                "semantic_budget": trace.get("semanticBudget", trace["budget"]),
                 "stages": stages,
                 "losses": losses,
                 "elapsed_ms": trace["elapsedMs"],
@@ -148,6 +150,14 @@ def analyze(directory: Path, output: Path) -> dict:
                 {
                     "split": split,
                     "budget_per_route": budget,
+                    "route_budgets": next(
+                        (
+                            p
+                            for p in metadata["recall_audit"].get("route_budgets", [])
+                            if p["id"] == budget
+                        ),
+                        None,
+                    ),
                     "stages": {
                         stage: summarize(subset, stage) for stage in rows[0]["stages"]
                     },

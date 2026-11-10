@@ -1,13 +1,14 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { requestRecall } = require('./recall-ipc.cjs');
+const { budgetPair } = require('./recall-budget.cjs');
 
 async function runRecallAudit(
   environment,
   client,
   directory,
   output,
-  { split = 'all', budgets = [5, 10, 15, 30, 60] } = {},
+  { split = 'all', budgets = [5, 10, 15, 30, 60], routeBudgets } = {},
   request = requestRecall,
 ) {
   const questions = JSON.parse(
@@ -21,11 +22,15 @@ async function runRecallAudit(
     budget: 15,
     user: client.user,
   });
-  for (const budget of budgets) {
+  const pairs = routeBudgets || budgets.map((b) => budgetPair(b, b));
+  for (const pair of pairs) {
+    const budget = pair.id;
     for (const question of questions) {
       const trace = await request(environment.api, {
         query: question.question,
-        budget,
+        ...(routeBudgets
+          ? { keywordBudget: pair.keyword, semanticBudget: pair.semantic }
+          : { budget }),
         user: client.user,
       });
       rows.push({ id: question.id, budget, ...trace });
@@ -60,7 +65,8 @@ async function runRecallAudit(
   )
     throw new Error('Recall diagnostic and production HTTP selection differ');
   return {
-    budgets,
+    budgets: pairs.map((pair) => pair.id),
+    route_budgets: pairs,
     split,
     requests: rows.length,
     http_selection_verified: sample.id,

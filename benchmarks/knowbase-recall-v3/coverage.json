@@ -1,0 +1,158 @@
+{
+  "documents": 158,
+  "questions": 224,
+  "splits": {
+    "development": {
+      "questions": 96,
+      "types": {
+        "answerable": 72,
+        "unanswerable": 24
+      },
+      "categories": {
+        "exact_identifier": 8,
+        "paraphrase": 8,
+        "negation_condition": 8,
+        "boundary_value": 8,
+        "role_scope": 8,
+        "heading_context": 8,
+        "multi_document": 8,
+        "historical_version": 8,
+        "cross_chunk": 8,
+        "unanswerable": 24
+      },
+      "phenomena": {
+        "exact_identifier": 8,
+        "paraphrase": 8,
+        "negation_condition": 16,
+        "boundary_value": 8,
+        "role_scope": 8,
+        "heading_context": 8,
+        "temporal_boundary": 8,
+        "multi_document": 8,
+        "historical_version": 8,
+        "cross_chunk": 8,
+        "missing_fact": 8,
+        "numeric_confuser": 8,
+        "out_of_scope": 8,
+        "false_permission_premise": 8
+      },
+      "gold_documents": [
+        "access_exceptions.md",
+        "access_rules.md",
+        "archive_exceptions.md",
+        "archive_rules.md",
+        "contract_exceptions.md",
+        "contract_rules.md",
+        "equipment_exceptions.md",
+        "equipment_rules.md",
+        "purchase_exceptions.md",
+        "purchase_rules.md",
+        "release_exceptions.md",
+        "release_rules.md",
+        "training_exceptions.md",
+        "training_rules.md",
+        "travel_exceptions.md",
+        "travel_rules.md"
+      ],
+      "families": [
+        "access",
+        "archive",
+        "contract",
+        "equipment",
+        "purchase",
+        "release",
+        "training",
+        "travel"
+      ]
+    },
+    "regression": {
+      "questions": 80,
+      "types": {
+        "answerable": 72,
+        "unanswerable": 8
+      },
+      "categories": {
+        "exact_term": 16,
+        "paraphrase": 16,
+        "workflow": 12,
+        "parameter_table": 8,
+        "multi_document": 8,
+        "version": 8,
+        "cross_chunk": 4,
+        "unanswerable": 8
+      },
+      "phenomena": {
+        "exact_term": 16,
+        "paraphrase": 16,
+        "workflow": 12,
+        "parameter_table": 8,
+        "multi_document": 8,
+        "version": 8,
+        "cross_chunk": 4,
+        "unanswerable": 8
+      },
+      "gold_documents": [
+        "kb_access.md",
+        "kb_deletion.md",
+        "kb_delivery.md",
+        "kb_generations.md",
+        "kb_graph.md",
+        "kb_policy_archive.md",
+        "kb_policy_current.md",
+        "kb_ports.md",
+        "kb_rag.md",
+        "kb_review.md",
+        "kb_search.md",
+        "kb_storage.md",
+        "kb_upload.md"
+      ],
+      "families": []
+    },
+    "validation": {
+      "questions": 48,
+      "types": {
+        "answerable": 36,
+        "unanswerable": 12
+      },
+      "categories": {
+        "exact_identifier": 4,
+        "paraphrase": 4,
+        "negation_condition": 4,
+        "boundary_value": 4,
+        "role_scope": 4,
+        "heading_context": 4,
+        "multi_document": 4,
+        "historical_version": 4,
+        "cross_chunk": 4,
+        "unanswerable": 12
+      },
+      "phenomena": {
+        "exact_identifier": 4,
+        "paraphrase": 4,
+        "negation_condition": 8,
+        "boundary_value": 4,
+        "role_scope": 4,
+        "heading_context": 4,
+        "temporal_boundary": 4,
+        "multi_document": 4,
+        "historical_version": 4,
+        "cross_chunk": 4,
+        "missing_fact": 4,
+        "numeric_confuser": 4,
+        "out_of_scope": 4,
+        "false_permission_premise": 4
+      },
+      "gold_documents": [
+        "data_exceptions.md",
+        "data_rules.md",
+        "repair_exceptions.md",
+        "repair_rules.md",
+        "sample_exceptions.md",
+        "sample_rules.md",
+        "vehicle_exceptions.md",
+        "vehicle_rules.md"
+      ],
+      "families": ["data", "repair", "sample", "vehicle"]
+    }
+  }
+}

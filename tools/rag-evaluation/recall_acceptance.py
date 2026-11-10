@@ -45,6 +45,7 @@ def select_development_budget(summaries: list[dict]) -> int | None:
         summary["budget_per_route"]
         for summary in summaries
         if summary["split"] == "development"
+        and isinstance(summary["budget_per_route"], int)
         and summary["acceptance"]["quality_and_serial_latency_passed"]
     ]
     return min(eligible) if eligible else None

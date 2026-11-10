@@ -113,6 +113,22 @@ class RecallAuditTests(unittest.TestCase):
                 ["selection_loss", "filtered_or_route_budget"],
             )
             self.assertTrue((root / "recall-audit.md").read_text())
+            # Unequal route budgets retain their own trace identities; validation
+            # cannot silently compare a partial allocation matrix.
+            metadata_path = root / "metadata.json"
+            metadata = json.loads(metadata_path.read_text())
+            metadata["recall_audit"]["budgets"] = ["k15-s5"]
+            metadata["recall_audit"]["route_budgets"] = [
+                {"id": "k15-s5", "keyword": 15, "semantic": 5}
+            ]
+            metadata_path.write_text(json.dumps(metadata))
+            for trace in traces:
+                trace.update(budget="k15-s5", keywordBudget=15, semanticBudget=5)
+            path.write_text(json.dumps(traces))
+            allocated = analyze(root, root)
+            self.assertEqual(allocated["summaries"][0]["route_budgets"]["semantic"], 5)
+            self.assertEqual(allocated["results"][0]["keyword_budget"], 15)
+
             path.write_text(json.dumps(traces[:1]))
             with self.assertRaisesRegex(ValueError, "incomplete"):
                 analyze(root, root)
