@@ -1,0 +1,24 @@
+{
+  "version": "v3-budget-selection-1",
+  "frozen_before_validation": true,
+  "development_run": "reports/retrieval-recall-v3-budgets/2026-11-10T13-45-34-522Z-56330",
+  "candidate": {
+    "keyword": 30,
+    "semantic": 10,
+    "final_k": 5
+  },
+  "control": {
+    "keyword": 15,
+    "semantic": 15,
+    "final_k": 5
+  },
+  "encoding": "plain",
+  "lexical": "cjk",
+  "model": "nomic-embed-text:latest",
+  "decision": "Compare these two fixed configurations on validation once; no further allocation search on validation. Do not change production or declare recall accepted from synthetic development results.",
+  "limitations": [
+    "One serial pass in a fixed order; timing is confounded by warmup and machine load.",
+    "All new source families share templates; no independent user validation.",
+    "Candidate-pool gate excludes final selection; low selected evidence remains unresolved."
+  ]
+}

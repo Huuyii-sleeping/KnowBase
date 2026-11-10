@@ -9,7 +9,7 @@ def render_report(summaries, rows, budgets, selected_budget=None):
     lines = [
         "# 召回逐阶段诊断",
         "",
-        "| 问题组 | 每路预算 | 关键词证据 | 向量证据 | 合并证据 | 最终证据 | 合并候选数 | 平均/P95 ms |",
+        "| 问题组 | 候选配置 | 关键词证据 | 向量证据 | 合并证据 | 最终证据 | 合并候选数 | 平均/P95 ms |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for summary in summaries:
@@ -24,9 +24,14 @@ def render_report(summaries, rows, budgets, selected_budget=None):
             + f" | {stages['pool']['mean_candidate_count']:.2f} | {summary['mean_ms']:.2f}/{summary['p95_ms']:.2f} |"
         )
     loss_budget = selected_budget or (15 if 15 in budgets else budgets[0])
+    loss_label = (
+        f"每路 {loss_budget} 候选"
+        if isinstance(loss_budget, int)
+        else f"配置 {loss_budget}"
+    )
     lines += [
         "",
-        f"## 每路 {loss_budget} 候选下的证据损失",
+        f"## {loss_label}下的证据损失",
         "",
         "| 问题 | 分组 | 阶段 | 来源 |",
         "| --- | --- | --- | --- |",

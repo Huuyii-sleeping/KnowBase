@@ -129,6 +129,22 @@ class RecallAuditTests(unittest.TestCase):
             self.assertEqual(allocated["summaries"][0]["route_budgets"]["semantic"], 5)
             self.assertEqual(allocated["results"][0]["keyword_budget"], 15)
 
+            traces[0]["semanticBudget"] = 15
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "differ from metadata"):
+                analyze(root, root)
+            traces[0]["semanticBudget"] = 5
+
+            metadata["recall_audit"]["route_budgets"] *= 2
+            metadata_path.write_text(json.dumps(metadata))
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "inconsistent"):
+                analyze(root, root)
+            metadata["recall_audit"]["route_budgets"] = metadata["recall_audit"][
+                "route_budgets"
+            ][:1]
+            metadata_path.write_text(json.dumps(metadata))
+
             path.write_text(json.dumps(traces[:1]))
             with self.assertRaisesRegex(ValueError, "incomplete"):
                 analyze(root, root)

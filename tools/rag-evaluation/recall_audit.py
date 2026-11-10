@@ -86,6 +86,18 @@ def analyze(directory: Path, output: Path) -> dict:
         (q, b) for q in questions for b in budgets
     }:
         raise ValueError("incomplete or duplicate recall audit traces")
+    pairs = metadata["recall_audit"].get("route_budgets")
+    if pairs is not None:
+        allocations = {pair["id"]: pair for pair in pairs}
+        if len(allocations) != len(pairs) or set(allocations) != set(budgets):
+            raise ValueError("inconsistent recall route budget metadata")
+        for trace in traces:
+            pair = allocations[trace["budget"]]
+            if (trace.get("keywordBudget"), trace.get("semanticBudget")) != (
+                pair["keyword"],
+                pair["semantic"],
+            ):
+                raise ValueError("trace route budgets differ from metadata")
     rows = []
     for trace in traces:
         q = questions[trace["id"]]
