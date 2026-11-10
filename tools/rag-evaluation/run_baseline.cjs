@@ -120,6 +120,15 @@ async function main(args) {
       `Benchmark report: ${path.join(output, config.suite === 'recall' ? 'recall-audit.md' : 'comparison.md')}`,
     );
   } catch (error) {
+    // Preserve startup failures before cleanup removes the temporary containers.
+    try {
+      await fs.writeFile(
+        path.join(output, 'infrastructure.log'),
+        await environment.compose('logs', '--no-color', '--tail', '80'),
+      );
+    } catch {
+      /* Diagnostics must not mask the original failure. */
+    }
     await fs.writeFile(
       statusPath,
       JSON.stringify({ status: 'failed', error: error.message }) + '\n',
