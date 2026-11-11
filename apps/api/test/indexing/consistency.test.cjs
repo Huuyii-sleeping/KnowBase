@@ -627,3 +627,92 @@ test('CJK recall requires a generation rebuild for old text and preserves visibi
     await client.close();
   }
 });
+
+test('contextual recall indexes source context while returning original evidence only after activation', async () => {
+  const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+    .split(':')
+    .pop();
+  const contextual = new VectorIndexService(
+    new ConfigService({
+      ELASTICSEARCH_NODE: `http://127.0.0.1:${esPort}`,
+      ELASTICSEARCH_CHUNK_INDEX: `context_${randomUUID()}`,
+      RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER: 'cjk',
+      RAG_RETRIEVAL_CONTEXT: 'title-heading',
+    }),
+    heads,
+  );
+  try {
+    const current = await document();
+    const input = {
+      query: '采购申请撤回窗口',
+      topK: 10,
+      allowedDocumentIds: [current.id],
+    };
+    const legacy = randomUUID();
+    await contextual.stageChunks(current.id, legacy, [
+      {
+        id: `${current.id}:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '允许窗口为24分钟。',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.equal(await heads.activate(current, 'rag', legacy), true);
+    assert.deepEqual(await contextual.searchKeywordChunks(input), []);
+    const generation = randomUUID();
+    await contextual.stageChunks(current.id, generation, [
+      {
+        id: `${current.id}:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '允许窗口为24分钟。',
+        retrievalText:
+          '文档：采购申请规则\n章节：采购申请的撤回窗口\n\n允许窗口为24分钟。',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks(input),
+      [],
+      'staged context cannot be queried',
+    );
+    assert.equal(await heads.activate(current, 'rag', generation), true);
+    const matches = await contextual.searchKeywordChunks(input);
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].content, '允许窗口为24分钟。');
+    assert.equal('retrievalText' in matches[0], false);
+    const vectors = await contextual.searchChunks({
+      queryVector: [1, 0],
+      topK: 5,
+      allowedDocumentIds: [current.id],
+    });
+    assert.equal(vectors.length, 1);
+    assert.equal(vectors[0].content, matches[0].content);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [],
+      }),
+      [],
+    );
+    assert.deepEqual(
+      await contextual.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [randomUUID()],
+      }),
+      [],
+    );
+    await revisions.updateMetadata(current.id, { title: 'New' }, admin);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks(input),
+      [],
+      'a draft revision hides enriched chunks too',
+    );
+  } finally {
+    await contextual.onModuleDestroy();
+  }
+});
