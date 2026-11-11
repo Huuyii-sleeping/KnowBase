@@ -33,7 +33,7 @@ function options(args) {
       !args[i + 1]
     )
       throw new Error(
-        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--context body|title|title-heading] [--split all|development|validation|regression] [--budgets 5,10,15,30,60 | --route-budgets 15:5,10:10,5:15]',
+        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--context body|title|title-heading] [--keyword-policy combined|weighted|body-reserve] [--split all|development|validation|regression] [--budgets 5,10,15,30,60 | --route-budgets 15:5,10:10,5:15]',
       );
     if (args[i] === '--python') result.python = args[i + 1];
     else if (args[i] === '--output-dir')

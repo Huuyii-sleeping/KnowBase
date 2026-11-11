@@ -716,3 +716,87 @@ test('contextual recall indexes source context while returning original evidence
     await contextual.onModuleDestroy();
   }
 });
+
+for (const policy of ['weighted', 'body-reserve']) {
+  test(`${policy}: body and context matches share active generations and document restrictions`, async () => {
+    const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+      .split(':')
+      .pop();
+    const index = new VectorIndexService(
+      new ConfigService({
+        ELASTICSEARCH_NODE: `http://127.0.0.1:${esPort}`,
+        ELASTICSEARCH_CHUNK_INDEX: `policy_${policy}_${randomUUID()}`,
+        RAG_EMBEDDING_DIMENSIONS: 2,
+        RAG_KEYWORD_ANALYZER: 'cjk',
+        RAG_RETRIEVAL_CONTEXT: 'title-heading',
+        RAG_KEYWORD_POLICY: policy,
+      }),
+      heads,
+    );
+    try {
+      const bodyDoc = await document(),
+        contextDoc = await document();
+      for (const [doc, body, text] of [
+        [
+          bodyDoc,
+          '退款办理必须先核对单据。',
+          '文档：账务规则\n\n退款办理必须先核对单据。',
+        ],
+        [
+          contextDoc,
+          '允许窗口为24分钟。',
+          '文档：退款办理规则\n章节：撤回窗口\n\n允许窗口为24分钟。',
+        ],
+      ]) {
+        const generation = randomUUID();
+        await index.stageChunks(doc.id, generation, [
+          {
+            id: `${doc.id}:c0`,
+            documentId: doc.id,
+            version: 1,
+            chunkIndex: 0,
+            content: body,
+            retrievalText: text,
+            embedding: [1, 0],
+          },
+        ]);
+        assert.equal(await heads.activate(doc, 'rag', generation), true);
+      }
+      const query = { query: '退款办理', topK: 10 };
+      const both = await index.searchKeywordChunks(query);
+      assert.deepEqual(
+        new Set(both.map((c) => c.documentId)),
+        new Set([bodyDoc.id, contextDoc.id]),
+      );
+      assert.equal(
+        both.find((c) => c.documentId === contextDoc.id).content,
+        '允许窗口为24分钟。',
+      );
+      const bodyOnly = await index.searchKeywordChunks({
+        ...query,
+        allowedDocumentIds: [bodyDoc.id],
+      });
+      assert.equal(bodyOnly.length, 1);
+      assert.equal(bodyOnly[0].documentId, bodyDoc.id);
+      assert.deepEqual(
+        await index.searchKeywordChunks({ ...query, allowedDocumentIds: [] }),
+        [],
+      );
+      await revisions.updateMetadata(
+        contextDoc.id,
+        { title: 'Revised' },
+        admin,
+      );
+      assert.deepEqual(
+        (await index.searchKeywordChunks(query)).map((c) => c.documentId),
+        [bodyDoc.id],
+      );
+      assert.deepEqual(
+        await index.searchKeywordChunks({ ...query, query: 'zzznomatchzzz' }),
+        [],
+      );
+    } finally {
+      await index.onModuleDestroy();
+    }
+  });
+}
