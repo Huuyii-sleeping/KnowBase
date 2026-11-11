@@ -26,6 +26,7 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
     encoding = 'plain',
     lexical = 'standard',
     context = 'body',
+    keywordPolicy = 'combined',
   ) {
     const port = async (service, inner) =>
       (await this.compose('port', service, inner)).split(':').pop();
@@ -63,6 +64,7 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
       RAG_EMBEDDING_DIMENSIONS: '768',
       RAG_KEYWORD_ANALYZER: lexical,
       RAG_RETRIEVAL_CONTEXT: context,
+      RAG_KEYWORD_POLICY: keywordPolicy,
       EMBEDDING_PROVIDER: 'ollama',
       OLLAMA_BASE_URL: ollamaUrl,
       OLLAMA_EMBEDDING_MODEL: 'nomic-embed-text',

@@ -58,6 +58,7 @@ async function main(args) {
       config.encoding,
       config.lexical,
       config.context,
+      config.keywordPolicy,
     );
     const client = new BenchmarkApiClient(environment.baseUrl);
     await client.login();

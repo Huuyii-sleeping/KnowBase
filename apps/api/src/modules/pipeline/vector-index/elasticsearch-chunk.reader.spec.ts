@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
+import type { KeywordPolicy } from './keyword-policy';
 
 function fixture(
   analyzer: 'standard' | 'cjk' = 'standard',
   contextual = false,
+  policy: KeywordPolicy = 'combined',
 ) {
   const search = vi.fn().mockResolvedValue({
     hits: {
@@ -35,11 +37,67 @@ function fixture(
       { active } as any,
       analyzer,
       contextual,
+      policy,
     ),
   };
 }
 
 describe('ElasticsearchChunkReader', () => {
+  it('uses weighted matching inside the same active generation filter', async () => {
+    const { reader, search } = fixture('cjk', true, 'weighted');
+    await reader.keyword({
+      query: '标题正文',
+      topK: 15,
+      allowedDocumentIds: ['doc'],
+    });
+    expect(search).toHaveBeenCalledOnce();
+    expect(search.mock.calls[0][0].query.bool).toEqual({
+      must: [
+        {
+          multi_match: {
+            query: '标题正文',
+            fields: ['content.cjk^2', 'retrieval_text.cjk'],
+            type: 'best_fields',
+            tie_breaker: 0.1,
+          },
+        },
+      ],
+      filter: [{ terms: { generation_id: ['active'] } }],
+    });
+  });
+
+  it('applies identical filters and limits to both protected sources and returns original bodies', async () => {
+    const { reader, search } = fixture('cjk', true, 'body-reserve');
+    const result = await reader.keyword({
+      query: '关键证据',
+      topK: 15,
+      allowedDocumentIds: ['doc'],
+    });
+    expect(search).toHaveBeenCalledTimes(2);
+    for (const [request] of search.mock.calls) {
+      expect(request.size).toBe(15);
+      expect(request.query.bool.filter).toEqual([
+        { terms: { generation_id: ['active'] } },
+      ]);
+    }
+    expect(result).toHaveLength(1);
+    expect(result[0].content).toBe('关键证据');
+    expect(search.mock.calls[0][0].query.bool.must[0]).toEqual({
+      match: { 'content.cjk': { query: '关键证据' } },
+    });
+    expect(search.mock.calls[1][0].query.bool.must[0]).toEqual({
+      match: { 'retrieval_text.cjk': { query: '关键证据' } },
+    });
+  });
+
+  it('fails the complete protected recall if either index query fails', async () => {
+    const { reader, search } = fixture('cjk', true, 'body-reserve');
+    search.mockRejectedValueOnce(new Error('body unavailable'));
+    await expect(reader.keyword({ query: 'q', topK: 15 })).rejects.toThrow(
+      'body unavailable',
+    );
+    expect(search).toHaveBeenCalledTimes(2);
+  });
   it.each(['standard', 'cjk'] as const)(
     'searches enriched %s text but only returns original evidence',
     async (analyzer) => {

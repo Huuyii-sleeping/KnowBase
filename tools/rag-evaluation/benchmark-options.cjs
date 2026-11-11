@@ -11,6 +11,7 @@ function options(args) {
     encoding: 'plain',
     lexical: 'standard',
     context: 'body',
+    keywordPolicy: 'combined',
     split: 'all',
     budgets: [5, 10, 15, 30, 60],
   };
@@ -24,6 +25,7 @@ function options(args) {
         '--encoding',
         '--lexical',
         '--context',
+        '--keyword-policy',
         '--split',
         '--budgets',
         '--route-budgets',
@@ -41,6 +43,7 @@ function options(args) {
     else if (args[i] === '--suite') result.suite = args[i + 1];
     else if (args[i] === '--lexical') result.lexical = args[i + 1];
     else if (args[i] === '--context') result.context = args[i + 1];
+    else if (args[i] === '--keyword-policy') result.keywordPolicy = args[i + 1];
     else if (args[i] === '--split') result.split = args[i + 1];
     else if (args[i] === '--route-budgets')
       result.routeBudgets = parseRouteBudgets(args[i + 1]);
@@ -52,7 +55,8 @@ function options(args) {
     !['baseline', 'recall'].includes(result.suite) ||
     !['plain', 'nomic-task'].includes(result.encoding) ||
     !['standard', 'cjk'].includes(result.lexical) ||
-    !['body', 'title', 'title-heading'].includes(result.context)
+    !['body', 'title', 'title-heading'].includes(result.context) ||
+    !['combined', 'weighted', 'body-reserve'].includes(result.keywordPolicy)
   )
     throw new Error('Invalid evaluation suite or encoding');
   if (

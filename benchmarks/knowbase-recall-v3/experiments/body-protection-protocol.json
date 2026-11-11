@@ -1,0 +1,46 @@
+{
+  "version": "body-protection-v1",
+  "dataset": "knowbase-recall-v3",
+  "configurations": [
+    { "context": "body", "keyword_policy": "combined" },
+    { "context": "title-heading", "keyword_policy": "combined" },
+    { "context": "title-heading", "keyword_policy": "weighted" },
+    { "context": "title-heading", "keyword_policy": "body-reserve" }
+  ],
+  "weighted_query": {
+    "type": "best_fields",
+    "body_boost": 2,
+    "enriched_boost": 1,
+    "tie_breaker": 0.1
+  },
+  "reserved_slots": "Repeat two body candidates then one enriched candidate, dedup by actual chunk ID; exhaust lists to backfill. Extra index reads up to twice the existing per-route raw read cap, retained budget unchanged. No guarantee to preserve all body candidates within a fixed mixed budget.",
+  "route_budget_pairs": [
+    [10, 10],
+    [15, 15]
+  ],
+  "split": "all",
+  "selection": "Prefer fixes that preserve every original-body-baseline pool evidence hit on exposed regression cases while keeping development pool evidence and heading-context recall at 100% at 15:15. Report every lost and gained evidence, final selection quality, counts and extra query costs. Do not tune on validation or pretend exposed synthetic data is unseen acceptance.",
+  "fixed": {
+    "embedding_model": "nomic-embed-text",
+    "encoding": "plain",
+    "analyzer": "cjk",
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "final_k": 5,
+    "reranking": "unchanged"
+  },
+  "known_cases": ["val009", "val029"],
+  "invariants": [
+    "Frozen document/question hashes",
+    "Identical original body chunks",
+    "Returned evidence excludes auxiliary labels",
+    "Version and allowed-document filters on every query",
+    "Default body context remains unchanged until quality decision"
+  ],
+  "limitations": [
+    "Synthetic correlated templates",
+    "All questions exposed",
+    "One serial pass per configuration",
+    "Embedding input differs between body and contextual baseline; policy comparisons hold contextual encoding fixed"
+  ]
+}

@@ -179,3 +179,7 @@ python tools/rag-evaluation/evaluate_answer.py \
 已完成的 2016 次计分、全部正文 Chunk 不变检查及逐题损失见[上下文对照报告](../benchmarks/knowbase-recall-v3/experiments/context-audit-v3.md)。标题加章节在开发组 15:15 时池证据 100%、最终证据 54.86%，正文同预算为 94.44% / 52.78%；但旧题 val009 的原始关键词排名由 9 降至 20，被保留 15 条的预算截掉。因此保留为可显式开启的实验模式，默认 `body`，不宣布召回层验收。
 
 语料发布后最多等待 600 秒完成 Search/RAG generation 激活，并打印发布数与激活数；早先两次 180 秒等待超时的运行不包含完整计分，失败状态单独保留。每次对照正常完成后清理本轮容器与卷。
+
+## 正文保护对照
+
+`--keyword-policy combined|weighted|body-reserve` 选择标题上下文下的关键词策略，默认 combined；配置、模型及实际预算记录到元数据。冻结矩阵见 `benchmarks/knowbase-recall-v3/experiments/body-protection-protocol.json`。正文基线与三种标题章节策略分别新建隔离索引，固定各路 10 / 15，开发与已暴露回归全部运行；逐条比较原文证据命中的获得与丢失，不能只比较平均分。body-reserve 的两次索引请求不隐藏为一次同成本召回。
