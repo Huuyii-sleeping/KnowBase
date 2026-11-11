@@ -645,7 +645,7 @@ test('contextual recall indexes source context while returning original evidence
   try {
     const current = await document();
     const input = {
-      query: '采购申请撤回窗口',
+      query: '采购申请',
       topK: 10,
       allowedDocumentIds: [current.id],
     };

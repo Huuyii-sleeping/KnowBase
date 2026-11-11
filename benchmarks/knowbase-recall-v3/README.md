@@ -25,6 +25,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 当前开发预算矩阵及一次固定配置验证已经完成，结果见[预算对照报告](experiments/budget-audit-v3.md)。30:10 提升了总体候选池召回，但验证组标题依赖题未通过门槛，线上预算保持现行配置。本组 validation 已被查看，后续使用需按已暴露的回归资料处理。
 
+后续[标题与章节对照](experiments/context-audit-v3.md)已对全部 224 题执行三种上下文、三对预算，共 2016 次计分。开发组标题加章节在 10:10 即达到 100% 池证据召回，15:15 的最终证据为 54.86%；旧回归仍有个别池证据退步，默认模式保持正文。原文 Chunk、语料指纹与模型摘要已逐轮核对一致，辅助文本不作为引用证据。
+
 预算实验示例：
 
 ```bash

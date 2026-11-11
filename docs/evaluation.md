@@ -175,3 +175,7 @@ python tools/rag-evaluation/evaluate_answer.py \
 在 recall 命令中添加 `--context body|title|title-heading`，分别建立独立索引，对比正文、标题加正文、标题与起始章节路径加正文。原始证据字段 `content` 与分块保持一致；辅助字段只用于关键词和向量召回，计分不允许用辅助标题代替正文。模式及映射/重建约束见 [检索设计](retrieval.md)。
 
 本轮冻结参数位于 `benchmarks/knowbase-recall-v3/experiments/context-protocol.json`：三种上下文、每种 10:10 / 15:15 / 30:10，模型/编码/分块/重排固定，`--split all` 同时报告开发与已暴露回归组；只按 development 比较配置，旧 validation 不再称未见验证。不得根据已测结果修改题目或答案。
+
+已完成的 2016 次计分、全部正文 Chunk 不变检查及逐题损失见[上下文对照报告](../benchmarks/knowbase-recall-v3/experiments/context-audit-v3.md)。标题加章节在开发组 15:15 时池证据 100%、最终证据 54.86%，正文同预算为 94.44% / 52.78%；但旧题 val009 的原始关键词排名由 9 降至 20，被保留 15 条的预算截掉。因此保留为可显式开启的实验模式，默认 `body`，不宣布召回层验收。
+
+语料发布后最多等待 600 秒完成 Search/RAG generation 激活，并打印发布数与激活数；早先两次 180 秒等待超时的运行不包含完整计分，失败状态单独保留。每次对照正常完成后清理本轮容器与卷。
