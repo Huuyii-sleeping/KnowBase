@@ -1,24 +1,46 @@
-export type ApiErrorKind = 'network' | 'timeout' | 'http' | 'response';
+import { ERROR_CATALOG, type ApiErrorCode } from './error-catalog';
+
+export type ApiErrorKind =
+  'network' | 'timeout' | 'http' | 'response' | 'validation' | 'business';
+
+interface ErrorOptions {
+  status?: number | null;
+  kind?: ApiErrorKind;
+  message?: string;
+}
 
 export class ApiError extends Error {
+  readonly status: number | null;
+  readonly kind: ApiErrorKind;
+  readonly action;
+  readonly retryable: boolean;
+
   constructor(
-    message: string,
-    readonly status: number | null,
-    readonly kind: ApiErrorKind,
-    readonly retryable = false,
+    readonly code: ApiErrorCode,
+    options: ErrorOptions = {},
   ) {
-    super(message);
+    const definition = ERROR_CATALOG[code];
+    super(options.message ?? definition.message);
     this.name = 'ApiError';
+    this.status = options.status ?? null;
+    this.kind = options.kind ?? 'business';
+    this.action = definition.action;
+    this.retryable = this.action === 'retry';
   }
+}
+
+// Pass only trusted local copy in options.message (e.g. the legacy whitelist below).
+export function createApiError(code: ApiErrorCode, options: ErrorOptions = {}) {
+  return new ApiError(code, options);
 }
 
 // Translate only recognized business messages. Unknown server text (including
 // upstream errors, stack traces and HTML) must never become user-facing copy.
 const BUSINESS_MESSAGES: Record<string, string> = {
-  'file is required': '请先选择要上传的文件。',
+  'file is required': ERROR_CATALOG.FILE_REQUIRED.message,
   'supported file types: pdf, xlsx, docx, pptx, txt, md':
-    '暂不支持这种文件格式，请上传 PDF、Excel、Word、PPT、TXT 或 Markdown 文件。',
-  'document parsing is not ready': '文档还未解析完成，请等待解析完成后再操作。',
+    ERROR_CATALOG.FILE_UNSUPPORTED.message,
+  'document parsing is not ready': ERROR_CATALOG.DOCUMENT_NOT_READY.message,
   'only draft or rejected documents can be submitted':
     '只有草稿或已驳回的文档可以提交审核，请刷新后确认文档状态。',
   'only pending documents can be reviewed':
@@ -50,61 +72,91 @@ function knownBusinessMessage(body: unknown): string | undefined {
     return [...new Set(translated)].join(' ');
 }
 
+// Accept business codes only for their documented HTTP status. An internal
+// failure must not be disguised as a correctable input error by its response body.
+const INPUT_CODES = new Set<ApiErrorCode>([
+  'FILE_REQUIRED',
+  'FILE_UNSUPPORTED',
+  'FILE_EMPTY',
+  'VALIDATION_FAILED',
+]);
+
 export function httpError(
   status: number,
   body: unknown,
   login = false,
 ): ApiError {
-  let message: string;
+  let code: ApiErrorCode;
+  let message: string | undefined;
   switch (status) {
     case 400:
-    case 422:
-      message =
-        knownBusinessMessage(body) ?? '提交的内容不符合要求，请检查后再试。';
+    case 422: {
+      const serverCode =
+        body && typeof body === 'object'
+          ? (body as { code?: unknown }).code
+          : undefined;
+      code =
+        typeof serverCode === 'string' &&
+        INPUT_CODES.has(serverCode as ApiErrorCode)
+          ? (serverCode as ApiErrorCode)
+          : 'VALIDATION_FAILED';
+      if (code === 'VALIDATION_FAILED') message = knownBusinessMessage(body);
       break;
+    }
     case 401:
-      message = login
-        ? '账号或密码不正确，请重新输入。'
-        : '登录已失效，请重新登录后继续。';
+      code = login ? 'INVALID_CREDENTIALS' : 'AUTH_REQUIRED';
       break;
     case 403:
-      message = '你没有执行此操作的权限，请联系管理员。';
+      code = 'FORBIDDEN';
       break;
     case 404:
-      message = '请求的内容不存在或已被移除，请刷新后再试。';
+      code = 'NOT_FOUND';
       break;
     case 409:
-      message = '内容状态已发生变化，请刷新后再操作。';
+      code = 'CONFLICT';
       break;
     case 413:
-      message = '文件或提交的内容过大，请缩小后再试。';
+      code = 'PAYLOAD_TOO_LARGE';
       break;
     case 415:
-      message = '暂不支持这种文件或内容格式，请更换后再试。';
+      code = 'UNSUPPORTED_MEDIA';
       break;
     case 408:
     case 504:
-      message = '这次处理用时较长，请稍后重试。';
+      code = 'REQUEST_TIMEOUT';
       break;
     case 429:
-      message = '操作有些频繁，请稍等片刻再试。';
+      code = 'RATE_LIMITED';
       break;
     default:
-      message =
-        status >= 500
-          ? '服务暂时无法完成处理，请稍后重试。'
-          : '暂时无法完成此操作，请稍后再试。';
+      code = status >= 500 ? 'SERVICE_UNAVAILABLE' : 'UNKNOWN_ERROR';
   }
-  return new ApiError(
-    message,
-    status,
-    'http',
-    status === 408 || status === 429 || status >= 500,
-  );
+  return createApiError(code, { status, kind: 'http', message });
 }
 
-export function requestFailure(error: unknown) {
-  return error instanceof ApiError
-    ? { message: error.message, retryable: error.retryable }
-    : { message: '暂时无法完成此操作，请稍后再试。', retryable: true };
+export function requestFailure(error: unknown, operation?: 'upload') {
+  let normalized =
+    error instanceof ApiError ? error : createApiError('UNKNOWN_ERROR');
+  // A lost response does not prove that this non-idempotent operation failed.
+  if (
+    operation === 'upload' &&
+    (normalized.kind === 'network' ||
+      normalized.kind === 'timeout' ||
+      normalized.kind === 'response' ||
+      normalized.code === 'UNKNOWN_ERROR' ||
+      normalized.status === 408 ||
+      (normalized.status !== null && normalized.status >= 500))
+  )
+    normalized = createApiError('UPLOAD_UNCONFIRMED', {
+      status: normalized.status,
+      kind: normalized.kind,
+    });
+  return {
+    code: normalized.code,
+    message: normalized.message,
+    action: normalized.action,
+    retryable: normalized.retryable,
+  };
 }
+
+export type RequestFailureInfo = ReturnType<typeof requestFailure>;

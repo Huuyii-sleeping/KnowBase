@@ -1,3 +1,9 @@
+import {
+  createApiError,
+  requestFailure,
+  type RequestFailureInfo,
+} from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,20 +25,30 @@ interface EditContentDialogProps {
   onSaved: (doc: DocumentDetail) => void;
 }
 
-export function EditContentDialog({ doc, open, onOpenChange, onSaved }: EditContentDialogProps) {
+export function EditContentDialog({
+  doc,
+  open,
+  onOpenChange,
+  onSaved,
+}: EditContentDialogProps) {
   const [markdown, setMarkdown] = useState('');
   const [saving, setSaving] = useState(false);
+  const [failure, setFailure] = useState<RequestFailureInfo | null>(null);
 
   useEffect(() => {
-    if (doc && open) setMarkdown(doc.content?.markdown ?? '');
+    if (doc && open) {
+      setMarkdown(doc.content?.markdown ?? '');
+      setFailure(null);
+    }
   }, [doc, open]);
 
   const save = async () => {
     if (!doc) return;
     if (!markdown.trim()) {
-      toast('正文不能为空', 'error');
+      setFailure(requestFailure(createApiError('CONTENT_REQUIRED')));
       return;
     }
+    setFailure(null);
     setSaving(true);
     try {
       const updated = await documentsApi.updateContent(doc.id, markdown);
@@ -40,7 +56,7 @@ export function EditContentDialog({ doc, open, onOpenChange, onSaved }: EditCont
       onOpenChange(false);
       onSaved(updated);
     } catch (e) {
-      toast((e as Error).message, 'error');
+      setFailure(requestFailure(e));
     } finally {
       setSaving(false);
     }
@@ -63,9 +79,18 @@ export function EditContentDialog({ doc, open, onOpenChange, onSaved }: EditCont
           className="min-h-[320px] font-mono text-[12.5px]"
           placeholder="# 在这里编写 Markdown 正文…"
         />
+        {failure && (
+          <div className="mt-4">
+            <RequestFailure title="暂时无法保存" failure={failure} />
+          </div>
+        )}
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>取消</Button>
-          <Button onClick={save} disabled={saving}>{saving ? '保存中…' : '保存为新版本'}</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            取消
+          </Button>
+          <Button onClick={save} disabled={saving}>
+            {saving ? '保存中…' : '保存为新版本'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,3 +1,4 @@
+import { RequestFailure } from '@/components/request-failure';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -16,6 +17,11 @@ import { ParseBadge, StatusBadge } from '@/components/status-badges';
 import { EditContentDialog } from '@/components/edit-content-dialog';
 import { EditMetaDialog } from '@/components/edit-meta-dialog';
 import { toast } from '@/components/toast';
+import {
+  createApiError,
+  requestFailure,
+  type RequestFailureInfo,
+} from '@/lib/api-error';
 import { documentsApi, type DocumentDetail } from '@/lib/api';
 import { formatBytes, formatDateTime, formatRelative } from '@/lib/format';
 
@@ -32,7 +38,7 @@ export function DocumentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [doc, setDoc] = useState<DocumentDetail | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RequestFailureInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [metaOpen, setMetaOpen] = useState(false);
   const [contentOpen, setContentOpen] = useState(false);
@@ -47,7 +53,7 @@ export function DocumentDetailPage() {
     try {
       setDoc(await documentsApi.detail(id));
     } catch (e) {
-      setError((e as Error).message);
+      setError(requestFailure(e));
     } finally {
       setLoading(false);
     }
@@ -64,7 +70,7 @@ export function DocumentDetailPage() {
       toast(success);
       await load();
     } catch (e) {
-      toast((e as Error).message, 'error');
+      toast(requestFailure(e).message, 'error');
     } finally {
       setActing(false);
     }
@@ -80,7 +86,16 @@ export function DocumentDetailPage() {
   if (error || !doc) {
     return (
       <div className="py-14 text-center text-[13px]">
-        <span className="text-destructive">{error ?? '文档不存在'}</span>
+        {error ? (
+          <RequestFailure
+            title="暂时无法加载文档"
+            failure={error}
+            onRetry={load}
+            onRefresh={load}
+          />
+        ) : (
+          <span>文档不存在</span>
+        )}
         <div className="mt-3">
           <Button
             variant="outline"
@@ -151,7 +166,7 @@ export function DocumentDetailPage() {
             </div>
           ) : doc.parseStatus === 'FAILED' ? (
             <div className="mx-7 my-5 rounded-md bg-red-50 px-4 py-3.5 text-[13px] text-red-700">
-              解析失败：{doc.parseError ?? '未知错误'}
+              {createApiError('DOCUMENT_PARSE_FAILED').message}
             </div>
           ) : (
             <div className="mx-7 my-5 rounded-md bg-sky-50 px-4 py-3.5 text-[13px] text-sky-800">

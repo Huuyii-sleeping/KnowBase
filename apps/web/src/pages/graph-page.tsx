@@ -1,3 +1,5 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { PageHeader } from '@/components/page-header';
 import { EmptyState } from '@/components/empty-state';
 import { Icon } from '@/components/ui/icon';
@@ -32,7 +34,9 @@ export function GraphPage() {
   const [maxHops, setMaxHops] = useState(params.get('maxHops') ?? '2');
   const [limit, setLimit] = useState(params.get('limit') ?? '12');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<
+    (RequestFailureInfo & { query: string; hops: string; limit: string }) | null
+  >(null);
   const [searched, setSearched] = useState('');
   const [items, setItems] = useState<GraphSearchPath[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -62,7 +66,7 @@ export function GraphPage() {
         if (current !== requestId.current) return;
         setItems([]);
         setActiveIndex(0);
-        setError((e as Error).message);
+        setError({ ...requestFailure(e), query: value, hops, limit: maxCount });
       } finally {
         if (current === requestId.current) setLoading(false);
       }
@@ -78,6 +82,8 @@ export function GraphPage() {
     setMaxHops(nextHops);
     setLimit(nextLimit);
     if (!nextQuery) {
+      requestId.current += 1;
+      setLoading(false);
       setSearched('');
       setItems([]);
       setActiveIndex(0);
@@ -184,9 +190,12 @@ export function GraphPage() {
         </div>
       )}
       {error && (
-        <div className="border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
-          图谱查询失败：{error}
-        </div>
+        <RequestFailure
+          title="暂时无法查询图谱"
+          failure={error}
+          onRetry={() => void runSearch(error.query, error.hops, error.limit)}
+          onRefresh={() => void runSearch(error.query, error.hops, error.limit)}
+        />
       )}
       {!loading && !error && searched && items.length === 0 && (
         <EmptyState

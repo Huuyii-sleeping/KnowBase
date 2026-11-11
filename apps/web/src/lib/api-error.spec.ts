@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ApiError, httpError, requestFailure } from './api-error';
+import { createApiError, httpError, requestFailure } from './api-error';
 
 describe('API error presentation', () => {
   it.each([
@@ -73,10 +73,80 @@ describe('API error presentation', () => {
       requestFailure(new Error('stack with private data')).message,
     ).not.toContain('private');
     expect(
-      requestFailure(new ApiError('无法连接服务', null, 'network', true)),
+      requestFailure(createApiError('NETWORK_ERROR', { kind: 'network' })),
     ).toEqual({
-      message: '无法连接服务',
+      code: 'NETWORK_ERROR',
+      message: '无法连接服务，请检查网络连接后重试。',
+      action: 'retry',
       retryable: true,
     });
   });
+
+  it.each([
+    ['FILE_REQUIRED', 'edit_input', false],
+    ['AUTH_REQUIRED', 'login', false],
+    ['SERVICE_UNAVAILABLE', 'retry', true],
+    ['UPLOAD_UNCONFIRMED', 'check_result', false],
+  ] as const)(
+    'creates %s with a stable recovery action',
+    (code, action, retryable) => {
+      expect(requestFailure(createApiError(code))).toMatchObject({
+        code,
+        action,
+        retryable,
+      });
+    },
+  );
+
+  it('prefers recognized server codes over changing message text', () => {
+    expect(
+      httpError(400, {
+        code: 'FILE_UNSUPPORTED',
+        message: 'arbitrary upstream text',
+      }),
+    ).toMatchObject({
+      code: 'FILE_UNSUPPORTED',
+      action: 'edit_input',
+      retryable: false,
+    });
+    expect(
+      httpError(400, { code: 'FILE_UNSUPPORTED', message: 'private detail' })
+        .message,
+    ).not.toContain('private');
+    expect(httpError(500, { code: 'FILE_UNSUPPORTED' }).code).toBe(
+      'SERVICE_UNAVAILABLE',
+    );
+    expect(httpError(400, { code: '__proto__' }).code).toBe(
+      'VALIDATION_FAILED',
+    );
+    expect(httpError(400, { code: 'AUTH_REQUIRED' }).code).toBe(
+      'VALIDATION_FAILED',
+    );
+  });
+
+  it.each([
+    createApiError('NETWORK_ERROR', { kind: 'network' }),
+    createApiError('REQUEST_INTERRUPTED', { kind: 'timeout' }),
+    createApiError('INVALID_RESPONSE', { kind: 'response', status: 201 }),
+    httpError(408, null),
+    httpError(500, null),
+    httpError(502, null),
+    httpError(504, null),
+    new Error('internal secret'),
+  ])('requires result verification for ambiguous uploads', (error) => {
+    expect(requestFailure(error, 'upload')).toMatchObject({
+      code: 'UPLOAD_UNCONFIRMED',
+      action: 'check_result',
+      retryable: false,
+    });
+    expect(requestFailure(error, 'upload').message).not.toContain('secret');
+  });
+
+  it.each([400, 401, 403, 413, 415, 429])(
+    'keeps explicit upload rejection %i actionable',
+    (status) => {
+      const error = httpError(status, null);
+      expect(requestFailure(error, 'upload')).toEqual(requestFailure(error));
+    },
+  );
 });

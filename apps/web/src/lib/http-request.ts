@@ -1,4 +1,4 @@
-import { ApiError, httpError } from './api-error';
+import { createApiError, httpError } from './api-error';
 
 export async function requestJson<T>(
   url: string,
@@ -13,13 +13,8 @@ export async function requestJson<T>(
       error instanceof Error &&
       ['AbortError', 'TimeoutError'].includes(error.name)
     )
-      throw new ApiError('这次请求已中断，请重试。', null, 'timeout', true);
-    throw new ApiError(
-      '无法连接服务，请检查网络连接后重试。',
-      null,
-      'network',
-      true,
-    );
+      throw createApiError('REQUEST_INTERRUPTED', { kind: 'timeout' });
+    throw createApiError('NETWORK_ERROR', { kind: 'network' });
   }
   if (!response.ok) {
     if (response.status === 401) onUnauthorized();
@@ -30,11 +25,9 @@ export async function requestJson<T>(
   try {
     return (await response.json()) as T;
   } catch {
-    throw new ApiError(
-      '暂时无法读取处理结果，请稍后重试。',
-      response.status,
-      'response',
-      true,
-    );
+    throw createApiError('INVALID_RESPONSE', {
+      status: response.status,
+      kind: 'response',
+    });
   }
 }

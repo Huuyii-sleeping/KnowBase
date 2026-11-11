@@ -1,3 +1,5 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { PageHeader } from '@/components/page-header';
 import { EmptyState } from '@/components/empty-state';
 import { Icon } from '@/components/ui/icon';
@@ -41,7 +43,10 @@ export function SearchPage() {
   );
   const [topK, setTopK] = useState('5');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<
+    | (RequestFailureInfo & { query: string; mode: SearchMode; topK: number })
+    | null
+  >(null);
   const [searched, setSearched] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [resultMode, setResultMode] = useState<SearchMode | null>(null);
@@ -53,7 +58,11 @@ export function SearchPage() {
     [mode],
   );
 
-  const runSearch = async (query: string, selectedMode: SearchMode = mode) => {
+  const runSearch = async (
+    query: string,
+    selectedMode: SearchMode = mode,
+    recall = Number(topK),
+  ) => {
     const requestId = ++requestSequence.current;
     setLoading(true);
     setError(null);
@@ -67,13 +76,13 @@ export function SearchPage() {
         setResultMode(selectedMode);
         setTotal(result.total);
       } else if (selectedMode === 'semantic') {
-        const result = await searchApi.semantic(query, Number(topK));
+        const result = await searchApi.semantic(query, recall);
         if (requestId !== requestSequence.current) return;
         setResults(result.items);
         setResultMode(selectedMode);
         setTotal(result.items.length);
       } else {
-        const result = await searchApi.hybrid(query, Number(topK));
+        const result = await searchApi.hybrid(query, recall);
         if (requestId !== requestSequence.current) return;
         setResults(result.items);
         setResultMode(selectedMode);
@@ -84,7 +93,12 @@ export function SearchPage() {
       setResults([]);
       setResultMode(null);
       setTotal(null);
-      setError((reason as Error).message);
+      setError({
+        ...requestFailure(reason),
+        query,
+        mode: selectedMode,
+        topK: recall,
+      });
     } finally {
       if (requestId === requestSequence.current) setLoading(false);
     }
@@ -96,6 +110,9 @@ export function SearchPage() {
     setInput(query);
     setMode(nextMode);
     if (!query) {
+      requestSequence.current += 1;
+      setLoading(false);
+      setError(null);
       setSearched('');
       setResults([]);
       setResultMode(null);
@@ -179,9 +196,12 @@ export function SearchPage() {
         </div>
       )}
       {error && (
-        <div className="border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
-          检索失败：{error}
-        </div>
+        <RequestFailure
+          title="暂时无法完成检索"
+          failure={error}
+          onRetry={() => void runSearch(error.query, error.mode, error.topK)}
+          onRefresh={() => void runSearch(error.query, error.mode, error.topK)}
+        />
       )}
       {!loading && !error && searched && results.length === 0 && (
         <EmptyState

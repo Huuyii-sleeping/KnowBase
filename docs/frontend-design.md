@@ -73,3 +73,44 @@ pnpm --filter @knowbase/web build
 HTTP 状态与响应体在 `lib/http-request.ts` 统一读取，`lib/api-error.ts` 将状态及已知的业务错误/校验消息转换为中文提示。已有页面和操作提示读取到的 `Error.message` 是转换后的文案；未知 JSON、HTML、空响应、英文异常与服务内部细节均使用统一兜底文案。保留状态码与错误类别供程序判断，不在提示中直接输出状态码或服务器原始消息。401 继续清理登录状态；登录接口的 401 单独提示账号或密码错误。
 
 问答页以中性提示卡说明失败和下一步。网络、超时、限流及服务错误提供手动重试；权限或输入问题提示用户采取对应操作。重试保留失败问题的原始召回数量，不重复插入用户消息，也不清空用户正在编辑的新问题。仅用户点击才重新发送，不自动循环重试。
+
+### 可复用错误工厂
+
+`lib/error-catalog.ts` 定义稳定错误码、中文文案和恢复动作；`createApiError(code)` 统一构造错误，`requestFailure(error, operation?)` 归一化未知异常并生成展示数据。调用方根据 `action`（`edit_input`、`login`、`retry`、`refresh`、`contact_admin`、`check_result`）决定后续操作，`retryable` 表示可以提供手动重试，不触发自动请求。新增场景优先扩展错误码目录和对应测试，不在组件中判断英文错误字符串。示例：
+
+```ts
+const error = createApiError('FILE_UNSUPPORTED', { kind: 'validation' });
+const failure = requestFailure(error); // 安全文案 + code + action + retryable
+const uploadFailure = requestFailure(reason, 'upload');
+```
+
+上传接口对缺失文件、不支持的格式、空文件返回 HTTP 400，并附加 `FILE_REQUIRED`、`FILE_UNSUPPORTED`、`FILE_EMPTY` 错误码。前端只接受白名单中的业务码且校验对应 HTTP 状态，优先使用本地文案；旧接口继续兼容已知消息白名单和 HTTP 状态兜底。其余业务接口尚未全部改为错误码协议。
+
+### 上传与正文解析
+
+文件选择器的 `accept`、格式说明、选择/拖放校验、`documentsApi.create` 入口校验均使用 `lib/document-upload.ts`。支持格式与当前服务端解析器对齐：PDF、DOCX、PPTX、XLSX、TXT、MD，扩展名不区分大小写；单文件上限为 `100 * 1024 * 1024` 字节，拒绝空文件。浏览器的 MIME 推断不作为格式依据。后端仍执行独立校验；前端不承诺支持音视频或旧版 Office 格式。
+
+HTTP 成功仅表示文件与草稿已经创建，上传弹窗保留结果并提供“查看文档”，按照返回的 `parseStatus` 独立展示：
+
+| 解析状态  | 展示与后续操作                                                                                      |
+| --------- | --------------------------------------------------------------------------------------------------- |
+| `READY`   | 上传成功，正文已就绪，可以查看并提交审核                                                            |
+| `PENDING` | 文件已保存，正文尚未就绪，稍后刷新详情或手动编辑；不承诺存在自动解析任务                            |
+| `FAILED`  | 文件已保存但正文解析失败，手动编辑正文或检查源文件；不直接显示原始 `parseError`，不再次发送上传请求 |
+
+超时、中断、断网、5xx 或无法识别成功响应中的文档 ID 时，服务端可能已经写入文档。`requestFailure(reason, 'upload')` 将这些情况映射为 `UPLOAD_UNCONFIRMED` / `check_result`，提示先查看列表核实，隐藏重新上传入口并刷新列表。当前没有上传幂等键，因此不自动重试，也不把“可以重试的 HTTP 错误”直接当成“可以重传文件”。明确拒绝的请求保留文件与表单供用户修改；上传期间阻止重复提交、关闭弹窗和替换文件。
+
+`components/upload-dialog.spec.tsx` 使用 Happy DOM 和 Testing Library 驱动真实弹窗交互；API 边界、格式规则、错误码与上传恢复策略分别有小型测试，覆盖三种解析结果、无效文件、输入保留、连续点击和不确定结果不重传。
+
+### 各页面统一接入
+
+文档库、详情、问答、全文/语义/混合检索、图谱、审核队列、登录页和编辑弹窗均通过 `requestFailure` 处理请求异常。页面保留完整的 `RequestFailureInfo`，传给共享 `RequestFailure` 组件；组件根据错误动作决定展示内容，避免各页面重复判断错误类型：
+
+- `retry`：仅调用方明确提供安全的 `onRetry` 时显示“重新尝试”。列表/详情重新读取；问答、检索和图谱重试失败时的原始问题、模式与数量，并保留新输入的草稿。
+- `login`：提供“重新登录”入口；账号密码不正确属于 `edit_input`，提示修改凭据。
+- `refresh`：仅提供 `onRefresh` 时显示“刷新状态”，不会把状态冲突当成重复写入的理由。
+- 输入、权限及上传结果不明：展示对应说明，不提供通用重试按钮。
+
+所有重试均由用户点击触发。编辑弹窗失败保留输入，使用原有保存按钮明确提交；审核、发布和删除操作的错误提示也经过同一归一化入口，不自动重放写请求。清空检索或图谱查询会使旧请求失效，迟到的响应不能覆盖新页面状态。图谱画布渲染异常统一映射为 `GRAPH_RENDER_FAILED`，不输出引擎原始异常；文档演示数据源同样使用稳定错误码。全局路由错误页独立在 `pages/app-error-page.tsx`，也使用共享错误组件；只读取路由异常的 HTTP 状态，未知渲染异常使用 `PAGE_LOAD_FAILED`，不显示原始响应体、状态描述或异常栈。
+
+页面恢复流程由 `pages/page-errors.spec.tsx` 覆盖，编辑输入保留由 `components/edit-dialog-errors.spec.tsx` 覆盖；共享错误组件另有动作展示测试。

@@ -1,3 +1,5 @@
+import { createApiError } from './api-error';
+import { validateUploadFile } from './document-upload';
 import { requestJson } from './http-request';
 
 /**
@@ -315,8 +317,13 @@ export const documentsApi = {
     return activeDocumentsApi().detail(id);
   },
 
-  create(file: File, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
-    return activeDocumentsApi().create(file, meta);
+  async create(file: File, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+    const error = validateUploadFile(file);
+    if (error) throw error;
+    const document = await activeDocumentsApi().create(file, meta);
+    if (!document || typeof document.id !== 'string' || !document.id.trim())
+      throw createApiError('INVALID_RESPONSE', { kind: 'response' });
+    return document;
   },
 
   update(id: string, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {

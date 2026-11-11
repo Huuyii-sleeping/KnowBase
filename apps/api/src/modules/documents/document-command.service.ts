@@ -38,16 +38,27 @@ export class DocumentCommandService {
     user: AuthUser,
   ): Promise<string> {
     if (!file) {
-      throw new BadRequestException('file is required');
+      throw new BadRequestException({
+        code: 'FILE_REQUIRED',
+        message: 'file is required',
+      });
     }
 
     const documentId = randomUUID();
     const contentId = randomUUID();
     const originalName = file.originalname || 'uploaded-file';
     if (!this.fileParser.supports(originalName)) {
-      throw new BadRequestException(
-        'supported file types: pdf, xlsx, docx, pptx, txt, md',
-      );
+      throw new BadRequestException({
+        code: 'FILE_UNSUPPORTED',
+        message: 'supported file types: pdf, xlsx, docx, pptx, txt, md',
+      });
+    }
+
+    if (file.size === 0) {
+      throw new BadRequestException({
+        code: 'FILE_EMPTY',
+        message: 'file is empty',
+      });
     }
 
     const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');

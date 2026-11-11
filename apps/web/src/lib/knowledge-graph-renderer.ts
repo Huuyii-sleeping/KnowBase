@@ -1,3 +1,4 @@
+import { createApiError } from './api-error';
 import type {
   EdgeData,
   Graph as G6Graph,
@@ -51,13 +52,9 @@ export function createKnowledgeGraphRenderer(
       .then(async () => {
         if (!disposed) await action();
       })
-      .catch((error: unknown) => {
+      .catch(() => {
         if (!disposed)
-          callbacks.onError(
-            error instanceof Error
-              ? error.message
-              : '关系图暂时无法显示，请重试。',
-          );
+          callbacks.onError(createApiError('GRAPH_RENDER_FAILED').message);
       });
     return queue;
   };

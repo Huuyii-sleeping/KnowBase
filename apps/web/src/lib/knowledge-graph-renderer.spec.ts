@@ -165,7 +165,9 @@ describe('knowledge graph renderer lifecycle', () => {
       f.load,
     );
     await renderer.update(dataset, 'network');
-    expect(f.callbacks.onError).toHaveBeenCalledWith('engine unavailable');
+    expect(f.callbacks.onError).toHaveBeenCalledWith(
+      '关系图暂时无法显示，请重新加载画布。',
+    );
     await renderer.update(dataset, 'network');
     expect(f.fake.render).toHaveBeenCalledOnce();
     await renderer.destroy();
@@ -180,7 +182,9 @@ describe('knowledge graph renderer lifecycle', () => {
       f.load,
     );
     await renderer.update(dataset, 'network');
-    expect(f.callbacks.onError).toHaveBeenCalledWith('layout failed');
+    expect(f.callbacks.onError).toHaveBeenCalledWith(
+      '关系图暂时无法显示，请重新加载画布。',
+    );
     await renderer.destroy();
     await renderer.zoom(1.2);
     expect(f.fake.destroy).toHaveBeenCalledOnce();

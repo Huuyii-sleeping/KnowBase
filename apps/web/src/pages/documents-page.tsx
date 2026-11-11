@@ -1,3 +1,5 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -43,7 +45,7 @@ export function DocumentsPage() {
   const [keyword, setKeyword] = useState('');
   const [keywordInput, setKeywordInput] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RequestFailureInfo | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
 
   const load = useCallback(async () => {
@@ -59,7 +61,7 @@ export function DocumentsPage() {
       setItems(result.items);
       setTotal(result.total);
     } catch (e) {
-      setError((e as Error).message);
+      setError(requestFailure(e));
       setItems([]);
       setTotal(0);
     } finally {
@@ -244,11 +246,13 @@ export function DocumentsPage() {
           />
         )}
         {error && (
-          <div role="alert" className="px-5 py-14 text-center">
-            <p className="text-[13px] text-destructive">加载失败：{error}</p>
-            <Button className="mt-4" variant="outline" onClick={load}>
-              重新加载
-            </Button>
+          <div className="p-5">
+            <RequestFailure
+              title="暂时无法加载文档"
+              failure={error}
+              onRetry={load}
+              onRefresh={load}
+            />
           </div>
         )}
         {loading && (

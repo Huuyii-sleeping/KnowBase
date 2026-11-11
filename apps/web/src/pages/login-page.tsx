@@ -1,5 +1,7 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { Icon } from '@/components/ui/icon';
-import { FormEvent, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,13 +11,14 @@ import { authApi } from '@/lib/api';
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const formRef = useRef<HTMLFormElement>(null);
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('knowbase-admin');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RequestFailureInfo | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submit = async () => {
+    if (submitting) return;
     setError(null);
     setSubmitting(true);
     try {
@@ -23,7 +26,7 @@ export function LoginPage() {
       const from = (location.state as { from?: string } | null)?.from;
       navigate(from || '/documents', { replace: true });
     } catch (reason) {
-      setError((reason as Error).message);
+      setError(requestFailure(reason));
     } finally {
       setSubmitting(false);
     }
@@ -91,7 +94,14 @@ export function LoginPage() {
               登录企业账号，继续探索团队的知识。
             </p>
           </div>
-          <form className="space-y-4" onSubmit={submit}>
+          <form
+            ref={formRef}
+            className="space-y-4"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void submit();
+            }}
+          >
             <div className="space-y-1.5">
               <Label htmlFor="username">用户名</Label>
               <Input
@@ -113,7 +123,13 @@ export function LoginPage() {
                 required
               />
             </div>
-            {error && <p className="text-[13px] text-destructive">{error}</p>}
+            {error && (
+              <RequestFailure
+                title="暂时无法登录"
+                failure={error}
+                onRetry={() => formRef.current?.requestSubmit()}
+              />
+            )}
             <Button
               className="w-full"
               size="lg"

@@ -1,3 +1,5 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { PageHeader } from '@/components/page-header';
 import { EmptyState } from '@/components/empty-state';
 import { FileSymbol } from '@/components/file-symbol';
@@ -21,7 +23,7 @@ import { formatBytes, formatDateTime } from '@/lib/format';
 export function ReviewQueuePage() {
   const [items, setItems] = useState<DocumentMeta[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RequestFailureInfo | null>(null);
   const [rejectTarget, setRejectTarget] = useState<DocumentMeta | null>(null);
   const [rejectReason, setRejectReason] = useState('');
   const [acting, setActing] = useState(false);
@@ -36,7 +38,8 @@ export function ReviewQueuePage() {
       });
       setItems(result.items);
     } catch (e) {
-      setError((e as Error).message);
+      setError(requestFailure(e));
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -53,7 +56,7 @@ export function ReviewQueuePage() {
       toast('已通过并发布');
       await load();
     } catch (e) {
-      toast((e as Error).message, 'error');
+      toast(requestFailure(e).message, 'error');
     } finally {
       setActing(false);
     }
@@ -73,7 +76,7 @@ export function ReviewQueuePage() {
       setRejectReason('');
       await load();
     } catch (e) {
-      toast((e as Error).message, 'error');
+      toast(requestFailure(e).message, 'error');
     } finally {
       setActing(false);
     }
@@ -98,9 +101,12 @@ export function ReviewQueuePage() {
         </div>
       )}
       {error && (
-        <div className="py-14 text-center text-[13px]">
-          <span className="text-destructive">加载失败：{error}</span>
-        </div>
+        <RequestFailure
+          title="暂时无法加载审核队列"
+          failure={error}
+          onRetry={load}
+          onRefresh={load}
+        />
       )}
       {!loading && !error && items.length === 0 && (
         <EmptyState

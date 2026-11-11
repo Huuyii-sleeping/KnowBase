@@ -1,3 +1,4 @@
+import { createApiError } from './api-error';
 /**
  * Mock 数据源：与 documentsApi 同接口的内存实现。
  * 通过 URL 参数 ?mock=1 开启（写入 sessionStorage，刷新后保持），?mock=0 关闭。
@@ -459,7 +460,7 @@ export const mockDocumentsApi = {
   async detail(id: string): Promise<DocumentDetail> {
     await latency();
     const meta = store.find((d) => d.id === id);
-    if (!meta) throw new Error('文档不存在（mock）');
+    if (!meta) throw createApiError('NOT_FOUND');
     return toDetail(meta);
   },
 
@@ -485,7 +486,7 @@ export const mockDocumentsApi = {
   async update(id: string, meta: { title?: string; category?: string; team?: string; tags?: string[] }): Promise<DocumentDetail> {
     await latency();
     const doc = store.find((d) => d.id === id);
-    if (!doc) throw new Error('文档不存在（mock）');
+    if (!doc) throw createApiError('NOT_FOUND');
     if (meta.title !== undefined) doc.title = meta.title;
     if (meta.category !== undefined) doc.category = meta.category;
     if (meta.team !== undefined) doc.team = meta.team;
@@ -497,7 +498,7 @@ export const mockDocumentsApi = {
   async updateContent(id: string, _markdown: string): Promise<DocumentDetail> {
     await latency(400);
     const doc = store.find((d) => d.id === id);
-    if (!doc) throw new Error('文档不存在（mock）');
+    if (!doc) throw createApiError('NOT_FOUND');
     doc.version += 1;
     doc.status = 'DRAFT';
     doc.parseStatus = 'READY';
@@ -508,8 +509,8 @@ export const mockDocumentsApi = {
   async submitReview(id: string): Promise<DocumentDetail> {
     await latency();
     const doc = store.find((d) => d.id === id);
-    if (!doc) throw new Error('文档不存在（mock）');
-    if (doc.parseStatus !== 'READY') throw new Error('仅解析状态为「就绪」的文档可提交审核');
+    if (!doc) throw createApiError('NOT_FOUND');
+    if (doc.parseStatus !== 'READY') throw createApiError('DOCUMENT_NOT_READY');
     doc.status = 'PENDING_REVIEW';
     doc.submittedAt = new Date().toISOString();
     doc.updatedAt = new Date().toISOString();
@@ -519,7 +520,7 @@ export const mockDocumentsApi = {
   async review(id: string, approved: boolean, reason?: string): Promise<DocumentDetail> {
     await latency();
     const doc = store.find((d) => d.id === id);
-    if (!doc) throw new Error('文档不存在（mock）');
+    if (!doc) throw createApiError('NOT_FOUND');
     doc.status = approved ? 'PUBLISHED' : 'REJECTED';
     doc.reviewedBy = 'huayi';
     doc.reviewedAt = new Date().toISOString();

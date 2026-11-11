@@ -7,8 +7,12 @@ describe('mock api graph fixtures', () => {
     const twoHops = await mockGraphApi.search('RAG', 2, 12);
 
     expect(oneHop.items.length).toBeGreaterThan(0);
-    expect(oneHop.items.every((path) => path.relations.length === 1)).toBe(true);
-    expect(twoHops.items.some((path) => path.relations.length === 2)).toBe(true);
+    expect(oneHop.items.every((path) => path.relations.length === 1)).toBe(
+      true,
+    );
+    expect(twoHops.items.some((path) => path.relations.length === 2)).toBe(
+      true,
+    );
   });
 
   it('uses published documents as provenance for graph results', async () => {
@@ -31,5 +35,20 @@ describe('mock api graph fixtures', () => {
     const detail = await mockDocumentsApi.detail(docs.items[0].id);
     expect(detail.content?.markdown).toContain('KnowledgeDocument');
     expect(detail.content?.markdown).toContain('RELATED_TO');
+  });
+
+  it('uses the same stable errors as the HTTP client for missing and unready documents', async () => {
+    await expect(
+      mockDocumentsApi.detail('missing-document'),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND', action: 'refresh' });
+    const result = await mockDocumentsApi.list({ keyword: '竞品分析：Notion' });
+    expect(result.items[0].parseStatus).toBe('PENDING');
+    await expect(
+      mockDocumentsApi.submitReview(result.items[0].id),
+    ).rejects.toMatchObject({
+      code: 'DOCUMENT_NOT_READY',
+      action: 'refresh',
+      retryable: false,
+    });
   });
 });

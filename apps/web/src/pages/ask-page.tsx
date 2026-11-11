@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { requestFailure } from '@/lib/api-error';
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
 import { RequestFailure } from '@/components/request-failure';
 
 const EXAMPLES = [
@@ -76,12 +76,9 @@ export function AskPage() {
   const [conversation, setConversation] = useState<ConversationItem[]>([]);
   const [latest, setLatest] = useState<AnswerResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [failure, setFailure] = useState<{
-    message: string;
-    retryable: boolean;
-    question: string;
-    topK: number;
-  } | null>(null);
+  const [failure, setFailure] = useState<
+    (RequestFailureInfo & { question: string; topK: number }) | null
+  >(null);
 
   const send = async (value: string, recall: number, retry = false) => {
     if (!value || loading) return;
@@ -225,7 +222,7 @@ export function AskPage() {
               {failure && (
                 <RequestFailure
                   title="这次没能生成回答"
-                  message={failure.message}
+                  failure={failure}
                   onRetry={
                     failure.retryable
                       ? () => void send(failure.question, failure.topK, true)

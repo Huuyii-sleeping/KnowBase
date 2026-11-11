@@ -151,4 +151,57 @@ describe('DocumentCommandService', () => {
     );
     expect(deletion.remove).toHaveBeenCalledWith('doc', undefined);
   });
+
+  it.each([
+    [undefined, true, 'FILE_REQUIRED'],
+    [makeFile('movie.mp4'), false, 'FILE_UNSUPPORTED'],
+    [{ ...makeFile(), size: 0, buffer: Buffer.alloc(0) }, true, 'FILE_EMPTY'],
+  ] as const)(
+    'rejects invalid uploads before writing any data (%s)',
+    async (file, supported, code) => {
+      const { service, repository, contentStore, storage } = makeService({
+        fileParser: { supports: vi.fn(() => supported) },
+      });
+      try {
+        await service.create(file, {}, { id: 'user-1' } as any);
+        expect.fail('must reject invalid upload');
+      } catch (error) {
+        expect(
+          (error as { getResponse(): unknown }).getResponse(),
+        ).toMatchObject({ code });
+      }
+      expect(storage.putObject).not.toHaveBeenCalled();
+      expect(contentStore.create).not.toHaveBeenCalled();
+      expect(repository.save).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([
+    [true, undefined, 'READY'],
+    [false, undefined, 'PENDING'],
+    [false, 'parser internal detail', 'FAILED'],
+  ])(
+    'persists parsing outcome independently of creation success',
+    async (ready, error, parseStatus) => {
+      const { service, repository, storage } = makeService({
+        fileParser: {
+          parse: vi.fn(async () => ({
+            markdown: '',
+            assets: [],
+            parser: 'test',
+            warnings: [],
+            ready,
+            error,
+          })),
+        },
+      });
+      await expect(
+        service.create(makeFile(), {}, { id: 'user-1' } as any),
+      ).resolves.toMatch(/^[0-9a-f-]{36}$/);
+      expect(repository.save).toHaveBeenCalledWith(
+        expect.objectContaining({ parseStatus, status: 'DRAFT' }),
+      );
+      expect(storage.removeObject).not.toHaveBeenCalled();
+    },
+  );
 });
