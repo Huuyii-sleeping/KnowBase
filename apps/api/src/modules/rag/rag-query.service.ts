@@ -33,6 +33,7 @@ export type RecallRoute = 'keyword' | 'semantic';
 export interface RecallTrace extends SemanticSearchResult {
   route: RecallRoute;
   rawCandidates: VectorChunkSearchItem[];
+  eligibleCandidates: SemanticSearchItem[];
   elapsedMs: number;
   timings: {
     visibilityMs: number;
@@ -109,6 +110,7 @@ export class RagQueryService {
         topK: query.topK,
         items: [],
         rawCandidates: [],
+        eligibleCandidates: [],
         route,
         elapsedMs: performance.now() - started,
         timings,
@@ -141,17 +143,17 @@ export class RagQueryService {
       throw new BadRequestException('unsupported recall route');
     }
     const metadataStarted = performance.now();
-    const items = await this.keepPublishedCandidates(
+    const eligibleCandidates = await this.keepPublishedCandidates(
       candidates,
-      query.topK,
       user,
     );
     timings.metadataMs = performance.now() - metadataStarted;
     return {
       query: normalizedQuery,
       topK: query.topK,
-      items,
+      items: eligibleCandidates.slice(0, query.topK),
       rawCandidates: candidates,
+      eligibleCandidates,
       route,
       elapsedMs: performance.now() - started,
       timings,
@@ -160,7 +162,6 @@ export class RagQueryService {
 
   private async keepPublishedCandidates(
     candidates: VectorChunkSearchItem[],
-    topK: number,
     user?: AuthUser,
   ): Promise<SemanticSearchItem[]> {
     const items: SemanticSearchItem[] = [];
@@ -192,9 +193,6 @@ export class RagQueryService {
           tags: document.tags,
         },
       });
-      if (items.length >= topK) {
-        break;
-      }
     }
 
     return items;

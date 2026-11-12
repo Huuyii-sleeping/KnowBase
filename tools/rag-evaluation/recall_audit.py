@@ -13,6 +13,7 @@ from metrics import normalized
 from recall_acceptance import assess, select_development_budget
 from recall_report import render_report
 from question_set import load_questions
+from recall_loss import locate_loss, route_details
 
 
 def evidence_hits(question: dict, candidates: list[dict], mapping: dict) -> list[bool]:
@@ -80,6 +81,13 @@ def analyze(directory: Path, output: Path) -> dict:
     mapping = {item["file"]: item["id"] for item in metadata["document_mapping"]}
     corpus = json.loads((output / "indexed-corpus.json").read_text())
     traces = json.loads((output / "recall-traces.json").read_text())
+    eligibility = [
+        "eligibleCandidates" in trace[route]
+        for trace in traces
+        for route in ("keyword", "semantic")
+    ]
+    if any(eligibility) and not all(eligibility):
+        raise ValueError("incomplete eligibility diagnostics")
     budgets = metadata["recall_audit"]["budgets"]
     identities = [(t["id"], t["budget"]) for t in traces]
     if len(set(identities)) != len(identities) or set(identities) != {
@@ -110,27 +118,23 @@ def analyze(directory: Path, output: Path) -> dict:
             "pool": trace["pool"],
             "selected": trace["selected"],
         }
+        if all(eligibility):
+            for route in ("keyword", "semantic"):
+                candidates[f"{route}_eligible"] = trace[route]["eligibleCandidates"]
         stages = {name: grade(q, items, mapping) for name, items in candidates.items()}
         losses = []
         for i, evidence in enumerate(q.get("evidence", [])):
 
-            def hit(stage):
-                return stages[stage]["evidence_hits"][i]
-
-            if not hit("indexed"):
-                cause = "missing_or_split_in_index"
-            elif not (hit("keyword_raw") or hit("semantic_raw")):
-                cause = "not_in_raw_candidates"
-            elif not (hit("keyword") or hit("semantic")):
-                cause = "filtered_or_route_budget"
-            elif not hit("pool"):
-                cause = "merge_loss"
-            elif not hit("selected"):
-                cause = "selection_loss"
-            else:
+            cause = locate_loss(stages, i)
+            if cause is None:
                 continue
             losses.append(
-                {"doc": evidence["doc"], "quote": evidence["quote"], "cause": cause}
+                {
+                    "doc": evidence["doc"],
+                    "quote": evidence["quote"],
+                    "cause": cause,
+                    "routes": route_details(evidence, trace, mapping),
+                }
             )
         rows.append(
             {

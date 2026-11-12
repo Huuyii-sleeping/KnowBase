@@ -63,7 +63,7 @@ describe('RagQueryService', () => {
     for (const route of ['keyword', 'semantic'] as const)
       expect(
         await service.recall({ query: '问题', topK: 5 }, route, user),
-      ).toMatchObject({ items: [], rawCandidates: [] });
+      ).toMatchObject({ items: [], rawCandidates: [], eligibleCandidates: [] });
     expect(embedding.embedQuery).not.toHaveBeenCalled();
     expect(index.searchChunks).not.toHaveBeenCalled();
     expect(index.searchKeywordChunks).not.toHaveBeenCalled();
@@ -169,6 +169,31 @@ describe('RagQueryService', () => {
     await expect(
       service.searchKeywordChunks({ query: 'evidence', topK: 1 }),
     ).rejects.toThrow('database unavailable');
+  });
+
+  it('separates metadata rejection from budget truncation without exposing diagnostics publicly', async () => {
+    const { service, index } = fixture();
+    index.searchKeywordChunks.mockResolvedValue([
+      chunk('first'),
+      chunk('stale', 'doc', 1),
+      chunk('unavailable', 'hidden'),
+      chunk('beyond-budget'),
+    ]);
+    const result = await service.recall(
+      { query: 'q', topK: 1 },
+      'keyword',
+      user,
+    );
+    expect(result.eligibleCandidates.map((c) => c.chunkId)).toEqual([
+      'first',
+      'beyond-budget',
+    ]);
+    expect(result.items.map((c) => c.chunkId)).toEqual(['first']);
+    expect(
+      Object.keys(
+        await service.searchKeywordChunks({ query: 'q', topK: 1 }, user),
+      ).sort(),
+    ).toEqual(['items', 'query', 'topK']);
   });
 
   it('fails on a missing query vector without querying the vector index', async () => {

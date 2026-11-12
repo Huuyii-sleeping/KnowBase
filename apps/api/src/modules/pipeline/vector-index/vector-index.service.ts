@@ -6,7 +6,7 @@ import { ElasticsearchSchema } from './elasticsearch-schema';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
 import { retrievalContext } from '../chunk/retrieval-context';
-import { keywordPolicy } from './keyword-policy';
+import { bodySlots, keywordPolicy } from './keyword-policy';
 
 export interface SearchDocumentInput {
   id: string;
@@ -131,6 +131,7 @@ export class VectorIndexService implements OnModuleDestroy {
       retrievalContext(config.get<string>('RAG_RETRIEVAL_CONTEXT', 'body')) !==
         'body',
       keywordPolicy(config.get<string>('RAG_KEYWORD_POLICY', 'combined')),
+      bodySlots(config.get<string>('RAG_KEYWORD_BODY_SLOTS', '2')),
     );
   }
 

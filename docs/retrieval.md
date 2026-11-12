@@ -51,3 +51,7 @@
 这两种策略复用现有 `content` 与 `retrieval_text` 映射；已完整建立相同上下文模式索引时，只切关键词策略不需要重新计算向量。上下文模式或向量输入变化仍按前文要求重建。本轮只修复召回候选受标题影响的问题，不更换模型或重排。
 
 1792 次计分后的候选选型为 `title-heading + body-reserve + cjk + 15:15`，逐证据回归、替代方案、额外读取成本及适用边界统一记录在[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。默认配置保持正文/combined/standard；本轮没有部署或重建业务文档，也不把合成集上的池证据恢复视为最终 Top 5 或答案质量验收。
+
+`RAG_KEYWORD_BODY_SLOTS=1|2|3` 控制每取一条辅助候选之前预留几条正文，默认 2；重复仍去重、不足回填，名额不构成绝对正文保底。仅调整查询选取比例不需要重建索引。评测对应 `--body-slots`，固定矩阵见 `benchmarks/knowbase-recall-v3/experiments/recall-boundaries-protocol.json`，不自动改变业务候选预算。
+
+内部召回诊断新增 `eligibleCandidates`，保存批量元数据与当前版本复查通过、尚未按路由预算裁剪的候选。评测据此区分 `metadata_filter` 与 `route_budget`，并记录原始/合格/保留排名；缺失或不可见文档的具体原因不通过额外越权读取区分。公开 HTTP 结果仍只有保留后的正文；旧 trace 缺少此阶段时保留原先的模糊归因，不据此猜测过滤原因。

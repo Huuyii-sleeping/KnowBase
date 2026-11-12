@@ -22,6 +22,7 @@ export class ElasticsearchChunkReader {
     private readonly keywordAnalyzer: 'standard' | 'cjk' = 'standard',
     private readonly contextual = false,
     private readonly keywordPolicy: KeywordPolicy = 'combined',
+    private readonly bodySlots = 2,
   ) {}
 
   async semantic(
@@ -80,7 +81,7 @@ export class ElasticsearchChunkReader {
     };
     if (this.contextual && this.keywordPolicy === 'body-reserve') {
       const [body, context] = await Promise.all([search(false), search(true)]);
-      return reserveBodyCandidates(body, context, input.topK);
+      return reserveBodyCandidates(body, context, input.topK, this.bodySlots);
     }
     return search(this.contextual);
   }

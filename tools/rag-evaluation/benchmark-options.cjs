@@ -12,6 +12,7 @@ function options(args) {
     lexical: 'standard',
     context: 'body',
     keywordPolicy: 'combined',
+    bodySlots: 2,
     split: 'all',
     budgets: [5, 10, 15, 30, 60],
   };
@@ -26,6 +27,7 @@ function options(args) {
         '--lexical',
         '--context',
         '--keyword-policy',
+        '--body-slots',
         '--split',
         '--budgets',
         '--route-budgets',
@@ -33,7 +35,7 @@ function options(args) {
       !args[i + 1]
     )
       throw new Error(
-        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--context body|title|title-heading] [--keyword-policy combined|weighted|body-reserve] [--split all|development|validation|regression] [--budgets 5,10,15,30,60 | --route-budgets 15:5,10:10,5:15]',
+        'Usage: run_baseline.cjs [--python executable] [--output-dir directory] [--dataset directory] [--suite baseline|recall] [--encoding plain|nomic-task] [--lexical standard|cjk] [--context body|title|title-heading] [--keyword-policy combined|weighted|body-reserve] [--body-slots 1|2|3] [--split all|development|validation|regression] [--budgets 5,10,15,30,60 | --route-budgets 15:5,10:10,5:15]',
       );
     if (args[i] === '--python') result.python = args[i + 1];
     else if (args[i] === '--output-dir')
@@ -44,6 +46,7 @@ function options(args) {
     else if (args[i] === '--lexical') result.lexical = args[i + 1];
     else if (args[i] === '--context') result.context = args[i + 1];
     else if (args[i] === '--keyword-policy') result.keywordPolicy = args[i + 1];
+    else if (args[i] === '--body-slots') result.bodySlots = Number(args[i + 1]);
     else if (args[i] === '--split') result.split = args[i + 1];
     else if (args[i] === '--route-budgets')
       result.routeBudgets = parseRouteBudgets(args[i + 1]);
@@ -56,7 +59,8 @@ function options(args) {
     !['plain', 'nomic-task'].includes(result.encoding) ||
     !['standard', 'cjk'].includes(result.lexical) ||
     !['body', 'title', 'title-heading'].includes(result.context) ||
-    !['combined', 'weighted', 'body-reserve'].includes(result.keywordPolicy)
+    !['combined', 'weighted', 'body-reserve'].includes(result.keywordPolicy) ||
+    ![1, 2, 3].includes(result.bodySlots)
   )
     throw new Error('Invalid evaluation suite or encoding');
   if (

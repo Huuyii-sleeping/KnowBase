@@ -113,6 +113,27 @@ class RecallAuditTests(unittest.TestCase):
                 ["selection_loss", "filtered_or_route_budget"],
             )
             self.assertTrue((root / "recall-audit.md").read_text())
+            # New traces distinguish eligible-but-truncated evidence from rejected metadata.
+            for trace in traces:
+                trace["keyword"]["eligibleCandidates"] = chunks
+                trace["semantic"]["eligibleCandidates"] = []
+            path.write_text(json.dumps(traces))
+            detailed = analyze(root, root)
+            self.assertEqual(
+                detailed["results"][0]["losses"][1]["cause"], "route_budget"
+            )
+            for trace in traces:
+                trace["keyword"]["eligibleCandidates"] = chunks[:1]
+            path.write_text(json.dumps(traces))
+            self.assertEqual(
+                analyze(root, root)["results"][0]["losses"][1]["cause"],
+                "metadata_filter",
+            )
+            del traces[0]["semantic"]["eligibleCandidates"]
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "incomplete eligibility"):
+                analyze(root, root)
+            traces[0]["semantic"]["eligibleCandidates"] = []
             # Unequal route budgets retain their own trace identities; validation
             # cannot silently compare a partial allocation matrix.
             metadata_path = root / "metadata.json"

@@ -101,11 +101,13 @@ test('environment starts an isolated retrieval API and always tears down after s
     'cjk',
     'title-heading',
     'weighted',
+    3,
   );
   assert.equal(launch.env.PIPELINE_WORKERS_ENABLED, 'false');
   assert.equal(launch.env.POSTGRES_DB, 'test');
   assert.equal(launch.env.RAG_RETRIEVAL_CONTEXT, 'title-heading');
   assert.equal(launch.env.RAG_KEYWORD_POLICY, 'weighted');
+  assert.equal(launch.env.RAG_KEYWORD_BODY_SLOTS, '3');
   assert.equal(launch.cwd, directory);
   assert.equal(environment.baseUrl, 'http://127.0.0.1:34567/api/v1');
   await environment.close();
@@ -129,6 +131,10 @@ test('cleanup still removes containers when the API shutdown operation fails', a
 });
 
 test('CLI rejects unsupported options before starting external services', () => {
+  for (const slots of ['0', '4', '1.5', 'x'])
+    assert.throws(() => options(['--body-slots', slots]), /Invalid/);
+  assert.equal(options([]).bodySlots, 2);
+  assert.equal(options(['--body-slots', '1']).bodySlots, 1);
   assert.throws(() => options(['--keyword-policy', 'unknown']), /Invalid/);
   assert.equal(options([]).keywordPolicy, 'combined');
   assert.equal(

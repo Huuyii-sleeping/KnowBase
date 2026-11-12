@@ -717,8 +717,13 @@ test('contextual recall indexes source context while returning original evidence
   }
 });
 
-for (const policy of ['weighted', 'body-reserve']) {
-  test(`${policy}: body and context matches share active generations and document restrictions`, async () => {
+for (const [policy, slots] of [
+  ['weighted', 2],
+  ['body-reserve', 1],
+  ['body-reserve', 2],
+  ['body-reserve', 3],
+]) {
+  test(`${policy}/${slots}: body and context matches share active generations and document restrictions`, async () => {
     const esPort = (await env.compose('port', 'elasticsearch', '9200'))
       .split(':')
       .pop();
@@ -730,6 +735,7 @@ for (const policy of ['weighted', 'body-reserve']) {
         RAG_KEYWORD_ANALYZER: 'cjk',
         RAG_RETRIEVAL_CONTEXT: 'title-heading',
         RAG_KEYWORD_POLICY: policy,
+        RAG_KEYWORD_BODY_SLOTS: String(slots),
       }),
       heads,
     );

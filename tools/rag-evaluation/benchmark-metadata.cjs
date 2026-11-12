@@ -61,10 +61,10 @@ async function collectMetadata({
     keyword_analyzer: config.lexical,
     retrieval_context: config.context,
     keyword_policy: config.keywordPolicy,
+    keyword_body_slots: config.bodySlots,
     keyword_policy_details: {
       weighted: 'best_fields body^2 vs retrieval_text, tie_breaker=0.1',
-      'body-reserve':
-        'two body slots then one context slot; dedup by chunk ID; up to 2x index reads, unchanged returned budget and native chosen-hit score',
+      'body-reserve': `${config.bodySlots} body slots then one context slot; dedup by chunk ID; up to 2x index reads, unchanged returned budget and native chosen-hit score`,
       combined:
         'existing contextual field only (original body field in body context mode)',
     }[config.keywordPolicy],

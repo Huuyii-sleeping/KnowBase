@@ -1,11 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import {
   keywordMatch,
+  bodySlots,
   keywordPolicy,
   reserveBodyCandidates,
 } from './keyword-policy';
 
 describe('Keyword recall policy', () => {
+  it('validates bounded body slots and applies different proportions without changing scores', () => {
+    for (const value of ['', '0', '4', '1.5', 'x'])
+      expect(() => bodySlots(value)).toThrow('BODY_SLOTS');
+    const body = [0, 1, 2, 3].map((i) => ({ id: `b${i}`, score: i }));
+    const context = [0, 1, 2].map((i) => ({ id: `c${i}`, score: i + 10 }));
+    expect(bodySlots('3')).toBe(3);
+    expect(reserveBodyCandidates(body, context, 4, 1)).toEqual([
+      body[0],
+      context[0],
+      body[1],
+      context[1],
+    ]);
+    expect(reserveBodyCandidates(body, context, 4, 3)).toEqual([
+      body[0],
+      body[1],
+      body[2],
+      context[0],
+    ]);
+    expect(() => reserveBodyCandidates(body, context, 4, 0)).toThrow(
+      'BODY_SLOTS',
+    );
+    expect(reserveBodyCandidates(body, context, 0)).toEqual([]);
+  });
   it('rejects unknown policies and leaves body-only matching unchanged', () => {
     expect(() => keywordPolicy('unknown')).toThrow('RAG_KEYWORD_POLICY');
     for (const policy of ['combined', 'weighted', 'body-reserve'] as const) {
