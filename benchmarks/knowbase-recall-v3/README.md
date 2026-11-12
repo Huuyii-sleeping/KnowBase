@@ -27,6 +27,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 后续[标题与章节对照](experiments/context-audit-v3.md)已对全部 224 题执行三种上下文、三对预算，共 2016 次计分。开发组标题加章节在 10:10 即达到 100% 池证据召回，15:15 的最终证据为 54.86%；旧回归仍有个别池证据退步，默认模式保持正文。原文 Chunk、语料指纹与模型摘要已逐轮核对一致，辅助文本不作为引用证据。
 
+针对上述退步，[正文保护对照](experiments/body-protection-audit-v3.md)完成 4 种配置 × 2 对预算 × 224 题，共 1792 次计分。候选选型、逐证据比较、预算边界及成本见该报告和同目录 decision/results JSON；默认配置仍未自动切换。正文候选恢复与最终 Top 5 选择分开记录，不能把池证据命中直接当作回答正确。
+
 预算实验示例：
 
 ```bash
