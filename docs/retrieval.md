@@ -55,3 +55,5 @@
 `RAG_KEYWORD_BODY_SLOTS=1|2|3` 控制每取一条辅助候选之前预留几条正文，默认 2；重复仍去重、不足回填，名额不构成绝对正文保底。仅调整查询选取比例不需要重建索引。评测对应 `--body-slots`，固定矩阵见 `benchmarks/knowbase-recall-v3/experiments/recall-boundaries-protocol.json`，不自动改变业务候选预算。
 
 内部召回诊断新增 `eligibleCandidates`，保存批量元数据与当前版本复查通过、尚未按路由预算裁剪的候选。评测据此区分 `metadata_filter` 与 `route_budget`，并记录原始/合格/保留排名；缺失或不可见文档的具体原因不通过额外越权读取区分。公开 HTTP 结果仍只有保留后的正文；旧 trace 缺少此阶段时保留原先的模糊归因，不据此猜测过滤原因。
+
+后续 1120 次冻结[候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)未发现改变 2:1 比例的收益，停止细调；关键词 30 / 向量 15 找回两道旧题的三条池证据，作为后续实验候选。它增加读取与候选处理成本，最终 Top 5 指标没有变化；HTTP 的 3K 等额预算与默认配置仍保持原样。简单追加术语没有找回剩余审核题，本轮未引入生产术语扩展。

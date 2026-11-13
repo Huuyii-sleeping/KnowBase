@@ -185,3 +185,5 @@ python tools/rag-evaluation/evaluate_answer.py \
 `--keyword-policy combined|weighted|body-reserve` 选择标题上下文下的关键词策略，默认 combined；配置、模型及实际预算记录到元数据。冻结矩阵见 `benchmarks/knowbase-recall-v3/experiments/body-protection-protocol.json`。正文基线与三种标题章节策略分别新建隔离索引，固定各路 10 / 15，开发与已暴露回归全部运行；逐条比较原文证据命中的获得与丢失，不能只比较平均分。body-reserve 的两次索引请求不隐藏为一次同成本召回。
 
 本轮 1792 次计分已完成，候选为 `title-heading + body-reserve + cjk + 15:15`；测量、逐题边界和复现命令见[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。结果与决策 JSON 同目录保留。此前上下文实验的正文退步由本轮继续处理，历史报告不覆盖；所有现有分组已暴露，不能作为未见验收数据。默认配置不随评测自动切换。
+
+后续[候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)增加合格候选阶段与逐证据排名，区分元数据复查和预算截断；1120 次冻结计分比较 `--body-slots 1|2|3` 及关键词 15/20/30、固定向量 15。保留 2:1 比例，实验候选为 30:15；收益与停止无效方向的结论见该报告。30:15 仅代表实验 IPC 配置，业务 HTTP 预算规则未切换。

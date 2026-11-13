@@ -29,6 +29,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 针对上述退步，[正文保护对照](experiments/body-protection-audit-v3.md)完成 4 种配置 × 2 对预算 × 224 题，共 1792 次计分。候选选型、逐证据比较、预算边界及成本见该报告和同目录 decision/results JSON；默认配置仍未自动切换。正文候选恢复与最终 Top 5 选择分开记录，不能把池证据命中直接当作回答正确。
 
+随后[候选边界对照](experiments/recall-boundaries-audit-v3.md)完成 1120 次计分：区分安全复查与预算截断，保留 2:1 比例，实验预算候选为关键词 30 / 向量 15。旧题池证据提高但最终选择未提高，默认及 HTTP 规则未变；无效比例和简单术语追加均记录后停止，没有覆盖先前历史报告。
+
 预算实验示例：
 
 ```bash
