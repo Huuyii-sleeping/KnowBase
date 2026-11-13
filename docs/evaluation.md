@@ -187,3 +187,11 @@ python tools/rag-evaluation/evaluate_answer.py \
 本轮 1792 次计分已完成，候选为 `title-heading + body-reserve + cjk + 15:15`；测量、逐题边界和复现命令见[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。结果与决策 JSON 同目录保留。此前上下文实验的正文退步由本轮继续处理，历史报告不覆盖；所有现有分组已暴露，不能作为未见验收数据。默认配置不随评测自动切换。
 
 后续[候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)增加合格候选阶段与逐证据排名，区分元数据复查和预算截断；1120 次冻结计分比较 `--body-slots 1|2|3` 及关键词 15/20/30、固定向量 15。保留 2:1 比例，实验候选为 30:15；收益与停止无效方向的结论见该报告。30:15 仅代表实验 IPC 配置，业务 HTTP 预算规则未切换。
+
+## 多意图查询实验
+
+recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内部 IPC 评测，默认 off，不修改业务查询。纯规则提取恰好两个问句片段，保留原问题；有代码、引号/括号不闭合或边界不明确时仅查原问题。无模型补写、同义词追加或跨句主体补全，因此子句仍可能缺少共享条件，必须通过逐证据回归验证。
+
+固定总候选与原始读取上限，而不是给每个子查询完整预算：30 条关键词按原问题/子句分配调用预算 15/8/7，原始读取合计最多 90（body-reserve 两次实际索引查询合计最多 180）；15 条向量分配 8/4/3、读取最多 45。通过现有元数据复查的片段在单一路由内按原问题两条、每子句一条交替去重选取，然后复用未修改的跨路合并和最终重排。请求数、元数据批量查询及可能的 query embedding 次数仍增加，不视为等成本。
+
+协议见 `benchmarks/knowbase-recall-v3/experiments/multi-intent-protocol.json`。Trace 和计分报告保留子查询计划、模式与预算，模式和元数据不一致拒绝计分。HTTP 一致性抽查仍验证原问题、既有 15:15 路径，不冒充拆解实验已接入业务 HTTP。所有现有问题已暴露，本轮对照不能作为独立验收。

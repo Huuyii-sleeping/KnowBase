@@ -8,7 +8,12 @@ async function runRecallAudit(
   client,
   directory,
   output,
-  { split = 'all', budgets = [5, 10, 15, 30, 60], routeBudgets } = {},
+  {
+    split = 'all',
+    budgets = [5, 10, 15, 30, 60],
+    routeBudgets,
+    queryMode = 'off',
+  } = {},
   request = requestRecall,
 ) {
   const questions = JSON.parse(
@@ -20,6 +25,7 @@ async function runRecallAudit(
   await request(environment.api, {
     query: questions[0].question,
     budget: 15,
+    queryMode,
     user: client.user,
   });
   const pairs = routeBudgets || budgets.map((b) => budgetPair(b, b));
@@ -28,6 +34,7 @@ async function runRecallAudit(
     for (const question of questions) {
       const trace = await request(environment.api, {
         query: question.question,
+        queryMode,
         ...(routeBudgets
           ? { keywordBudget: pair.keyword, semanticBudget: pair.semantic }
           : { budget }),
@@ -47,7 +54,9 @@ async function runRecallAudit(
   // Verify the diagnostic path matches the production HTTP path at its current budget.
   const sample =
     questions.find((question) => question.id === 'kb011') || questions[0];
-  let traced = rows.find((row) => row.id === sample.id && row.budget === 15);
+  let traced =
+    queryMode === 'off' &&
+    rows.find((row) => row.id === sample.id && row.budget === 15);
   if (!traced)
     traced = await request(environment.api, {
       query: sample.question,
@@ -69,6 +78,9 @@ async function runRecallAudit(
     route_budgets: pairs,
     split,
     requests: rows.length,
+    query_mode: queryMode,
+    http_parity_scope:
+      'original unsplit query at existing production budget; experimental split path has no public HTTP endpoint',
     http_selection_verified: sample.id,
   };
 }

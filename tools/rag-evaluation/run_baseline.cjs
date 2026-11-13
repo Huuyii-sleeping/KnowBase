@@ -94,6 +94,7 @@ async function main(args) {
           split: config.split,
           budgets: config.budgets,
           routeBudgets: config.routeBudgets,
+          queryMode: config.queryMode,
         },
       );
       await fs.writeFile(

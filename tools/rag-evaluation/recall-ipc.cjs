@@ -1,5 +1,7 @@
 const { randomUUID } = require('node:crypto');
 const { resolveBudgets } = require('./recall-budget.cjs');
+const { queryMode } = require('./multi-intent.cjs');
+const { recallIntents } = require('./multi-intent-recall.cjs');
 
 // Parent/child IPC only. No debug HTTP route is installed in the application.
 function requestRecall(child, input, timeoutMs = 120000) {
@@ -43,6 +45,7 @@ function installRecallHandler(child, recall, rerank, merge) {
     if (message.kind !== 'recall-audit') return;
     try {
       const { query, user, finalK = 5 } = message.input;
+      const mode = queryMode(message.input.queryMode || 'off');
       let pair;
       try {
         pair = resolveBudgets(message.input);
@@ -59,14 +62,15 @@ function installRecallHandler(child, recall, rerank, merge) {
         throw new Error('Invalid isolated recall audit input');
       const started = performance.now();
       const [keyword, semantic] = await Promise.all([
-        recall.recall({ query, topK: pair.keyword }, 'keyword', user),
-        recall.recall({ query, topK: pair.semantic }, 'semantic', user),
+        recallIntents(recall, query, pair.keyword, 'keyword', user, mode),
+        recallIntents(recall, query, pair.semantic, 'semantic', user, mode),
       ]);
       const pool = merge(keyword.items, semantic.items);
       const selected = rerank.rerank(query, pool, { topK: finalK });
       child.send({
         id: message.id,
         trace: {
+          queryMode: mode,
           keywordBudget: pair.keyword,
           semanticBudget: pair.semantic,
           keyword,

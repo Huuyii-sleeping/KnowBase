@@ -112,3 +112,61 @@ test('isolated handler reports dependency failures instead of fabricating an emp
   await new Promise(setImmediate);
   assert.equal(reply.error, 'store failed');
 });
+
+test('multi-intent IPC preserves user scope, original rerank query and total budgets; invalid mode never queries', async () => {
+  const child = new EventEmitter(),
+    replies = [],
+    calls = [];
+  child.send = (reply) => replies.push(reply);
+  const query = '解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？';
+  const user = { id: 'fixture-admin', role: 'ADMIN' };
+  const dispose = installRecallHandler(
+    child,
+    {
+      recall: async (input, route, identity) => {
+        calls.push({ input, route, identity });
+        return {
+          rawCandidates: [],
+          eligibleCandidates: [],
+          items: [],
+          elapsedMs: 1,
+          timings: {},
+        };
+      },
+    },
+    {
+      rerank: (text, pool, options) => {
+        assert.equal(text, query);
+        assert.equal(options.topK, 5);
+        return pool;
+      },
+    },
+    (a, b) => [...a, ...b],
+  );
+  child.emit('message', {
+    kind: 'recall-audit',
+    id: 'split',
+    input: {
+      query,
+      user,
+      keywordBudget: 30,
+      semanticBudget: 15,
+      queryMode: 'clauses-both',
+    },
+  });
+  await new Promise(setImmediate);
+  assert.equal(calls.length, 6);
+  assert.ok(calls.every((c) => c.identity === user));
+  assert.equal(replies[0].trace.queryMode, 'clauses-both');
+  assert.equal(replies[0].trace.keyword.topK, 30);
+  assert.equal(replies[0].trace.semantic.topK, 15);
+  child.emit('message', {
+    kind: 'recall-audit',
+    id: 'bad',
+    input: { query, user, budget: 15, queryMode: 'bad' },
+  });
+  await new Promise(setImmediate);
+  assert.match(replies[1].error, /Invalid/);
+  assert.equal(calls.length, 6);
+  dispose();
+});

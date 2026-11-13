@@ -137,6 +137,31 @@ test('CLI validates recall split and unique bounded integer budgets', () => {
   assert.deepEqual(parsed.budgets, [10, 30]);
 });
 
+test('experimental query mode is passed to scoring but HTTP parity always uses the unsplit baseline', async (t) => {
+  const directory = await fixture(t),
+    inputs = [];
+  const request = async (_child, input) => {
+    inputs.push(input);
+    return {
+      selected: [{ chunkId: input.queryMode ? 'experimental' : 'original' }],
+    };
+  };
+  const result = await runRecallAudit(
+    {},
+    { request: async () => ({ items: [{ chunkId: 'original' }] }) },
+    directory,
+    directory,
+    { split: 'development', budgets: [15], queryMode: 'clauses-both' },
+    request,
+  );
+  assert.deepEqual(
+    inputs.map((i) => i.queryMode),
+    ['clauses-both', 'clauses-both', undefined],
+  );
+  assert.equal(result.query_mode, 'clauses-both');
+  assert.match(result.http_parity_scope, /original unsplit/);
+});
+
 test('metadata fingerprints include a frozen protocol and reject missing corpus files', async (t) => {
   const directory = await fixture(t);
   await fs.mkdir(path.join(directory, 'docs'));

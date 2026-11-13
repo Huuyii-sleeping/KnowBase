@@ -81,6 +81,9 @@ def analyze(directory: Path, output: Path) -> dict:
     mapping = {item["file"]: item["id"] for item in metadata["document_mapping"]}
     corpus = json.loads((output / "indexed-corpus.json").read_text())
     traces = json.loads((output / "recall-traces.json").read_text())
+    query_mode = metadata["recall_audit"].get("query_mode", "off")
+    if any(trace.get("queryMode", "off") != query_mode for trace in traces):
+        raise ValueError("trace query mode differs from metadata")
     eligibility = [
         "eligibleCandidates" in trace[route]
         for trace in traces
@@ -153,6 +156,10 @@ def analyze(directory: Path, output: Path) -> dict:
                 "semantic_ms": trace["semantic"]["elapsedMs"],
                 "route_timings": {
                     route: trace[route].get("timings")
+                    for route in ("keyword", "semantic")
+                },
+                "query_plans": {
+                    route: trace[route].get("queryPlan")
                     for route in ("keyword", "semantic")
                 },
             }

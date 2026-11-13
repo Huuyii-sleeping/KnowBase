@@ -131,6 +131,16 @@ test('cleanup still removes containers when the API shutdown operation fails', a
 });
 
 test('CLI rejects unsupported options before starting external services', () => {
+  assert.equal(options([]).queryMode, 'off');
+  assert.throws(() => options(['--query-mode', 'bad']), /Invalid/);
+  assert.throws(
+    () => options(['--query-mode', 'clauses-both']),
+    /require recall/,
+  );
+  assert.equal(
+    options(['--suite', 'recall', '--query-mode', 'clauses-keyword']).queryMode,
+    'clauses-keyword',
+  );
   for (const slots of ['0', '4', '1.5', 'x'])
     assert.throws(() => options(['--body-slots', slots]), /Invalid/);
   assert.equal(options([]).bodySlots, 2);

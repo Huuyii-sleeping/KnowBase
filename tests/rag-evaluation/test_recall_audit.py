@@ -113,6 +113,11 @@ class RecallAuditTests(unittest.TestCase):
                 ["selection_loss", "filtered_or_route_budget"],
             )
             self.assertTrue((root / "recall-audit.md").read_text())
+            traces[0]["queryMode"] = "clauses-both"
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "query mode differs"):
+                analyze(root, root)
+            del traces[0]["queryMode"]
             # New traces distinguish eligible-but-truncated evidence from rejected metadata.
             for trace in traces:
                 trace["keyword"]["eligibleCandidates"] = chunks
