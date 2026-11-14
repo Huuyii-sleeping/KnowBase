@@ -1,4 +1,5 @@
 import json
+import gzip
 import sys
 import tempfile
 import unittest
@@ -113,6 +114,18 @@ class RecallAuditTests(unittest.TestCase):
                 ["selection_loss", "filtered_or_route_budget"],
             )
             self.assertTrue((root / "recall-audit.md").read_text())
+            with gzip.open(root / "recall-traces.json.gz", "wb") as compressed:
+                compressed.write(path.read_bytes())
+            path.unlink()
+            self.assertEqual(analyze(root, root)["results"], payload["results"])
+            path.write_text(json.dumps(traces))
+            (root / "recall-traces.json.gz").write_bytes(b"invalid archive")
+            # New uncompressed checkpoints take precedence over old archives.
+            self.assertEqual(analyze(root, root)["results"], payload["results"])
+            path.unlink()
+            with self.assertRaises(gzip.BadGzipFile):
+                analyze(root, root)
+            path.write_text(json.dumps(traces))
             traces[0]["queryMode"] = "clauses-both"
             path.write_text(json.dumps(traces))
             with self.assertRaisesRegex(ValueError, "query mode differs"):

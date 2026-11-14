@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import math
 from pathlib import Path
@@ -80,7 +81,12 @@ def analyze(directory: Path, output: Path) -> dict:
     }
     mapping = {item["file"]: item["id"] for item in metadata["document_mapping"]}
     corpus = json.loads((output / "indexed-corpus.json").read_text())
-    traces = json.loads((output / "recall-traces.json").read_text())
+    trace_path = output / "recall-traces.json"
+    if trace_path.is_file():
+        traces = json.loads(trace_path.read_text())
+    else:
+        with gzip.open(output / "recall-traces.json.gz", "rt", encoding="utf-8") as f:
+            traces = json.load(f)
     query_mode = metadata["recall_audit"].get("query_mode", "off")
     if any(trace.get("queryMode", "off") != query_mode for trace in traces):
         raise ValueError("trace query mode differs from metadata")

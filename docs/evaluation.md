@@ -1,6 +1,17 @@
 # 检索评测
 
-检索评测的主集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。语料和计分口径固定，运行记录保存被测检索实现的提交与策略。
+检索评测的初始基线集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。语料和计分口径固定，运行记录保存被测检索实现的提交与策略。
+
+## 当前状态与结果入口
+
+后续召回诊断使用 `knowbase-recall-v2/v3`，新来源检查使用 `knowbase-holdout-v1`；历史基线不被新结果覆盖。所有已评分数据现均为已暴露回归数据，同作者合成留出不能当作独立人工验收。
+
+| 项目 | 当前状态 | 依据 |
+| --- | --- | --- |
+| 业务默认 | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算 | [检索设计](retrieval.md) |
+| 冻结实验候选 | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署 | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md) |
+| 未采用方向 | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭 | 本文对应实验章节 |
+| 最新留出检查 | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步 | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md) |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
@@ -51,6 +62,29 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 启动失败时，运行器会在清理容器前尽量保留 `infrastructure.log`。测试 RabbitMQ 的健康检查以 broker 用户运行，防止 root 诊断进程在首次启动时创建 broker 无法读取的 Erlang cookie。
 
 输出包括总览 `comparison.md/json`、配置与语料 SHA-256、模型摘要、每组的逐题 JSON/Markdown、TREC qrels/run 和 API 日志。报告不包含认证 Token。
+
+## 本地评测产物整理
+
+`reports/` 是忽略提交的本地运行证据；冻结数据集、协议、汇总结论及失败样本仍保存在 `benchmarks/`。未采用的实验脚本保留以便复现，不作为业务默认开启的依据。
+
+原始召回记录会重复保存候选正文，可对已完成运行做无损 gzip 压缩：
+
+```bash
+# 默认仅预览
+python tools/rag-evaluation/compact_reports.py --reports reports
+# 执行压缩
+python tools/rag-evaluation/compact_reports.py --reports reports --apply
+```
+
+工具只处理同目录 `run-status.json` 标记为 `completed` 的 `recall-traces.json`，跳过符号链接；失败或运行中的记录保持原样。先写临时文件，再解压校验 SHA-256，确认原文件未变化后发布 `.json.gz`，最后删除已校验的原件。已有同名压缩文件时拒绝覆盖；删除原件失败时保留两份供检查。标准输出包含原文校验值及压缩前后字节数，可重定向保存。本文运行命令使用的 Python 应为 3.11 或更新版本。
+
+`recall_audit.py` 在没有原始 JSON 时直接读取 gzip，重新评分无需重新检索；两种文件并存时优先读取未压缩文件，损坏的压缩文件明确报错。例：
+
+```bash
+python tools/rag-evaluation/recall_audit.py \
+  --dataset benchmarks/knowbase-holdout-v1 \
+  --output-dir reports/retrieval-holdout-candidate/<运行目录>
+```
 
 ## 指标口径
 
