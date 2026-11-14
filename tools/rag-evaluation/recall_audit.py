@@ -84,6 +84,9 @@ def analyze(directory: Path, output: Path) -> dict:
     query_mode = metadata["recall_audit"].get("query_mode", "off")
     if any(trace.get("queryMode", "off") != query_mode for trace in traces):
         raise ValueError("trace query mode differs from metadata")
+    keyword_mode = metadata["recall_audit"].get("keyword_query_mode", "off")
+    if any(trace.get("keywordQueryMode", "off") != keyword_mode for trace in traces):
+        raise ValueError("trace keyword query mode differs from metadata")
     eligibility = [
         "eligibleCandidates" in trace[route]
         for trace in traces

@@ -2,6 +2,7 @@ const { randomUUID } = require('node:crypto');
 const { resolveBudgets } = require('./recall-budget.cjs');
 const { queryMode } = require('./multi-intent.cjs');
 const { recallIntents } = require('./multi-intent-recall.cjs');
+const { keywordQueryMode, keywordQuery } = require('./keyword-query.cjs');
 
 // Parent/child IPC only. No debug HTTP route is installed in the application.
 function requestRecall(child, input, timeoutMs = 120000) {
@@ -46,6 +47,11 @@ function installRecallHandler(child, recall, rerank, merge) {
     try {
       const { query, user, finalK = 5 } = message.input;
       const mode = queryMode(message.input.queryMode || 'off');
+      const keywordMode = keywordQueryMode(
+        message.input.keywordQueryMode || 'off',
+      );
+      if (mode !== 'off' && keywordMode !== 'off')
+        throw new Error('Invalid combined query experiments');
       let pair;
       try {
         pair = resolveBudgets(message.input);
@@ -60,9 +66,10 @@ function installRecallHandler(child, recall, rerank, merge) {
         finalK > 20
       )
         throw new Error('Invalid isolated recall audit input');
+      const keywordText = keywordQuery(query, keywordMode);
       const started = performance.now();
       const [keyword, semantic] = await Promise.all([
-        recallIntents(recall, query, pair.keyword, 'keyword', user, mode),
+        recallIntents(recall, keywordText, pair.keyword, 'keyword', user, mode),
         recallIntents(recall, query, pair.semantic, 'semantic', user, mode),
       ]);
       const pool = merge(keyword.items, semantic.items);
@@ -71,6 +78,8 @@ function installRecallHandler(child, recall, rerank, merge) {
         id: message.id,
         trace: {
           queryMode: mode,
+          keywordQueryMode: keywordMode,
+          originalQuery: query,
           keywordBudget: pair.keyword,
           semanticBudget: pair.semantic,
           keyword,

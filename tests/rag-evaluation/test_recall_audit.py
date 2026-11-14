@@ -118,6 +118,11 @@ class RecallAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "query mode differs"):
                 analyze(root, root)
             del traces[0]["queryMode"]
+            traces[0]["keywordQueryMode"] = "trim-question"
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "keyword query mode differs"):
+                analyze(root, root)
+            del traces[0]["keywordQueryMode"]
             # New traces distinguish eligible-but-truncated evidence from rejected metadata.
             for trace in traces:
                 trace["keyword"]["eligibleCandidates"] = chunks

@@ -95,6 +95,7 @@ async function main(args) {
           budgets: config.budgets,
           routeBudgets: config.routeBudgets,
           queryMode: config.queryMode,
+          keywordQueryMode: config.keywordQueryMode,
         },
       );
       await fs.writeFile(

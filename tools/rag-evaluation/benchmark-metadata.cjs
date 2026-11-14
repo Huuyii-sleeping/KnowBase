@@ -63,6 +63,7 @@ async function collectMetadata({
     keyword_policy: config.keywordPolicy,
     keyword_body_slots: config.bodySlots,
     query_mode: config.queryMode,
+    keyword_query_mode: config.keywordQueryMode,
     keyword_policy_details: {
       weighted: 'best_fields body^2 vs retrieval_text, tie_breaker=0.1',
       'body-reserve': `${config.bodySlots} body slots then one context slot; dedup by chunk ID; up to 2x index reads, unchanged returned budget and native chosen-hit score`,

@@ -162,6 +162,33 @@ test('experimental query mode is passed to scoring but HTTP parity always uses t
   assert.match(result.http_parity_scope, /original unsplit/);
 });
 
+test('keyword query mode is passed to scoring but HTTP parity always uses the original baseline', async (t) => {
+  const directory = await fixture(t),
+    inputs = [];
+  const request = async (_child, input) => {
+    inputs.push(input);
+    return {
+      selected: [
+        { chunkId: input.keywordQueryMode ? 'experimental' : 'original' },
+      ],
+    };
+  };
+  const result = await runRecallAudit(
+    {},
+    { request: async () => ({ items: [{ chunkId: 'original' }] }) },
+    directory,
+    directory,
+    { split: 'development', budgets: [15], keywordQueryMode: 'trim-question' },
+    request,
+  );
+  assert.deepEqual(
+    inputs.map((i) => i.keywordQueryMode),
+    ['trim-question', 'trim-question', undefined],
+  );
+  assert.equal(result.keyword_query_mode, 'trim-question');
+  assert.match(result.http_parity_scope, /original unsplit/);
+});
+
 test('metadata fingerprints include a frozen protocol and reject missing corpus files', async (t) => {
   const directory = await fixture(t);
   await fs.mkdir(path.join(directory, 'docs'));

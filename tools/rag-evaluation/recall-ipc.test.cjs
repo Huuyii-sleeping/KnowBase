@@ -113,6 +113,68 @@ test('isolated handler reports dependency failures instead of fabricating an emp
   assert.equal(reply.error, 'store failed');
 });
 
+test('keyword reduction changes one route only and preserves identity, budgets and rerank query', async () => {
+  const child = new EventEmitter(),
+    replies = [],
+    calls = [];
+  child.send = (reply) => replies.push(reply);
+  const query = '未满24小时怎么撤回，N-123_v2不能删除吗？';
+  const user = { id: 'fixture', role: 'ADMIN' };
+  const dispose = installRecallHandler(
+    child,
+    {
+      recall: async (input, route, identity) => {
+        calls.push({ input, route, identity });
+        return { items: [] };
+      },
+    },
+    {
+      rerank: (text, pool) => {
+        assert.equal(text, query);
+        return pool;
+      },
+    },
+    (a, b) => [...a, ...b],
+  );
+  const input = {
+    query,
+    user,
+    keywordBudget: 30,
+    semanticBudget: 15,
+    keywordQueryMode: 'trim-question',
+  };
+  child.emit('message', { kind: 'recall-audit', id: 'valid', input });
+  await new Promise(setImmediate);
+  assert.deepEqual(
+    calls.map((c) => [c.input, c.route]),
+    [
+      [{ query: '未满24小时 撤回，N-123_v2不能删除 ？', topK: 30 }, 'keyword'],
+      [{ query, topK: 15 }, 'semantic'],
+    ],
+  );
+  assert.ok(calls.every((c) => c.identity === user));
+  assert.equal(replies[0].trace.originalQuery, query);
+  assert.equal(replies[0].trace.keywordQueryMode, 'trim-question');
+  assert.equal(
+    replies[0].trace.keyword.queryPlan[0].query,
+    calls[0].input.query,
+  );
+  for (const patch of [
+    { keywordQueryMode: 'bad' },
+    { queryMode: 'clauses-both' },
+  ]) {
+    child.emit('message', {
+      kind: 'recall-audit',
+      id: 'bad',
+      input: { ...input, ...patch },
+    });
+    await new Promise(setImmediate);
+    assert.match(replies.at(-1).error, /Invalid/);
+  }
+  assert.equal(calls.length, 2);
+  dispose();
+});
+
 test('multi-intent IPC preserves user scope, original rerank query and total budgets; invalid mode never queries', async () => {
   const child = new EventEmitter(),
     replies = [],

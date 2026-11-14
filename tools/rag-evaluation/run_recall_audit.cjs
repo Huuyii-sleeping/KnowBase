@@ -13,6 +13,7 @@ async function runRecallAudit(
     budgets = [5, 10, 15, 30, 60],
     routeBudgets,
     queryMode = 'off',
+    keywordQueryMode = 'off',
   } = {},
   request = requestRecall,
 ) {
@@ -26,6 +27,7 @@ async function runRecallAudit(
     query: questions[0].question,
     budget: 15,
     queryMode,
+    keywordQueryMode,
     user: client.user,
   });
   const pairs = routeBudgets || budgets.map((b) => budgetPair(b, b));
@@ -35,6 +37,7 @@ async function runRecallAudit(
       const trace = await request(environment.api, {
         query: question.question,
         queryMode,
+        keywordQueryMode,
         ...(routeBudgets
           ? { keywordBudget: pair.keyword, semanticBudget: pair.semantic }
           : { budget }),
@@ -56,6 +59,7 @@ async function runRecallAudit(
     questions.find((question) => question.id === 'kb011') || questions[0];
   let traced =
     queryMode === 'off' &&
+    keywordQueryMode === 'off' &&
     rows.find((row) => row.id === sample.id && row.budget === 15);
   if (!traced)
     traced = await request(environment.api, {
@@ -79,8 +83,9 @@ async function runRecallAudit(
     split,
     requests: rows.length,
     query_mode: queryMode,
+    keyword_query_mode: keywordQueryMode,
     http_parity_scope:
-      'original unsplit query at existing production budget; experimental split path has no public HTTP endpoint',
+      'original unsplit query at existing production budget; experimental query paths have no public HTTP endpoint',
     http_selection_verified: sample.id,
   };
 }
