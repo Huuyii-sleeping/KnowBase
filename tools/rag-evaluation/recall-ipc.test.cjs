@@ -232,3 +232,70 @@ test('multi-intent IPC preserves user scope, original rerank query and total bud
   assert.equal(calls.length, 6);
   dispose();
 });
+
+test('phrase mode uses the isolated keyword adapter only, retains identity/original query, and rejects unavailable or combined modes', async () => {
+  const child = new EventEmitter(),
+    replies = [],
+    calls = [];
+  child.send = (r) => replies.push(r);
+  const query = 'parseStatus=READY 如何提交“发布审核”？',
+    user = { id: 'fixture', role: 'ADMIN' };
+  const service = (kind) => ({
+    recall: async (input, route, identity) => {
+      calls.push({ kind, input, route, identity });
+      return { items: [] };
+    },
+  });
+  const dispose = installRecallHandler(
+    child,
+    service('normal'),
+    {
+      rerank: (text, pool) => {
+        assert.equal(text, query);
+        return pool;
+      },
+    },
+    (a, b) => [...a, ...b],
+    (mode) => {
+      assert.equal(mode, 'identifiers-phrases');
+      return service('phrase');
+    },
+  );
+  const input = {
+    query,
+    user,
+    keywordBudget: 30,
+    semanticBudget: 15,
+    keywordMatchMode: 'identifiers-phrases',
+  };
+  child.emit('message', { kind: 'recall-audit', id: 'ok', input });
+  await new Promise(setImmediate);
+  assert.deepEqual(
+    calls.map((c) => [c.kind, c.route, c.input]),
+    [
+      ['phrase', 'keyword', { query, topK: 30 }],
+      ['normal', 'semantic', { query, topK: 15 }],
+    ],
+  );
+  assert.ok(calls.every((c) => c.identity === user));
+  assert.equal(replies[0].trace.keywordMatchTargets.length, 2);
+  for (const patch of [
+    { keywordMatchMode: 'bad' },
+    { queryMode: 'clauses-both' },
+    { keywordQueryMode: 'trim-question' },
+  ]) {
+    child.emit('message', {
+      kind: 'recall-audit',
+      id: 'bad',
+      input: { ...input, ...patch },
+    });
+    await new Promise(setImmediate);
+    assert.match(replies.at(-1).error, /Invalid/);
+  }
+  assert.equal(calls.length, 2);
+  dispose();
+  installRecallHandler(child, {}, {}, () => []);
+  child.emit('message', { kind: 'recall-audit', id: 'missing', input });
+  await new Promise(setImmediate);
+  assert.match(replies.at(-1).error, /adapter unavailable/);
+});

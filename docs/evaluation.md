@@ -205,3 +205,9 @@ recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内
 冻结规则、134 题预检触发数及两模式共 448 次计分计划见 `benchmarks/knowbase-recall-v3/experiments/keyword-noise-protocol.json`。固定标题章节、正文保护 2:1、CJK、30:15 及既有模型，不改索引正文、问题或答案。逐条比较池证据与最终选择；未标注片段不能直接视为不相关，不能把证据密度当作完整 Precision。无稳定收益则记录并停止，不根据结果反复调整停用词。
 
 448 次计分已完成，见[关键词降噪对照报告](../benchmarks/knowbase-recall-v3/experiments/keyword-noise-audit-v3.md)。各阶段逐证据命中均无新增或丢失，三组的池与最终证据指标不变，故不采用、保持 off。独立重建下未改动查询也出现关键词候选次序/分数变化，不能把所有候选变化归因于规则；后续小幅排名收益需同索引交替与重复测量确认。本轮无证据收益，停止该规则细调。
+
+## 标识符与短语优先匹配实验
+
+`run_phrase_comparison.cjs --python /path/to/venv/bin/python` 是独立的内部评测入口。每份语料只建一次索引，按题交替比较 off、identifiers、identifiers-phrases，第二遍反转顺序；每模式/每遍单独保存完整 Trace 并计分。固定现有 30:15、正文保护 2:1、标题章节、CJK、模型与分块，不改业务接口、索引字段、融合或重排。实验通过已有 generation 读取器与 RagQueryService 执行，复用真实权限/版本复查；只为关键词请求的同一字段增加可选 `match_phrase`，原查询必须命中。
+
+规则只提取原文中的标识符和明确引用的短语，最多四项，slop=0、boost=2；具体边界与停止条件冻结在 `benchmarks/knowbase-recall-v3/experiments/phrase-match-protocol.json`。现有 224 题之外，`knowbase-phrase-v1` 的 16 篇/10 题诊断样本检查相近错误码、路径、大小写、短语、否定和未出现标识。全部为合成且已暴露，不能当作独立验收。`match_phrase` 按分词后位置匹配，会归一化大小写或符号，不保证原始字符串完全相等；小样本中的明确碰撞也必须单独报告。

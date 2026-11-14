@@ -3,6 +3,7 @@ const { resolveBudgets } = require('./recall-budget.cjs');
 const { queryMode } = require('./multi-intent.cjs');
 const { recallIntents } = require('./multi-intent-recall.cjs');
 const { keywordQueryMode, keywordQuery } = require('./keyword-query.cjs');
+const { phraseMode, phraseTargets } = require('./phrase-match.cjs');
 
 // Parent/child IPC only. No debug HTTP route is installed in the application.
 function requestRecall(child, input, timeoutMs = 120000) {
@@ -41,7 +42,7 @@ function requestRecall(child, input, timeoutMs = 120000) {
   });
 }
 
-function installRecallHandler(child, recall, rerank, merge) {
+function installRecallHandler(child, recall, rerank, merge, phraseRecall) {
   const handler = async (message) => {
     if (message.kind !== 'recall-audit') return;
     try {
@@ -50,8 +51,11 @@ function installRecallHandler(child, recall, rerank, merge) {
       const keywordMode = keywordQueryMode(
         message.input.keywordQueryMode || 'off',
       );
-      if (mode !== 'off' && keywordMode !== 'off')
+      const matchMode = phraseMode(message.input.keywordMatchMode || 'off');
+      if ([mode, keywordMode, matchMode].filter((v) => v !== 'off').length > 1)
         throw new Error('Invalid combined query experiments');
+      if (matchMode !== 'off' && !phraseRecall)
+        throw new Error('Phrase experiment adapter unavailable');
       let pair;
       try {
         pair = resolveBudgets(message.input);
@@ -69,7 +73,14 @@ function installRecallHandler(child, recall, rerank, merge) {
       const keywordText = keywordQuery(query, keywordMode);
       const started = performance.now();
       const [keyword, semantic] = await Promise.all([
-        recallIntents(recall, keywordText, pair.keyword, 'keyword', user, mode),
+        recallIntents(
+          matchMode === 'off' ? recall : phraseRecall(matchMode),
+          keywordText,
+          pair.keyword,
+          'keyword',
+          user,
+          mode,
+        ),
         recallIntents(recall, query, pair.semantic, 'semantic', user, mode),
       ]);
       const pool = merge(keyword.items, semantic.items);
@@ -79,6 +90,8 @@ function installRecallHandler(child, recall, rerank, merge) {
         trace: {
           queryMode: mode,
           keywordQueryMode: keywordMode,
+          keywordMatchMode: matchMode,
+          keywordMatchTargets: phraseTargets(query, matchMode),
           originalQuery: query,
           keywordBudget: pair.keyword,
           semanticBudget: pair.semantic,

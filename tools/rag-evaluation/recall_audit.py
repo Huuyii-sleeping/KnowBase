@@ -87,6 +87,9 @@ def analyze(directory: Path, output: Path) -> dict:
     keyword_mode = metadata["recall_audit"].get("keyword_query_mode", "off")
     if any(trace.get("keywordQueryMode", "off") != keyword_mode for trace in traces):
         raise ValueError("trace keyword query mode differs from metadata")
+    match_mode = metadata["recall_audit"].get("keyword_match_mode", "off")
+    if any(trace.get("keywordMatchMode", "off") != match_mode for trace in traces):
+        raise ValueError("trace keyword match mode differs from metadata")
     eligibility = [
         "eligibleCandidates" in trace[route]
         for trace in traces
@@ -165,6 +168,7 @@ def analyze(directory: Path, output: Path) -> dict:
                     route: trace[route].get("queryPlan")
                     for route in ("keyword", "semantic")
                 },
+                "keyword_match_targets": trace.get("keywordMatchTargets", []),
             }
         )
     summaries = []
