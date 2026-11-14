@@ -1,0 +1,1936 @@
+{
+  "protocol_sha256": "951a0cc838c766d0c56a612593974bc50b8bb29448ded9671959ba64414a0141",
+  "freeze_sha256": "3414dacd7e0adc6aa75736b8f4d6cdd87a67fbb4be648ee40fefa624eec95058",
+  "scope": "One-time prospective data-disjoint synthetic holdout after existing configuration selection; not independent author, human or real-user blind evaluation",
+  "scored_requests": 160,
+  "verified": [
+    "same clean execution commit",
+    "same model digest and corpus fingerprints",
+    "identical original chunks and content",
+    "all gold evidence present in indexed chunks",
+    "all8cross-chunk pairs span different actual chunks",
+    "all query experiments off",
+    "two complete runs and cleaned infrastructure"
+  ],
+  "candidate_quality_checks": {
+    "indexed_evidence_presence": true,
+    "pool_evidence": true,
+    "pool_all_sources": true,
+    "pool_all_evidence": true,
+    "each_positive_category": true,
+    "merge_loss": true,
+    "no_new_pool_evidence_losses": true
+  },
+  "candidate_quality_passed": true,
+  "evidence_changes": {
+    "keyword_raw": [],
+    "keyword": [],
+    "semantic_raw": [
+      {
+        "id": "holdout-wetland-survey-05",
+        "family": "wetland-survey",
+        "category": "role_scope",
+        "question": "样带的位置挪动了，谁有权确认新的坐标？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-03",
+        "family": "theatre-rigging",
+        "category": "negation_condition",
+        "question": "演员还站在杆子下面，我在对讲机里提醒了，能开始升降吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-manuscript-reading-08",
+        "family": "manuscript-reading",
+        "category": "cross_chunk",
+        "question": "听雨特藏调阅以什么码登记，归还时缺少哪张卡会变成待复核？",
+        "lost": [
+          0
+        ],
+        "gained": []
+      },
+      {
+        "id": "holdout-mountain-radio-03",
+        "family": "mountain-radio",
+        "category": "negation_condition",
+        "question": "备用电池外壳好好的，只是还没做负载检查，可以先装机救急吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-mountain-radio-05",
+        "family": "mountain-radio",
+        "category": "role_scope",
+        "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      }
+    ],
+    "semantic": [
+      {
+        "id": "holdout-wetland-survey-03",
+        "family": "wetland-survey",
+        "category": "negation_condition",
+        "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-wetland-survey-08",
+        "family": "wetland-survey",
+        "category": "cross_chunk",
+        "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-planetarium-visit-07",
+        "family": "planetarium-visit",
+        "category": "multi_document",
+        "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-cold-chain-samples-06",
+        "family": "cold-chain-samples",
+        "category": "heading_context",
+        "question": "霜层目视检查用什么光，看到连续霜带需要留下哪些照片？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-04",
+        "family": "theatre-rigging",
+        "category": "boundary_value",
+        "question": "排练想一次升1.8米，可以直接执行吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-06",
+        "family": "theatre-rigging",
+        "category": "heading_context",
+        "question": "软景折痕缓释要降到什么高度、停多久，能不能再挂重物拉平？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-07",
+        "family": "theatre-rigging",
+        "category": "multi_document",
+        "question": "吊杆运动口令由谁发出，布景阻燃证明最后由谁复核？",
+        "lost": [
+          1
+        ],
+        "gained": []
+      },
+      {
+        "id": "holdout-manuscript-reading-06",
+        "family": "manuscript-reading",
+        "category": "heading_context",
+        "question": "虫蚀孔洞描记画在什么材料上，能直接压在古籍纸面上画吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-mountain-radio-04",
+        "family": "mountain-radio",
+        "category": "boundary_value",
+        "question": "位置简报发出后过了22秒没回执，现在能重发吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-mountain-radio-08",
+        "family": "mountain-radio",
+        "category": "cross_chunk",
+        "question": "岑岭中继救援位置主要按什么登记，撤站时除了设备还必须交哪份图？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-03",
+        "family": "ceramics-kiln",
+        "category": "negation_condition",
+        "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-06",
+        "family": "ceramics-kiln",
+        "category": "heading_context",
+        "question": "流釉边界判读从哪里量、用什么单位，还要和什么东西一起拍照？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-07",
+        "family": "ceramics-kiln",
+        "category": "multi_document",
+        "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-08",
+        "family": "ceramics-kiln",
+        "category": "cross_chunk",
+        "question": "栖陶试烧数据按哪个批号关联，小样交接少了什么就不能出结论？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-02",
+        "family": "reef-dive",
+        "category": "paraphrase",
+        "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-03",
+        "family": "reef-dive",
+        "category": "negation_condition",
+        "question": "我的潜水电脑看着正常，但还没和潜伴互查气源，可以先下水吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-05",
+        "family": "reef-dive",
+        "category": "role_scope",
+        "question": "摄影记录员为了画面好看可以挪样线锚点吗，需要谁同意？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-07",
+        "family": "reef-dive",
+        "category": "multi_document",
+        "question": "移动样线锚点由谁同意，发现渔网缠绕又由哪个岗位联系清理队？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      }
+    ],
+    "pool": [],
+    "selected": [
+      {
+        "id": "holdout-wetland-survey-03",
+        "family": "wetland-survey",
+        "category": "negation_condition",
+        "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-wetland-survey-08",
+        "family": "wetland-survey",
+        "category": "cross_chunk",
+        "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-planetarium-visit-07",
+        "family": "planetarium-visit",
+        "category": "multi_document",
+        "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-cold-chain-samples-06",
+        "family": "cold-chain-samples",
+        "category": "heading_context",
+        "question": "霜层目视检查用什么光，看到连续霜带需要留下哪些照片？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-04",
+        "family": "theatre-rigging",
+        "category": "boundary_value",
+        "question": "排练想一次升1.8米，可以直接执行吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-06",
+        "family": "theatre-rigging",
+        "category": "heading_context",
+        "question": "软景折痕缓释要降到什么高度、停多久，能不能再挂重物拉平？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-theatre-rigging-07",
+        "family": "theatre-rigging",
+        "category": "multi_document",
+        "question": "吊杆运动口令由谁发出，布景阻燃证明最后由谁复核？",
+        "lost": [
+          1
+        ],
+        "gained": []
+      },
+      {
+        "id": "holdout-manuscript-reading-06",
+        "family": "manuscript-reading",
+        "category": "heading_context",
+        "question": "虫蚀孔洞描记画在什么材料上，能直接压在古籍纸面上画吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-mountain-radio-04",
+        "family": "mountain-radio",
+        "category": "boundary_value",
+        "question": "位置简报发出后过了22秒没回执，现在能重发吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-mountain-radio-08",
+        "family": "mountain-radio",
+        "category": "cross_chunk",
+        "question": "岑岭中继救援位置主要按什么登记，撤站时除了设备还必须交哪份图？",
+        "lost": [],
+        "gained": [
+          1
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-03",
+        "family": "ceramics-kiln",
+        "category": "negation_condition",
+        "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-06",
+        "family": "ceramics-kiln",
+        "category": "heading_context",
+        "question": "流釉边界判读从哪里量、用什么单位，还要和什么东西一起拍照？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-07",
+        "family": "ceramics-kiln",
+        "category": "multi_document",
+        "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-ceramics-kiln-08",
+        "family": "ceramics-kiln",
+        "category": "cross_chunk",
+        "question": "栖陶试烧数据按哪个批号关联，小样交接少了什么就不能出结论？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-02",
+        "family": "reef-dive",
+        "category": "paraphrase",
+        "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-03",
+        "family": "reef-dive",
+        "category": "negation_condition",
+        "question": "我的潜水电脑看着正常，但还没和潜伴互查气源，可以先下水吗？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-05",
+        "family": "reef-dive",
+        "category": "role_scope",
+        "question": "摄影记录员为了画面好看可以挪样线锚点吗，需要谁同意？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      },
+      {
+        "id": "holdout-reef-dive-07",
+        "family": "reef-dive",
+        "category": "multi_document",
+        "question": "移动样线锚点由谁同意，发现渔网缠绕又由哪个岗位联系清理队？",
+        "lost": [],
+        "gained": [
+          0
+        ]
+      }
+    ]
+  },
+  "configurations": {
+    "current-default": {
+      "raw_report_directory": "reports/retrieval-holdout-default/2026-11-14T14-54-21-258Z-7543",
+      "metadata": {
+        "api_git_commit": "2e71600d3d886d955450a20e6d988bfa01fdfe97",
+        "working_tree_dirty": false,
+        "document_count": 40,
+        "indexed_chunk_count": 64,
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "embedding_encoding": "plain",
+        "retrieval_context": "body",
+        "keyword_analyzer": "standard",
+        "keyword_policy": "combined",
+        "keyword_body_slots": 2
+      },
+      "summary": {
+        "split": "validation",
+        "budget_per_route": 15,
+        "route_budgets": {
+          "id": 15,
+          "keyword": 15,
+          "semantic": 15
+        },
+        "stages": {
+          "indexed": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 64,
+            "negative_empty_rate": 0
+          },
+          "keyword_raw": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 44.8,
+            "negative_empty_rate": 0
+          },
+          "keyword": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": 0
+          },
+          "semantic_raw": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.9375,
+            "all_evidence_found": 0.9375,
+            "mean_candidate_count": 45,
+            "negative_empty_rate": 0
+          },
+          "semantic": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 0.7422,
+            "all_sources_found": 0.7188,
+            "evidence_recall": 0.5,
+            "all_evidence_found": 0.4375,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": 0
+          },
+          "pool": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 26.49,
+            "negative_empty_rate": 0
+          },
+          "selected": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 0.6016,
+            "all_sources_found": 0.5625,
+            "evidence_recall": 0.5,
+            "all_evidence_found": 0.4375,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": 0
+          },
+          "keyword_eligible": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 44.8,
+            "negative_empty_rate": 0
+          },
+          "semantic_eligible": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.9375,
+            "all_evidence_found": 0.9375,
+            "mean_candidate_count": 45,
+            "negative_empty_rate": 0
+          }
+        },
+        "by_category": {
+          "boundary_value": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.75,
+              "all_sources_found": 0.75,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.625,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 25.88,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.625,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.625,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "cross_chunk": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.875,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 25.25,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.875,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "exact_identifier": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 26.62,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "heading_context": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.5,
+              "all_sources_found": 0.5,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 27.25,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.375,
+              "all_sources_found": 0.375,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "multi_document": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.8125,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 26.5,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.6875,
+              "all_sources_found": 0.375,
+              "evidence_recall": 0.625,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "negation_condition": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.625,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.125,
+              "all_evidence_found": 0.125,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 27.38,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.25,
+              "all_sources_found": 0.25,
+              "evidence_recall": 0.125,
+              "all_evidence_found": 0.125,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "paraphrase": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.75,
+              "all_sources_found": 0.75,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 27,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.5,
+              "all_sources_found": 0.5,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "role_scope": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.625,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.25,
+              "all_evidence_found": 0.25,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 27.5,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.5,
+              "all_sources_found": 0.5,
+              "evidence_recall": 0.25,
+              "all_evidence_found": 0.25,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "unanswerable": {
+            "keyword": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 25.75,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            }
+          }
+        },
+        "mean_ms": 48.39,
+        "p95_ms": 62.53,
+        "acceptance": {
+          "quality_and_serial_latency_passed": true,
+          "checks": {
+            "evidence_recall": true,
+            "all_sources_found": true,
+            "all_evidence_found": true,
+            "each_positive_category": true,
+            "merge_loss": true,
+            "serial_latency": true
+          },
+          "positive_category_evidence": {
+            "boundary_value": 1,
+            "cross_chunk": 1,
+            "exact_identifier": 1,
+            "heading_context": 1,
+            "multi_document": 1,
+            "negation_condition": 1,
+            "paraphrase": 1,
+            "role_scope": 1
+          },
+          "merge_losses": 0,
+          "safety_status": "requires separate permission and generation consistency tests",
+          "scope": "synthetic engineering gate, not production acceptance"
+        }
+      },
+      "verified_cross_chunk_questions": [
+        "holdout-wetland-survey-08",
+        "holdout-planetarium-visit-08",
+        "holdout-cold-chain-samples-08",
+        "holdout-theatre-rigging-08",
+        "holdout-manuscript-reading-08",
+        "holdout-mountain-radio-08",
+        "holdout-ceramics-kiln-08",
+        "holdout-reef-dive-08"
+      ],
+      "family_scores": {
+        "ceramics-kiln": {
+          "keyword": 1,
+          "semantic": 0.5,
+          "pool": 1,
+          "selected": 0.5
+        },
+        "cold-chain-samples": {
+          "keyword": 1,
+          "semantic": 0.5625,
+          "pool": 1,
+          "selected": 0.5625
+        },
+        "manuscript-reading": {
+          "keyword": 1,
+          "semantic": 0.375,
+          "pool": 1,
+          "selected": 0.375
+        },
+        "mountain-radio": {
+          "keyword": 1,
+          "semantic": 0.5,
+          "pool": 1,
+          "selected": 0.5
+        },
+        "planetarium-visit": {
+          "keyword": 1,
+          "semantic": 0.625,
+          "pool": 1,
+          "selected": 0.625
+        },
+        "reef-dive": {
+          "keyword": 1,
+          "semantic": 0.5,
+          "pool": 1,
+          "selected": 0.5
+        },
+        "theatre-rigging": {
+          "keyword": 1,
+          "semantic": 0.5,
+          "pool": 1,
+          "selected": 0.5
+        },
+        "wetland-survey": {
+          "keyword": 1,
+          "semantic": 0.4375,
+          "pool": 1,
+          "selected": 0.4375
+        }
+      },
+      "pool_misses": [],
+      "negative_candidate_counts": [
+        {
+          "id": "holdout-wetland-survey-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 25,
+          "selected": 5
+        },
+        {
+          "id": "holdout-wetland-survey-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 28,
+          "selected": 5
+        },
+        {
+          "id": "holdout-planetarium-visit-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 23,
+          "selected": 5
+        },
+        {
+          "id": "holdout-planetarium-visit-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 27,
+          "selected": 5
+        },
+        {
+          "id": "holdout-cold-chain-samples-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-cold-chain-samples-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 27,
+          "selected": 5
+        },
+        {
+          "id": "holdout-theatre-rigging-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 26,
+          "selected": 5
+        },
+        {
+          "id": "holdout-theatre-rigging-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 23,
+          "selected": 5
+        },
+        {
+          "id": "holdout-manuscript-reading-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-manuscript-reading-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 28,
+          "selected": 5
+        },
+        {
+          "id": "holdout-mountain-radio-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 25,
+          "selected": 5
+        },
+        {
+          "id": "holdout-mountain-radio-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 28,
+          "selected": 5
+        },
+        {
+          "id": "holdout-ceramics-kiln-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 29,
+          "selected": 5
+        },
+        {
+          "id": "holdout-ceramics-kiln-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 27,
+          "selected": 5
+        },
+        {
+          "id": "holdout-reef-dive-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 23,
+          "selected": 5
+        },
+        {
+          "id": "holdout-reef-dive-10",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 25,
+          "selected": 5
+        }
+      ],
+      "keyword_top5_evidence": 0.984375
+    },
+    "frozen-candidate": {
+      "raw_report_directory": "reports/retrieval-holdout-candidate/2026-11-14T14-56-04-614Z-8148",
+      "metadata": {
+        "api_git_commit": "2e71600d3d886d955450a20e6d988bfa01fdfe97",
+        "working_tree_dirty": false,
+        "document_count": 40,
+        "indexed_chunk_count": 64,
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "embedding_encoding": "plain",
+        "retrieval_context": "title-heading",
+        "keyword_analyzer": "cjk",
+        "keyword_policy": "body-reserve",
+        "keyword_body_slots": 2
+      },
+      "summary": {
+        "split": "validation",
+        "budget_per_route": "k30-s15",
+        "route_budgets": {
+          "id": "k30-s15",
+          "keyword": 30,
+          "semantic": 15
+        },
+        "stages": {
+          "indexed": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 64,
+            "negative_empty_rate": 0
+          },
+          "keyword_raw": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 19.2,
+            "negative_empty_rate": 0
+          },
+          "keyword": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 17.36,
+            "negative_empty_rate": 0
+          },
+          "semantic_raw": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.9922,
+            "all_evidence_found": 0.9844,
+            "mean_candidate_count": 45,
+            "negative_empty_rate": 0
+          },
+          "semantic": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 0.8438,
+            "all_sources_found": 0.8281,
+            "evidence_recall": 0.7109,
+            "all_evidence_found": 0.6562,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": 0
+          },
+          "pool": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 27.54,
+            "negative_empty_rate": 0
+          },
+          "selected": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 0.7734,
+            "all_sources_found": 0.75,
+            "evidence_recall": 0.7109,
+            "all_evidence_found": 0.6562,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": 0
+          },
+          "keyword_eligible": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 19.2,
+            "negative_empty_rate": 0
+          },
+          "semantic_eligible": {
+            "questions": 80,
+            "answerable": 64,
+            "unanswerable": 16,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.9922,
+            "all_evidence_found": 0.9844,
+            "mean_candidate_count": 45,
+            "negative_empty_rate": 0
+          }
+        },
+        "by_category": {
+          "boundary_value": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15.5,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 0.875,
+              "all_evidence_found": 0.875,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 24,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 0.875,
+              "all_evidence_found": 0.875,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "cross_chunk": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 28.12,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 0.8125,
+              "all_evidence_found": 0.625,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 35.12,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 0.8125,
+              "all_evidence_found": 0.625,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "exact_identifier": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 11.62,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 23.75,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "heading_context": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 19.75,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.875,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.875,
+              "all_evidence_found": 0.875,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 29.62,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.875,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.875,
+              "all_evidence_found": 0.875,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "multi_document": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 28,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.875,
+              "all_sources_found": 0.75,
+              "evidence_recall": 0.75,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 36,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.8125,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.75,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "negation_condition": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 13.38,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.5,
+              "all_sources_found": 0.5,
+              "evidence_recall": 0.5,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 25.38,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.5,
+              "all_sources_found": 0.5,
+              "evidence_recall": 0.5,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "paraphrase": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 14.62,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.75,
+              "all_sources_found": 0.75,
+              "evidence_recall": 0.5,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 25.5,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.625,
+              "all_sources_found": 0.625,
+              "evidence_recall": 0.5,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "role_scope": {
+            "keyword": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 19.25,
+              "negative_empty_rate": null
+            },
+            "semantic": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.75,
+              "all_sources_found": 0.75,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": null
+            },
+            "pool": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 30.62,
+              "negative_empty_rate": null
+            },
+            "selected": {
+              "questions": 8,
+              "answerable": 8,
+              "unanswerable": 0,
+              "document_recall": 0.375,
+              "all_sources_found": 0.375,
+              "evidence_recall": 0.375,
+              "all_evidence_found": 0.375,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": null
+            }
+          },
+          "unanswerable": {
+            "keyword": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 11.69,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 22.69,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 16,
+              "answerable": 0,
+              "unanswerable": 16,
+              "document_recall": null,
+              "all_sources_found": null,
+              "evidence_recall": null,
+              "all_evidence_found": null,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            }
+          }
+        },
+        "mean_ms": 50.38,
+        "p95_ms": 62.37,
+        "acceptance": {
+          "quality_and_serial_latency_passed": true,
+          "checks": {
+            "evidence_recall": true,
+            "all_sources_found": true,
+            "all_evidence_found": true,
+            "each_positive_category": true,
+            "merge_loss": true,
+            "serial_latency": true
+          },
+          "positive_category_evidence": {
+            "boundary_value": 1,
+            "cross_chunk": 1,
+            "exact_identifier": 1,
+            "heading_context": 1,
+            "multi_document": 1,
+            "negation_condition": 1,
+            "paraphrase": 1,
+            "role_scope": 1
+          },
+          "merge_losses": 0,
+          "safety_status": "requires separate permission and generation consistency tests",
+          "scope": "synthetic engineering gate, not production acceptance"
+        }
+      },
+      "verified_cross_chunk_questions": [
+        "holdout-wetland-survey-08",
+        "holdout-planetarium-visit-08",
+        "holdout-cold-chain-samples-08",
+        "holdout-theatre-rigging-08",
+        "holdout-manuscript-reading-08",
+        "holdout-mountain-radio-08",
+        "holdout-ceramics-kiln-08",
+        "holdout-reef-dive-08"
+      ],
+      "family_scores": {
+        "ceramics-kiln": {
+          "keyword": 1,
+          "semantic": 0.875,
+          "pool": 1,
+          "selected": 0.875
+        },
+        "cold-chain-samples": {
+          "keyword": 1,
+          "semantic": 0.6875,
+          "pool": 1,
+          "selected": 0.6875
+        },
+        "manuscript-reading": {
+          "keyword": 1,
+          "semantic": 0.5,
+          "pool": 1,
+          "selected": 0.5
+        },
+        "mountain-radio": {
+          "keyword": 1,
+          "semantic": 0.6875,
+          "pool": 1,
+          "selected": 0.6875
+        },
+        "planetarium-visit": {
+          "keyword": 1,
+          "semantic": 0.6875,
+          "pool": 1,
+          "selected": 0.6875
+        },
+        "reef-dive": {
+          "keyword": 1,
+          "semantic": 0.9375,
+          "pool": 1,
+          "selected": 0.9375
+        },
+        "theatre-rigging": {
+          "keyword": 1,
+          "semantic": 0.6875,
+          "pool": 1,
+          "selected": 0.6875
+        },
+        "wetland-survey": {
+          "keyword": 1,
+          "semantic": 0.625,
+          "pool": 1,
+          "selected": 0.625
+        }
+      },
+      "pool_misses": [],
+      "negative_candidate_counts": [
+        {
+          "id": "holdout-wetland-survey-09",
+          "keyword": 15,
+          "semantic": 15,
+          "pool": 23,
+          "selected": 5
+        },
+        {
+          "id": "holdout-wetland-survey-10",
+          "keyword": 8,
+          "semantic": 15,
+          "pool": 22,
+          "selected": 5
+        },
+        {
+          "id": "holdout-planetarium-visit-09",
+          "keyword": 8,
+          "semantic": 15,
+          "pool": 17,
+          "selected": 5
+        },
+        {
+          "id": "holdout-planetarium-visit-10",
+          "keyword": 11,
+          "semantic": 15,
+          "pool": 22,
+          "selected": 5
+        },
+        {
+          "id": "holdout-cold-chain-samples-09",
+          "keyword": 16,
+          "semantic": 15,
+          "pool": 26,
+          "selected": 5
+        },
+        {
+          "id": "holdout-cold-chain-samples-10",
+          "keyword": 12,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-theatre-rigging-09",
+          "keyword": 11,
+          "semantic": 15,
+          "pool": 22,
+          "selected": 5
+        },
+        {
+          "id": "holdout-theatre-rigging-10",
+          "keyword": 10,
+          "semantic": 15,
+          "pool": 23,
+          "selected": 5
+        },
+        {
+          "id": "holdout-manuscript-reading-09",
+          "keyword": 8,
+          "semantic": 15,
+          "pool": 15,
+          "selected": 5
+        },
+        {
+          "id": "holdout-manuscript-reading-10",
+          "keyword": 9,
+          "semantic": 15,
+          "pool": 22,
+          "selected": 5
+        },
+        {
+          "id": "holdout-mountain-radio-09",
+          "keyword": 8,
+          "semantic": 15,
+          "pool": 21,
+          "selected": 5
+        },
+        {
+          "id": "holdout-mountain-radio-10",
+          "keyword": 17,
+          "semantic": 15,
+          "pool": 29,
+          "selected": 5
+        },
+        {
+          "id": "holdout-ceramics-kiln-09",
+          "keyword": 11,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-ceramics-kiln-10",
+          "keyword": 11,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-reef-dive-09",
+          "keyword": 16,
+          "semantic": 15,
+          "pool": 24,
+          "selected": 5
+        },
+        {
+          "id": "holdout-reef-dive-10",
+          "keyword": 16,
+          "semantic": 15,
+          "pool": 25,
+          "selected": 5
+        }
+      ],
+      "keyword_top5_evidence": 0.984375
+    }
+  },
+  "exposure_after_run": "Results viewed; this is now exposed regression. Never retune on it and call it unseen again.",
+  "deployment": "none"
+}
