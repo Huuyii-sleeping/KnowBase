@@ -1,0 +1,1746 @@
+[
+  {
+    "id": "holdout-wetland-survey-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "WET-ACOU-73对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "监测批次 WET-ACOU-73 使用离线声学记录器采集蛙鸣，不采集游客谈话。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "监测批次 WET-ACOU-73 使用离线声学记录器采集蛙鸣，不采集游客谈话。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "一轮已经连续录了37分钟，还能接着录吗？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "样带的位置挪动了，谁有权确认新的坐标？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "东岸回声复核需要间隔多久录几次，什么情况下算清洁样本？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "采用相隔11秒的两次短录音；两次均无机械噪声才可标记为清洁样本。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "采用相隔11秒的两次短录音；两次均无机械噪声才可标记为清洁样本。"
+      }
+    ],
+    "section_heading": "东岸回声复核"
+  },
+  {
+    "id": "holdout-wetland-survey-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "滨泽夜间声学监测由谁确认偏移后的样带坐标，遇到异常水位又由哪个岗位决定关不关栈道？",
+    "gold_docs": [
+      "wetland-survey.md",
+      "wetland-survey-companion.md"
+    ],
+    "reference_answer": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。 异常水位通知应发送给防汛联络岗，由其决定是否关闭滨泽观测栈道。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。"
+      },
+      {
+        "doc": "wetland-survey-companion.md",
+        "quote": "异常水位通知应发送给防汛联络岗，由其决定是否关闭滨泽观测栈道。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+    "gold_docs": [
+      "wetland-survey.md"
+    ],
+    "reference_answer": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。 资料交接时必须同时移交设备校时照片，只有音频文件不能完成交接。",
+    "evidence": [
+      {
+        "doc": "wetland-survey.md",
+        "quote": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。"
+      },
+      {
+        "doc": "wetland-survey.md",
+        "quote": "资料交接时必须同时移交设备校时照片，只有音频文件不能完成交接。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-wetland-survey-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "滨泽声学监测原始音频向外部商业机构出售的价格是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-wetland-survey-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "wetland-survey",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "WET-ACOU-74批次的设备采购折扣是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-planetarium-visit-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "ASTRO-GRP-26对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "预约单 ASTRO-GRP-26 对应双筒望远镜夜观活动，不包含主穹顶摄影服务。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "预约单 ASTRO-GRP-26 对应双筒望远镜夜观活动，不包含主穹顶摄影服务。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "天被云挡住看不到星星，我们这团是不是得重新排队等另一场？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "遇到云层遮蔽，讲解员改用室内星图讲座，已签到的团体无需重新排队。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "遇到云层遮蔽，讲解员改用室内星图讲座，已签到的团体无需重新排队。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "孩子还没听暗适应说明，家长陪着能直接进红光区吗？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "未完成暗适应说明的访客不能进入红光观测区，家长陪同也不能替代说明。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "未完成暗适应说明的访客不能进入红光观测区，家长陪同也不能替代说明。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "现在离夜观开场只剩18分钟了，还来得及办这场团体签到吗？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "团体最晚应在开场前19分钟完成签到，距离开场不足19分钟不再受理该场签到。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "团体最晚应在开场前19分钟完成签到，距离开场不足19分钟不再受理该场签到。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "我们带队老师可以自己移动赤道仪配重吗，应该找谁？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "月缘眩光抑制时先装什么，遮光罩要拉到哪里？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "先安装灰色减光片，再将目镜遮光罩伸出两格，不能直接遮挡物镜。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "先安装灰色减光片，再将目镜遮光罩伸出两格，不能直接遮挡物镜。"
+      }
+    ],
+    "section_heading": "月缘眩光抑制"
+  },
+  {
+    "id": "holdout-planetarium-visit-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+    "gold_docs": [
+      "planetarium-visit.md",
+      "planetarium-visit-companion.md"
+    ],
+    "reference_answer": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。 夜观团体的失物由前厅接待员登记，闭馆后移交安保值班室保管。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+      },
+      {
+        "doc": "planetarium-visit-companion.md",
+        "quote": "夜观团体的失物由前厅接待员登记，闭馆后移交安保值班室保管。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "澄星团体夜观的记录用什么命名，结束后怎么交还目镜才算完成？",
+    "gold_docs": [
+      "planetarium-visit.md"
+    ],
+    "reference_answer": "活动记录以预约单上的团体简称为索引，不使用未成年访客姓名作为文件名。 活动结束须归还带有蓝色圆点的目镜盒，散放的目镜不视为完成归还。",
+    "evidence": [
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "活动记录以预约单上的团体简称为索引，不使用未成年访客姓名作为文件名。"
+      },
+      {
+        "doc": "planetarium-visit.md",
+        "quote": "活动结束须归还带有蓝色圆点的目镜盒，散放的目镜不视为完成归还。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-planetarium-visit-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "澄星天文馆明年暑期夜观的具体票价是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-planetarium-visit-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "planetarium-visit",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "ASTRO-GRP-27是否提供免费天文相机？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-cold-chain-samples-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "SEED-COLD-58对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "封签 SEED-COLD-58 用于低温种子运输箱，不能贴在常温标本纸袋上。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "封签 SEED-COLD-58 用于低温种子运输箱，不能贴在常温标本纸袋上。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "封条完整，但一路测温的记录仪找不到了，这箱种子能先放正式库位吗？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "冷箱已经在缓冲区放了43分钟，是否必须重新测温？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "离开冷库的交接缓冲时间上限为43分钟，到达43分钟必须重新核验箱温。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "离开冷库的交接缓冲时间上限为43分钟，到达43分钟必须重新核验箱温。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "物流接收员能签字放行待查种子箱吗，应由谁签？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "霜层目视检查用什么光，看到连续霜带需要留下哪些照片？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "使用侧向白光观察箱盖边缘，发现连续霜带即拍摄四角照片并标注方向。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "使用侧向白光观察箱盖边缘，发现连续霜带即拍摄四角照片并标注方向。"
+      }
+    ],
+    "section_heading": "霜层目视检查"
+  },
+  {
+    "id": "holdout-cold-chain-samples-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "待查种子箱由谁签字放行，供样方名称填错则找谁核对更正？",
+    "gold_docs": [
+      "cold-chain-samples.md",
+      "cold-chain-samples-companion.md"
+    ],
+    "reference_answer": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。 接收单发现供样方名称写错时，应由资源登记专员核对授权函后更正。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+      },
+      {
+        "doc": "cold-chain-samples-companion.md",
+        "quote": "接收单发现供样方名称写错时，应由资源登记专员核对授权函后更正。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "霁川种质冷链清单的重量按什么单位填，归档还必须保留称重台的什么编号？",
+    "gold_docs": [
+      "cold-chain-samples.md"
+    ],
+    "reference_answer": "交接清单上的重量统一用克记录，运输公司的千克数需先换算后登记。 归档时同时保留称重台的校准编号，只有重量数字的清单不能归档。",
+    "evidence": [
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "交接清单上的重量统一用克记录，运输公司的千克数需先换算后登记。"
+      },
+      {
+        "doc": "cold-chain-samples.md",
+        "quote": "归档时同时保留称重台的校准编号，只有重量数字的清单不能归档。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-cold-chain-samples-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "霁川种质库样品的基因测序服务每份收费多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-cold-chain-samples-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "cold-chain-samples",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "SEED-COLD-59封签是否可用于液氮罐？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-theatre-rigging-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "RIG-REH-81对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "工单 RIG-REH-81 用于第三道景杆的排练调试，不授权改变主承重结构。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "工单 RIG-REH-81 用于第三道景杆的排练调试，不授权改变主承重结构。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "演员还站在杆子下面，我在对讲机里提醒了，能开始升降吗？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "吊杆下方有人停留时禁止启动，无线口头提醒不能替代清场确认。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "吊杆下方有人停留时禁止启动，无线口头提醒不能替代清场确认。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "排练想一次升1.8米，可以直接执行吗？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "灯光师能直接下吊杆运动口令吗，谁可以下？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "软景折痕缓释要降到什么高度、停多久，能不能再挂重物拉平？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "将布景降至距台面半米并保持悬垂九分钟，不可悬挂额外配重拉平。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "将布景降至距台面半米并保持悬垂九分钟，不可悬挂额外配重拉平。"
+      }
+    ],
+    "section_heading": "软景折痕缓释"
+  },
+  {
+    "id": "holdout-theatre-rigging-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "吊杆运动口令由谁发出，布景阻燃证明最后由谁复核？",
+    "gold_docs": [
+      "theatre-rigging.md",
+      "theatre-rigging-companion.md"
+    ],
+    "reference_answer": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。 布景阻燃证明由制作统筹收集并交技术总监复核，现场复印件只作参考。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。"
+      },
+      {
+        "doc": "theatre-rigging-companion.md",
+        "quote": "布景阻燃证明由制作统筹收集并交技术总监复核，现场复印件只作参考。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "白鹭吊杆排练变更表关联哪个编号，收工证明复位时又少不了什么记录？",
+    "gold_docs": [
+      "theatre-rigging.md"
+    ],
+    "reference_answer": "排练变更表采用剧场场次号关联，不使用演员姓名作为吊杆任务编号。 收工交班须附控制台急停试验记录，缺少记录时不能签署复位完成。",
+    "evidence": [
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "排练变更表采用剧场场次号关联，不使用演员姓名作为吊杆任务编号。"
+      },
+      {
+        "doc": "theatre-rigging.md",
+        "quote": "收工交班须附控制台急停试验记录，缺少记录时不能签署复位完成。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-theatre-rigging-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "白鹭剧场吊杆电机更换的含税采购价是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-theatre-rigging-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "theatre-rigging",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "RIG-REH-82允许拆除主承重连接件吗？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-manuscript-reading-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "RARE-READ-34对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "阅览凭单 RARE-READ-34 对应线装谱牒原件，不包含拓片复制授权。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "阅览凭单 RARE-READ-34 对应线装谱牒原件，不包含拓片复制授权。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "古籍原件已经看满52分钟，继续看之前需要做什么？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "每次原件阅览最长为52分钟，到时先合册，续阅须重新检查书叶状态。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "每次原件阅览最长为52分钟，到时先合册，续阅须重新检查书叶状态。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "谱牒里的折页由谁同意才能打开，志愿讲解员说可以算吗？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "虫蚀孔洞描记画在什么材料上，能直接压在古籍纸面上画吗？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "在透明描记片上用编号圆圈标出孔洞，描记片应悬离原件，不得覆压纸面。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "在透明描记片上用编号圆圈标出孔洞，描记片应悬离原件，不得覆压纸面。"
+      }
+    ],
+    "section_heading": "虫蚀孔洞描记"
+  },
+  {
+    "id": "holdout-manuscript-reading-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "展开谱牒折页需要谁确认，公开引用馆藏图像又先找谁核对权利？",
+    "gold_docs": [
+      "manuscript-reading.md",
+      "manuscript-reading-companion.md"
+    ],
+    "reference_answer": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。 研究者申请公开引用馆藏图像，应先由版权联络员核对权利状态，再提交馆务秘书备案。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+      },
+      {
+        "doc": "manuscript-reading-companion.md",
+        "quote": "研究者申请公开引用馆藏图像，应先由版权联络员核对权利状态，再提交馆务秘书备案。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "听雨特藏调阅以什么码登记，归还时缺少哪张卡会变成待复核？",
+    "gold_docs": [
+      "manuscript-reading.md"
+    ],
+    "reference_answer": "特藏调阅按馆藏架位码登记，作者生卒年不能代替架位码。 归还时须移交同号书托状态卡，缺卡则登记为待复核，不算完成归还。",
+    "evidence": [
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "特藏调阅按馆藏架位码登记，作者生卒年不能代替架位码。"
+      },
+      {
+        "doc": "manuscript-reading.md",
+        "quote": "归还时须移交同号书托状态卡，缺卡则登记为待复核，不算完成归还。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-manuscript-reading-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "听雨古籍室馆藏家谱的拍卖估值是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-manuscript-reading-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "manuscript-reading",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "RARE-READ-35凭单是否包含彩色拓片免费复制？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-mountain-radio-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "RAD-MESH-62对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "任务标记 RAD-MESH-62 使用山脊中继站转发位置简报，不传送伤员面部影像。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "任务标记 RAD-MESH-62 使用山脊中继站转发位置简报，不传送伤员面部影像。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "山里一直通不了话，是不停发整段录音，还是先报一个简短位置？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "无法建立语音联系时，先发送短位置码并等待回执，不连续重发长段呼救录音。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "无法建立语音联系时，先发送短位置码并等待回执，不连续重发长段呼救录音。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "备用电池外壳好好的，只是还没做负载检查，可以先装机救急吗？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "备用电池未通过负载检查时不得装入中继机，外观完好不能替代负载检查。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "备用电池未通过负载检查时不得装入中继机，外观完好不能替代负载检查。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "位置简报发出后过了22秒没回执，现在能重发吗？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "简报重发间隔至少为23秒，等待不足23秒不得再次发送同条简报。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "简报重发间隔至少为23秒，等待不足23秒不得再次发送同条简报。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "山谷回声判别要听几段回执，听到尾字重复后要修改位置码吗？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "在原地连续听取三段回执，若末尾同字重复则记录回声，不据此改写位置码。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "在原地连续听取三段回执，若末尾同字重复则记录回声，不据此改写位置码。"
+      }
+    ],
+    "section_heading": "山谷回声判别"
+  },
+  {
+    "id": "holdout-mountain-radio-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "全队换工作信道由谁决定，伤员转运接驳又由哪个岗位对接？",
+    "gold_docs": [
+      "mountain-radio.md",
+      "mountain-radio-companion.md"
+    ],
+    "reference_answer": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。 伤员转运联络由医疗协调员对接接驳队，通信岗位不得自行承诺起飞时刻。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+      },
+      {
+        "doc": "mountain-radio-companion.md",
+        "quote": "伤员转运联络由医疗协调员对接接驳队，通信岗位不得自行承诺起飞时刻。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "岑岭中继救援位置主要按什么登记，撤站时除了设备还必须交哪份图？",
+    "gold_docs": [
+      "mountain-radio.md"
+    ],
+    "reference_answer": "救援位置使用网格坐标登记，景区路牌名称仅作辅助描述。 撤站时须移交天线方位草图，只有设备箱和电池不构成完整撤站交接。",
+    "evidence": [
+      {
+        "doc": "mountain-radio.md",
+        "quote": "救援位置使用网格坐标登记，景区路牌名称仅作辅助描述。"
+      },
+      {
+        "doc": "mountain-radio.md",
+        "quote": "撤站时须移交天线方位草图，只有设备箱和电池不构成完整撤站交接。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-mountain-radio-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "岑岭救援队直升机保险理赔的免赔额是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-mountain-radio-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "mountain-radio",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "RAD-MESH-63是否允许广播伤员面部影像？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-ceramics-kiln-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "KILN-TEST-47对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "试片单 KILN-TEST-47 记录青釉小样，不用于承诺成品餐具的食品接触安全。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "试片单 KILN-TEST-47 记录青釉小样，不用于承诺成品餐具的食品接触安全。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "试烧小样上有小针眼，是直接塞进下一窑再烧一次吗？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "窑温未降至规定冷却区间不得开启窑门，切断电源也不代表可以开门。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "窑温未降至规定冷却区间不得开启窑门，切断电源也不代表可以开门。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "显示69摄氏度时能检查外门了吗，要降到多少才行？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "窑温降至68摄氏度及以下才可进行外门检查，69摄氏度仍不能检查。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "窑温降至68摄氏度及以下才可进行外门检查，69摄氏度仍不能检查。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "配釉学员想改升温曲线，应由谁签认？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "流釉边界判读从哪里量、用什么单位，还要和什么东西一起拍照？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "沿试片底缘量取最远流痕，记录到毫米，并与同窑空白垫片一起拍照。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "沿试片底缘量取最远流痕，记录到毫米，并与同窑空白垫片一起拍照。"
+      }
+    ],
+    "section_heading": "流釉边界判读"
+  },
+  {
+    "id": "holdout-ceramics-kiln-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+    "gold_docs": [
+      "ceramics-kiln.md",
+      "ceramics-kiln-companion.md"
+    ],
+    "reference_answer": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。 试片涉及外来颜料时，由材料登记员收集供应商成分说明，交安全员审核存放条件。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。"
+      },
+      {
+        "doc": "ceramics-kiln-companion.md",
+        "quote": "试片涉及外来颜料时，由材料登记员收集供应商成分说明，交安全员审核存放条件。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "栖陶试烧数据按哪个批号关联，小样交接少了什么就不能出结论？",
+    "gold_docs": [
+      "ceramics-kiln.md"
+    ],
+    "reference_answer": "试烧数据以坯土批号关联，商品展示名不能作为批号。 小样移交必须带同批未上釉见证片，缺少见证片则暂缓出具试烧结论。",
+    "evidence": [
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "试烧数据以坯土批号关联，商品展示名不能作为批号。"
+      },
+      {
+        "doc": "ceramics-kiln.md",
+        "quote": "小样移交必须带同批未上釉见证片，缺少见证片则暂缓出具试烧结论。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-ceramics-kiln-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "栖陶工坊青釉成品是否已通过某国家食品接触认证？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-ceramics-kiln-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "ceramics-kiln",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "KILN-TEST-48对应的商业订单赔偿比例是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-reef-dive-01",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "exact_identifier",
+    "phenomena": [
+      "exact_identifier"
+    ],
+    "question": "REEF-LINE-95对应什么用途，哪些服务或行为不包含在内？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "潜调卡 REEF-LINE-95 用于非接触式珊瑚摄影，不授权采集活体珊瑚。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "潜调卡 REEF-LINE-95 用于非接触式珊瑚摄影，不授权采集活体珊瑚。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-02",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "paraphrase",
+    "phenomena": [
+      "paraphrase"
+    ],
+    "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-03",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "negation_condition",
+    "phenomena": [
+      "negation_condition"
+    ],
+    "question": "我的潜水电脑看着正常，但还没和潜伴互查气源，可以先下水吗？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "潜伴未完成气源互检时禁止下潜，个人电脑显示正常不能替代互检。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "潜伴未完成气源互检时禁止下潜，个人电脑显示正常不能替代互检。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-04",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "boundary_value",
+    "phenomena": [
+      "boundary_value"
+    ],
+    "question": "调查时到了15米，能把这一小段拍完再回去吗？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "样线作业深度上限为14米，到15米即应终止该段调查并按计划上升。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "样线作业深度上限为14米，到15米即应终止该段调查并按计划上升。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-05",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "role_scope",
+    "phenomena": [
+      "role_scope"
+    ],
+    "question": "摄影记录员为了画面好看可以挪样线锚点吗，需要谁同意？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-06",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "heading_context",
+    "phenomena": [
+      "heading_context"
+    ],
+    "question": "白化色阶复核要把什么放进画面，还需要什么角度的参考照片？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "将中性灰色卡放入同一画面边缘，保持不接触珊瑚，再拍一张侧向参考照。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "将中性灰色卡放入同一画面边缘，保持不接触珊瑚，再拍一张侧向参考照。"
+      }
+    ],
+    "section_heading": "白化色阶复核"
+  },
+  {
+    "id": "holdout-reef-dive-07",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "multi_document",
+    "phenomena": [
+      "multi_document"
+    ],
+    "question": "移动样线锚点由谁同意，发现渔网缠绕又由哪个岗位联系清理队？",
+    "gold_docs": [
+      "reef-dive.md",
+      "reef-dive-companion.md"
+    ],
+    "reference_answer": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。 发现渔网缠绕活体时，由海洋保护联络员联系清理队，不由摄影组擅自切割。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。"
+      },
+      {
+        "doc": "reef-dive-companion.md",
+        "quote": "发现渔网缠绕活体时，由海洋保护联络员联系清理队，不由摄影组擅自切割。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-08",
+    "type": "answerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "cross_chunk",
+    "phenomena": [
+      "cross_chunk"
+    ],
+    "question": "珊湾潜调照片按什么编号归档，结束归档还必须附哪份观测页？",
+    "gold_docs": [
+      "reef-dive.md"
+    ],
+    "reference_answer": "潜调照片按样线桩号归档，船只名称不能替代桩号。 调查结束须附潮汐观测页，只有照片与桩号无法完成当次归档。",
+    "evidence": [
+      {
+        "doc": "reef-dive.md",
+        "quote": "潜调照片按样线桩号归档，船只名称不能替代桩号。"
+      },
+      {
+        "doc": "reef-dive.md",
+        "quote": "调查结束须附潮汐观测页，只有照片与桩号无法完成当次归档。"
+      }
+    ]
+  },
+  {
+    "id": "holdout-reef-dive-09",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "out_of_scope"
+    ],
+    "question": "珊湾珊瑚活体出口许可证的申请费用是多少？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  },
+  {
+    "id": "holdout-reef-dive-10",
+    "type": "unanswerable",
+    "split": "validation",
+    "family": "reef-dive",
+    "origin": "assistant-authored-synthetic",
+    "category": "unanswerable",
+    "phenomena": [
+      "absent_identifier"
+    ],
+    "question": "REEF-LINE-96允许带走多少株活体珊瑚？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "新语料未提供所问事实。",
+    "unanswerable_reason": "The corpus does not supply the requested commercial fact, authorization or next-batch identifier; adjacent descriptions are not evidence."
+  }
+]

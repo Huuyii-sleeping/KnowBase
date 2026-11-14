@@ -1,0 +1,17 @@
+{
+  "version": "recall-audit-v2.1",
+  "scope": "Synthetic retrieval engineering validation, not production or blind user quality acceptance",
+  "development_questions": 40,
+  "validation_questions": 40,
+  "distractor_documents": 120,
+  "budgets_per_route": [5, 10, 15, 30, 60],
+  "selection_rule": "On development only, choose the lowest tested budget meeting pool thresholds and serial latency; evaluate frozen validation wording only after selection. Keep rerank and generation unchanged.",
+  "pool_evidence_recall_min": 0.95,
+  "pool_all_sources_rate_min": 0.95,
+  "pool_all_evidence_rate_min": 0.9,
+  "pool_category_evidence_recall_min": 0.85,
+  "p95_serial_ms_max": 500,
+  "merge_loss_max": 0,
+  "permission_or_stale_generation_leaks_max": 0,
+  "limitations": "Validation questions were authored by the same assistant from the same source facts and frozen before measurements; they are new wording, not an independent blind benchmark. Templated distractors are a scale stress test. Raw filtering may change during concurrent revisions. Refusal, answer correctness and load performance are excluded."
+}

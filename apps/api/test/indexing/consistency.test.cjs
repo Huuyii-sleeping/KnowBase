@@ -49,6 +49,8 @@ before(
       ELASTICSEARCH_DOCUMENT_INDEX: 'test_document',
       ELASTICSEARCH_CHUNK_INDEX: 'test_chunk',
       RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER:
+        process.env.INDEX_TEST_KEYWORD_ANALYZER || 'standard',
       NEO4J_URI: `bolt://127.0.0.1:${graphPort}`,
       NEO4J_USER: 'neo4j',
       NEO4J_PASSWORD: 'index-test-password',
@@ -485,3 +487,322 @@ test('keyword chunks restrict results to allowed documents and return no hits fo
     [],
   );
 });
+
+test('CJK recall requires a generation rebuild for old text and preserves visibility after migration', async () => {
+  const { Client } = require('@elastic/elasticsearch');
+  const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+    .split(':')
+    .pop();
+  const node = `http://127.0.0.1:${esPort}`;
+  const client = new Client({ node });
+  const index = `legacy_cjk_${randomUUID()}`;
+  const cjk = new VectorIndexService(
+    new ConfigService({
+      ELASTICSEARCH_NODE: node,
+      ELASTICSEARCH_CHUNK_INDEX: index,
+      RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER: 'cjk',
+    }),
+    heads,
+  );
+  try {
+    await client.indices.create({
+      index,
+      mappings: {
+        properties: {
+          generation_id: { type: 'keyword' },
+          content: { type: 'text' },
+          embedding: {
+            type: 'dense_vector',
+            dims: 2,
+            index: true,
+            similarity: 'cosine',
+          },
+        },
+      },
+    });
+    const current = await document();
+    const { DocumentQueryService } = load(
+      'documents/document-query.service.js',
+    );
+    const repository = env.source.getRepository(Document);
+    const metadata = new DocumentQueryService(
+      repository,
+      {},
+      new DocumentAccessService(repository),
+    );
+    const outsider = { id: 'outsider', role: 'MEMBER' };
+    await env.source.query(
+      `UPDATE kh_document SET permissions='{"visibility":"PRIVATE"}'::jsonb WHERE id=$1`,
+      [current.id],
+    );
+    assert.equal(
+      (await metadata.findPublishedByIds([current.id, current.id], admin))
+        .length,
+      1,
+    );
+    assert.deepEqual(
+      await metadata.findPublishedByIds([current.id], outsider),
+      [],
+    );
+    await env.source.query(
+      `UPDATE kh_document SET permissions='{"visibility":"PUBLIC"}'::jsonb WHERE id=$1`,
+      [current.id],
+    );
+    assert.equal(
+      (await metadata.findPublishedByIds([current.id], outsider)).length,
+      1,
+    );
+    const legacy = randomUUID();
+    await client.index({
+      index,
+      id: 'legacy',
+      refresh: 'wait_for',
+      document: {
+        generation_id: legacy,
+        document_id: current.id,
+        document_version: 1,
+        chunk_index: 0,
+        content: '上传成功后使用 RabbitMQ 和 kh_chunk 建立索引',
+        embedding: [1, 0],
+      },
+    });
+    assert.equal(await heads.activate(current, 'rag', legacy), true);
+    const input = {
+      query: '上传成功',
+      topK: 10,
+      allowedDocumentIds: [current.id],
+    };
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'adding a multi-field does not backfill existing indexed text',
+    );
+    const generation = randomUUID();
+    await cjk.stageChunks(current.id, generation, [
+      {
+        id: `${current.id}:v1:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '上传成功后使用 RabbitMQ 和 kh_chunk 建立索引',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'staged rebuilt chunks remain invisible',
+    );
+    assert.equal(await heads.activate(current, 'rag', generation), true);
+    for (const query of ['上传成功', 'RabbitMQ', 'kh_chunk']) {
+      const items = await cjk.searchKeywordChunks({ ...input, query });
+      assert.equal(items.length, 1);
+      assert.equal(items[0].documentId, current.id);
+      assert.equal(items[0].version, 1);
+    }
+    assert.deepEqual(
+      await cjk.searchKeywordChunks({ ...input, allowedDocumentIds: [] }),
+      [],
+    );
+    assert.deepEqual(
+      await cjk.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [randomUUID()],
+      }),
+      [],
+    );
+    await revisions.updateMetadata(current.id, { title: 'Revised' }, admin);
+    assert.deepEqual(
+      await metadata.findPublishedByIds([current.id], admin),
+      [],
+    );
+    assert.deepEqual(
+      await cjk.searchKeywordChunks(input),
+      [],
+      'draft revision must hide even a matching rebuilt chunk',
+    );
+  } finally {
+    await cjk.onModuleDestroy();
+    await client.close();
+  }
+});
+
+test('contextual recall indexes source context while returning original evidence only after activation', async () => {
+  const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+    .split(':')
+    .pop();
+  const contextual = new VectorIndexService(
+    new ConfigService({
+      ELASTICSEARCH_NODE: `http://127.0.0.1:${esPort}`,
+      ELASTICSEARCH_CHUNK_INDEX: `context_${randomUUID()}`,
+      RAG_EMBEDDING_DIMENSIONS: 2,
+      RAG_KEYWORD_ANALYZER: 'cjk',
+      RAG_RETRIEVAL_CONTEXT: 'title-heading',
+    }),
+    heads,
+  );
+  try {
+    const current = await document();
+    const input = {
+      query: '采购申请',
+      topK: 10,
+      allowedDocumentIds: [current.id],
+    };
+    const legacy = randomUUID();
+    await contextual.stageChunks(current.id, legacy, [
+      {
+        id: `${current.id}:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '允许窗口为24分钟。',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.equal(await heads.activate(current, 'rag', legacy), true);
+    assert.deepEqual(await contextual.searchKeywordChunks(input), []);
+    const generation = randomUUID();
+    await contextual.stageChunks(current.id, generation, [
+      {
+        id: `${current.id}:c0`,
+        documentId: current.id,
+        version: 1,
+        chunkIndex: 0,
+        content: '允许窗口为24分钟。',
+        retrievalText:
+          '文档：采购申请规则\n章节：采购申请的撤回窗口\n\n允许窗口为24分钟。',
+        embedding: [1, 0],
+      },
+    ]);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks(input),
+      [],
+      'staged context cannot be queried',
+    );
+    assert.equal(await heads.activate(current, 'rag', generation), true);
+    const matches = await contextual.searchKeywordChunks(input);
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].content, '允许窗口为24分钟。');
+    assert.equal('retrievalText' in matches[0], false);
+    const vectors = await contextual.searchChunks({
+      queryVector: [1, 0],
+      topK: 5,
+      allowedDocumentIds: [current.id],
+    });
+    assert.equal(vectors.length, 1);
+    assert.equal(vectors[0].content, matches[0].content);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [],
+      }),
+      [],
+    );
+    assert.deepEqual(
+      await contextual.searchKeywordChunks({
+        ...input,
+        allowedDocumentIds: [randomUUID()],
+      }),
+      [],
+    );
+    await revisions.updateMetadata(current.id, { title: 'New' }, admin);
+    assert.deepEqual(
+      await contextual.searchKeywordChunks(input),
+      [],
+      'a draft revision hides enriched chunks too',
+    );
+  } finally {
+    await contextual.onModuleDestroy();
+  }
+});
+
+for (const [policy, slots] of [
+  ['weighted', 2],
+  ['body-reserve', 1],
+  ['body-reserve', 2],
+  ['body-reserve', 3],
+]) {
+  test(`${policy}/${slots}: body and context matches share active generations and document restrictions`, async () => {
+    const esPort = (await env.compose('port', 'elasticsearch', '9200'))
+      .split(':')
+      .pop();
+    const index = new VectorIndexService(
+      new ConfigService({
+        ELASTICSEARCH_NODE: `http://127.0.0.1:${esPort}`,
+        ELASTICSEARCH_CHUNK_INDEX: `policy_${policy}_${randomUUID()}`,
+        RAG_EMBEDDING_DIMENSIONS: 2,
+        RAG_KEYWORD_ANALYZER: 'cjk',
+        RAG_RETRIEVAL_CONTEXT: 'title-heading',
+        RAG_KEYWORD_POLICY: policy,
+        RAG_KEYWORD_BODY_SLOTS: String(slots),
+      }),
+      heads,
+    );
+    try {
+      const bodyDoc = await document(),
+        contextDoc = await document();
+      for (const [doc, body, text] of [
+        [
+          bodyDoc,
+          '退款办理必须先核对单据。',
+          '文档：账务规则\n\n退款办理必须先核对单据。',
+        ],
+        [
+          contextDoc,
+          '允许窗口为24分钟。',
+          '文档：退款办理规则\n章节：撤回窗口\n\n允许窗口为24分钟。',
+        ],
+      ]) {
+        const generation = randomUUID();
+        await index.stageChunks(doc.id, generation, [
+          {
+            id: `${doc.id}:c0`,
+            documentId: doc.id,
+            version: 1,
+            chunkIndex: 0,
+            content: body,
+            retrievalText: text,
+            embedding: [1, 0],
+          },
+        ]);
+        assert.equal(await heads.activate(doc, 'rag', generation), true);
+      }
+      const query = { query: '退款办理', topK: 10 };
+      const both = await index.searchKeywordChunks(query);
+      assert.deepEqual(
+        new Set(both.map((c) => c.documentId)),
+        new Set([bodyDoc.id, contextDoc.id]),
+      );
+      assert.equal(
+        both.find((c) => c.documentId === contextDoc.id).content,
+        '允许窗口为24分钟。',
+      );
+      const bodyOnly = await index.searchKeywordChunks({
+        ...query,
+        allowedDocumentIds: [bodyDoc.id],
+      });
+      assert.equal(bodyOnly.length, 1);
+      assert.equal(bodyOnly[0].documentId, bodyDoc.id);
+      assert.deepEqual(
+        await index.searchKeywordChunks({ ...query, allowedDocumentIds: [] }),
+        [],
+      );
+      await revisions.updateMetadata(
+        contextDoc.id,
+        { title: 'Revised' },
+        admin,
+      );
+      assert.deepEqual(
+        (await index.searchKeywordChunks(query)).map((c) => c.documentId),
+        [bodyDoc.id],
+      );
+      assert.deepEqual(
+        await index.searchKeywordChunks({ ...query, query: 'zzznomatchzzz' }),
+        [],
+      );
+    } finally {
+      await index.onModuleDestroy();
+    }
+  });
+}

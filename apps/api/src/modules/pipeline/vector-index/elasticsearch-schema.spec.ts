@@ -35,6 +35,27 @@ describe('ElasticsearchSchema', () => {
       properties: { generation_id: { type: 'keyword' } },
     });
   });
+  it('adds the CJK subfield to existing chunk mappings without changing the original analyzer or vector dimensions', async () => {
+    const { schema, indices } = fixture();
+    indices.exists.mockResolvedValueOnce(true);
+    await schema.chunks();
+    expect(indices.putMapping).toHaveBeenCalledWith({
+      index: 'chunks',
+      properties: {
+        generation_id: { type: 'keyword' },
+        content: {
+          type: 'text',
+          fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+        },
+        retrieval_text: {
+          type: 'text',
+          fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+        },
+      },
+    });
+    expect(indices.create).not.toHaveBeenCalled();
+  });
+
   it('accepts concurrent index creation but propagates unrelated failures', async () => {
     const { schema, indices } = fixture();
     indices.create.mockRejectedValueOnce({
@@ -44,5 +65,17 @@ describe('ElasticsearchSchema', () => {
     expect(indices.putMapping).toHaveBeenCalledOnce();
     indices.create.mockRejectedValueOnce(new Error('cluster down'));
     await expect(schema.document()).rejects.toThrow('cluster down');
+  });
+  it('initializes once per index across concurrent readers and retries a failed initialization', async () => {
+    const { schema, indices } = fixture();
+    indices.exists.mockResolvedValue(true);
+    indices.putMapping.mockRejectedValueOnce(new Error('cluster unavailable'));
+    await expect(schema.chunks()).rejects.toThrow('cluster unavailable');
+    await Promise.all([schema.chunks(), schema.chunks(), schema.chunks()]);
+    await schema.chunks();
+    expect(indices.exists).toHaveBeenCalledTimes(2);
+    expect(indices.putMapping).toHaveBeenCalledTimes(2);
+    await schema.document();
+    expect(indices.exists).toHaveBeenCalledTimes(3);
   });
 });

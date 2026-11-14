@@ -20,4 +20,14 @@ export class MarkdownChunkerService {
     const chunks = await this.splitter.splitText(markdown);
     return chunks.map((chunk) => chunk.trim()).filter(Boolean);
   }
+
+  async splitLocated(
+    markdown: string,
+  ): Promise<{ content: string; startLine: number }[]> {
+    const chunks = await this.splitter.createDocuments([markdown]);
+    return chunks.map((chunk) => ({
+      content: chunk.pageContent,
+      startLine: chunk.metadata.loc.lines.from as number,
+    }));
+  }
 }

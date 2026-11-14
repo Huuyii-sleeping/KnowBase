@@ -1,6 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { DocumentQueryService } from '../documents/document-query.service';
-import { DocumentStatus } from '../documents/entities/document.entity';
 import { EmbeddingService } from '../pipeline/embedding/embedding.service';
 import {
   VectorChunkSearchItem,
@@ -30,6 +29,20 @@ export interface SemanticSearchResult {
   items: SemanticSearchItem[];
 }
 
+export type RecallRoute = 'keyword' | 'semantic';
+export interface RecallTrace extends SemanticSearchResult {
+  route: RecallRoute;
+  rawCandidates: VectorChunkSearchItem[];
+  eligibleCandidates: SemanticSearchItem[];
+  elapsedMs: number;
+  timings: {
+    visibilityMs: number;
+    embeddingMs: number;
+    indexMs: number;
+    metadataMs: number;
+  };
+}
+
 @Injectable()
 export class RagQueryService {
   constructor(
@@ -42,66 +55,125 @@ export class RagQueryService {
     query: SemanticSearchDto,
     user?: AuthUser,
   ): Promise<SemanticSearchResult> {
-    const normalizedQuery = query.query.trim();
-    const [queryVector] = await this.embedding.embedDocuments([
-      normalizedQuery,
-    ]);
-    if (!queryVector) {
-      throw new Error('embedding provider returned no query vector');
-    }
-
-    const candidates = await this.vectorIndex.searchChunks({
-      queryVector,
-      topK: Math.min(query.topK * 3, 100),
-      allowedDocumentIds: user
-        ? await this.documentQuery.findVisiblePublishedIds(user)
-        : undefined,
-    });
-    const items = await this.keepPublishedCandidates(candidates, query.topK);
-
-    return {
-      query: normalizedQuery,
-      topK: query.topK,
+    const {
+      query: text,
+      topK,
       items,
-    };
+    } = await this.recall(query, 'semantic', user);
+    return { query: text, topK, items };
   }
 
   async searchKeywordChunks(
     query: SemanticSearchDto,
     user?: AuthUser,
   ): Promise<SemanticSearchResult> {
+    const {
+      query: text,
+      topK,
+      items,
+    } = await this.recall(query, 'keyword', user);
+    return { query: text, topK, items };
+  }
+
+  /** Internal diagnostics; public controllers expose only the filtered items. */
+  async recall(
+    query: SemanticSearchDto,
+    route: RecallRoute,
+    user?: AuthUser,
+  ): Promise<RecallTrace> {
+    const started = performance.now();
     const normalizedQuery = query.query.trim();
-    const candidates = await this.vectorIndex.searchKeywordChunks({
-      query: normalizedQuery,
+    if (
+      !normalizedQuery ||
+      !Number.isInteger(query.topK) ||
+      query.topK < 1 ||
+      query.topK > 100
+    )
+      throw new BadRequestException(
+        'recall requires a non-empty query and a candidate budget of 1..100',
+      );
+    if (route !== 'keyword' && route !== 'semantic')
+      throw new BadRequestException('unsupported recall route');
+    const visibilityStarted = performance.now();
+    const allowedDocumentIds = user
+      ? await this.documentQuery.findVisiblePublishedIds(user)
+      : undefined;
+    const timings = {
+      visibilityMs: performance.now() - visibilityStarted,
+      embeddingMs: 0,
+      indexMs: 0,
+      metadataMs: 0,
+    };
+    if (allowedDocumentIds?.length === 0)
+      return {
+        query: normalizedQuery,
+        topK: query.topK,
+        items: [],
+        rawCandidates: [],
+        eligibleCandidates: [],
+        route,
+        elapsedMs: performance.now() - started,
+        timings,
+      };
+    const input = {
       topK: Math.min(query.topK * 3, 100),
-      allowedDocumentIds: user
-        ? await this.documentQuery.findVisiblePublishedIds(user)
-        : undefined,
-    });
+      allowedDocumentIds,
+    };
+    let candidates: VectorChunkSearchItem[];
+    if (route === 'keyword') {
+      const indexStarted = performance.now();
+      candidates = await this.vectorIndex.searchKeywordChunks({
+        ...input,
+        query: normalizedQuery,
+      });
+      timings.indexMs = performance.now() - indexStarted;
+    } else if (route === 'semantic') {
+      const embeddingStarted = performance.now();
+      const queryVector = await this.embedding.embedQuery(normalizedQuery);
+      timings.embeddingMs = performance.now() - embeddingStarted;
+      if (!queryVector?.length)
+        throw new Error('embedding provider returned no query vector');
+      const indexStarted = performance.now();
+      candidates = await this.vectorIndex.searchChunks({
+        ...input,
+        queryVector,
+      });
+      timings.indexMs = performance.now() - indexStarted;
+    } else {
+      throw new BadRequestException('unsupported recall route');
+    }
+    const metadataStarted = performance.now();
+    const eligibleCandidates = await this.keepPublishedCandidates(
+      candidates,
+      user,
+    );
+    timings.metadataMs = performance.now() - metadataStarted;
     return {
       query: normalizedQuery,
       topK: query.topK,
-      items: await this.keepPublishedCandidates(candidates, query.topK),
+      items: eligibleCandidates.slice(0, query.topK),
+      rawCandidates: candidates,
+      eligibleCandidates,
+      route,
+      elapsedMs: performance.now() - started,
+      timings,
     };
   }
 
   private async keepPublishedCandidates(
     candidates: VectorChunkSearchItem[],
-    topK: number,
+    user?: AuthUser,
   ): Promise<SemanticSearchItem[]> {
     const items: SemanticSearchItem[] = [];
-    const documents = new Map<
-      string,
-      Awaited<ReturnType<DocumentQueryService['findEntity']>> | null
-    >();
-
+    if (!candidates.length) return items;
+    const visible = await this.documentQuery.findPublishedByIds(
+      candidates.map((candidate) => candidate.documentId),
+      user,
+    );
+    const documents = new Map(
+      visible.map((document) => [document.id, document]),
+    );
     for (const candidate of candidates) {
-      if (!documents.has(candidate.documentId)) {
-        documents.set(
-          candidate.documentId,
-          await this.findPublishedDocument(candidate.documentId),
-        );
-      }
       const document = documents.get(candidate.documentId);
       if (!document || document.version !== candidate.version) {
         continue;
@@ -121,23 +193,8 @@ export class RagQueryService {
           tags: document.tags,
         },
       });
-      if (items.length >= topK) {
-        break;
-      }
     }
 
     return items;
-  }
-
-  private async findPublishedDocument(documentId: string) {
-    try {
-      const document = await this.documentQuery.findEntity(documentId);
-      return document.status === DocumentStatus.PUBLISHED ? document : null;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        return null;
-      }
-      throw error;
-    }
   }
 }

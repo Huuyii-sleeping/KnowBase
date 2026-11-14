@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
 import { EmbeddingService } from '../embedding/embedding.service';
-import { MarkdownChunkerService } from '../chunk/markdown-chunker.service';
+import { RagChunkTextService } from '../chunk/rag-chunk-text.service';
 import {
   VectorChunkInput,
   VectorIndexService,
@@ -13,7 +13,7 @@ import { IndexBuildService } from '../../indexing/index-build.service';
 export class RagPipelineService {
   constructor(
     private readonly contentStore: DocumentContentStore,
-    private readonly chunker: MarkdownChunkerService,
+    private readonly chunkText: RagChunkTextService,
     private readonly embedding: EmbeddingService,
     private readonly vectorIndex: VectorIndexService,
     private readonly generations: IndexGenerationStore,
@@ -35,9 +35,14 @@ export class RagPipelineService {
       throw new Error(`document content not found: ${document.contentId}`);
     }
 
-    const chunks = await this.chunker.split(content.markdown);
+    const chunks = await this.chunkText.prepare(
+      content.markdown,
+      document.title,
+    );
     const embeddings = chunks.length
-      ? await this.embedding.embedDocuments(chunks)
+      ? await this.embedding.embedDocuments(
+          chunks.map((chunk) => chunk.retrievalText),
+        )
       : [];
     if (embeddings.length !== chunks.length) {
       throw new Error('embedding count does not match chunk count');
@@ -48,7 +53,8 @@ export class RagPipelineService {
       documentId: document.id,
       version: document.version,
       chunkIndex: index,
-      content: chunk,
+      content: chunk.content,
+      retrievalText: chunk.retrievalText,
       embedding: embeddings[index],
     }));
 

@@ -1,0 +1,326 @@
+{
+  "version": "knowbase-holdout-v1",
+  "scope": "Prospective synthetic source-disjoint holdout; same assistant author, not independently authored or real-user blind",
+  "documents": [
+    {
+      "file": "wetland-survey.md",
+      "title": "滨泽湿地夜间声学监测手册",
+      "family": "wetland-survey",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "wetland-survey-companion.md",
+      "title": "夜间声学监测配套联络记录",
+      "family": "wetland-survey",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "wetland-survey-old.md",
+      "title": "夜间声学监测旧版留档说明",
+      "family": "wetland-survey",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "wetland-survey-maintenance.md",
+      "title": "夜间声学监测器材维护便笺",
+      "family": "wetland-survey",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "wetland-survey-visitor.md",
+      "title": "夜间声学监测公众介绍摘记",
+      "family": "wetland-survey",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "planetarium-visit.md",
+      "title": "澄星天文馆团体观测须知",
+      "family": "planetarium-visit",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "planetarium-visit-companion.md",
+      "title": "团体夜观配套联络记录",
+      "family": "planetarium-visit",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "planetarium-visit-old.md",
+      "title": "团体夜观旧版留档说明",
+      "family": "planetarium-visit",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "planetarium-visit-maintenance.md",
+      "title": "团体夜观器材维护便笺",
+      "family": "planetarium-visit",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "planetarium-visit-visitor.md",
+      "title": "团体夜观公众介绍摘记",
+      "family": "planetarium-visit",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "cold-chain-samples.md",
+      "title": "霁川种质库冷链交接规程",
+      "family": "cold-chain-samples",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "cold-chain-samples-companion.md",
+      "title": "种质冷链交接配套联络记录",
+      "family": "cold-chain-samples",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "cold-chain-samples-old.md",
+      "title": "种质冷链交接旧版留档说明",
+      "family": "cold-chain-samples",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "cold-chain-samples-maintenance.md",
+      "title": "种质冷链交接器材维护便笺",
+      "family": "cold-chain-samples",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "cold-chain-samples-visitor.md",
+      "title": "种质冷链交接公众介绍摘记",
+      "family": "cold-chain-samples",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "theatre-rigging.md",
+      "title": "白鹭剧场吊杆排练安全约定",
+      "family": "theatre-rigging",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "theatre-rigging-companion.md",
+      "title": "舞台吊杆排练配套联络记录",
+      "family": "theatre-rigging",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "theatre-rigging-old.md",
+      "title": "舞台吊杆排练旧版留档说明",
+      "family": "theatre-rigging",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "theatre-rigging-maintenance.md",
+      "title": "舞台吊杆排练器材维护便笺",
+      "family": "theatre-rigging",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "theatre-rigging-visitor.md",
+      "title": "舞台吊杆排练公众介绍摘记",
+      "family": "theatre-rigging",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "manuscript-reading.md",
+      "title": "听雨古籍室特藏阅览办法",
+      "family": "manuscript-reading",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "manuscript-reading-companion.md",
+      "title": "古籍特藏阅览配套联络记录",
+      "family": "manuscript-reading",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "manuscript-reading-old.md",
+      "title": "古籍特藏阅览旧版留档说明",
+      "family": "manuscript-reading",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "manuscript-reading-maintenance.md",
+      "title": "古籍特藏阅览器材维护便笺",
+      "family": "manuscript-reading",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "manuscript-reading-visitor.md",
+      "title": "古籍特藏阅览公众介绍摘记",
+      "family": "manuscript-reading",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "mountain-radio.md",
+      "title": "岑岭山地救援中继通信细则",
+      "family": "mountain-radio",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "mountain-radio-companion.md",
+      "title": "救援中继通信配套联络记录",
+      "family": "mountain-radio",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "mountain-radio-old.md",
+      "title": "救援中继通信旧版留档说明",
+      "family": "mountain-radio",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "mountain-radio-maintenance.md",
+      "title": "救援中继通信器材维护便笺",
+      "family": "mountain-radio",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "mountain-radio-visitor.md",
+      "title": "救援中继通信公众介绍摘记",
+      "family": "mountain-radio",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "ceramics-kiln.md",
+      "title": "栖陶工坊试烧与开窑规程",
+      "family": "ceramics-kiln",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "ceramics-kiln-companion.md",
+      "title": "陶瓷试烧配套联络记录",
+      "family": "ceramics-kiln",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "ceramics-kiln-old.md",
+      "title": "陶瓷试烧旧版留档说明",
+      "family": "ceramics-kiln",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "ceramics-kiln-maintenance.md",
+      "title": "陶瓷试烧器材维护便笺",
+      "family": "ceramics-kiln",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "ceramics-kiln-visitor.md",
+      "title": "陶瓷试烧公众介绍摘记",
+      "family": "ceramics-kiln",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    },
+    {
+      "file": "reef-dive.md",
+      "title": "珊湾近岸珊瑚样线潜调说明",
+      "family": "reef-dive",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "primary"
+    },
+    {
+      "file": "reef-dive-companion.md",
+      "title": "珊瑚样线潜调配套联络记录",
+      "family": "reef-dive",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "companion"
+    },
+    {
+      "file": "reef-dive-old.md",
+      "title": "珊瑚样线潜调旧版留档说明",
+      "family": "reef-dive",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "historical-confuser"
+    },
+    {
+      "file": "reef-dive-maintenance.md",
+      "title": "珊瑚样线潜调器材维护便笺",
+      "family": "reef-dive",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "adjacent-confuser"
+    },
+    {
+      "file": "reef-dive-visitor.md",
+      "title": "珊瑚样线潜调公众介绍摘记",
+      "family": "reef-dive",
+      "partition": "validation",
+      "origin": "assistant-authored-synthetic",
+      "kind": "out-of-scope-confuser"
+    }
+  ]
+}

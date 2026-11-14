@@ -1,0 +1,19 @@
+{
+  "version": "context-decision-v1",
+  "comparison_protocol": "context-protocol.json",
+  "candidate": {
+    "context": "title-heading",
+    "keyword": 15,
+    "semantic": 15,
+    "final_k": 5
+  },
+  "basis": "Development pool gates and final evidence; title:15/15 ties on development metrics. Title-heading also permits 10/10 pool completeness. Exposed splits are reported as regressions, not unseen validation.",
+  "production_changed": false,
+  "production_default": "body",
+  "remaining_regressions": [
+    "val009 loses pool evidence at 10/10 and 15/15",
+    "val029 loses one pool evidence at 10/10"
+  ],
+  "rollout": "No automatic promotion. Fix or explicitly assess existing-case losses before default changes; rebuild all RAG generations and coordinate query/embedding input switch.",
+  "scope": "Best candidate within this fixed synthetic development comparison, not a globally optimal or accepted RAG system."
+}

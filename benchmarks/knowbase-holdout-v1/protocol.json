@@ -1,0 +1,41 @@
+{
+  "version": "holdout-scoring-v1",
+  "scope": "Prospective synthetic holdout, same author; not human independent validation",
+  "pool_evidence_recall_min": 0.95,
+  "pool_all_sources_rate_min": 0.95,
+  "pool_all_evidence_rate_min": 0.9,
+  "pool_category_evidence_recall_min": 0.85,
+  "p95_serial_ms_max": 500,
+  "merge_loss_max": 0,
+  "dataset_contract": {
+    "split_counts": {
+      "validation": 80
+    },
+    "document_count": 40,
+    "type_counts": {
+      "answerable": 64,
+      "unanswerable": 16
+    },
+    "source_disjoint_splits": [
+      "validation"
+    ],
+    "required_positive_categories": [
+      "exact_identifier",
+      "paraphrase",
+      "negation_condition",
+      "boundary_value",
+      "role_scope",
+      "heading_context",
+      "multi_document",
+      "cross_chunk"
+    ],
+    "min_per_category": 8,
+    "required_negative_phenomena": [
+      "out_of_scope",
+      "absent_identifier"
+    ],
+    "allowed_origin": "assistant-authored-synthetic"
+  },
+  "exposure": "Unscored when frozen; becomes exposed after the first scored run",
+  "selection_rule": "No selection or tuning on this dataset; report frozen current-default vs frozen-candidate once"
+}

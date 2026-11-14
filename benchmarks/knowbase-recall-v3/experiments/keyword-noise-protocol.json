@@ -1,0 +1,71 @@
+{
+  "version": "keyword-noise-v1",
+  "scope": "Frozen all-synthetic and all-exposed diagnostic regression; not independent acceptance",
+  "configurations": [
+    "off",
+    "trim-question"
+  ],
+  "fixed": {
+    "dataset": "knowbase-recall-v3",
+    "split": "all",
+    "questions": 224,
+    "documents": 158,
+    "original_chunks": 220,
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "body_slots": 2,
+    "analyzer": "cjk",
+    "model": "nomic-embed-text",
+    "encoding": "plain",
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "keyword_retained": 30,
+    "semantic_retained": 15,
+    "final_k": 5,
+    "hybrid_merge": "unchanged chunk-ID merge",
+    "reranking": "unchanged"
+  },
+  "expected_scored_requests": 448,
+  "query_rule": {
+    "method": "Frozen deterministic deletion of interrogative words in keyword route only, replaced by spaces to avoid invented CJK bigrams",
+    "phrases": [
+      "麻烦问一下",
+      "想问一下",
+      "请问",
+      "为什么",
+      "为何",
+      "怎么样",
+      "怎么",
+      "怎样",
+      "如何",
+      "什么",
+      "哪个",
+      "哪些",
+      "哪种",
+      "哪位"
+    ],
+    "suffix": "吗 only immediately before clause punctuation or end",
+    "preserved": "Numbers, Latin identifiers, negation, condition phrases, whether/can and duration/quantity words remain; semantic and rerank always use original query",
+    "fallback": "Quoted/code/bracketed input, length over512 or fewer than2 remaining letters/numbers: original query",
+    "preflight_trigger_count": 134,
+    "preflight_trigger_counts_by_split": {
+      "regression": 62,
+      "development": 48,
+      "validation": 24
+    }
+  },
+  "budgets": {
+    "retained": "30 keyword +15 semantic",
+    "raw_cap": "90 keyword selected from up to180 body/context hits;45 semantic",
+    "calls_per_scored_request": "2 Elasticsearch keyword searches,1 vector search,1 query embedding; identical in both modes"
+  },
+  "selection": "Compare individual pool and keyword evidence gains/losses, then final Top5 side effects. No change to questions, gold, indexed text, model, chunking, fusion or reranking. Density of annotated evidence is not precision; gold is not exhaustive relevance annotation.",
+  "stop_rules": [
+    "One pass through both frozen modes; no rule tuning after scores",
+    "Do not adopt without stable pool evidence gain and zero evidence regressions; no business default switch",
+    "If no stable gain, record limitations and stop this direction"
+  ],
+  "known_case": "val017",
+  "http_parity": "Verify original unsplit diagnostic path against existing HTTP at 15:15; query transformations remain internal experiments and do not claim HTTP split-path parity",
+  "timings": "One serial pass; no production latency/throughput claim"
+}

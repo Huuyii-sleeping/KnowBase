@@ -24,8 +24,12 @@ export class DocumentQueryService {
       builder.andWhere(
         new Brackets((where) => {
           where
-            .where('document.title ILIKE :keyword', { keyword: `%${query.keyword}%` })
-            .orWhere('document.fileName ILIKE :keyword', { keyword: `%${query.keyword}%` });
+            .where('document.title ILIKE :keyword', {
+              keyword: `%${query.keyword}%`,
+            })
+            .orWhere('document.fileName ILIKE :keyword', {
+              keyword: `%${query.keyword}%`,
+            });
         }),
       );
     }
@@ -33,7 +37,9 @@ export class DocumentQueryService {
       builder.andWhere('document.status = :status', { status: query.status });
     }
     if (query.category) {
-      builder.andWhere('document.category = :category', { category: query.category });
+      builder.andWhere('document.category = :category', {
+        category: query.category,
+      });
     }
 
     const page = query.page ?? 1;
@@ -107,6 +113,22 @@ export class DocumentQueryService {
     this.access?.applyVisibilityFilter(builder, user);
     const rows = await builder.getRawMany<{ id: string }>();
     return rows.map((row) => row.id);
+  }
+
+  async findPublishedByIds(
+    ids: string[],
+    user?: AuthUser,
+  ): Promise<Document[]> {
+    const uniqueIds = [...new Set(ids)];
+    if (!uniqueIds.length) return [];
+    const builder = this.documentRepository
+      .createQueryBuilder('document')
+      .where('document.id IN (:...ids)', { ids: uniqueIds })
+      .andWhere('document.status = :publishedStatus', {
+        publishedStatus: DocumentStatus.PUBLISHED,
+      });
+    if (user) this.access?.applyVisibilityFilter(builder, user);
+    return builder.getMany();
   }
 
   async findEntity(id: string): Promise<Document> {

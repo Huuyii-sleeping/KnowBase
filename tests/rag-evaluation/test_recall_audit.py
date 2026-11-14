@@ -1,0 +1,229 @@
+import json
+import gzip
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/rag-evaluation"))
+from recall_audit import analyze, grade
+from recall_report import render_report
+from benchmark_dataset import validate_dataset
+
+
+class RecallAuditTests(unittest.TestCase):
+    def test_grades_actual_evidence_and_multiple_sources_without_using_document_title(
+        self,
+    ):
+        question = {
+            "gold_docs": ["one.md", "two.md"],
+            "evidence": [
+                {"doc": "one.md", "quote": "关键 证据"},
+                {"doc": "two.md", "quote": "other"},
+            ],
+        }
+        result = grade(
+            question,
+            [
+                {"documentId": "one", "content": "关键\n证据"},
+                {"documentId": "two", "content": "irrelevant"},
+            ],
+            {"one.md": "one", "two.md": "two"},
+        )
+        self.assertEqual(result["document_recall"], 1)
+        self.assertEqual(result["evidence_recall"], 0.5)
+        self.assertFalse(result["all_evidence_found"])
+        self.assertIsNone(grade({"gold_docs": []}, [], {})["document_recall"])
+
+    def test_stage_attribution_excludes_negatives_and_rejects_partial_runs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "docs").mkdir()
+            (root / "docs/one.md").write_text("fact first and fact second")
+            (root / "manifest.json").write_text(
+                json.dumps(
+                    {
+                        "version": "fixture",
+                        "documents": [{"file": "one.md", "title": "One"}],
+                    }
+                )
+            )
+            cases = [
+                {
+                    "id": "p",
+                    "type": "answerable",
+                    "category": "test",
+                    "split": "development",
+                    "question": "known",
+                    "gold_docs": ["one.md"],
+                    "evidence": [
+                        {"doc": "one.md", "quote": "fact first"},
+                        {"doc": "one.md", "quote": "fact second"},
+                    ],
+                },
+                {
+                    "id": "n",
+                    "type": "unanswerable",
+                    "category": "negative",
+                    "split": "development",
+                    "question": "unknown",
+                    "gold_docs": [],
+                    "evidence": [],
+                },
+            ]
+            (root / "questions.json").write_text(json.dumps(cases))
+            (root / "metadata.json").write_text(
+                json.dumps(
+                    {
+                        "document_mapping": [{"file": "one.md", "id": "one"}],
+                        "recall_audit": {"budgets": [15], "split": "development"},
+                    }
+                )
+            )
+            chunks = [
+                {"documentId": "one", "content": "fact first"},
+                {"documentId": "one", "content": "fact second"},
+            ]
+            (root / "indexed-corpus.json").write_text(json.dumps(chunks))
+            traces = [
+                {
+                    "id": case["id"],
+                    "budget": 15,
+                    "keyword": {
+                        "rawCandidates": chunks,
+                        "items": chunks[:1],
+                        "elapsedMs": 1,
+                    },
+                    "semantic": {"rawCandidates": [], "items": [], "elapsedMs": 2},
+                    "pool": chunks[:1],
+                    "selected": [],
+                    "elapsedMs": 3,
+                }
+                for case in cases
+            ]
+            path = root / "recall-traces.json"
+            path.write_text(json.dumps(traces))
+            payload = analyze(root, root)
+            summary = payload["summaries"][0]
+            self.assertEqual(summary["stages"]["pool"]["evidence_recall"], 0.5)
+            self.assertEqual(summary["stages"]["selected"]["evidence_recall"], 0)
+            self.assertEqual(summary["stages"]["selected"]["negative_empty_rate"], 1)
+            self.assertEqual(
+                [loss["cause"] for loss in payload["results"][0]["losses"]],
+                ["selection_loss", "filtered_or_route_budget"],
+            )
+            self.assertTrue((root / "recall-audit.md").read_text())
+            with gzip.open(root / "recall-traces.json.gz", "wb") as compressed:
+                compressed.write(path.read_bytes())
+            path.unlink()
+            self.assertEqual(analyze(root, root)["results"], payload["results"])
+            path.write_text(json.dumps(traces))
+            (root / "recall-traces.json.gz").write_bytes(b"invalid archive")
+            # New uncompressed checkpoints take precedence over old archives.
+            self.assertEqual(analyze(root, root)["results"], payload["results"])
+            path.unlink()
+            with self.assertRaises(gzip.BadGzipFile):
+                analyze(root, root)
+            path.write_text(json.dumps(traces))
+            traces[0]["queryMode"] = "clauses-both"
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "query mode differs"):
+                analyze(root, root)
+            del traces[0]["queryMode"]
+            traces[0]["keywordQueryMode"] = "trim-question"
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "keyword query mode differs"):
+                analyze(root, root)
+            del traces[0]["keywordQueryMode"]
+            traces[0]["keywordMatchMode"] = "identifiers"
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "keyword match mode differs"):
+                analyze(root, root)
+            del traces[0]["keywordMatchMode"]
+            # New traces distinguish eligible-but-truncated evidence from rejected metadata.
+            for trace in traces:
+                trace["keyword"]["eligibleCandidates"] = chunks
+                trace["semantic"]["eligibleCandidates"] = []
+            path.write_text(json.dumps(traces))
+            detailed = analyze(root, root)
+            self.assertEqual(
+                detailed["results"][0]["losses"][1]["cause"], "route_budget"
+            )
+            for trace in traces:
+                trace["keyword"]["eligibleCandidates"] = chunks[:1]
+            path.write_text(json.dumps(traces))
+            self.assertEqual(
+                analyze(root, root)["results"][0]["losses"][1]["cause"],
+                "metadata_filter",
+            )
+            del traces[0]["semantic"]["eligibleCandidates"]
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "incomplete eligibility"):
+                analyze(root, root)
+            traces[0]["semantic"]["eligibleCandidates"] = []
+            # Unequal route budgets retain their own trace identities; validation
+            # cannot silently compare a partial allocation matrix.
+            metadata_path = root / "metadata.json"
+            metadata = json.loads(metadata_path.read_text())
+            metadata["recall_audit"]["budgets"] = ["k15-s5"]
+            metadata["recall_audit"]["route_budgets"] = [
+                {"id": "k15-s5", "keyword": 15, "semantic": 5}
+            ]
+            metadata_path.write_text(json.dumps(metadata))
+            for trace in traces:
+                trace.update(budget="k15-s5", keywordBudget=15, semanticBudget=5)
+            path.write_text(json.dumps(traces))
+            allocated = analyze(root, root)
+            self.assertEqual(allocated["summaries"][0]["route_budgets"]["semantic"], 5)
+            self.assertEqual(allocated["results"][0]["keyword_budget"], 15)
+
+            traces[0]["semanticBudget"] = 15
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "differ from metadata"):
+                analyze(root, root)
+            traces[0]["semanticBudget"] = 5
+
+            metadata["recall_audit"]["route_budgets"] *= 2
+            metadata_path.write_text(json.dumps(metadata))
+            path.write_text(json.dumps(traces))
+            with self.assertRaisesRegex(ValueError, "inconsistent"):
+                analyze(root, root)
+            metadata["recall_audit"]["route_budgets"] = metadata["recall_audit"][
+                "route_budgets"
+            ][:1]
+            metadata_path.write_text(json.dumps(metadata))
+
+            path.write_text(json.dumps(traces[:1]))
+            with self.assertRaisesRegex(ValueError, "incomplete"):
+                analyze(root, root)
+
+    def test_markdown_report_handles_negative_only_metrics_and_selected_budget(self):
+        stages = {
+            stage: {"evidence_recall": None, "mean_candidate_count": 2}
+            for stage in ("keyword", "semantic", "pool", "selected")
+        }
+        summary = {
+            "split": "validation",
+            "budget_per_route": 10,
+            "stages": stages,
+            "mean_ms": 3,
+            "p95_ms": 4,
+        }
+        text = render_report([summary], [], [10], 10)
+        self.assertIn("N/A", text)
+        self.assertIn("每路 10 候选", text)
+        self.assertNotIn("默认 15", text)
+
+    def test_expanded_corpus_has_valid_evidence_and_disjoint_question_identifiers(self):
+        directory = ROOT / "benchmarks/knowbase-recall-v2"
+        manifest = validate_dataset(directory)
+        self.assertEqual(len(manifest["documents"]), 134)
+        cases = json.loads((directory / "questions.json").read_text())
+        self.assertEqual(len(cases), 80)
+        self.assertEqual(len({q["question"] for q in cases}), 80)
+        self.assertEqual(sum(q["split"] == "validation" for q in cases), 40)
+
+
+if __name__ == "__main__":
+    unittest.main()
