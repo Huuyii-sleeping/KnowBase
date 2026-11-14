@@ -1,0 +1,29 @@
+{
+  "decision": "not-adopted",
+  "business_keyword_query": "original",
+  "experimental_keyword_query_mode": "off",
+  "protocol_sha256": "238d2d451035004bebb4d59d463ea4a38b9c7785449840cde1b81d176d632259",
+  "scored_requests": 448,
+  "triggered_questions": 134,
+  "reasons": [
+    "No individual evidence gains or losses in keyword raw/retained, pool or final selected stages",
+    "All three groups have identical evidence recall; known val017 remains absent from raw candidates",
+    "Keyword ranking/score variation also occurs in34 unmodified queries after independent index rebuilds; cannot attribute all candidate changes to trimming",
+    "No exhaustive relevance labels; do not claim improved precision or all candidates unchanged"
+  ],
+  "stop_rule": "Stop this frozen deletion rule; no tuning of question words or gold after results",
+  "scope": "All synthetic, correlated and exposed diagnostic regression; no independent acceptance or production latency claim",
+  "validation": {
+    "api_tests": 232,
+    "web_tests": 11,
+    "node_evaluation_tests": 28,
+    "python_retrieval_tests": 24,
+    "python_adapter_tests": 11,
+    "api_build": "passed",
+    "web_build": "passed; existing bundle-size warning",
+    "format": "Prettier single-quote and Black passed",
+    "test_compose_configs": "retrieval/index/delivery passed",
+    "fault_injection": "not rerun; delivery/index consistency application logic unchanged",
+    "isolated_end_to_end": "Both158document rounds parsed, published and activated Search/RAG generations,220 chunks; cleanup completed"
+  }
+}

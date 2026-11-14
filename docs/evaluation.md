@@ -203,3 +203,5 @@ recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内
 内部 recall suite 支持 `--keyword-query-mode off|trim-question`，默认 off，与多意图模式互斥。仅关键词一路删除冻结的疑问词及句尾“吗”，以空格替代，避免拼出新的 CJK 相邻词；数字、标识符、否定和条件保留，带引号、代码或括号的输入回退原文。向量召回与重排仍使用原问题。Trace 记录两路实际查询计划与原问题，计分拒绝模式不一致；HTTP 抽查仍只验证现行业务原问题路径。
 
 冻结规则、134 题预检触发数及两模式共 448 次计分计划见 `benchmarks/knowbase-recall-v3/experiments/keyword-noise-protocol.json`。固定标题章节、正文保护 2:1、CJK、30:15 及既有模型，不改索引正文、问题或答案。逐条比较池证据与最终选择；未标注片段不能直接视为不相关，不能把证据密度当作完整 Precision。无稳定收益则记录并停止，不根据结果反复调整停用词。
+
+448 次计分已完成，见[关键词降噪对照报告](../benchmarks/knowbase-recall-v3/experiments/keyword-noise-audit-v3.md)。各阶段逐证据命中均无新增或丢失，三组的池与最终证据指标不变，故不采用、保持 off。独立重建下未改动查询也出现关键词候选次序/分数变化，不能把所有候选变化归因于规则；后续小幅排名收益需同索引交替与重复测量确认。本轮无证据收益，停止该规则细调。

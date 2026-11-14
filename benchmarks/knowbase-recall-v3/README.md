@@ -33,6 +33,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 最新[多意图查询对照](experiments/multi-intent-audit-v3.md)完成 3 模式 × 224 题，共 672 次计分；固定 30:15，保留原问题并测试提取子句。没有新增池证据，仍有最终证据退步，故不采用、保持不拆解；工具和逐证据结果保留用于复核，业务查询未改。
 
+后续[关键词降噪对照](experiments/keyword-noise-audit-v3.md)完成 2 模式 × 224 题，共 448 次计分；134 题实际删除疑问词，但各阶段标注证据无新增或丢失，故不采用、保持原问题。独立重建也带来未改动查询的候选波动，未宣称 Precision 或排名收益；原始证据、限制和停止决策见报告。
+
 预算实验示例：
 
 ```bash
