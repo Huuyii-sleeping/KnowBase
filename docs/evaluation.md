@@ -211,3 +211,5 @@ recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内
 `run_phrase_comparison.cjs --python /path/to/venv/bin/python` 是独立的内部评测入口。每份语料只建一次索引，按题交替比较 off、identifiers、identifiers-phrases，第二遍反转顺序；每模式/每遍单独保存完整 Trace 并计分。固定现有 30:15、正文保护 2:1、标题章节、CJK、模型与分块，不改业务接口、索引字段、融合或重排。实验通过已有 generation 读取器与 RagQueryService 执行，复用真实权限/版本复查；只为关键词请求的同一字段增加可选 `match_phrase`，原查询必须命中。
 
 规则只提取原文中的标识符和明确引用的短语，最多四项，slop=0、boost=2；具体边界与停止条件冻结在 `benchmarks/knowbase-recall-v3/experiments/phrase-match-protocol.json`。现有 224 题之外，`knowbase-phrase-v1` 的 16 篇/10 题诊断样本检查相近错误码、路径、大小写、短语、否定和未出现标识。全部为合成且已暴露，不能当作独立验收。`match_phrase` 按分词后位置匹配，会归一化大小写或符号，不保证原始字符串完全相等；小样本中的明确碰撞也必须单独报告。
+
+1,404 次计分已完成，见[标识符与短语对照报告](../benchmarks/knowbase-recall-v3/experiments/phrase-match-audit-v3.md)。同索引两遍的基线、向量与未触发关键词控制组均稳定。两种加权方式没有池、最终或关键词前 5 条的证据收益，且泛称 AI 加权使两道旧题证据排名从 1/2 降到 3；不采用并停止调规则。专门样本正例基线已全部排第一，存在上限；分词探查确认路径符号及大小写碰撞，不能宣称实现了原文完全相等。

@@ -35,6 +35,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 后续[关键词降噪对照](experiments/keyword-noise-audit-v3.md)完成 2 模式 × 224 题，共 448 次计分；134 题实际删除疑问词，但各阶段标注证据无新增或丢失，故不采用、保持原问题。独立重建也带来未改动查询的候选波动，未宣称 Precision 或排名收益；原始证据、限制和停止决策见报告。
 
+[标识符与短语优先匹配](experiments/phrase-match-audit-v3.md)采用同索引交替三模式、两遍：本语料 1,344 次，加独立专门样本 60 次，共 1,404 次计分。没有证据或关键词前 5 条收益，两道旧题关键词排名退步；控制组稳定，故不采用并停止细调。报告包含分词符号/大小写碰撞和专门样本的上限，不把这些合成测量推广为完整 Precision 或验收。
+
 预算实验示例：
 
 ```bash
