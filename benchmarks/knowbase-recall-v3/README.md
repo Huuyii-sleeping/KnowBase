@@ -31,6 +31,8 @@ python tools/rag-evaluation/benchmark_dataset.py benchmarks/knowbase-recall-v3 \
 
 随后[候选边界对照](experiments/recall-boundaries-audit-v3.md)完成 1120 次计分：区分安全复查与预算截断，保留 2:1 比例，实验预算候选为关键词 30 / 向量 15。旧题池证据提高但最终选择未提高，默认及 HTTP 规则未变；无效比例和简单术语追加均记录后停止，没有覆盖先前历史报告。
 
+最新[多意图查询对照](experiments/multi-intent-audit-v3.md)完成 3 模式 × 224 题，共 672 次计分；固定 30:15，保留原问题并测试提取子句。没有新增池证据，仍有最终证据退步，故不采用、保持不拆解；工具和逐证据结果保留用于复核，业务查询未改。
+
 预算实验示例：
 
 ```bash

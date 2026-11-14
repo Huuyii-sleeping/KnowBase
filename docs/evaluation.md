@@ -195,3 +195,5 @@ recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内
 固定总候选与原始读取上限，而不是给每个子查询完整预算：30 条关键词按原问题/子句分配调用预算 15/8/7，原始读取合计最多 90（body-reserve 两次实际索引查询合计最多 180）；15 条向量分配 8/4/3、读取最多 45。通过现有元数据复查的片段在单一路由内按原问题两条、每子句一条交替去重选取，然后复用未修改的跨路合并和最终重排。请求数、元数据批量查询及可能的 query embedding 次数仍增加，不视为等成本。
 
 协议见 `benchmarks/knowbase-recall-v3/experiments/multi-intent-protocol.json`。Trace 和计分报告保留子查询计划、模式与预算，模式和元数据不一致拒绝计分。HTTP 一致性抽查仍验证原问题、既有 15:15 路径，不冒充拆解实验已接入业务 HTTP。所有现有问题已暴露，本轮对照不能作为独立验收。
+
+672 次计分已完成，见[多意图对照报告](../benchmarks/knowbase-recall-v3/experiments/multi-intent-audit-v3.md)。两种拆解都没有新增池证据，剩余审核题仍未找回，且存在最终证据退步与额外请求成本，故不采用、保持 off，停止本轮规则细调。结果与决策 JSON 同目录保留；没有接入业务查询。
