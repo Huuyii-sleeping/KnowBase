@@ -1,6 +1,17 @@
 # 检索评测
 
-检索评测的主集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。语料和计分口径固定，运行记录保存被测检索实现的提交与策略。
+检索评测的初始基线集是项目原创的 `knowbase-retrieval-v1`：14 篇 Markdown 文档、40 道中文问题，覆盖多主题来源、同义改写、流程、参数表、版本、多文档和跨 Chunk 证据。每道可回答问题标注标准来源、参考答案和原文证据；4 道无答案问题单独统计。指标由 [`ir_measures`](https://github.com/terrierteam/ir_measures) 计算。语料和计分口径固定，运行记录保存被测检索实现的提交与策略。
+
+## 当前状态与结果入口
+
+后续召回诊断使用 `knowbase-recall-v2/v3`，新来源检查使用 `knowbase-holdout-v1`；历史基线不被新结果覆盖。所有已评分数据现均为已暴露回归数据，同作者合成留出不能当作独立人工验收。
+
+| 项目 | 当前状态 | 依据 |
+| --- | --- | --- |
+| 业务默认 | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算 | [检索设计](retrieval.md) |
+| 冻结实验候选 | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署 | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md) |
+| 未采用方向 | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭 | 本文对应实验章节 |
+| 最新留出检查 | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步 | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md) |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
@@ -48,7 +59,32 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 
 整个过程不读取 API `.env`，不使用业务数据库、业务索引或业务存储卷。正常完成和受控失败后清理本轮容器与卷；中断或强制终止进程可能需要按 Compose 项目名手动清理。`run-status.json` 标识当前轮是否完整结束，每次运行都创建新目录，避免把旧结果误认为本轮输出。
 
+启动失败时，运行器会在清理容器前尽量保留 `infrastructure.log`。测试 RabbitMQ 的健康检查以 broker 用户运行，防止 root 诊断进程在首次启动时创建 broker 无法读取的 Erlang cookie。
+
 输出包括总览 `comparison.md/json`、配置与语料 SHA-256、模型摘要、每组的逐题 JSON/Markdown、TREC qrels/run 和 API 日志。报告不包含认证 Token。
+
+## 本地评测产物整理
+
+`reports/` 是忽略提交的本地运行证据；冻结数据集、协议、汇总结论及失败样本仍保存在 `benchmarks/`。未采用的实验脚本保留以便复现，不作为业务默认开启的依据。
+
+原始召回记录会重复保存候选正文，可对已完成运行做无损 gzip 压缩：
+
+```bash
+# 默认仅预览
+python tools/rag-evaluation/compact_reports.py --reports reports
+# 执行压缩
+python tools/rag-evaluation/compact_reports.py --reports reports --apply
+```
+
+工具只处理同目录 `run-status.json` 标记为 `completed` 的 `recall-traces.json`，跳过符号链接；失败或运行中的记录保持原样。先写临时文件，再解压校验 SHA-256，确认原文件未变化后发布 `.json.gz`，最后删除已校验的原件。已有同名压缩文件时拒绝覆盖；删除原件失败时保留两份供检查。标准输出包含原文校验值及压缩前后字节数，可重定向保存。本文运行命令使用的 Python 应为 3.11 或更新版本。
+
+`recall_audit.py` 在没有原始 JSON 时直接读取 gzip，重新评分无需重新检索；两种文件并存时优先读取未压缩文件，损坏的压缩文件明确报错。例：
+
+```bash
+python tools/rag-evaluation/recall_audit.py \
+  --dataset benchmarks/knowbase-holdout-v1 \
+  --output-dir reports/retrieval-holdout-candidate/<运行目录>
+```
 
 ## 指标口径
 
@@ -60,6 +96,38 @@ pnpm --filter @knowbase/api benchmark:retrieval \
 - 延迟只包含检索 HTTP 请求，不含上传、建索引、登录和预热；报告包含平均与 P95。当前为本机单次串行测量，不是并发或生产性能结论。
 
 这是一套手工编写并可见的开发集，不是独立用户问题盲测。它适合定位问题和比较固定配置，不能据此宣称整体检索质量。后续需要加入真实用户问题和独立保留集；标注遗漏或合理替代证据应人工复核并升级数据集版本，不能为了当前配置的分数随意改答案。
+
+## 召回层逐阶段诊断
+
+`knowbase-recall-v2` 为 134 篇、80 题的合成扩展集，包含 v1 的 14 篇原文、120 篇模拟干扰资料、40 道原始开发题和 40 道冻结的新措辞验证题。其协议文件预设本轮工程验证阈值；验证措辞仍来自同一作者与同一事实，不是独立真实用户盲测。
+
+```bash
+pnpm --filter @knowbase/api benchmark:retrieval \
+  --python "$PWD/.venv-rag-eval/bin/python" \
+  --suite recall --dataset benchmarks/knowbase-recall-v2 \
+  --split development --encoding plain \
+  --output-dir reports/retrieval-recall-plain
+```
+
+在开发组上对比原始编码与 `--encoding nomic-task`（正文 `search_document: `、问题 `search_query: `），分别全新建索引。选定编码与预算后，再用 `--split validation --budgets 15`（预算按开发选择结果替换）验证。`--lexical standard|cjk` 选择正文关键词分词方式，默认 `standard`；对比 `cjk` 时使用同一语料与默认空任务前缀，全新建立索引。默认预算矩阵为每路 5/10/15/30/60，最终选择固定为 Top 5，重排规则和问答逻辑保持固定。
+
+计分报告根据冻结协议自动检查总体、各正样本题型、合并损失和串行 P95，只有开发组可以选择预算；权限与过期版本泄漏需要另跑真实索引一致性测试。`recall-traces.json` 还保留可见范围查询、向量编码、索引查询和元数据复查的耗时，用于诊断性能，不能把不同运行时刻的延迟差异直接归因于某个改动。
+
+诊断通过隔离 API 进程的内部服务 IPC 获取真实索引原始候选、过滤后路由候选、合并池和最终选择，并对一个样本与真实 HTTP 路径核对 Chunk 顺序。没有公开诊断 HTTP 接口。耗时为内部服务时间，不能和旧 HTTP 基线的延迟直接比较。
+
+输出 `indexed-corpus.json`（实际索引正文）、`recall-traces.json`（原始候选）、`recall-audit.json/md`（阶段与题型指标）以及元数据、API 日志和运行状态。证据损失分为：索引中不存在或被切断、未进入原始候选、路由过滤或预算截断、合并丢失、最终选择淘汰。候选命中使用原文证据检查，无法代替人工语义相关性判断；原始候选可能包含需要过滤的过期记录，不能直接用于问答。
+
+本轮实测、冻结验证失败、迁移条件与剩余召回问题见 [召回层排查报告](../benchmarks/knowbase-recall-v2/experiments/recall-audit-v2.md)。
+
+## 扩展召回覆盖与两路预算实验
+
+[v3 合成集](../benchmarks/knowbase-recall-v3/README.md) 为 158 篇、224 题：旧 80 题转为 regression，新增 development 96 题和 validation 48 题，开发/验证的业务主题及 gold 文档分开。全部新增样本由助手生成，保留题型、来源、证据、负样本原因和合成来源标记。题型覆盖与计数由 dataset contract 校验，真实分块器测试核对标题分离和跨段落证据。
+
+`--split regression` 单独运行已暴露的旧题；`--route-budgets 15:5,10:10,5:15` 指定“关键词:向量”的不同保留预算，支持与等额配置在相同总预算下比较。该选项只适用于 recall suite，与 `--budgets` 互斥。Trace 与报告保留两路各自预算和稳定 ID（如 `k15-s5`），每对配置都执行真实查询；生产 HTTP 抽查仍固定现行的每路 15、最终 Top 5，避免拿实验配置冒充业务接口行为。报告中的“候选配置”列遇到 `k15-s5` 时表示关键词 15、向量 5，不表示每路都取 15。
+
+实验时保持模型、编码、分块、正文分词与重排固定；只比较分配比例，按开发题的来源完整率、证据召回、题型、候选数量和串行耗时报告结果。不同时间的单次延迟不能证明稳定性能差异。预算对照没有修改生产路由，也没有上线查询扩展、标题补全或新模型。模型选型必须另用同一冻结集、分别重建索引比较；模型或编码变更不能混用旧向量。
+
+开发 9 对预算与冻结后 2 对配置验证共执行 960 次计分请求，结果见 [v3 预算报告](../benchmarks/knowbase-recall-v3/experiments/budget-audit-v3.md)。30:10 的验证候选池证据召回为 97.22%，但标题依赖题 75% 未过 85% 门槛，且最终选择证据仍有损失，因此未晋级生产；验证组已暴露，不能继续作为未见验收集。
 
 ## 对已有 API 单独评测
 
@@ -135,3 +203,55 @@ python tools/rag-evaluation/evaluate_answer.py \
 ```
 
 该基线不依赖 OpenAI Key，也不把评测逻辑放进 API。后续可在相同数据采集结果上增加 Ragas/DeepEval 的模型评判指标，例如 Faithfulness 和 Answer Relevancy。
+
+## 标题与章节上下文实验
+
+在 recall 命令中添加 `--context body|title|title-heading`，分别建立独立索引，对比正文、标题加正文、标题与起始章节路径加正文。原始证据字段 `content` 与分块保持一致；辅助字段只用于关键词和向量召回，计分不允许用辅助标题代替正文。模式及映射/重建约束见 [检索设计](retrieval.md)。
+
+本轮冻结参数位于 `benchmarks/knowbase-recall-v3/experiments/context-protocol.json`：三种上下文、每种 10:10 / 15:15 / 30:10，模型/编码/分块/重排固定，`--split all` 同时报告开发与已暴露回归组；只按 development 比较配置，旧 validation 不再称未见验证。不得根据已测结果修改题目或答案。
+
+已完成的 2016 次计分、全部正文 Chunk 不变检查及逐题损失见[上下文对照报告](../benchmarks/knowbase-recall-v3/experiments/context-audit-v3.md)。标题加章节在开发组 15:15 时池证据 100%、最终证据 54.86%，正文同预算为 94.44% / 52.78%；但旧题 val009 的原始关键词排名由 9 降至 20，被保留 15 条的预算截掉。因此保留为可显式开启的实验模式，默认 `body`，不宣布召回层验收。
+
+语料发布后最多等待 600 秒完成 Search/RAG generation 激活，并打印发布数与激活数；早先两次 180 秒等待超时的运行不包含完整计分，失败状态单独保留。每次对照正常完成后清理本轮容器与卷。
+
+## 正文保护对照
+
+`--keyword-policy combined|weighted|body-reserve` 选择标题上下文下的关键词策略，默认 combined；配置、模型及实际预算记录到元数据。冻结矩阵见 `benchmarks/knowbase-recall-v3/experiments/body-protection-protocol.json`。正文基线与三种标题章节策略分别新建隔离索引，固定各路 10 / 15，开发与已暴露回归全部运行；逐条比较原文证据命中的获得与丢失，不能只比较平均分。body-reserve 的两次索引请求不隐藏为一次同成本召回。
+
+本轮 1792 次计分已完成，候选为 `title-heading + body-reserve + cjk + 15:15`；测量、逐题边界和复现命令见[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。结果与决策 JSON 同目录保留。此前上下文实验的正文退步由本轮继续处理，历史报告不覆盖；所有现有分组已暴露，不能作为未见验收数据。默认配置不随评测自动切换。
+
+后续[候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)增加合格候选阶段与逐证据排名，区分元数据复查和预算截断；1120 次冻结计分比较 `--body-slots 1|2|3` 及关键词 15/20/30、固定向量 15。保留 2:1 比例，实验候选为 30:15；收益与停止无效方向的结论见该报告。30:15 仅代表实验 IPC 配置，业务 HTTP 预算规则未切换。
+
+## 多意图查询实验
+
+recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内部 IPC 评测，默认 off，不修改业务查询。纯规则提取恰好两个问句片段，保留原问题；有代码、引号/括号不闭合或边界不明确时仅查原问题。无模型补写、同义词追加或跨句主体补全，因此子句仍可能缺少共享条件，必须通过逐证据回归验证。
+
+固定总候选与原始读取上限，而不是给每个子查询完整预算：30 条关键词按原问题/子句分配调用预算 15/8/7，原始读取合计最多 90（body-reserve 两次实际索引查询合计最多 180）；15 条向量分配 8/4/3、读取最多 45。通过现有元数据复查的片段在单一路由内按原问题两条、每子句一条交替去重选取，然后复用未修改的跨路合并和最终重排。请求数、元数据批量查询及可能的 query embedding 次数仍增加，不视为等成本。
+
+协议见 `benchmarks/knowbase-recall-v3/experiments/multi-intent-protocol.json`。Trace 和计分报告保留子查询计划、模式与预算，模式和元数据不一致拒绝计分。HTTP 一致性抽查仍验证原问题、既有 15:15 路径，不冒充拆解实验已接入业务 HTTP。所有现有问题已暴露，本轮对照不能作为独立验收。
+
+672 次计分已完成，见[多意图对照报告](../benchmarks/knowbase-recall-v3/experiments/multi-intent-audit-v3.md)。两种拆解都没有新增池证据，剩余审核题仍未找回，且存在最终证据退步与额外请求成本，故不采用、保持 off，停止本轮规则细调。结果与决策 JSON 同目录保留；没有接入业务查询。
+
+## 关键词疑问词降噪实验
+
+内部 recall suite 支持 `--keyword-query-mode off|trim-question`，默认 off，与多意图模式互斥。仅关键词一路删除冻结的疑问词及句尾“吗”，以空格替代，避免拼出新的 CJK 相邻词；数字、标识符、否定和条件保留，带引号、代码或括号的输入回退原文。向量召回与重排仍使用原问题。Trace 记录两路实际查询计划与原问题，计分拒绝模式不一致；HTTP 抽查仍只验证现行业务原问题路径。
+
+冻结规则、134 题预检触发数及两模式共 448 次计分计划见 `benchmarks/knowbase-recall-v3/experiments/keyword-noise-protocol.json`。固定标题章节、正文保护 2:1、CJK、30:15 及既有模型，不改索引正文、问题或答案。逐条比较池证据与最终选择；未标注片段不能直接视为不相关，不能把证据密度当作完整 Precision。无稳定收益则记录并停止，不根据结果反复调整停用词。
+
+448 次计分已完成，见[关键词降噪对照报告](../benchmarks/knowbase-recall-v3/experiments/keyword-noise-audit-v3.md)。各阶段逐证据命中均无新增或丢失，三组的池与最终证据指标不变，故不采用、保持 off。独立重建下未改动查询也出现关键词候选次序/分数变化，不能把所有候选变化归因于规则；后续小幅排名收益需同索引交替与重复测量确认。本轮无证据收益，停止该规则细调。
+
+## 标识符与短语优先匹配实验
+
+`run_phrase_comparison.cjs --python /path/to/venv/bin/python` 是独立的内部评测入口。每份语料只建一次索引，按题交替比较 off、identifiers、identifiers-phrases，第二遍反转顺序；每模式/每遍单独保存完整 Trace 并计分。固定现有 30:15、正文保护 2:1、标题章节、CJK、模型与分块，不改业务接口、索引字段、融合或重排。实验通过已有 generation 读取器与 RagQueryService 执行，复用真实权限/版本复查；只为关键词请求的同一字段增加可选 `match_phrase`，原查询必须命中。
+
+规则只提取原文中的标识符和明确引用的短语，最多四项，slop=0、boost=2；具体边界与停止条件冻结在 `benchmarks/knowbase-recall-v3/experiments/phrase-match-protocol.json`。现有 224 题之外，`knowbase-phrase-v1` 的 16 篇/10 题诊断样本检查相近错误码、路径、大小写、短语、否定和未出现标识。全部为合成且已暴露，不能当作独立验收。`match_phrase` 按分词后位置匹配，会归一化大小写或符号，不保证原始字符串完全相等；小样本中的明确碰撞也必须单独报告。
+
+1,404 次计分已完成，见[标识符与短语对照报告](../benchmarks/knowbase-recall-v3/experiments/phrase-match-audit-v3.md)。同索引两遍的基线、向量与未触发关键词控制组均稳定。两种加权方式没有池、最终或关键词前 5 条的证据收益，且泛称 AI 加权使两道旧题证据排名从 1/2 降到 3；不采用并停止调规则。专门样本正例基线已全部排第一，存在上限；分词探查确认路径符号及大小写碰撞，不能宣称实现了原文完全相等。
+
+## 新来源合成留出评测
+
+[knowbase-holdout-v1](../benchmarks/knowbase-holdout-v1/README.md)在配置选定后创建新来源与问题，先冻结配置、门槛和文件指纹再运行。固定默认与既有候选两套整体方案，各跑 80 题，不以留出得分选新参数。40 份文档来自八个新主题，逐字证据、类别覆盖、与旧题/标题/正文/主题不复用由测试校验。配置含不同索引上下文，须分别完整建索引并核对相同原文 Chunk、模型摘要和语料指纹。
+
+它只提供相对于旧调参数据的前瞻性合成留出检查，作者仍是同一助手，了解旧问题，存在风格和模板相关性；不能称为独立人工或真实用户盲测。查看结果后即转为已暴露回归集。绝对门槛、逐证据退步和最终选择分别报告，不以通过合成门槛宣布业务部署或生产验收。
+
+160 次计分已完成，见[留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)。相同 64 个原始 Chunk、模型摘要及语料指纹下，两套方案池证据均 100%，无新增池损失，候选通过冻结的池门槛；默认也通过，因此存在上限，不能宣称候选池更优。最终证据从 50.00% 提高到 71.09%，同时存在一条最终证据退步，业务不切换。来源仍为合成且仅八主题；这批题现已暴露，后续只用作回归。

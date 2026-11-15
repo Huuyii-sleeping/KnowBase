@@ -1,6 +1,7 @@
 import type { Client, estypes } from '@elastic/elasticsearch';
 
 export class ElasticsearchSchema {
+  private readonly initialization = new Map<string, Promise<void>>();
   constructor(
     private readonly client: Client,
     private readonly documentIndex: string,
@@ -28,7 +29,14 @@ export class ElasticsearchSchema {
       generation_id: { type: 'keyword' },
       document_version: { type: 'integer' },
       chunk_index: { type: 'integer' },
-      content: { type: 'text' },
+      content: {
+        type: 'text',
+        fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+      },
+      retrieval_text: {
+        type: 'text',
+        fields: { cjk: { type: 'text', analyzer: 'cjk' } },
+      },
       embedding: {
         type: 'dense_vector',
         dims: this.dimensions,
@@ -38,7 +46,22 @@ export class ElasticsearchSchema {
     });
   }
 
-  private async ensure(
+  private ensure(
+    index: string,
+    properties: Record<string, estypes.MappingProperty>,
+  ): Promise<void> {
+    let pending = this.initialization.get(index);
+    if (!pending) {
+      pending = this.initialize(index, properties).catch((error) => {
+        this.initialization.delete(index);
+        throw error;
+      });
+      this.initialization.set(index, pending);
+    }
+    return pending;
+  }
+
+  private async initialize(
     index: string,
     properties: Record<string, estypes.MappingProperty>,
   ): Promise<void> {
@@ -59,7 +82,15 @@ export class ElasticsearchSchema {
     // writes; dynamic text mappings would tokenize the generation UUID.
     await this.client.indices.putMapping({
       index,
-      properties: { generation_id: { type: 'keyword' } },
+      properties: {
+        generation_id: { type: 'keyword' },
+        ...(properties.content && index === this.chunkIndex
+          ? {
+              content: properties.content,
+              retrieval_text: properties.retrieval_text,
+            }
+          : {}),
+      },
     });
   }
 }

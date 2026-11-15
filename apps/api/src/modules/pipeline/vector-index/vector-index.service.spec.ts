@@ -24,6 +24,19 @@ vi.mock('@elastic/elasticsearch', () => ({
 import { VectorIndexService } from './vector-index.service';
 
 describe('VectorIndexService document search', () => {
+  it('rejects unsupported keyword analyzers instead of silently changing retrieval behavior', () => {
+    expect(
+      () =>
+        new VectorIndexService(
+          {
+            get: (key: string, fallback: unknown) =>
+              key === 'RAG_KEYWORD_ANALYZER' ? 'unknown' : fallback,
+          } as any,
+          {} as any,
+        ),
+    ).toThrow('standard or cjk');
+  });
+
   it('never queries external indexes when no current generation is visible', async () => {
     searchMock.mockReset();
     const service = new VectorIndexService(

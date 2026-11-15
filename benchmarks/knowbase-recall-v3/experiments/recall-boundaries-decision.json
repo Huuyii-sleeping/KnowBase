@@ -1,0 +1,52 @@
+{
+  "protocol": "recall-boundaries-protocol.json",
+  "results": "recall-boundaries-results.json",
+  "status": "experimental_candidate_only",
+  "selection": {
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "keyword_body_slots": 2,
+    "keyword_retained": 30,
+    "semantic_retained": 15,
+    "final_k": 5
+  },
+  "scored_requests": 1120,
+  "basis": [
+    "15:15 rerun has no pool evidence changes against the prior body-reserve baseline",
+    "20:15 restores both val006 evidence items; 30:15 additionally restores kb027 storage evidence",
+    "Regression pool evidence 96.53% to 98.61%; development and exposed validation pool evidence remain 100%",
+    "No individual pool or final selected evidence losses against the same-run 15:15 baseline at 30:15",
+    "All aggregate final Top 5 evidence metrics remain unchanged; no answer-quality gain claimed"
+  ],
+  "stopped_directions": [
+    "1:1 yields no new pool evidence and loses v3_contract_05 final evidence",
+    "3:1 yields no new pool evidence or final evidence improvement",
+    "No larger candidate-budget search beyond the frozen 30:15 endpoint",
+    "Appending 审核 to val017 improves lexical rank only from 174/175 to 162 in a reconstructed full-corpus keyword-only probe; still outside raw 90 and retained 30, so no term mapping was shipped"
+  ],
+  "remaining": {
+    "question": "val017",
+    "stage": "not_in_raw_candidates",
+    "action": "Separate matching and controlled-term investigation; do not keep expanding budgets",
+    "exploratory_probe": "approval-term-probe.json"
+  },
+  "cost": {
+    "keyword_index_requests": 2,
+    "max_hits_per_keyword_request": 90,
+    "max_keyword_hits_read_total": 180,
+    "semantic_index_max_hits": 45,
+    "max_retained_pool_before_dedup": 45,
+    "regression_mean_pool_candidates": 39.98,
+    "baseline_regression_mean_pool_candidates": 26.84,
+    "production_latency_established": false
+  },
+  "default_configuration_changed": false,
+  "business_deployment_performed": false,
+  "limitations": [
+    "All 224 questions are synthetic and exposed, with correlated templates",
+    "Budget improvement is regression evidence from two known questions; no independent unseen acceptance",
+    "Final selection and answer correctness have not improved in this measured matrix",
+    "30:15 is supported by diagnostic IPC and evaluation CLI; business HTTP remains its existing 3K equal-route policy",
+    "Single serial pass cannot establish production latency, throughput or universally optimal ratios"
+  ]
+}

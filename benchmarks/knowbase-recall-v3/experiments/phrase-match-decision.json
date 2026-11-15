@@ -1,0 +1,38 @@
+{
+  "decision": "not-adopted",
+  "business_keyword_matching": "original unchanged",
+  "experimental_keyword_match_mode": "off",
+  "protocol_sha256": "81030a070d10f46601ba3837de2ac2a0bce8bc53dd0b805be99ea305500173b8",
+  "code_commit": "82032f333b0296e9814b753b303529dc8001cd8b",
+  "scored_requests": 1404,
+  "repetitions": 2,
+  "same_index_within_each_dataset": true,
+  "reasons": [
+    "Zero gained or lost evidence at raw/retained/pool/final stages in both repeats; no keywordTop5 gain",
+    "Both experimental modes decrease kb016 keyword evidence rank1->3 and val016 rank2->3; no evidence rank improvements",
+    "Regression keywordTop1 evidence65.28%->63.89%; mean evidence reciprocal rank76.25%->75.09%",
+    "Small focused corpus8positives already rank1 in baseline, so it offers no measured headroom;2missing-identifier questions still return2keyword candidates each",
+    "CJK collapses two path spellings to equal token sequences and case-sensitive field names to lowercase; analyzed phrases do not enforce literal identity"
+  ],
+  "controls": [
+    "Off repeats return identical candidates and scores on both datasets",
+    "All semantic candidates/scores match paired off",
+    "All untargeted keyword candidates/scores match paired off",
+    "All modes/repeats share identical model digest, original chunk snapshot, corpus fingerprints and same clean code commit"
+  ],
+  "stop_rule": "Retain off and stop this frozen target/boost rule; do not remove AI or retune boosts after seeing these results",
+  "scope": "Synthetic exposed diagnostics, not production acceptance or exhaustive v3 precision; true literal-identifier indexing/checking remains outside this query-only experiment",
+  "validation": {
+    "api_tests": 232,
+    "web_tests": 11,
+    "node_evaluation_tests": 34,
+    "python_retrieval_tests": 24,
+    "python_adapter_tests": 11,
+    "api_build": "passed",
+    "web_build": "passed; pre-existing bundle-size warning",
+    "format": "Prettier single-quote and Black passed",
+    "test_compose_configs": "retrieval/index/delivery passed",
+    "end_to_end": "Both datasets parsed, published, activated Search/RAG generations;220+16original chunks, shared indexed snapshots; cleanup completed",
+    "fault_injection": "not rerun; application delivery/index consistency implementation unchanged"
+  }
+}

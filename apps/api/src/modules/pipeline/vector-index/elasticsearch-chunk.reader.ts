@@ -1,6 +1,11 @@
 import type { Client, estypes } from '@elastic/elasticsearch';
 import type { IndexGenerationStore } from '../../indexing/index-generation.store';
 import type { ElasticsearchSchema } from './elasticsearch-schema';
+import {
+  KeywordPolicy,
+  keywordMatch,
+  reserveBodyCandidates,
+} from './keyword-policy';
 import type {
   KeywordChunkSearchInput,
   VectorChunkSearchInput,
@@ -14,6 +19,10 @@ export class ElasticsearchChunkReader {
     private readonly index: string,
     private readonly schema: ElasticsearchSchema,
     private readonly generations: IndexGenerationStore,
+    private readonly keywordAnalyzer: 'standard' | 'cjk' = 'standard',
+    private readonly contextual = false,
+    private readonly keywordPolicy: KeywordPolicy = 'combined',
+    private readonly bodySlots = 2,
   ) {}
 
   async semantic(
@@ -50,17 +59,31 @@ export class ElasticsearchChunkReader {
     );
     if (!generations.length) return [];
     await this.schema.chunks();
-    const response = await this.client.search<Record<string, unknown>>({
-      index: this.index,
-      size: input.topK,
-      query: {
-        bool: {
-          must: [{ match: { content: { query } } }],
-          filter: [{ terms: { generation_id: generations } }],
+    const search = async (contextual: boolean) => {
+      const response = await this.client.search<Record<string, unknown>>({
+        index: this.index,
+        size: input.topK,
+        query: {
+          bool: {
+            must: [
+              keywordMatch(
+                query,
+                this.keywordAnalyzer === 'cjk',
+                contextual,
+                this.keywordPolicy,
+              ),
+            ],
+            filter: [{ terms: { generation_id: generations } }],
+          },
         },
-      },
-    });
-    return this.items(response.hits.hits);
+      });
+      return this.items(response.hits.hits);
+    };
+    if (this.contextual && this.keywordPolicy === 'body-reserve') {
+      const [body, context] = await Promise.all([search(false), search(true)]);
+      return reserveBodyCandidates(body, context, input.topK, this.bodySlots);
+    }
+    return search(this.contextual);
   }
 
   private items(

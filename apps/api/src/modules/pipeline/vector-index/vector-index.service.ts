@@ -5,6 +5,8 @@ import { ElasticsearchGenerationWriter } from './elasticsearch-generation.writer
 import { ElasticsearchSchema } from './elasticsearch-schema';
 import { ElasticsearchChunkReader } from './elasticsearch-chunk.reader';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
+import { retrievalContext } from '../chunk/retrieval-context';
+import { bodySlots, keywordPolicy } from './keyword-policy';
 
 export interface SearchDocumentInput {
   id: string;
@@ -68,6 +70,7 @@ export interface VectorChunkInput {
   version: number;
   chunkIndex: number;
   content: string;
+  retrievalText?: string;
   embedding: number[];
 }
 
@@ -113,11 +116,22 @@ export class VectorIndexService implements OnModuleDestroy {
       this.chunkIndex,
       this.schema,
     );
+    const keywordAnalyzer = config.get<string>(
+      'RAG_KEYWORD_ANALYZER',
+      'standard',
+    );
+    if (keywordAnalyzer !== 'standard' && keywordAnalyzer !== 'cjk')
+      throw new Error('RAG_KEYWORD_ANALYZER must be standard or cjk');
     this.chunks = new ElasticsearchChunkReader(
       this.client,
       this.chunkIndex,
       this.schema,
       this.generations,
+      keywordAnalyzer,
+      retrievalContext(config.get<string>('RAG_RETRIEVAL_CONTEXT', 'body')) !==
+        'body',
+      keywordPolicy(config.get<string>('RAG_KEYWORD_POLICY', 'combined')),
+      bodySlots(config.get<string>('RAG_KEYWORD_BODY_SLOTS', '2')),
     );
   }
 

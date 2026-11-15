@@ -41,6 +41,7 @@ class BenchmarkApiClient {
     if (!result.accessToken)
       throw new Error('Benchmark login did not return a token');
     this.token = result.accessToken;
+    this.user = result.user;
   }
 }
 
@@ -80,7 +81,15 @@ async function seedCorpus(
       status: 201,
     });
     documents.push({ file: entry.file, id: created.id });
+    if (
+      documents.length % 25 === 0 ||
+      documents.length === manifest.documents.length
+    )
+      console.log(
+        `Published ${documents.length}/${manifest.documents.length} corpus documents`,
+      );
   }
+  let lastProgress = 0;
   await wait(
     async () => {
       const rows = await source.query(
@@ -89,10 +98,16 @@ async function seedCorpus(
         AND d.status='PUBLISHED' AND d.version=h.version AND h.document_id=ANY($1::uuid[])`,
         [documents.map((document) => document.id)],
       );
+      if (Date.now() - lastProgress >= 10000) {
+        console.log(
+          `Active benchmark generations: ${rows.length}/${documents.length * 2}`,
+        );
+        lastProgress = Date.now();
+      }
       return rows.length === documents.length * 2;
     },
     'all benchmark search and RAG generations active',
-    180000,
+    600000,
   );
   return documents;
 }

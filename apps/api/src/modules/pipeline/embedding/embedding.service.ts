@@ -5,13 +5,19 @@ import { OllamaEmbeddings } from '@langchain/ollama';
 
 export interface EmbeddingProvider {
   embedDocuments(texts: string[]): Promise<number[][]>;
+  embedQuery(text: string): Promise<number[]>;
 }
 
 @Injectable()
 export class EmbeddingService implements EmbeddingProvider {
   private readonly embeddings: EmbeddingProvider;
+  private readonly documentPrefix: string;
+  private readonly queryPrefix: string;
 
   constructor(config: ConfigService) {
+    // Empty defaults preserve the encoding of existing vector generations.
+    this.documentPrefix = config.get<string>('EMBEDDING_DOCUMENT_PREFIX', '');
+    this.queryPrefix = config.get<string>('EMBEDDING_QUERY_PREFIX', '');
     const provider = config
       .get<string>('EMBEDDING_PROVIDER', 'ollama')
       .toLowerCase();
@@ -36,10 +42,7 @@ export class EmbeddingService implements EmbeddingProvider {
           'OLLAMA_BASE_URL',
           'http://localhost:11434',
         ),
-        model: config.get<string>(
-          'OLLAMA_EMBEDDING_MODEL',
-          'nomic-embed-text',
-        ),
+        model: config.get<string>('OLLAMA_EMBEDDING_MODEL', 'nomic-embed-text'),
       });
       return;
     }
@@ -48,6 +51,12 @@ export class EmbeddingService implements EmbeddingProvider {
   }
 
   embedDocuments(texts: string[]): Promise<number[][]> {
-    return this.embeddings.embedDocuments(texts);
+    return this.embeddings.embedDocuments(
+      texts.map((text) => this.documentPrefix + text),
+    );
+  }
+
+  embedQuery(text: string): Promise<number[]> {
+    return this.embeddings.embedQuery(this.queryPrefix + text);
   }
 }

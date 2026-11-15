@@ -1,0 +1,108 @@
+{
+  "version": "phrase-match-v1",
+  "scope": "Recall-only isolated synthetic diagnostic comparison; v3 all exposed; new small closed-world fixture authored by same assistant, not human/unseen acceptance",
+  "modes": [
+    "off",
+    "identifiers",
+    "identifiers-phrases"
+  ],
+  "datasets": [
+    {
+      "directory": "knowbase-recall-v3",
+      "documents": 158,
+      "chunks": 220,
+      "questions": 224,
+      "preflight_trigger_counts": {
+        "off": 0,
+        "identifiers": 46,
+        "identifiers-phrases": 58
+      }
+    },
+    {
+      "directory": "knowbase-phrase-v1",
+      "documents": 16,
+      "questions": 10,
+      "positive": 8,
+      "negative": 2,
+      "preflight_trigger_counts": {
+        "off": 0,
+        "identifiers": 7,
+        "identifiers-phrases": 9
+      }
+    }
+  ],
+  "repetitions": 2,
+  "expected_scored_requests": 1404,
+  "fixed": {
+    "model": "nomic-embed-text",
+    "encoding": "plain",
+    "analyzer": "cjk",
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "body_slots": 2,
+    "keyword_retained": 30,
+    "semantic_retained": 15,
+    "keyword_raw_cap": 90,
+    "keyword_physical_hit_cap": 180,
+    "semantic_raw_cap": 45,
+    "final_k": 5,
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "fusion_and_rerank": "unchanged",
+    "semantic_query_and_rerank_query": "original",
+    "multi_intent": "off",
+    "keyword_noise": "off"
+  },
+  "target_rule": {
+    "identifiers": "Literal ASCII tokens with digits/underscore/path punctuation, camelCase or uppercase abbreviations;2..64chars",
+    "phrases": "Explicit curly/Chinese corner/backtick/ASCII double quoted spans2..32chars only; no dictionary or model extraction",
+    "max_targets": 4,
+    "max_query_length": 512,
+    "dedup": "Literal text, preserve first occurrence; quoted phrases precede identifiers",
+    "boost": 2,
+    "slop": 0,
+    "original_match": "mandatory; optional phrases with minimum_should_match0",
+    "fields": "same content.cjk or retrieval_text.cjk field as existing mandatory match",
+    "filters": "same active generation and existing ACL/publication/revision hydration",
+    "limitations": "Analyzer-level adjacency/case folding can collapse punctuation and case; this is not byte-exact identifier equality"
+  },
+  "pairing": {
+    "shared_index": "One seeding/index for all3 modes and both repetitions within each dataset",
+    "order": "Rotate mode order by question index; reverse it in repetition2; serial individual requests",
+    "http_parity": "Original15:15 only, once per dataset",
+    "durability": "Separate trace files per mode/repeat; checkpoints every25 questions; preserve partial evidence on failure"
+  },
+  "metrics": [
+    "per-evidence gains/losses at keyword raw/retained, merged pool and final selection",
+    "keyword first5 evidence recall and evidence reciprocal rank",
+    "v3 overall and triggered subsets; all split groups retained as exposed regression",
+    "small closed-world fixture strict source precision@1/3/5, literal collision probes and per-case ranks; do not generalize to v3 precision",
+    "off repeat stability; semantic and untargeted-query controls; no production timing claim"
+  ],
+  "decision": [
+    "One pass through frozen3 modes x2 repeats on both datasets; do not tune targets, boosts or gold after results",
+    "Require repeat-consistent keyword ranking/evidence gains without new pool or final evidence loss; focused-only gains are not broad production adoption",
+    "Keep off if gains are absent, unstable or come with regressions; record and stop this direction",
+    "Do not change business defaults, schema/indexed text, chunks, cross-route fusion, reranker or answer generation"
+  ],
+  "fixture_sha256": {
+    "docs/case_confuser.md": "b3be7679eab53016cf08d9a0f47a60f00f597139c6d4b38e19bb798d02c36d0e",
+    "docs/case_target.md": "60efc2d7ba9140e83e235c602dbb4798f7b0c4c61cfd4ac478ce641adc6e6b73",
+    "docs/control_confuser.md": "08d987ceb8ba93c9b65340441a438ff30e92b8648940fa30a6cdb23822f9b7ff",
+    "docs/control_target.md": "f24a15dacd110c50db27f0e81d49a724fac3e839319b315f912e846aa0da5fe0",
+    "docs/error_confuser.md": "ad47266c53debc67cc6a661c5e0a056a64a7d0de5335b39318f77b39b2e29015",
+    "docs/error_target.md": "058dfa3fd8134ecd3b8f4c0afd2189d5b9612584343c79bcf77acf5bcbdf90ee",
+    "docs/field_confuser.md": "ab6d55b347b857d6024627e47bc169986d5ac1ab068812059f6b36055520a0dc",
+    "docs/field_target.md": "0b35138d1d482dd59509ec80854b362238c25e9bab5d0fb5a50f23149ca8b5a2",
+    "docs/negation_confuser.md": "26d8ef079c80cf9febd62b17afb6f0b5dffcb367b4d6bc184d36723fe2177364",
+    "docs/negation_target.md": "853cf2148ce66168e85391a7e1d29fa8445eab7ded0202a8798383230c9d8b1a",
+    "docs/path_confuser.md": "449a9822fc223416e5fd54fbd23dba2ef1fb67b5d3813d65bf805e2efc36a3c7",
+    "docs/path_target.md": "8add3ce38e8a7ee1e7bb909e66eee9566bf2d7d4c3fd31d6f58f273de40403b1",
+    "docs/phrase_confuser.md": "33aabc0d07a763e00ca73c1aa7f37f1d735ffe90dc2bd85f904db59d5330ab21",
+    "docs/phrase_target.md": "46792e543a036b024f2e3bb969f07c04eda06a40d5452ce3d54de6fe09ea038d",
+    "docs/table_confuser.md": "cf72b898dba95c5e6e1fcca4beb4ba271dfdc9835e2a78a541bc57248435997c",
+    "docs/table_target.md": "93a83d004089dd6572dcdf44d5e3ba7a41b94665aea9c337994389c3c99b8ad9",
+    "manifest.json": "5dc9d34003a6a0cf99aa873d97bcdebe435959537771e41b6df4a1d43b35c37b",
+    "questions.json": "fd379b8d84e898cfa9116f539f2652e60e2c9fe6847fe9846174b3bf340e932b"
+  }
+}

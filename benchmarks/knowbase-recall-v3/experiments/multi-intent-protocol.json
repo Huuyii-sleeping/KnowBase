@@ -1,0 +1,61 @@
+{
+  "version": "multi-intent-v1",
+  "scope": "Frozen all-synthetic and all-exposed diagnostic regression; not independent acceptance",
+  "configurations": ["off", "clauses-keyword", "clauses-both"],
+  "fixed": {
+    "dataset": "knowbase-recall-v3",
+    "split": "all",
+    "questions": 224,
+    "documents": 158,
+    "original_chunks": 220,
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "body_slots": 2,
+    "analyzer": "cjk",
+    "model": "nomic-embed-text",
+    "encoding": "plain",
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "keyword_retained": 30,
+    "semantic_retained": 15,
+    "final_k": 5,
+    "hybrid_merge": "unchanged chunk-ID merge",
+    "reranking": "unchanged"
+  },
+  "expected_scored_requests": 672,
+  "query_rule": {
+    "method": "Deterministic extraction, no model or term insertion; preserve original plus exactly two original clauses",
+    "boundaries": "Chinese comma, semicolon, question mark outside balanced quotes/brackets",
+    "eligibility": "Both clauses contain interrogative markers and at least six characters; no backticks or over-512-character input; ambiguous input remains original only",
+    "original_kept": true,
+    "max_queries_per_enabled_route": 3,
+    "preflight_trigger_count": 48,
+    "preflight_trigger_counts_by_split": {
+      "regression": 12,
+      "development": 24,
+      "validation": 12
+    },
+    "limitations": "Extracted clauses may lose shared subjects or cross-clause conditions; retaining original query does not guarantee semantic equivalence or zero regressions"
+  },
+  "budgets": {
+    "keyword_branch_budgets": [15, 8, 7],
+    "keyword_raw_sum_limit": 90,
+    "semantic_branch_budgets": [8, 4, 3],
+    "semantic_raw_sum_limit": 45,
+    "keyword_body_reserve_physical_max_hits": 180,
+    "retained_per_route": "Unchanged total 30 keyword, 15 semantic; not 30/15 per subquery",
+    "branch_combination": "Schedule two original unique chunks, one first-clause chunk, one second-clause chunk repeatedly; dedup by actual chunk ID, backfill exhausted lists, keep selected native score",
+    "hydration": "Each actual recall branch runs existing publication/revision/permission rechecks; select only metadata-eligible candidates within total route cap",
+    "cost": "Split routes triple index requests and metadata/visibility batches; clauses-both also triples query embeddings. Raw hit caps are fixed, request overhead is not fixed"
+  },
+  "selection": "Compare every individual pool evidence hit against same-run off baseline, report gained/lost evidence and final selection side effects. Do not promote a mode on one rescued known question or aggregate gains with new evidence losses.",
+  "stop_rules": [
+    "One pass through the three frozen modes; do not retune split markers, proportions or questions after inspecting results",
+    "If neither split mode yields stable pool evidence gains without losses, retain off and record no adoption",
+    "No changes to chunking, indexed context, model, cross-route fusion, reranking or answer generation",
+    "No business deployment or public debug endpoint"
+  ],
+  "known_case": "val017",
+  "http_parity": "Verify original unsplit diagnostic path against existing HTTP at 15:15; split modes remain internal experiments and do not claim HTTP split-path parity",
+  "timings": "One serial measured pass per mode; branch durations are summed work and route elapsed is wall time; no production latency or throughput conclusion"
+}
