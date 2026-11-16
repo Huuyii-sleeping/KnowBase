@@ -1,0 +1,156 @@
+{
+  "development_candidate": "rrf",
+  "development_gain": 0.131944,
+  "development_gain_gate": true,
+  "regression_gates": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "no_new_evidence_loss": false,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "no_new_evidence_loss": false,
+      "no_source_completeness_regression": true
+    }
+  ],
+  "accepted": false,
+  "business_defaults_changed": false,
+  "scope": "Exposed synthetic fixed-pool regression only; no production or answer acceptance",
+  "action": "retain current business rule; RRF candidate fails no-new-loss gate; stop tuning the fixed rule comparisons",
+  "application_changes": false,
+  "no_model_invocation": true,
+  "next_experiment": "freeze dedicated cross-encoder model comparison on the same pools, including conditional/role/heading regressions; not run in this iteration",
+  "rejected_rrf_losses": [
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_02",
+      "split": "development",
+      "category": "paraphrase",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_05",
+      "split": "development",
+      "category": "role_scope",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_06",
+      "split": "development",
+      "category": "heading_context",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_02",
+      "split": "development",
+      "category": "paraphrase",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_06",
+      "split": "development",
+      "category": "heading_context",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_06",
+      "split": "development",
+      "category": "heading_context",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_02",
+      "split": "validation",
+      "category": "paraphrase",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_06",
+      "split": "validation",
+      "category": "heading_context",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_02",
+      "split": "validation",
+      "category": "paraphrase",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_06",
+      "split": "validation",
+      "category": "heading_context",
+      "strategy": "rrf",
+      "gained": [],
+      "lost": [
+        0
+      ]
+    }
+  ]
+}

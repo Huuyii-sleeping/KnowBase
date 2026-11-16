@@ -1,0 +1,131 @@
+{
+  "version": "knowbase-rerank-v1",
+  "status_at_freeze": "unscored reranking alternatives; previous retrieval scores exposed",
+  "base_commit": "56b1e0314c330eabe4ddff43831d6784802db156",
+  "sources": [
+    {
+      "id": "v3-candidate",
+      "dataset": "benchmarks/knowbase-recall-v3",
+      "run": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/off-r1",
+      "budget": "k30-s15",
+      "trace_sha256": "c5b44c8c1bdd36b907c4e7d90e1b2efe42eb45fb6d9b7d14ae9985ac8a3d148e",
+      "files_sha256": {
+        "metadata.json": "9b1df57fd76d9395f7d395cc14e3a84dc380e5c157d1121c54c8a48e440ae518",
+        "indexed-corpus.json": "875fbc811b74a59f4ec263fd08691a1f7a35f2d909c7776a221e18214d8f1a77",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-default",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-default/2026-11-14T14-54-21-258Z-7543",
+      "budget": 15,
+      "trace_sha256": "02a947fdffbfc06f19616c79614bff8d94566f6ab67c51dc43bb02bfb546b074",
+      "files_sha256": {
+        "metadata.json": "73ccca2fc0f15cd5212be98ab1dfd0110fd4dd4c2685f46ebea7f437a4bd8df3",
+        "indexed-corpus.json": "6739024e87e17c813653cb96fc8b903a63fc90c5966462a0c6ae15b5f4e70ece",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-candidate",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-candidate/2026-11-14T14-56-04-614Z-8148",
+      "budget": "k30-s15",
+      "trace_sha256": "72f56402966b9ee1bbe1ab5a2f712c0755d03fcb692d485f746873a681b493c4",
+      "files_sha256": {
+        "metadata.json": "5be6ff3f4e7afc73821b741e589752a96d008b9a123f434bec6dfc8996bae044",
+        "indexed-corpus.json": "7c9f07d2a90c403bbcf72978ea0ec2ed90482b99c4e83eac8f3d58205d881949",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    }
+  ],
+  "strategies": [
+    {
+      "id": "rule",
+      "kind": "rule"
+    },
+    {
+      "id": "rrf",
+      "kind": "rrf",
+      "constant": 60
+    },
+    {
+      "id": "rule-no-dual",
+      "kind": "no-dual"
+    },
+    {
+      "id": "rule-diverse",
+      "kind": "diverse",
+      "relevance": 0.85
+    },
+    {
+      "id": "keyword-first",
+      "kind": "route",
+      "route": "keyword",
+      "diagnostic": true
+    },
+    {
+      "id": "semantic-first",
+      "kind": "route",
+      "route": "semantic",
+      "diagnostic": true
+    },
+    {
+      "id": "rule-doc-cap5",
+      "kind": "rule",
+      "maxChunksPerDocument": 5,
+      "diagnostic": true
+    },
+    {
+      "id": "rule-char12000",
+      "kind": "rule",
+      "maxContextCharacters": 12000,
+      "diagnostic": true
+    },
+    {
+      "id": "rule-top10",
+      "kind": "rule",
+      "topK": 10,
+      "diagnostic": true
+    }
+  ],
+  "selection": {
+    "source": "v3-candidate",
+    "split": "development",
+    "minimum_development_gain": 0.02,
+    "tie_break": [
+      "evidence_recall",
+      "all_evidence_found",
+      "evidence_mrr",
+      "frozen_strategy_order"
+    ],
+    "regression_gates": "No new evidence losses and no aggregate source completeness regression on every source/split, including development. Failure stops this candidate; do not select another using regression scores."
+  },
+  "fixed_constraints": {
+    "topK": 5,
+    "maxChunksPerDocument": 2,
+    "maxContextCharacters": 6000,
+    "first_oversized_candidate": "production exception preserved"
+  },
+  "strategy_details": {
+    "rule": "unchanged production 0.5semantic+0.25keyword+0.15coverage+0.1dual, max-score normalization",
+    "rrf": "sum 1/(60+route_rank), original retained route orders, same caps",
+    "rule-no-dual": "subtract existing 0.1 dual bonus only; all other scores unchanged",
+    "rule-diverse": "greedy 0.85*original rule score-0.15*max normalized body trigram Jaccard, same caps; no embeddings or gold labels",
+    "controls": "single-route-first controls retain the whole pool with other route as tail; cap/length/top10 ablations are diagnosis only, never eligible for adoption"
+  },
+  "measurement": {
+    "unit": "384 source-query pools x9 strategies =3456 offline selections; 304 unique question IDs across datasets, holdout repeated across2source configs",
+    "selection_only_latency": "offline ranking/decision bookkeeping and text similarity, not API latency or reranker model inference; no production performance claim",
+    "scoring": "original literal evidence with NFKC/whitespace normalization; positives macro-averaged; negatives separate; annotated evidence reciprocal rank, not exhaustive relevance MRR or full precision",
+    "reproduction": "rebuild application, validate corpus/source hashes, reconstruct merge and compare exact pool and production selected objects before scoring any alternatives"
+  },
+  "boundaries": [
+    "No retrieval, model, original text, permission, answer, or production config changes",
+    "All datasets exposed and synthetic, including the previous same-author source holdout; no independent acceptance claim",
+    "Only development selects a candidate; other splits are regression audits",
+    "No online ranker installed. Dedicated model comparison is a later experiment, not simulated with embeddings or a tiny chat model. No model/network invocation in this replay.",
+    "Frozen single parameter per method; no sweeps after scores. If no acceptable candidate, retain business rule."
+  ]
+}
