@@ -1,0 +1,63 @@
+{
+  "decision": "frozen-candidate-passes-synthetic-recall-gates; no automatic deployment",
+  "candidate_pool_gate_passed": true,
+  "checks": {
+    "indexed_evidence_presence": true,
+    "pool_evidence": true,
+    "pool_all_sources": true,
+    "pool_all_evidence": true,
+    "each_positive_category": true,
+    "merge_loss": true,
+    "no_new_pool_evidence_losses": true
+  },
+  "protocol_sha256": "951a0cc838c766d0c56a612593974bc50b8bb29448ded9671959ba64414a0141",
+  "execution_commit": "2e71600d3d886d955450a20e6d988bfa01fdfe97",
+  "scored_requests": 160,
+  "new_document_count": 40,
+  "actual_original_chunks": 64,
+  "question_count": 80,
+  "positive": 64,
+  "negative": 16,
+  "pool_evidence_recall": {
+    "current-default": 1,
+    "frozen-candidate": 1
+  },
+  "final_evidence_recall": {
+    "current-default": 0.5,
+    "frozen-candidate": 0.7109
+  },
+  "final_evidence_changes": {
+    "gained": 17,
+    "lost": 1,
+    "regressed_question": "holdout-theatre-rigging-07"
+  },
+  "interpretation": [
+    "No detected pool regression on this new synthetic corpus",
+    "Both configurations saturate pool gates; this dataset cannot establish superior pool recall or distinguish generalization widely",
+    "Final selection improves on average but loses a previously selected companion-document evidence; not zero-regression final acceptance",
+    "Contextual embeddings and keyword policies/budgets changed together; do not causally attribute gains to one optimization",
+    "Negatives return candidates; no answer/refusal evaluation or exhaustive precision claim"
+  ],
+  "followup": "Record final evidence loss and unsatisfied final choice; no retrieval/config changes in this run. Future acceptance requires genuinely different/human questions and stronger independently sourced corpus.",
+  "data_exposure": "Scores now viewed: this dataset becomes exposed regression, not a reusable unseen holdout",
+  "business_defaults_changed": false,
+  "deployment_performed": false,
+  "limitations": [
+    "Same author knows earlier experiments; prospective source separation is not independent authorship",
+    "Eight families,40docs,64chunks,shared diary scaffolding; limited scale and thematic correlation",
+    "Separate rebuilt indexes and one measurement each; no causal tiny-rank or production performance claims"
+  ],
+  "validation": {
+    "api_tests": 232,
+    "web_tests": 11,
+    "node_evaluation_tests": 34,
+    "python_retrieval_tests": 26,
+    "python_adapter_tests": 11,
+    "api_and_web_builds": "passed; existing web bundle warning",
+    "format": "Black passed for new test; diff clean; no JS changes",
+    "test_compose": "retrieval/index/delivery configs passed",
+    "real_ingestion": "Two40document parses, publication and Search/RAGgeneration activation; same64original chunks and model; all gold present,8pairs across actual distinct chunks",
+    "cleanup": "all isolated containers and volumes removed",
+    "fault_injection": "not rerun; unchanged application implementation"
+  }
+}

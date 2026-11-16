@@ -1,0 +1,113 @@
+const { randomUUID } = require('node:crypto');
+const { resolveBudgets } = require('./recall-budget.cjs');
+const { queryMode } = require('./multi-intent.cjs');
+const { recallIntents } = require('./multi-intent-recall.cjs');
+const { keywordQueryMode, keywordQuery } = require('./keyword-query.cjs');
+const { phraseMode, phraseTargets } = require('./phrase-match.cjs');
+
+// Parent/child IPC only. No debug HTTP route is installed in the application.
+function requestRecall(child, input, timeoutMs = 120000) {
+  return new Promise((resolve, reject) => {
+    const id = randomUUID();
+    const cleanup = () => {
+      clearTimeout(timeout);
+      child.removeListener('message', message);
+      child.removeListener('exit', exit);
+    };
+    const fail = (error) => {
+      cleanup();
+      reject(error);
+    };
+    const exit = () =>
+      fail(new Error('Benchmark API exited during recall audit'));
+    const message = (result) => {
+      if (result.id !== id) return;
+      cleanup();
+      if (result.error) reject(new Error(result.error));
+      else resolve(result.trace);
+    };
+    const timeout = setTimeout(
+      () => fail(new Error('Recall audit IPC timed out')),
+      timeoutMs,
+    );
+    child.on('message', message);
+    child.once('exit', exit);
+    try {
+      child.send({ kind: 'recall-audit', id, input }, (error) => {
+        if (error) fail(error);
+      });
+    } catch (error) {
+      fail(error);
+    }
+  });
+}
+
+function installRecallHandler(child, recall, rerank, merge, phraseRecall) {
+  const handler = async (message) => {
+    if (message.kind !== 'recall-audit') return;
+    try {
+      const { query, user, finalK = 5 } = message.input;
+      const mode = queryMode(message.input.queryMode || 'off');
+      const keywordMode = keywordQueryMode(
+        message.input.keywordQueryMode || 'off',
+      );
+      const matchMode = phraseMode(message.input.keywordMatchMode || 'off');
+      if ([mode, keywordMode, matchMode].filter((v) => v !== 'off').length > 1)
+        throw new Error('Invalid combined query experiments');
+      if (matchMode !== 'off' && !phraseRecall)
+        throw new Error('Phrase experiment adapter unavailable');
+      let pair;
+      try {
+        pair = resolveBudgets(message.input);
+      } catch {
+        throw new Error('Invalid isolated recall audit input');
+      }
+      if (
+        !user?.id ||
+        user.role !== 'ADMIN' ||
+        !Number.isInteger(finalK) ||
+        finalK < 1 ||
+        finalK > 20
+      )
+        throw new Error('Invalid isolated recall audit input');
+      const keywordText = keywordQuery(query, keywordMode);
+      const started = performance.now();
+      const [keyword, semantic] = await Promise.all([
+        recallIntents(
+          matchMode === 'off' ? recall : phraseRecall(matchMode),
+          keywordText,
+          pair.keyword,
+          'keyword',
+          user,
+          mode,
+        ),
+        recallIntents(recall, query, pair.semantic, 'semantic', user, mode),
+      ]);
+      const pool = merge(keyword.items, semantic.items);
+      const selected = rerank.rerank(query, pool, { topK: finalK });
+      child.send({
+        id: message.id,
+        trace: {
+          queryMode: mode,
+          keywordQueryMode: keywordMode,
+          keywordMatchMode: matchMode,
+          keywordMatchTargets: phraseTargets(query, matchMode),
+          originalQuery: query,
+          keywordBudget: pair.keyword,
+          semanticBudget: pair.semantic,
+          keyword,
+          semantic,
+          pool,
+          selected,
+          elapsedMs: performance.now() - started,
+        },
+      });
+    } catch (error) {
+      child.send({ id: message.id, error: error.message });
+    }
+  };
+  child.on('message', handler);
+  return () => child.removeListener('message', handler);
+}
+
+module.exports = { requestRecall, installRecallHandler };

@@ -1,0 +1,180 @@
+[
+  {
+    "id": "phrase01",
+    "type": "answerable",
+    "split": "development",
+    "category": "identifier",
+    "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+    "gold_docs": [
+      "field_target.md"
+    ],
+    "reference_answer": "字段 parseStatus=READY 表示解析准备就绪，允许提交审核。",
+    "evidence": [
+      {
+        "doc": "field_target.md",
+        "quote": "字段 parseStatus=READY 表示解析准备就绪，允许提交审核。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase02",
+    "type": "answerable",
+    "split": "development",
+    "category": "identifier",
+    "question": "错误码 ERR_AUTH_401 应该如何处理？",
+    "gold_docs": [
+      "error_target.md"
+    ],
+    "reference_answer": "错误码 ERR_AUTH_401 的处理方法是重新登录后刷新令牌。",
+    "evidence": [
+      {
+        "doc": "error_target.md",
+        "quote": "错误码 ERR_AUTH_401 的处理方法是重新登录后刷新令牌。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase03",
+    "type": "answerable",
+    "split": "development",
+    "category": "punctuation_collision",
+    "question": "接口 /api/v1/tasks/retry 用来做什么？",
+    "gold_docs": [
+      "path_target.md"
+    ],
+    "reference_answer": "接口 /api/v1/tasks/retry 用于重新投递失败任务。",
+    "evidence": [
+      {
+        "doc": "path_target.md",
+        "quote": "接口 /api/v1/tasks/retry 用于重新投递失败任务。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase04",
+    "type": "answerable",
+    "split": "development",
+    "category": "identifier",
+    "question": "表 kh_document 保存什么内容？",
+    "gold_docs": [
+      "table_target.md"
+    ],
+    "reference_answer": "表 kh_document 保存文档标题、版本和审核状态。",
+    "evidence": [
+      {
+        "doc": "table_target.md",
+        "quote": "表 kh_document 保存文档标题、版本和审核状态。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase05",
+    "type": "answerable",
+    "split": "development",
+    "category": "quoted_phrase",
+    "question": "“临时门禁申请”需要谁确认后送审？",
+    "gold_docs": [
+      "phrase_target.md"
+    ],
+    "reference_answer": "临时门禁申请需要接待人确认后送审。",
+    "evidence": [
+      {
+        "doc": "phrase_target.md",
+        "quote": "临时门禁申请需要接待人确认后送审。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase06",
+    "type": "answerable",
+    "split": "development",
+    "category": "quoted_negation",
+    "question": "“未批准不得发布”这条约束是什么意思？",
+    "gold_docs": [
+      "negation_target.md"
+    ],
+    "reference_answer": "未批准不得发布是发布前置约束，审核通过后才能公开。",
+    "evidence": [
+      {
+        "doc": "negation_target.md",
+        "quote": "未批准不得发布是发布前置约束，审核通过后才能公开。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase07",
+    "type": "answerable",
+    "split": "development",
+    "category": "case_collision",
+    "question": "字段 currentGeneration 保存什么值？",
+    "gold_docs": [
+      "case_target.md"
+    ],
+    "reference_answer": "字段 currentGeneration 保存当前生效的索引批次。",
+    "evidence": [
+      {
+        "doc": "case_target.md",
+        "quote": "字段 currentGeneration 保存当前生效的索引批次。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase08",
+    "type": "answerable",
+    "split": "development",
+    "category": "untargeted_control",
+    "question": "借阅窗口每天下午几点关闭？",
+    "gold_docs": [
+      "control_target.md"
+    ],
+    "reference_answer": "借阅窗口每天下午四点关闭，关闭后只能次日上午再次借阅。",
+    "evidence": [
+      {
+        "doc": "control_target.md",
+        "quote": "借阅窗口每天下午四点关闭，关闭后只能次日上午再次借阅。"
+      }
+    ],
+    "origin": "assistant-authored-synthetic",
+    "relevance_scope": "closed-world exact named referent; other15 docs are nonrelevant for this specific question"
+  },
+  {
+    "id": "phrase09",
+    "type": "unanswerable",
+    "split": "development",
+    "category": "absent_identifier",
+    "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "语料中没有这一标识符的说明。",
+    "origin": "assistant-authored-synthetic",
+    "unanswerable_reason": "The exact referenced identifier is absent; similar versions/codes do not answer the question.",
+    "relevance_scope": "all16 documents nonrelevant for the absent exact referent"
+  },
+  {
+    "id": "phrase10",
+    "type": "unanswerable",
+    "split": "development",
+    "category": "absent_identifier",
+    "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+    "gold_docs": [],
+    "evidence": [],
+    "reference_answer": "语料中没有这一标识符的说明。",
+    "origin": "assistant-authored-synthetic",
+    "unanswerable_reason": "The exact referenced identifier is absent; similar versions/codes do not answer the question.",
+    "relevance_scope": "all16 documents nonrelevant for the absent exact referent"
+  }
+]

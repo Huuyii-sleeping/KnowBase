@@ -1,0 +1,1750 @@
+{
+  "protocol_sha256": "81030a070d10f46601ba3837de2ac2a0bce8bc53dd0b805be99ea305500173b8",
+  "scope": "Recall-only isolated synthetic diagnostic comparison; v3 all exposed; new small closed-world fixture authored by same assistant, not human/unseen acceptance",
+  "code_commit": "82032f333b0296e9814b753b303529dc8001cd8b",
+  "scored_requests": 1404,
+  "analyzer_probes": [
+    {
+      "literal": "parseStatus=READY",
+      "tokens": [
+        {
+          "token": "parsestatus",
+          "position": 0
+        },
+        {
+          "token": "ready",
+          "position": 1
+        }
+      ]
+    },
+    {
+      "literal": "parseStatus:READY",
+      "tokens": [
+        {
+          "token": "parsestatus:ready",
+          "position": 0
+        }
+      ]
+    },
+    {
+      "literal": "currentGeneration",
+      "tokens": [
+        {
+          "token": "currentgeneration",
+          "position": 0
+        }
+      ]
+    },
+    {
+      "literal": "currentgeneration",
+      "tokens": [
+        {
+          "token": "currentgeneration",
+          "position": 0
+        }
+      ]
+    },
+    {
+      "literal": "/api/v1/tasks/retry",
+      "tokens": [
+        {
+          "token": "api",
+          "position": 0
+        },
+        {
+          "token": "v1",
+          "position": 1
+        },
+        {
+          "token": "tasks",
+          "position": 2
+        },
+        {
+          "token": "retry",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "literal": "/api/v1/tasks-retry",
+      "tokens": [
+        {
+          "token": "api",
+          "position": 0
+        },
+        {
+          "token": "v1",
+          "position": 1
+        },
+        {
+          "token": "tasks",
+          "position": 2
+        },
+        {
+          "token": "retry",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "literal": "kh_document",
+      "tokens": [
+        {
+          "token": "kh_document",
+          "position": 0
+        }
+      ]
+    },
+    {
+      "literal": "kh.document",
+      "tokens": [
+        {
+          "token": "kh.document",
+          "position": 0
+        }
+      ]
+    }
+  ],
+  "datasets": [
+    {
+      "dataset": "knowbase-recall-v3",
+      "document_count": 158,
+      "chunk_count": 220,
+      "questions": 224,
+      "model_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "corpus_fingerprints_sha256": "c726d241af9d0da81281d57d5f33ff7ceebbf444163f612d160cdd8acc3aafaa",
+      "off_repeat_candidate_differences": {
+        "keyword": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "off_repeat_evidence_changes": {
+        "keyword_raw": [],
+        "keyword": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "experiments": [
+        {
+          "mode": "off",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/off-r1",
+          "triggered_questions": 0,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6527777777777778,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7624831649831649
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": null,
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 0,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": []
+        },
+        {
+          "mode": "identifiers",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/identifiers-r1",
+          "triggered_questions": 46,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6388888888888888,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7509090909090909
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 0.9193548387096774,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "keyword_evidence_reciprocal_rank": 0.9489247311827957
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 46,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": [
+            {
+              "id": "kb016",
+              "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+              "before": [
+                1
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            },
+            {
+              "id": "val016",
+              "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+              "before": [
+                2
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "identifiers-phrases",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/identifiers-phrases-r1",
+          "triggered_questions": 58,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6388888888888888,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7509090909090909
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 0.9418604651162791,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "keyword_evidence_reciprocal_rank": 0.9631782945736435
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 58,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": [
+            {
+              "id": "kb016",
+              "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+              "before": [
+                1
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            },
+            {
+              "id": "val016",
+              "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+              "before": [
+                2
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "off",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/off-r2",
+          "triggered_questions": 0,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6527777777777778,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7624831649831649
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": null,
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 0,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": []
+        },
+        {
+          "mode": "identifiers",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/identifiers-r2",
+          "triggered_questions": 46,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6388888888888888,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7509090909090909
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 0.9193548387096774,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "keyword_evidence_reciprocal_rank": 0.9489247311827957
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 46,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": [
+            {
+              "id": "kb016",
+              "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+              "before": [
+                1
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            },
+            {
+              "id": "val016",
+              "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+              "before": [
+                2
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "mode": "identifiers-phrases",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/identifiers-phrases-r2",
+          "triggered_questions": 58,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.5764,
+              "pool": 1,
+              "selected": 0.5625
+            },
+            "regression": {
+              "keyword_raw": 0.9861,
+              "keyword": 0.9861,
+              "semantic": 0.4861,
+              "pool": 0.9861,
+              "selected": 0.4861
+            },
+            "validation": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 0.6528,
+              "pool": 1,
+              "selected": 0.6528
+            }
+          },
+          "keyword_metrics_by_split": {
+            "regression": {
+              "keyword_evidence_recall_at1": 0.6388888888888888,
+              "keyword_evidence_recall_at3": 0.8472222222222222,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7509090909090909
+            },
+            "validation": {
+              "keyword_evidence_recall_at1": 0.5555555555555556,
+              "keyword_evidence_recall_at3": 0.8333333333333334,
+              "keyword_evidence_recall_at5": 0.8888888888888888,
+              "keyword_evidence_reciprocal_rank": 0.7222222222222222
+            },
+            "development": {
+              "keyword_evidence_recall_at1": 0.5416666666666666,
+              "keyword_evidence_recall_at3": 0.8055555555555556,
+              "keyword_evidence_recall_at5": 0.8611111111111112,
+              "keyword_evidence_reciprocal_rank": 0.706983024691358
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 0.9418604651162791,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "keyword_evidence_reciprocal_rank": 0.9631782945736435
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 58,
+          "remaining_pool_misses": [
+            "val017"
+          ],
+          "keyword_evidence_rank_changes": [
+            {
+              "id": "kb016",
+              "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+              "before": [
+                1
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            },
+            {
+              "id": "val016",
+              "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+              "before": [
+                2
+              ],
+              "after": [
+                3
+              ],
+              "targets": [
+                {
+                  "text": "AI",
+                  "kind": "identifier"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "knowbase-phrase-v1",
+      "document_count": 16,
+      "chunk_count": 16,
+      "questions": 10,
+      "model_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "corpus_fingerprints_sha256": "cbd4cb1b3a2bb562244c50f909cd4c09607b9f8a0adde0f2f6e88d2734083329",
+      "off_repeat_candidate_differences": {
+        "keyword": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "off_repeat_evidence_changes": {
+        "keyword_raw": [],
+        "keyword": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "experiments": [
+        {
+          "mode": "off",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/off-r1",
+          "triggered_questions": 0,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": null,
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 0,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        },
+        {
+          "mode": "identifiers",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/identifiers-r1",
+          "triggered_questions": 7,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 1,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "strict_source_precision_at1": 1.0,
+            "strict_source_precision_at3": 0.3333333333333333,
+            "strict_source_precision_at5": 0.2,
+            "keyword_evidence_reciprocal_rank": 1.0
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 5,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        },
+        {
+          "mode": "identifiers-phrases",
+          "repeat": 1,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/identifiers-phrases-r1",
+          "triggered_questions": 9,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 1,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "strict_source_precision_at1": 1.0,
+            "strict_source_precision_at3": 0.3333333333333333,
+            "strict_source_precision_at5": 0.2,
+            "keyword_evidence_reciprocal_rank": 1.0
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 7,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        },
+        {
+          "mode": "off",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/off-r2",
+          "triggered_questions": 0,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": null,
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 0,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        },
+        {
+          "mode": "identifiers",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/identifiers-r2",
+          "triggered_questions": 7,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 1,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "strict_source_precision_at1": 1.0,
+            "strict_source_precision_at3": 0.3333333333333333,
+            "strict_source_precision_at5": 0.2,
+            "keyword_evidence_reciprocal_rank": 1.0
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 5,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        },
+        {
+          "mode": "identifiers-phrases",
+          "repeat": 2,
+          "raw_report_directory": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-phrase-v1/identifiers-phrases-r2",
+          "triggered_questions": 9,
+          "split_metrics": {
+            "development": {
+              "keyword_raw": 1,
+              "keyword": 1,
+              "semantic": 1,
+              "pool": 1,
+              "selected": 1
+            }
+          },
+          "keyword_metrics_by_split": {
+            "development": {
+              "keyword_evidence_recall_at1": 1,
+              "keyword_evidence_recall_at3": 1,
+              "keyword_evidence_recall_at5": 1,
+              "strict_source_precision_at1": 1.0,
+              "strict_source_precision_at3": 0.3333333333333333,
+              "strict_source_precision_at5": 0.2,
+              "keyword_evidence_reciprocal_rank": 1.0
+            }
+          },
+          "triggered_keyword_metrics": {
+            "keyword_evidence_recall_at1": 1,
+            "keyword_evidence_recall_at3": 1,
+            "keyword_evidence_recall_at5": 1,
+            "strict_source_precision_at1": 1.0,
+            "strict_source_precision_at3": 0.3333333333333333,
+            "strict_source_precision_at5": 0.2,
+            "keyword_evidence_reciprocal_rank": 1.0
+          },
+          "evidence_changes": {
+            "keyword_raw": [],
+            "keyword": [],
+            "semantic_raw": [],
+            "semantic": [],
+            "pool": [],
+            "selected": []
+          },
+          "control_differences": {
+            "semantic": [],
+            "untargeted_keyword": []
+          },
+          "keyword_candidate_order_or_score_changes": 7,
+          "remaining_pool_misses": [],
+          "keyword_evidence_rank_changes": [],
+          "cases": [
+            {
+              "id": "phrase01",
+              "question": "字段 `parseStatus=READY` 代表什么状态，是否允许提交审核？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "field_target.md",
+                "table_target.md",
+                "field_confuser.md",
+                "negation_target.md",
+                "case_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase02",
+              "question": "错误码 ERR_AUTH_401 应该如何处理？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "error_target.md",
+                "error_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase03",
+              "question": "接口 /api/v1/tasks/retry 用来做什么？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase04",
+              "question": "表 kh_document 保存什么内容？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "table_target.md",
+                "case_target.md",
+                "case_confuser.md",
+                "table_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase05",
+              "question": "“临时门禁申请”需要谁确认后送审？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "phrase_target.md",
+                "phrase_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase06",
+              "question": "“未批准不得发布”这条约束是什么意思？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "negation_target.md",
+                "negation_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase07",
+              "question": "字段 currentGeneration 保存什么值？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "case_target.md",
+                "case_confuser.md",
+                "field_confuser.md",
+                "table_target.md",
+                "field_target.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase08",
+              "question": "借阅窗口每天下午几点关闭？",
+              "evidence_ranks": [
+                1
+              ],
+              "first5_sources": [
+                "control_target.md",
+                "control_confuser.md"
+              ],
+              "negative_keyword_candidates": null
+            },
+            {
+              "id": "phrase09",
+              "question": "错误码 ERR_TASK_599 的处理方法是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "error_confuser.md",
+                "error_target.md"
+              ],
+              "negative_keyword_candidates": 2
+            },
+            {
+              "id": "phrase10",
+              "question": "接口 /api/v2/tasks/retry 的用途是什么？",
+              "evidence_ranks": [],
+              "first5_sources": [
+                "path_target.md",
+                "path_confuser.md"
+              ],
+              "negative_keyword_candidates": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

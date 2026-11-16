@@ -1,0 +1,542 @@
+{
+  "version": "knowbase-recall-v2",
+  "provenance": "Synthetic scale stress corpus: frozen v1 source documents plus 120 templated fictional operations distractors. Validation questions are authored paraphrases, not independent blind user data.",
+  "documents": [
+    {
+      "file": "kb_access.md",
+      "title": "KnowBase 文档访问控制"
+    },
+    {
+      "file": "kb_deletion.md",
+      "title": "KnowBase 文档删除与异步清理"
+    },
+    {
+      "file": "kb_delivery.md",
+      "title": "KnowBase 发布任务可靠投递"
+    },
+    {
+      "file": "kb_generations.md",
+      "title": "KnowBase 索引批次与可见性"
+    },
+    {
+      "file": "kb_graph.md",
+      "title": "KnowBase 知识图谱管线"
+    },
+    {
+      "file": "kb_noise.md",
+      "title": "RAG 实验讨论与待办"
+    },
+    {
+      "file": "kb_policy_archive.md",
+      "title": "上传审批策略：历史归档版"
+    },
+    {
+      "file": "kb_policy_current.md",
+      "title": "上传审批策略：当前生效版"
+    },
+    {
+      "file": "kb_ports.md",
+      "title": "KnowBase 本地依赖端口表"
+    },
+    {
+      "file": "kb_rag.md",
+      "title": "KnowBase 语义检索与问答"
+    },
+    {
+      "file": "kb_review.md",
+      "title": "KnowBase 审核发布流程"
+    },
+    {
+      "file": "kb_search.md",
+      "title": "KnowBase 全文与混合检索"
+    },
+    {
+      "file": "kb_storage.md",
+      "title": "KnowBase 分层存储说明"
+    },
+    {
+      "file": "kb_upload.md",
+      "title": "KnowBase 文件上传与解析"
+    },
+    {
+      "file": "noise_01_01.md",
+      "title": "模拟业务：设备借用的申请资料准备"
+    },
+    {
+      "file": "noise_01_02.md",
+      "title": "模拟业务：设备借用的人工复核安排"
+    },
+    {
+      "file": "noise_01_03.md",
+      "title": "模拟业务：设备借用的业务单据发布"
+    },
+    {
+      "file": "noise_01_04.md",
+      "title": "模拟业务：设备借用的异常处理记录"
+    },
+    {
+      "file": "noise_01_05.md",
+      "title": "模拟业务：设备借用的历史记录查询"
+    },
+    {
+      "file": "noise_01_06.md",
+      "title": "模拟业务：设备借用的年度归档检查"
+    },
+    {
+      "file": "noise_02_01.md",
+      "title": "模拟业务：差旅报销的申请资料准备"
+    },
+    {
+      "file": "noise_02_02.md",
+      "title": "模拟业务：差旅报销的人工复核安排"
+    },
+    {
+      "file": "noise_02_03.md",
+      "title": "模拟业务：差旅报销的业务单据发布"
+    },
+    {
+      "file": "noise_02_04.md",
+      "title": "模拟业务：差旅报销的异常处理记录"
+    },
+    {
+      "file": "noise_02_05.md",
+      "title": "模拟业务：差旅报销的历史记录查询"
+    },
+    {
+      "file": "noise_02_06.md",
+      "title": "模拟业务：差旅报销的年度归档检查"
+    },
+    {
+      "file": "noise_03_01.md",
+      "title": "模拟业务：采购申请的申请资料准备"
+    },
+    {
+      "file": "noise_03_02.md",
+      "title": "模拟业务：采购申请的人工复核安排"
+    },
+    {
+      "file": "noise_03_03.md",
+      "title": "模拟业务：采购申请的业务单据发布"
+    },
+    {
+      "file": "noise_03_04.md",
+      "title": "模拟业务：采购申请的异常处理记录"
+    },
+    {
+      "file": "noise_03_05.md",
+      "title": "模拟业务：采购申请的历史记录查询"
+    },
+    {
+      "file": "noise_03_06.md",
+      "title": "模拟业务：采购申请的年度归档检查"
+    },
+    {
+      "file": "noise_04_01.md",
+      "title": "模拟业务：合同归档的申请资料准备"
+    },
+    {
+      "file": "noise_04_02.md",
+      "title": "模拟业务：合同归档的人工复核安排"
+    },
+    {
+      "file": "noise_04_03.md",
+      "title": "模拟业务：合同归档的业务单据发布"
+    },
+    {
+      "file": "noise_04_04.md",
+      "title": "模拟业务：合同归档的异常处理记录"
+    },
+    {
+      "file": "noise_04_05.md",
+      "title": "模拟业务：合同归档的历史记录查询"
+    },
+    {
+      "file": "noise_04_06.md",
+      "title": "模拟业务：合同归档的年度归档检查"
+    },
+    {
+      "file": "noise_05_01.md",
+      "title": "模拟业务：库存盘点的申请资料准备"
+    },
+    {
+      "file": "noise_05_02.md",
+      "title": "模拟业务：库存盘点的人工复核安排"
+    },
+    {
+      "file": "noise_05_03.md",
+      "title": "模拟业务：库存盘点的业务单据发布"
+    },
+    {
+      "file": "noise_05_04.md",
+      "title": "模拟业务：库存盘点的异常处理记录"
+    },
+    {
+      "file": "noise_05_05.md",
+      "title": "模拟业务：库存盘点的历史记录查询"
+    },
+    {
+      "file": "noise_05_06.md",
+      "title": "模拟业务：库存盘点的年度归档检查"
+    },
+    {
+      "file": "noise_06_01.md",
+      "title": "模拟业务：供应商登记的申请资料准备"
+    },
+    {
+      "file": "noise_06_02.md",
+      "title": "模拟业务：供应商登记的人工复核安排"
+    },
+    {
+      "file": "noise_06_03.md",
+      "title": "模拟业务：供应商登记的业务单据发布"
+    },
+    {
+      "file": "noise_06_04.md",
+      "title": "模拟业务：供应商登记的异常处理记录"
+    },
+    {
+      "file": "noise_06_05.md",
+      "title": "模拟业务：供应商登记的历史记录查询"
+    },
+    {
+      "file": "noise_06_06.md",
+      "title": "模拟业务：供应商登记的年度归档检查"
+    },
+    {
+      "file": "noise_07_01.md",
+      "title": "模拟业务：会议室预约的申请资料准备"
+    },
+    {
+      "file": "noise_07_02.md",
+      "title": "模拟业务：会议室预约的人工复核安排"
+    },
+    {
+      "file": "noise_07_03.md",
+      "title": "模拟业务：会议室预约的业务单据发布"
+    },
+    {
+      "file": "noise_07_04.md",
+      "title": "模拟业务：会议室预约的异常处理记录"
+    },
+    {
+      "file": "noise_07_05.md",
+      "title": "模拟业务：会议室预约的历史记录查询"
+    },
+    {
+      "file": "noise_07_06.md",
+      "title": "模拟业务：会议室预约的年度归档检查"
+    },
+    {
+      "file": "noise_08_01.md",
+      "title": "模拟业务：办公用品的申请资料准备"
+    },
+    {
+      "file": "noise_08_02.md",
+      "title": "模拟业务：办公用品的人工复核安排"
+    },
+    {
+      "file": "noise_08_03.md",
+      "title": "模拟业务：办公用品的业务单据发布"
+    },
+    {
+      "file": "noise_08_04.md",
+      "title": "模拟业务：办公用品的异常处理记录"
+    },
+    {
+      "file": "noise_08_05.md",
+      "title": "模拟业务：办公用品的历史记录查询"
+    },
+    {
+      "file": "noise_08_06.md",
+      "title": "模拟业务：办公用品的年度归档检查"
+    },
+    {
+      "file": "noise_09_01.md",
+      "title": "模拟业务：访客接待的申请资料准备"
+    },
+    {
+      "file": "noise_09_02.md",
+      "title": "模拟业务：访客接待的人工复核安排"
+    },
+    {
+      "file": "noise_09_03.md",
+      "title": "模拟业务：访客接待的业务单据发布"
+    },
+    {
+      "file": "noise_09_04.md",
+      "title": "模拟业务：访客接待的异常处理记录"
+    },
+    {
+      "file": "noise_09_05.md",
+      "title": "模拟业务：访客接待的历史记录查询"
+    },
+    {
+      "file": "noise_09_06.md",
+      "title": "模拟业务：访客接待的年度归档检查"
+    },
+    {
+      "file": "noise_10_01.md",
+      "title": "模拟业务：车辆调度的申请资料准备"
+    },
+    {
+      "file": "noise_10_02.md",
+      "title": "模拟业务：车辆调度的人工复核安排"
+    },
+    {
+      "file": "noise_10_03.md",
+      "title": "模拟业务：车辆调度的业务单据发布"
+    },
+    {
+      "file": "noise_10_04.md",
+      "title": "模拟业务：车辆调度的异常处理记录"
+    },
+    {
+      "file": "noise_10_05.md",
+      "title": "模拟业务：车辆调度的历史记录查询"
+    },
+    {
+      "file": "noise_10_06.md",
+      "title": "模拟业务：车辆调度的年度归档检查"
+    },
+    {
+      "file": "noise_11_01.md",
+      "title": "模拟业务：培训报名的申请资料准备"
+    },
+    {
+      "file": "noise_11_02.md",
+      "title": "模拟业务：培训报名的人工复核安排"
+    },
+    {
+      "file": "noise_11_03.md",
+      "title": "模拟业务：培训报名的业务单据发布"
+    },
+    {
+      "file": "noise_11_04.md",
+      "title": "模拟业务：培训报名的异常处理记录"
+    },
+    {
+      "file": "noise_11_05.md",
+      "title": "模拟业务：培训报名的历史记录查询"
+    },
+    {
+      "file": "noise_11_06.md",
+      "title": "模拟业务：培训报名的年度归档检查"
+    },
+    {
+      "file": "noise_12_01.md",
+      "title": "模拟业务：工时填报的申请资料准备"
+    },
+    {
+      "file": "noise_12_02.md",
+      "title": "模拟业务：工时填报的人工复核安排"
+    },
+    {
+      "file": "noise_12_03.md",
+      "title": "模拟业务：工时填报的业务单据发布"
+    },
+    {
+      "file": "noise_12_04.md",
+      "title": "模拟业务：工时填报的异常处理记录"
+    },
+    {
+      "file": "noise_12_05.md",
+      "title": "模拟业务：工时填报的历史记录查询"
+    },
+    {
+      "file": "noise_12_06.md",
+      "title": "模拟业务：工时填报的年度归档检查"
+    },
+    {
+      "file": "noise_13_01.md",
+      "title": "模拟业务：客户工单的申请资料准备"
+    },
+    {
+      "file": "noise_13_02.md",
+      "title": "模拟业务：客户工单的人工复核安排"
+    },
+    {
+      "file": "noise_13_03.md",
+      "title": "模拟业务：客户工单的业务单据发布"
+    },
+    {
+      "file": "noise_13_04.md",
+      "title": "模拟业务：客户工单的异常处理记录"
+    },
+    {
+      "file": "noise_13_05.md",
+      "title": "模拟业务：客户工单的历史记录查询"
+    },
+    {
+      "file": "noise_13_06.md",
+      "title": "模拟业务：客户工单的年度归档检查"
+    },
+    {
+      "file": "noise_14_01.md",
+      "title": "模拟业务：发票核验的申请资料准备"
+    },
+    {
+      "file": "noise_14_02.md",
+      "title": "模拟业务：发票核验的人工复核安排"
+    },
+    {
+      "file": "noise_14_03.md",
+      "title": "模拟业务：发票核验的业务单据发布"
+    },
+    {
+      "file": "noise_14_04.md",
+      "title": "模拟业务：发票核验的异常处理记录"
+    },
+    {
+      "file": "noise_14_05.md",
+      "title": "模拟业务：发票核验的历史记录查询"
+    },
+    {
+      "file": "noise_14_06.md",
+      "title": "模拟业务：发票核验的年度归档检查"
+    },
+    {
+      "file": "noise_15_01.md",
+      "title": "模拟业务：资产维修的申请资料准备"
+    },
+    {
+      "file": "noise_15_02.md",
+      "title": "模拟业务：资产维修的人工复核安排"
+    },
+    {
+      "file": "noise_15_03.md",
+      "title": "模拟业务：资产维修的业务单据发布"
+    },
+    {
+      "file": "noise_15_04.md",
+      "title": "模拟业务：资产维修的异常处理记录"
+    },
+    {
+      "file": "noise_15_05.md",
+      "title": "模拟业务：资产维修的历史记录查询"
+    },
+    {
+      "file": "noise_15_06.md",
+      "title": "模拟业务：资产维修的年度归档检查"
+    },
+    {
+      "file": "noise_16_01.md",
+      "title": "模拟业务：项目立项的申请资料准备"
+    },
+    {
+      "file": "noise_16_02.md",
+      "title": "模拟业务：项目立项的人工复核安排"
+    },
+    {
+      "file": "noise_16_03.md",
+      "title": "模拟业务：项目立项的业务单据发布"
+    },
+    {
+      "file": "noise_16_04.md",
+      "title": "模拟业务：项目立项的异常处理记录"
+    },
+    {
+      "file": "noise_16_05.md",
+      "title": "模拟业务：项目立项的历史记录查询"
+    },
+    {
+      "file": "noise_16_06.md",
+      "title": "模拟业务：项目立项的年度归档检查"
+    },
+    {
+      "file": "noise_17_01.md",
+      "title": "模拟业务：服务变更的申请资料准备"
+    },
+    {
+      "file": "noise_17_02.md",
+      "title": "模拟业务：服务变更的人工复核安排"
+    },
+    {
+      "file": "noise_17_03.md",
+      "title": "模拟业务：服务变更的业务单据发布"
+    },
+    {
+      "file": "noise_17_04.md",
+      "title": "模拟业务：服务变更的异常处理记录"
+    },
+    {
+      "file": "noise_17_05.md",
+      "title": "模拟业务：服务变更的历史记录查询"
+    },
+    {
+      "file": "noise_17_06.md",
+      "title": "模拟业务：服务变更的年度归档检查"
+    },
+    {
+      "file": "noise_18_01.md",
+      "title": "模拟业务：值班交接的申请资料准备"
+    },
+    {
+      "file": "noise_18_02.md",
+      "title": "模拟业务：值班交接的人工复核安排"
+    },
+    {
+      "file": "noise_18_03.md",
+      "title": "模拟业务：值班交接的业务单据发布"
+    },
+    {
+      "file": "noise_18_04.md",
+      "title": "模拟业务：值班交接的异常处理记录"
+    },
+    {
+      "file": "noise_18_05.md",
+      "title": "模拟业务：值班交接的历史记录查询"
+    },
+    {
+      "file": "noise_18_06.md",
+      "title": "模拟业务：值班交接的年度归档检查"
+    },
+    {
+      "file": "noise_19_01.md",
+      "title": "模拟业务：预算申请的申请资料准备"
+    },
+    {
+      "file": "noise_19_02.md",
+      "title": "模拟业务：预算申请的人工复核安排"
+    },
+    {
+      "file": "noise_19_03.md",
+      "title": "模拟业务：预算申请的业务单据发布"
+    },
+    {
+      "file": "noise_19_04.md",
+      "title": "模拟业务：预算申请的异常处理记录"
+    },
+    {
+      "file": "noise_19_05.md",
+      "title": "模拟业务：预算申请的历史记录查询"
+    },
+    {
+      "file": "noise_19_06.md",
+      "title": "模拟业务：预算申请的年度归档检查"
+    },
+    {
+      "file": "noise_20_01.md",
+      "title": "模拟业务：材料领用的申请资料准备"
+    },
+    {
+      "file": "noise_20_02.md",
+      "title": "模拟业务：材料领用的人工复核安排"
+    },
+    {
+      "file": "noise_20_03.md",
+      "title": "模拟业务：材料领用的业务单据发布"
+    },
+    {
+      "file": "noise_20_04.md",
+      "title": "模拟业务：材料领用的异常处理记录"
+    },
+    {
+      "file": "noise_20_05.md",
+      "title": "模拟业务：材料领用的历史记录查询"
+    },
+    {
+      "file": "noise_20_06.md",
+      "title": "模拟业务：材料领用的年度归档检查"
+    }
+  ]
+}

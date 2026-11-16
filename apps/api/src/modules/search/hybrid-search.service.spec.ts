@@ -1,117 +1,90 @@
 import { describe, expect, it, vi } from 'vitest';
 import { HybridSearchService } from './hybrid-search.service';
+import { RerankService } from '../retrieval/rerank/rerank.service';
+
+const chunk = (chunkId: string, score: number) => ({
+  chunkId,
+  documentId: chunkId,
+  documentVersion: 1,
+  chunkIndex: 0,
+  content: '正文证据',
+  score,
+  document: { title: 'Title', category: null, team: null, tags: [] },
+});
 
 describe('HybridSearchService', () => {
-  it('merges keyword and semantic results with document-level deduplication', async () => {
-    const searchQuery = {
-      searchDocuments: vi.fn().mockResolvedValue({
-        items: [
-          {
-            id: 'document-1',
-            title: 'RabbitMQ Guide',
-            category: 'platform',
-            team: 'infra',
-            tags: ['mq'],
-            score: 10,
-          },
-          {
-            id: 'document-2',
-            title: 'Search Guide',
-            category: 'platform',
-            team: 'infra',
-            tags: ['search'],
-            score: 5,
-          },
-        ],
-        page: 1,
-        pageSize: 3,
-        total: 2,
-      }),
-    };
+  it('passes the same identity to both chunk routes and selects the final budget after merging', async () => {
     const ragQuery = {
-      search: vi.fn().mockResolvedValue({
-        query: 'how does retrieval work?',
-        topK: 3,
-        items: [
-          {
-            chunkId: 'document-1:v1:c0',
-            documentId: 'document-1',
-            documentVersion: 1,
-            chunkIndex: 0,
-            content: 'RabbitMQ content',
-            score: 0.9,
-            document: {
-              title: 'RabbitMQ Guide',
-              category: 'platform',
-              team: 'infra',
-              tags: ['mq'],
-            },
-          },
-          {
-            chunkId: 'document-3:v1:c0',
-            documentId: 'document-3',
-            documentVersion: 1,
-            chunkIndex: 0,
-            content: 'Semantic content',
-            score: 0.8,
-            document: {
-              title: 'Semantic Guide',
-              category: 'platform',
-              team: 'infra',
-              tags: ['rag'],
-            },
-          },
-        ],
-      }),
-    };
-    const rerank = {
-      rerank: vi.fn((_query, candidates) => candidates.map((candidate) => ({
-        ...candidate,
-        rerankScore: candidate.score,
-      }))),
+      searchKeywordChunks: vi
+        .fn()
+        .mockResolvedValue({ items: [chunk('a', 10), chunk('b', 5)] }),
+      search: vi
+        .fn()
+        .mockResolvedValue({ items: [chunk('a', 0.9), chunk('c', 0.8)] }),
     };
     const service = new HybridSearchService(
-      searchQuery as any,
       ragQuery as any,
-      rerank as any,
+      new RerankService(),
     );
-
-    const result = await service.search({
-      query: '  how does retrieval work? ',
-      topK: 3,
-    });
-
-    expect(result.query).toBe('how does retrieval work?');
-    expect(result.items.map((item) => item.documentId)).toEqual([
-      'document-1',
-      'document-3',
-      'document-2',
-    ]);
+    const user = { id: 'user', role: 'MEMBER' as const, team: 'team' };
+    const result = await service.search({ query: '  证据  ', topK: 2 }, user);
+    expect(result).toMatchObject({ query: '证据', topK: 2 });
+    expect(result.items).toHaveLength(2);
     expect(result.items[0]).toMatchObject({
-      chunkId: 'document-1:v1:c0',
-      sources: ['semantic', 'keyword'],
-      keywordScore: 10,
-      semanticScore: 0.9,
-      score: 1,
+      chunkId: 'a',
+      content: '正文证据',
+      sources: ['keyword', 'semantic'],
     });
-    expect(result.items[2]).toMatchObject({
-      documentId: 'document-2',
-      sources: ['keyword'],
-    });
-    expect(result.items[2].content).toBeUndefined();
-    expect(searchQuery.searchDocuments).toHaveBeenCalledWith({
-      keyword: 'how does retrieval work?',
-      page: 1,
-      pageSize: 3,
-    });
-    expect(ragQuery.search).toHaveBeenCalledWith({
-      query: 'how does retrieval work?',
-      topK: 3,
-    });
-    expect(rerank.rerank).toHaveBeenCalledWith(
-      'how does retrieval work?',
-      expect.any(Array),
-      { topK: 3 },
+    for (const route of [ragQuery.search, ragQuery.searchKeywordChunks]) {
+      expect(route).toHaveBeenCalledWith({ query: '证据', topK: 6 }, user);
+    }
+  });
+
+  it('keeps usable keyword-only bodies when semantic retrieval returns no candidates', async () => {
+    const service = new HybridSearchService(
+      {
+        searchKeywordChunks: vi
+          .fn()
+          .mockResolvedValue({ items: [chunk('a', 10)] }),
+        search: vi.fn().mockResolvedValue({ items: [] }),
+      } as any,
+      new RerankService(),
+    );
+    expect(
+      (await service.search({ query: '证据', topK: 1 })).items[0],
+    ).toMatchObject({ content: '正文证据', sources: ['keyword'] });
+  });
+
+  it('bounds expanded route budgets even at the largest public TopK', async () => {
+    const ragQuery = {
+      searchKeywordChunks: vi.fn().mockResolvedValue({ items: [] }),
+      search: vi.fn().mockResolvedValue({ items: [] }),
+    };
+    const result = await new HybridSearchService(
+      ragQuery as any,
+      new RerankService(),
+    ).search({ query: '证据', topK: 20 });
+    expect(result).toEqual({ query: '证据', topK: 20, items: [] });
+    for (const route of [ragQuery.search, ragQuery.searchKeywordChunks]) {
+      expect(route).toHaveBeenCalledWith(
+        { query: '证据', topK: 60 },
+        undefined,
+      );
+    }
+  });
+
+  it('surfaces route failures and does not return unvalidated fallback metadata', async () => {
+    const service = new HybridSearchService(
+      {
+        searchKeywordChunks: vi
+          .fn()
+          .mockRejectedValue(new Error('index unavailable')),
+        search: vi.fn().mockResolvedValue({ items: [] }),
+      } as any,
+      new RerankService(),
+    );
+    await expect(service.search({ query: '证据', topK: 1 })).rejects.toThrow(
+      'index unavailable',
     );
   });
 });

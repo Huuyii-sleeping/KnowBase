@@ -1,0 +1,64 @@
+{
+  "documents": 40,
+  "questions": 80,
+  "splits": {
+    "validation": {
+      "questions": 80,
+      "types": {
+        "answerable": 64,
+        "unanswerable": 16
+      },
+      "categories": {
+        "exact_identifier": 8,
+        "paraphrase": 8,
+        "negation_condition": 8,
+        "boundary_value": 8,
+        "role_scope": 8,
+        "heading_context": 8,
+        "multi_document": 8,
+        "cross_chunk": 8,
+        "unanswerable": 16
+      },
+      "phenomena": {
+        "exact_identifier": 8,
+        "paraphrase": 8,
+        "negation_condition": 8,
+        "boundary_value": 8,
+        "role_scope": 8,
+        "heading_context": 8,
+        "multi_document": 8,
+        "cross_chunk": 8,
+        "out_of_scope": 8,
+        "absent_identifier": 8
+      },
+      "gold_documents": [
+        "ceramics-kiln-companion.md",
+        "ceramics-kiln.md",
+        "cold-chain-samples-companion.md",
+        "cold-chain-samples.md",
+        "manuscript-reading-companion.md",
+        "manuscript-reading.md",
+        "mountain-radio-companion.md",
+        "mountain-radio.md",
+        "planetarium-visit-companion.md",
+        "planetarium-visit.md",
+        "reef-dive-companion.md",
+        "reef-dive.md",
+        "theatre-rigging-companion.md",
+        "theatre-rigging.md",
+        "wetland-survey-companion.md",
+        "wetland-survey.md"
+      ],
+      "families": [
+        "ceramics-kiln",
+        "cold-chain-samples",
+        "manuscript-reading",
+        "mountain-radio",
+        "planetarium-visit",
+        "reef-dive",
+        "theatre-rigging",
+        "wetland-survey"
+      ]
+    }
+  }
+}

@@ -1,0 +1,4162 @@
+[
+  {
+    "id": "kb001",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "PDF、XLSX、DOCX 和 PPTX 分别由什么解析器处理？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "分别使用 pdf-parse、exceljs、mammoth 和 jszip。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "PDF 使用 pdf-parse 提取文字，XLSX 使用 exceljs 读取工作表，DOCX 使用 mammoth 转 HTML 后再转 Markdown，PPTX 使用 jszip 读取幻灯片 XML"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb002",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "kh_document、document_content 和 RustFS 分别保存什么？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "分别保存结构化元数据、标准化长正文、原始文件和提取资源。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "PostgreSQL 的 kh_document 保存标题、文件名、版本、审核状态、权限和当前 content_id。MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。RustFS 通过 S3 兼容接口保存原始文件和提取出的图片等资源。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb003",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "为什么发布任务要先写 Outbox 再发送到 RabbitMQ？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "让发布状态与任务原子保存，Broker 停机时任务仍可持久化等待投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb004",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "SKIP LOCKED 在多个 Relay 投递任务时有什么作用？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "避免多个 Relay 争抢同一条 Outbox 记录。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "Relay 轮询 Outbox，使用 SKIP LOCKED 避免多个 Relay 争抢同一条记录"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb005",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "version 和 generation 有什么区别？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "version 标识业务修订，generation 标识一次独立的索引构建。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "version 是文档的业务修订号，generation 是一次索引构建的唯一批次号。同一个文档版本可以多次重建，每次得到不同的 generation。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb006",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "PRIVATE、TEAM、PUBLIC 是什么，空权限默认怎么处理？",
+    "gold_docs": ["kb_access.md"],
+    "reference_answer": "三者是文档可见性，空权限默认私有。",
+    "evidence": [
+      {
+        "doc": "kb_access.md",
+        "quote": "文档的可见性为 PRIVATE、TEAM 或 PUBLIC。"
+      },
+      {
+        "doc": "kb_access.md",
+        "quote": "旧记录或空权限配置默认按 PRIVATE 处理。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb007",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "语义检索默认使用哪个 Embedding 模型和多少维向量？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "使用 nomic-embed-text，向量维度为 768。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb008",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "Neo4j 中的实体 key 由哪两部分组成？",
+    "gold_docs": ["kb_graph.md"],
+    "reference_answer": "由实体类型和归一化名称组成。",
+    "evidence": [
+      {
+        "doc": "kb_graph.md",
+        "quote": "实体 key 由实体类型和归一化名称组成。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "kb009",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "文件明明上传成功了，为什么其他人还搜不到？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "上传只是接入，需要后续发布并完成索引才能被检索。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "上传成功不表示文档已经发布或可检索。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb010",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "当前不支持 OCR，扫描图片里的文字无法直接提取。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb011",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表只取元数据，长正文在打开详情时再读取。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb012",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "不必失败，任务先保存在数据库，Broker 恢复后投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb013",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "同一条消息收到了两遍，怎么避免重复执行已经完成的工作？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "按 event_id 查询 receipt，已完成的事件跳过副作用。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb014",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "重新建索引建到一半报错，会不会把原来可以查到的内容弄没了？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "同版本重建失败不会替换原来的完整批次。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb015",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "永久删除标记会阻止旧任务重新激活。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb016",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "文档命中不代表取到了含关键证据的 Chunk。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "kb017",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "解析必须为 READY，由管理员审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb018",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "审核发布接口成功返回，能否认为全文、向量和图谱已经同时就绪？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "不能，发布成功只代表状态和异步任务已持久化。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "HTTP 发布成功表示发布状态和任务已经持久化，不表示三路索引已经全部就绪。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb019",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "只改了标题和标签，正文没有改，还需要重新审核吗？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "有意义的元数据变更增加修订并回到草稿，需要重新审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb020",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "锁定文档检查发布状态、版本和正文引用后切换可见指针。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb021",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "删除文档的四条清理任务分别清理哪些内容？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "分别清理全文、向量、图谱和源数据。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb022",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "问答接口没有足够证据时会怎么做，会继续请求对话模型吗？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "返回知识不足提示，不调用对话模型。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "没有足够的可用上下文时，系统返回“知识库中没有找到足够信息”，不调用对话模型。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "kb023",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "RabbitMQ 的消息连接和管理页面分别使用哪个宿主机端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "消息连接为 15672，管理页面为 15673。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ AMQP | 15672 | 应用连接消息 Broker |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ Management | 15673 | 消息管理界面 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "kb024",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "从宿主机连接 PostgreSQL 和 MongoDB，分别应该使用什么端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "PostgreSQL 为 15432，MongoDB 为 17017。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| MongoDB | 17017 | Markdown 正文 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "kb025",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "图数据库的 Bolt 连接与浏览器管理界面分别在哪个端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Bolt 为 17687，Browser 为 17474。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Bolt | 17687 | 应用访问图数据库 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Browser | 17474 | 图数据库管理界面 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "kb026",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "Elasticsearch HTTP 和 RustFS 的对象读写 API 各使用哪个端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Elasticsearch 为 19200，RustFS S3 API 为 19000。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Elasticsearch HTTP | 19200 | 全文和向量查询 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RustFS S3 API | 19000 | 二进制对象读写 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "kb027",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+    "gold_docs": ["kb_storage.md", "kb_rag.md"],
+    "reference_answer": "正文在 MongoDB document_content，向量索引是 Elasticsearch kh_chunk。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+      },
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "kb028",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+    "gold_docs": ["kb_delivery.md", "kb_generations.md"],
+    "reference_answer": "Outbox 与发布原子保存防丢任务，索引最终版本校验与批次可见性阻止旧任务覆盖。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "kb029",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "修改已发布正文时，审核状态如何变化，旧索引还能继续作为当前修订查询吗？",
+    "gold_docs": ["kb_review.md", "kb_generations.md"],
+    "reference_answer": "修改正文增加修订并回到草稿；查询仅接受当前已发布修订的有效批次。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "查询只使用当前已发布修订对应的有效 generation。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "kb030",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "文档级与段落级命中为什么都要检查，关键词候选能直接作为 AI 正文证据吗？",
+    "gold_docs": ["kb_rag.md", "kb_search.md"],
+    "reference_answer": "正确文档可能对应错误 Chunk，仅元数据的关键词候选不能作为正文证据。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      },
+      {
+        "doc": "kb_search.md",
+        "quote": "关键词候选如果没有正文，只包含文档元数据，不能直接作为 AI 回答的正文证据。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "kb031",
+    "type": "answerable",
+    "category": "version",
+    "question": "评测知识库中当前生效的上传审批策略，单文件上限是多少？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "当前生效上限为 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "kb032",
+    "type": "answerable",
+    "category": "version",
+    "question": "已失效的 KB-UPLOAD-2024 历史策略里，单文件上限是多少？",
+    "gold_docs": ["kb_policy_archive.md"],
+    "reference_answer": "历史上限为 20 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "kb033",
+    "type": "answerable",
+    "category": "version",
+    "question": "当前策略与历史归档策略的上传上限有什么变化？",
+    "gold_docs": ["kb_policy_current.md", "kb_policy_archive.md"],
+    "reference_answer": "从历史的 20 MiB 变为当前的 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      },
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "kb034",
+    "type": "answerable",
+    "category": "version",
+    "question": "当前生效的上传审批责任人是谁，可以自动批准吗？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "责任人为知识库管理员，要求人工审核，没有自动批准或免审。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前审批责任人为知识库管理员，审批要求为人工审核。该策略没有规定自动批准或免审流程。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "kb035",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "任务持续失败默认最多处理几次，人工恢复死信之前和之后分别要做什么？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "默认最多 3 次；先修复原因并核对文档状态版本，再创建新的投递事件。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+      },
+      {
+        "doc": "kb_delivery.md",
+        "quote": "恢复死信前先修复失败原因，再确认文档仍存在且版本适用，最后人工创建新的投递事件。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "kb036",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "文档列表和详情分别如何读取，跨存储故障应该按什么顺序核对？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表读取 PostgreSQL，详情按 content_id 读取 MongoDB；先核对元数据引用、正文和对象键，再决定补偿。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      },
+      {
+        "doc": "kb_storage.md",
+        "quote": "定位跨存储故障时，排查顺序是核对元数据引用、确认正文记录、检查对象键，再判断是否需要补偿"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "kb037",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "KnowBase 生产环境数据库的真实密码是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供生产密码。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "kb038",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "评测公司的 2027 年销售收入目标是多少？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供财务收入目标。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "kb039",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "系统已经配置好的 OCR 服务地址与 API Key 是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料只说明 OCR 尚未提供，没有 OCR 地址或密钥。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "kb040",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "知识库音视频转写服务的负责人姓名和联系电话是多少？",
+    "gold_docs": [],
+    "reference_answer": "评测语料没有转写服务的负责人和联系电话。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "development",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "val001",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "想了解四种办公文件的文字抽取：PDF、Excel 表格、Word 和幻灯片各用了哪个库？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "分别使用 pdf-parse、exceljs、mammoth 和 jszip。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "PDF 使用 pdf-parse 提取文字，XLSX 使用 exceljs 读取工作表，DOCX 使用 mammoth 转 HTML 后再转 Markdown，PPTX 使用 jszip 读取幻灯片 XML"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val002",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "文件的标题权限、转换后的 Markdown、上传原件分别落在哪几套持久化系统？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "分别保存结构化元数据、标准化长正文、原始文件和提取资源。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "PostgreSQL 的 kh_document 保存标题、文件名、版本、审核状态、权限和当前 content_id。MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。RustFS 通过 S3 兼容接口保存原始文件和提取出的图片等资源。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val003",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "让发布状态与任务原子保存，Broker 停机时任务仍可持久化等待投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val004",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "部署多个轮询投递进程时，靠什么数据库机制避免它们抢到相同任务？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "避免多个 Relay 争抢同一条 Outbox 记录。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "Relay 轮询 Outbox，使用 SKIP LOCKED 避免多个 Relay 争抢同一条记录"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val005",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "一份文档不修改正文也可以重复建索引，那修订号与构建批号分别表示什么？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "version 标识业务修订，generation 标识一次独立的索引构建。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "version 是文档的业务修订号，generation 是一次索引构建的唯一批次号。同一个文档版本可以多次重建，每次得到不同的 generation。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val006",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "资料的三种开放范围有哪些，历史记录没填权限时会不会直接公开？",
+    "gold_docs": ["kb_access.md"],
+    "reference_answer": "三者是文档可见性，空权限默认私有。",
+    "evidence": [
+      {
+        "doc": "kb_access.md",
+        "quote": "文档的可见性为 PRIVATE、TEAM 或 PUBLIC。"
+      },
+      {
+        "doc": "kb_access.md",
+        "quote": "旧记录或空权限配置默认按 PRIVATE 处理。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val007",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "使用 nomic-embed-text，向量维度为 768。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val008",
+    "type": "answerable",
+    "category": "exact_term",
+    "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+    "gold_docs": ["kb_graph.md"],
+    "reference_answer": "由实体类型和归一化名称组成。",
+    "evidence": [
+      {
+        "doc": "kb_graph.md",
+        "quote": "实体 key 由实体类型和归一化名称组成。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["exact_term"]
+  },
+  {
+    "id": "val009",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我刚传好附件，同事立即检索没有结果；上传成功和检索可见之间还差什么？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "上传只是接入，需要后续发布并完成索引才能被检索。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "上传成功不表示文档已经发布或可检索。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val010",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+    "gold_docs": ["kb_upload.md"],
+    "reference_answer": "当前不支持 OCR，扫描图片里的文字无法直接提取。",
+    "evidence": [
+      {
+        "doc": "kb_upload.md",
+        "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val011",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表只取元数据，长正文在打开详情时再读取。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val012",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "如果 Broker 停机，批准发布请求是否一定要回滚，还是能把工作留待恢复？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "不必失败，任务先保存在数据库，Broker 恢复后投递。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val013",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "消费者处理过的事件再次送来，要用什么标识判断无需再做一次？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "按 event_id 查询 receipt，已完成的事件跳过副作用。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val014",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "同一修订重新生成向量时失败，上一轮已经完整的索引会被清空吗？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "同版本重建失败不会替换原来的完整批次。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val015",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "资料删除以后，有个迟到的索引消费者刚做完任务，它能让删除内容重新出现吗？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "永久删除标记会阻止旧任务重新激活。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val016",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "文档命中不代表取到了含关键证据的 Chunk。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "val017",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "解析必须为 READY，由管理员审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val018",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "发布接口返回成功时，是否保证全文搜索、语义搜索与图谱马上都能查询？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "不能，发布成功只代表状态和异步任务已持久化。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "HTTP 发布成功表示发布状态和任务已经持久化，不表示三路索引已经全部就绪。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val019",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "只调整已发布资料的分类标签和标题，业务状态与审核要求如何变化？",
+    "gold_docs": ["kb_review.md"],
+    "reference_answer": "有意义的元数据变更增加修订并回到草稿，需要重新审核。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val020",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "一个暂存索引批次在成为当前可见批次之前，最后必须比对哪些文档属性？",
+    "gold_docs": ["kb_generations.md"],
+    "reference_answer": "锁定文档检查发布状态、版本和正文引用后切换可见指针。",
+    "evidence": [
+      {
+        "doc": "kb_generations.md",
+        "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val021",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "移除资料时产生的几种后台清理工作，分别负责什么资源？",
+    "gold_docs": ["kb_deletion.md"],
+    "reference_answer": "分别清理全文、向量、图谱和源数据。",
+    "evidence": [
+      {
+        "doc": "kb_deletion.md",
+        "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val022",
+    "type": "answerable",
+    "category": "workflow",
+    "question": "知识库拿不出足够上下文时，系统怎样回应，还会把问题发送给大模型吗？",
+    "gold_docs": ["kb_rag.md"],
+    "reference_answer": "返回知识不足提示，不调用对话模型。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "没有足够的可用上下文时，系统返回“知识库中没有找到足够信息”，不调用对话模型。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["workflow"]
+  },
+  {
+    "id": "val023",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "本地程序连接 AMQP 与人在浏览器打开 RabbitMQ 控制台，端口怎么区分？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "消息连接为 15672，管理页面为 15673。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ AMQP | 15672 | 应用连接消息 Broker |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RabbitMQ Management | 15673 | 消息管理界面 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "val024",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "我要从电脑宿主机连关系库和正文库，两者端口分别是多少？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "PostgreSQL 为 15432，MongoDB 为 17017。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| MongoDB | 17017 | Markdown 正文 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "val025",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "Neo4j 给程序使用的连接和给人查看的页面，各自映射到哪个端口？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Bolt 为 17687，Browser 为 17474。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Bolt | 17687 | 应用访问图数据库 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Neo4j Browser | 17474 | 图数据库管理界面 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "val026",
+    "type": "answerable",
+    "category": "parameter_table",
+    "question": "全文向量引擎的 HTTP 入口与对象存储 S3 接口，宿主机端口各是什么？",
+    "gold_docs": ["kb_ports.md"],
+    "reference_answer": "Elasticsearch 为 19200，RustFS S3 API 为 19000。",
+    "evidence": [
+      {
+        "doc": "kb_ports.md",
+        "quote": "| Elasticsearch HTTP | 19200 | 全文和向量查询 |"
+      },
+      {
+        "doc": "kb_ports.md",
+        "quote": "| RustFS S3 API | 19000 | 二进制对象读写 |"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["parameter_table"]
+  },
+  {
+    "id": "val027",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+    "gold_docs": ["kb_storage.md", "kb_rag.md"],
+    "reference_answer": "正文在 MongoDB document_content，向量索引是 Elasticsearch kh_chunk。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+      },
+      {
+        "doc": "kb_rag.md",
+        "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "val028",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "既要保证发布任务故障后不丢，又要保证晚完成的旧任务不覆盖新结果，分别靠什么？",
+    "gold_docs": ["kb_delivery.md", "kb_generations.md"],
+    "reference_answer": "Outbox 与发布原子保存防丢任务，索引最终版本校验与批次可见性阻止旧任务覆盖。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "val029",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "已发布内容被编辑之后会变成什么状态，先前那轮索引能否继续代表当前版本？",
+    "gold_docs": ["kb_review.md", "kb_generations.md"],
+    "reference_answer": "修改正文增加修订并回到草稿；查询仅接受当前已发布修订的有效批次。",
+    "evidence": [
+      {
+        "doc": "kb_review.md",
+        "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+      },
+      {
+        "doc": "kb_generations.md",
+        "quote": "查询只使用当前已发布修订对应的有效 generation。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "val030",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "如果只找到文档信息却没找到有用段落，能否把这些元数据当成回答依据？为什么？",
+    "gold_docs": ["kb_rag.md", "kb_search.md"],
+    "reference_answer": "正确文档可能对应错误 Chunk，仅元数据的关键词候选不能作为正文证据。",
+    "evidence": [
+      {
+        "doc": "kb_rag.md",
+        "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+      },
+      {
+        "doc": "kb_search.md",
+        "quote": "关键词候选如果没有正文，只包含文档元数据，不能直接作为 AI 回答的正文证据。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "val031",
+    "type": "answerable",
+    "category": "version",
+    "question": "模拟上传制度中目前仍有效的版本允许的最大文件体积是多少？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "当前生效上限为 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "val032",
+    "type": "answerable",
+    "category": "version",
+    "question": "编号 KB-UPLOAD-2024 的归档制度当年允许上传的最大文件体积是多少？",
+    "gold_docs": ["kb_policy_archive.md"],
+    "reference_answer": "历史上限为 20 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "val033",
+    "type": "answerable",
+    "category": "version",
+    "question": "对照上传业务的新旧两版规则，文件大小限制从多少调整到了多少？",
+    "gold_docs": ["kb_policy_current.md", "kb_policy_archive.md"],
+    "reference_answer": "从历史的 20 MiB 变为当前的 100 MiB。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前单文件上传上限为 100 MiB。"
+      },
+      {
+        "doc": "kb_policy_archive.md",
+        "quote": "历史单文件上传上限为 20 MiB。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "val034",
+    "type": "answerable",
+    "category": "version",
+    "question": "模拟上传制度的现行版由哪个岗位审批，有没有无需人工审核的例外？",
+    "gold_docs": ["kb_policy_current.md"],
+    "reference_answer": "责任人为知识库管理员，要求人工审核，没有自动批准或免审。",
+    "evidence": [
+      {
+        "doc": "kb_policy_current.md",
+        "quote": "当前审批责任人为知识库管理员，审批要求为人工审核。该策略没有规定自动批准或免审流程。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["version"]
+  },
+  {
+    "id": "val035",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "发布消息一直处理失败要尝试几回，死信修复后人工再次投递的检查顺序是什么？",
+    "gold_docs": ["kb_delivery.md"],
+    "reference_answer": "默认最多 3 次；先修复原因并核对文档状态版本，再创建新的投递事件。",
+    "evidence": [
+      {
+        "doc": "kb_delivery.md",
+        "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+      },
+      {
+        "doc": "kb_delivery.md",
+        "quote": "恢复死信前先修复失败原因，再确认文档仍存在且版本适用，最后人工创建新的投递事件。"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "val036",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "资料列表及详情分别查什么存储，跨系统引用出故障时应依次核查什么？",
+    "gold_docs": ["kb_storage.md"],
+    "reference_answer": "列表读取 PostgreSQL，详情按 content_id 读取 MongoDB；先核对元数据引用、正文和对象键，再决定补偿。",
+    "evidence": [
+      {
+        "doc": "kb_storage.md",
+        "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+      },
+      {
+        "doc": "kb_storage.md",
+        "quote": "定位跨存储故障时，排查顺序是核对元数据引用、确认正文记录、检查对象键，再判断是否需要补偿"
+      }
+    ],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "val037",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "生产服务器的管理员登录口令在知识库中写的是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供生产密码。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "val038",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "公司明年计划赚多少营业收入？",
+    "gold_docs": [],
+    "reference_answer": "评测语料未提供财务收入目标。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "val039",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "当前 OCR 图像识字接口的调用凭证以及服务网址能提供吗？",
+    "gold_docs": [],
+    "reference_answer": "评测语料只说明 OCR 尚未提供，没有 OCR 地址或密钥。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "val040",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "负责录音转文字的工作人员手机号码和姓名是什么？",
+    "gold_docs": [],
+    "reference_answer": "评测语料没有转写服务的负责人和联系电话。",
+    "evidence": [],
+    "split": "regression",
+    "previous_split": "validation",
+    "origin": "synthetic-v2-exposed",
+    "phenomena": ["unanswerable"]
+  },
+  {
+    "id": "v3_equipment_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "EQ-LEASE-27约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "设备借用，不超过3000元。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "规则标识为 EQ-LEASE-27"
+      },
+      {
+        "doc": "equipment_rules.md",
+        "quote": "单次申请金额不超过3000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_equipment_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办设备借用，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "需要资产管理员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "资产管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_equipment_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "设备借用只做到了“经理口头同意”，能否先发起审批、之后补手续？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "必须同时满足用途登记且保管状态核验通过，才可以提交设备借用申请。经理口头同意不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_equipment_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "设备借用金额恰好3000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "单次申请金额不超过3000元时使用普通流程，恰好3000元包含在内。超过3000元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_equipment_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了设备借用的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "研发组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_equipment_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "设备借用批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "45分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "允许窗口为45分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "设备借用的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_equipment_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "设备借用低于普通额度但涉及跨组共享时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["equipment_exceptions.md", "equipment_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "equipment_exceptions.md",
+        "quote": "涉及跨组共享时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "equipment_rules.md",
+        "quote": "必须同时满足用途登记且保管状态核验通过，才可以提交设备借用申请。"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_equipment_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版设备借用表格把额度写成1500元，现在是否仍应按它驳回？",
+    "gold_docs": ["equipment_exceptions.md", "equipment_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "equipment_exceptions.md",
+        "quote": "2025 年单次普通额度曾为1500元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "equipment_rules.md",
+        "quote": "单次申请金额不超过3000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_equipment_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "设备借用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["equipment_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "equipment_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "equipment_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_equipment_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "设备借用的押金金额具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定押金金额，其他数值不能代替。"
+  },
+  {
+    "id": "v3_equipment_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "设备借用后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_equipment_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许设备借用在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "equipment",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_travel_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "TR-CLAIM-16约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "差旅报销，不超过5000元。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "规则标识为 TR-CLAIM-16"
+      },
+      {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_travel_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办差旅报销，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "需要财务复核员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "财务复核员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_travel_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "差旅报销只做到了“付款截图齐全”，能否先发起审批、之后补手续？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "必须同时满足行程结束且电子发票验真通过，才可以提交差旅报销申请。付款截图齐全不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_travel_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "差旅报销金额恰好5000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程，恰好5000元包含在内。超过5000元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_travel_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了差旅报销的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "市场组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_travel_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "差旅报销批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "72分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "允许窗口为72分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "差旅报销的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_travel_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "差旅报销低于普通额度但涉及海外差旅时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["travel_exceptions.md", "travel_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "travel_exceptions.md",
+        "quote": "涉及海外差旅时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "travel_rules.md",
+        "quote": "必须同时满足行程结束且电子发票验真通过，才可以提交差旅报销申请。"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_travel_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版差旅报销表格把额度写成2500元，现在是否仍应按它驳回？",
+    "gold_docs": ["travel_exceptions.md", "travel_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "travel_exceptions.md",
+        "quote": "2025 年单次普通额度曾为2500元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_travel_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "差旅报销请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["travel_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "travel_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "travel_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_travel_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "差旅报销的汇率换算公式具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定汇率换算公式，其他数值不能代替。"
+  },
+  {
+    "id": "v3_travel_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "差旅报销后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_travel_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许差旅报销在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "travel",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_contract_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "CT-SEAL-08约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "合同用印，不超过10000元。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "规则标识为 CT-SEAL-08"
+      },
+      {
+        "doc": "contract_rules.md",
+        "quote": "单次申请金额不超过10000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_contract_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办合同用印，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "需要法务审批员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "法务审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_contract_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "合同用印只做到了“已向供应商发送草稿”，能否先发起审批、之后补手续？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "必须同时满足合同定稿且法务审查通过，才可以提交合同用印申请。已向供应商发送草稿不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_contract_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "合同用印金额恰好10000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "单次申请金额不超过10000元时使用普通流程，恰好10000元包含在内。超过10000元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_contract_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了合同用印的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "采购组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_contract_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "合同用印批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "30分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "允许窗口为30分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "合同用印的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_contract_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "合同用印低于普通额度但涉及电子签章时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["contract_exceptions.md", "contract_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "contract_exceptions.md",
+        "quote": "涉及电子签章时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "contract_rules.md",
+        "quote": "必须同时满足合同定稿且法务审查通过，才可以提交合同用印申请。"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_contract_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+    "gold_docs": ["contract_exceptions.md", "contract_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "contract_exceptions.md",
+        "quote": "2025 年单次普通额度曾为5000元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "contract_rules.md",
+        "quote": "单次申请金额不超过10000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_contract_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "合同用印请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["contract_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "contract_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "contract_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_contract_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "合同用印的违约金比例具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定违约金比例，其他数值不能代替。"
+  },
+  {
+    "id": "v3_contract_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "合同用印后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_contract_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许合同用印在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "contract",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_access_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "AC-TEMP-42约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "临时门禁，不超过800元。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "规则标识为 AC-TEMP-42"
+      },
+      {
+        "doc": "access_rules.md",
+        "quote": "单次申请金额不超过800元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_access_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办临时门禁，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "需要园区安保员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "园区安保员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_access_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "临时门禁只做到了“已有接待日历邀请”，能否先发起审批、之后补手续？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "必须同时满足访客实名核验且被访人确认，才可以提交临时门禁申请。已有接待日历邀请不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_access_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "临时门禁金额恰好800元，和高出一元，各应走什么流程？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "单次申请金额不超过800元时使用普通流程，恰好800元包含在内。超过800元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_access_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了临时门禁的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "访客服务组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_access_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "临时门禁批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "120分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "允许窗口为120分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "临时门禁的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_access_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "临时门禁低于普通额度但涉及跨园区通行时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["access_exceptions.md", "access_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "access_exceptions.md",
+        "quote": "涉及跨园区通行时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "access_rules.md",
+        "quote": "必须同时满足访客实名核验且被访人确认，才可以提交临时门禁申请。"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_access_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版临时门禁表格把额度写成400元，现在是否仍应按它驳回？",
+    "gold_docs": ["access_exceptions.md", "access_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "access_exceptions.md",
+        "quote": "2025 年单次普通额度曾为400元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "access_rules.md",
+        "quote": "单次申请金额不超过800元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_access_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "临时门禁请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["access_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "access_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "access_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_access_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "临时门禁的停车费单价具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定停车费单价，其他数值不能代替。"
+  },
+  {
+    "id": "v3_access_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "临时门禁后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_access_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许临时门禁在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "access",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_purchase_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "PO-REQ-63约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "采购申请，不超过20000元。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "规则标识为 PO-REQ-63"
+      },
+      {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_purchase_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办采购申请，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "需要采购审批员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "采购审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_purchase_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "采购申请只做到了“已经收到报价邮件”，能否先发起审批、之后补手续？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "必须同时满足预算已锁定且供应商准入通过，才可以提交采购申请申请。已经收到报价邮件不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_purchase_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "采购申请金额恰好20000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程，恰好20000元包含在内。超过20000元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_purchase_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了采购申请的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "运维组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_purchase_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "采购申请批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "24分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "允许窗口为24分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "采购申请的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_purchase_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "采购申请低于普通额度但涉及紧急采购时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["purchase_exceptions.md", "purchase_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "purchase_exceptions.md",
+        "quote": "涉及紧急采购时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "purchase_rules.md",
+        "quote": "必须同时满足预算已锁定且供应商准入通过，才可以提交采购申请申请。"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_purchase_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+    "gold_docs": ["purchase_exceptions.md", "purchase_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "purchase_exceptions.md",
+        "quote": "2025 年单次普通额度曾为10000元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_purchase_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "采购申请请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["purchase_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "purchase_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "purchase_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_purchase_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "采购申请的税率标准具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定税率标准，其他数值不能代替。"
+  },
+  {
+    "id": "v3_purchase_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "采购申请后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_purchase_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许采购申请在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "purchase",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_archive_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "AR-READ-11约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "档案调阅，不超过1200元。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "规则标识为 AR-READ-11"
+      },
+      {
+        "doc": "archive_rules.md",
+        "quote": "单次申请金额不超过1200元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_archive_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办档案调阅，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "需要档案管理员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "档案管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_archive_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "档案调阅只做到了“已经知道档案编号”，能否先发起审批、之后补手续？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "必须同时满足档案密级核验且用途审批通过，才可以提交档案调阅申请。已经知道档案编号不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_archive_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "档案调阅金额恰好1200元，和高出一元，各应走什么流程？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "单次申请金额不超过1200元时使用普通流程，恰好1200元包含在内。超过1200元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_archive_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了档案调阅的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "审计组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_archive_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "档案调阅批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "90分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "允许窗口为90分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "档案调阅的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_archive_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "档案调阅低于普通额度但涉及外借原件时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["archive_exceptions.md", "archive_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "archive_exceptions.md",
+        "quote": "涉及外借原件时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "archive_rules.md",
+        "quote": "必须同时满足档案密级核验且用途审批通过，才可以提交档案调阅申请。"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_archive_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版档案调阅表格把额度写成600元，现在是否仍应按它驳回？",
+    "gold_docs": ["archive_exceptions.md", "archive_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "archive_exceptions.md",
+        "quote": "2025 年单次普通额度曾为600元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "archive_rules.md",
+        "quote": "单次申请金额不超过1200元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_archive_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "档案调阅请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["archive_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "archive_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "archive_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_archive_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "档案调阅的快递运费具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定快递运费，其他数值不能代替。"
+  },
+  {
+    "id": "v3_archive_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "档案调阅后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_archive_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许档案调阅在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "archive",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_release_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "SW-REL-35约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "软件上线，不超过6000元。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "规则标识为 SW-REL-35"
+      },
+      {
+        "doc": "release_rules.md",
+        "quote": "单次申请金额不超过6000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_release_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办软件上线，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "需要发布经理批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "发布经理负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_release_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "软件上线只做到了“开发人员已经自测”，能否先发起审批、之后补手续？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "必须同时满足回归测试通过且回滚方案审批完成，才可以提交软件上线申请。开发人员已经自测不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_release_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "软件上线金额恰好6000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "单次申请金额不超过6000元时使用普通流程，恰好6000元包含在内。超过6000元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_release_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了软件上线的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "平台组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_release_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "软件上线批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "60分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "允许窗口为60分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "软件上线的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_release_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "软件上线低于普通额度但涉及数据库结构变更时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["release_exceptions.md", "release_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "release_exceptions.md",
+        "quote": "涉及数据库结构变更时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "release_rules.md",
+        "quote": "必须同时满足回归测试通过且回滚方案审批完成，才可以提交软件上线申请。"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_release_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+    "gold_docs": ["release_exceptions.md", "release_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "release_exceptions.md",
+        "quote": "2025 年单次普通额度曾为3000元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "release_rules.md",
+        "quote": "单次申请金额不超过6000元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_release_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "软件上线请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["release_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "release_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "release_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_release_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "软件上线的值班补贴具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定值班补贴，其他数值不能代替。"
+  },
+  {
+    "id": "v3_release_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "软件上线后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_release_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许软件上线在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "release",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_training_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "HR-TRAIN-52约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "培训报名，不超过2500元。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "规则标识为 HR-TRAIN-52"
+      },
+      {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_training_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办培训报名，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "需要培训协调员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "培训协调员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_training_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "培训报名只做到了“报名页面已经保存”，能否先发起审批、之后补手续？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "必须同时满足直属主管批准且课程名额锁定，才可以提交培训报名申请。报名页面已经保存不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_training_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "培训报名金额恰好2500元，和高出一元，各应走什么流程？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程，恰好2500元包含在内。超过2500元必须走专项审批"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_training_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了培训报名的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "人事组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_training_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "培训报名批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "48分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "允许窗口为48分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "培训报名的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_training_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "培训报名低于普通额度但涉及跨部门旁听时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["training_exceptions.md", "training_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "training_exceptions.md",
+        "quote": "涉及跨部门旁听时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "training_rules.md",
+        "quote": "必须同时满足直属主管批准且课程名额锁定，才可以提交培训报名申请。"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_training_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+    "gold_docs": ["training_exceptions.md", "training_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "training_exceptions.md",
+        "quote": "2025 年单次普通额度曾为1250元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_training_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "培训报名请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["training_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "training_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "training_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_training_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "培训报名的讲师课时费具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定讲师课时费，其他数值不能代替。"
+  },
+  {
+    "id": "v3_training_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "培训报名后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_training_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许培训报名在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "development",
+    "family": "training",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_sample_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "SP-TAKE-74约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "样品领用，不超过1800元。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "规则标识为 SP-TAKE-74"
+      },
+      {
+        "doc": "sample_rules.md",
+        "quote": "单次申请金额不超过1800元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_sample_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办样品领用，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "需要样品保管员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "样品保管员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_sample_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "样品领用只做到了“已在群里说明用途”，能否先发起审批、之后补手续？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。已在群里说明用途不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_sample_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "样品领用金额恰好1800元，和高出一元，各应走什么流程？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "单次申请金额不超过1800元时使用普通流程，恰好1800元包含在内。超过1800元必须走专项审批"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_sample_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了样品领用的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "质检组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_sample_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "样品领用批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "36分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "允许窗口为36分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "样品领用的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_sample_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "样品领用低于普通额度但涉及外部机构借样时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["sample_exceptions.md", "sample_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "sample_exceptions.md",
+        "quote": "涉及外部机构借样时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "sample_rules.md",
+        "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_sample_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版样品领用表格把额度写成900元，现在是否仍应按它驳回？",
+    "gold_docs": ["sample_exceptions.md", "sample_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "sample_exceptions.md",
+        "quote": "2025 年单次普通额度曾为900元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "sample_rules.md",
+        "quote": "单次申请金额不超过1800元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_sample_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "样品领用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["sample_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "sample_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "sample_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_sample_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "样品领用的检测收费具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定检测收费，其他数值不能代替。"
+  },
+  {
+    "id": "v3_sample_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "样品领用后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_sample_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许样品领用在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "sample",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_repair_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "MT-JOB-91约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "维修派单，不超过4500元。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "规则标识为 MT-JOB-91"
+      },
+      {
+        "doc": "repair_rules.md",
+        "quote": "单次申请金额不超过4500元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_repair_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办维修派单，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "需要维修调度员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "维修调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_repair_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "维修派单只做到了“已经上传故障照片”，能否先发起审批、之后补手续？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "必须同时满足故障等级确认且安全隔离完成，才可以提交维修派单申请。已经上传故障照片不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_repair_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "维修派单金额恰好4500元，和高出一元，各应走什么流程？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "单次申请金额不超过4500元时使用普通流程，恰好4500元包含在内。超过4500元必须走专项审批"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_repair_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了维修派单的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "设施组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_repair_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "维修派单批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "15分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "允许窗口为15分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "维修派单的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_repair_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "维修派单低于普通额度但涉及高空作业时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["repair_exceptions.md", "repair_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "repair_exceptions.md",
+        "quote": "涉及高空作业时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "repair_rules.md",
+        "quote": "必须同时满足故障等级确认且安全隔离完成，才可以提交维修派单申请。"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_repair_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版维修派单表格把额度写成2250元，现在是否仍应按它驳回？",
+    "gold_docs": ["repair_exceptions.md", "repair_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "repair_exceptions.md",
+        "quote": "2025 年单次普通额度曾为2250元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "repair_rules.md",
+        "quote": "单次申请金额不超过4500元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_repair_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "维修派单请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["repair_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "repair_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "repair_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_repair_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "维修派单的配件折旧率具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定配件折旧率，其他数值不能代替。"
+  },
+  {
+    "id": "v3_repair_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "维修派单后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_repair_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许维修派单在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "repair",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_vehicle_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "CAR-BOOK-23约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "公务用车，不超过3500元。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "规则标识为 CAR-BOOK-23"
+      },
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "单次申请金额不超过3500元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_vehicle_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办公务用车，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "需要车队调度员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "车队调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_vehicle_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "公务用车只做到了“已经在日历占位”，能否先发起审批、之后补手续？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "必须同时满足出行事由批准且驾驶员资质核验通过，才可以提交公务用车申请。已经在日历占位不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_vehicle_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "公务用车金额恰好3500元，和高出一元，各应走什么流程？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "单次申请金额不超过3500元时使用普通流程，恰好3500元包含在内。超过3500元必须走专项审批"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_vehicle_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了公务用车的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "行政组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_vehicle_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "公务用车批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "180分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "允许窗口为180分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "公务用车的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_vehicle_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "公务用车低于普通额度但涉及跨省出行时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["vehicle_exceptions.md", "vehicle_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "vehicle_exceptions.md",
+        "quote": "涉及跨省出行时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "必须同时满足出行事由批准且驾驶员资质核验通过，才可以提交公务用车申请。"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_vehicle_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+    "gold_docs": ["vehicle_exceptions.md", "vehicle_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "vehicle_exceptions.md",
+        "quote": "2025 年单次普通额度曾为1750元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "单次申请金额不超过3500元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_vehicle_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "公务用车请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["vehicle_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "vehicle_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_vehicle_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "公务用车的油耗报销单价具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定油耗报销单价，其他数值不能代替。"
+  },
+  {
+    "id": "v3_vehicle_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "公务用车后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_vehicle_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许公务用车在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "vehicle",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  },
+  {
+    "id": "v3_data_01",
+    "type": "answerable",
+    "category": "exact_identifier",
+    "question": "DATA-OUT-86约束的是什么业务，普通申请的上限是多少？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "数据导出，不超过9000元。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "规则标识为 DATA-OUT-86"
+      },
+      {
+        "doc": "data_rules.md",
+        "quote": "单次申请金额不超过9000元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["exact_identifier"]
+  },
+  {
+    "id": "v3_data_02",
+    "type": "answerable",
+    "category": "paraphrase",
+    "question": "我想办数据导出，谁有最后拍板的权力？主管点头是否就算办完？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "需要数据审批员批准，主管只确认用途。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "数据审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["paraphrase"]
+  },
+  {
+    "id": "v3_data_03",
+    "type": "answerable",
+    "category": "negation_condition",
+    "question": "数据导出只做到了“能够在工作台预览数据”，能否先发起审批、之后补手续？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "不能先提交，条件必须全部满足。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "必须同时满足数据分级确认且用途授权完成，才可以提交数据导出申请。能够在工作台预览数据不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["negation_condition"]
+  },
+  {
+    "id": "v3_data_04",
+    "type": "answerable",
+    "category": "boundary_value",
+    "question": "数据导出金额恰好9000元，和高出一元，各应走什么流程？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "边界包含在普通流程，高出一元走专项审批。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "单次申请金额不超过9000元时使用普通流程，恰好9000元包含在内。超过9000元必须走专项审批"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["boundary_value"]
+  },
+  {
+    "id": "v3_data_05",
+    "type": "answerable",
+    "category": "role_scope",
+    "question": "外组同事拿到了数据导出的编号，是否就能打开我们组批准的详情？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "编号不能代替逐人授权。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "分析组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["role_scope"]
+  },
+  {
+    "id": "v3_data_06",
+    "type": "answerable",
+    "category": "heading_context",
+    "question": "数据导出批准后还允许撤销多久，时间应从什么时候起算？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "20分钟，自最终批准起算。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "允许窗口为20分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["heading_context", "temporal_boundary"],
+    "section_heading": "数据导出的撤回窗口",
+    "requires_heading_context": true
+  },
+  {
+    "id": "v3_data_07",
+    "type": "answerable",
+    "category": "multi_document",
+    "question": "数据导出低于普通额度但涉及包含敏感字段时，能否直接走普通流程？还需要满足哪些前提？",
+    "gold_docs": ["data_exceptions.md", "data_rules.md"],
+    "reference_answer": "必须走专项审批，提交条件仍须满足。",
+    "evidence": [
+      {
+        "doc": "data_exceptions.md",
+        "quote": "涉及包含敏感字段时，即使金额未超过普通额度，也必须转专项审批"
+      },
+      {
+        "doc": "data_rules.md",
+        "quote": "必须同时满足数据分级确认且用途授权完成，才可以提交数据导出申请。"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["multi_document"]
+  },
+  {
+    "id": "v3_data_08",
+    "type": "answerable",
+    "category": "historical_version",
+    "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+    "gold_docs": ["data_exceptions.md", "data_rules.md"],
+    "reference_answer": "旧规则已失效，应按现行额度。",
+    "evidence": [
+      {
+        "doc": "data_exceptions.md",
+        "quote": "2025 年单次普通额度曾为4500元，该规定自 2026 年现行规则启用时失效。"
+      },
+      {
+        "doc": "data_rules.md",
+        "quote": "单次申请金额不超过9000元时使用普通流程"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["historical_version"]
+  },
+  {
+    "id": "v3_data_09",
+    "type": "answerable",
+    "category": "cross_chunk",
+    "question": "数据导出请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+    "gold_docs": ["data_rules.md"],
+    "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+    "evidence": [
+      {
+        "doc": "data_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      {
+        "doc": "data_rules.md",
+        "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+      }
+    ],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["cross_chunk"]
+  },
+  {
+    "id": "v3_data_10",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "数据导出的脱敏算法参数具体是多少？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["missing_fact", "numeric_confuser"],
+    "unanswerable_reason": "资料明确没有规定脱敏算法参数，其他数值不能代替。"
+  },
+  {
+    "id": "v3_data_11",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "数据导出后台 API 的请求地址和调用密钥是什么？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["out_of_scope"],
+    "unanswerable_reason": "测试资料没有后台接口地址或密钥。"
+  },
+  {
+    "id": "v3_data_12",
+    "type": "unanswerable",
+    "category": "unanswerable",
+    "question": "哪条规定允许数据导出在前置条件不齐时先批准、以后再补材料？",
+    "gold_docs": [],
+    "reference_answer": "",
+    "evidence": [],
+    "split": "validation",
+    "family": "data",
+    "origin": "assistant-authored-synthetic",
+    "phenomena": ["false_permission_premise", "negation_condition"],
+    "unanswerable_reason": "问题要求不存在的允许条款；正文只有相反的禁止规定。"
+  }
+]

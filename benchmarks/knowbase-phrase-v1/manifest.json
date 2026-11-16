@@ -1,0 +1,86 @@
+{
+  "version": "knowbase-phrase-v1",
+  "scope": "Assistant-authored synthetic diagnostic fixtures, all exposed; no independent acceptance",
+  "documents": [
+    {
+      "file": "field_target.md",
+      "title": "诊断资料 01 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "field_confuser.md",
+      "title": "诊断资料 01 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "error_target.md",
+      "title": "诊断资料 02 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "error_confuser.md",
+      "title": "诊断资料 02 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "path_target.md",
+      "title": "诊断资料 03 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "path_confuser.md",
+      "title": "诊断资料 03 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "table_target.md",
+      "title": "诊断资料 04 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "table_confuser.md",
+      "title": "诊断资料 04 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "phrase_target.md",
+      "title": "诊断资料 05 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "phrase_confuser.md",
+      "title": "诊断资料 05 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "negation_target.md",
+      "title": "诊断资料 06 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "negation_confuser.md",
+      "title": "诊断资料 06 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "case_target.md",
+      "title": "诊断资料 07 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "case_confuser.md",
+      "title": "诊断资料 07 confuser",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "control_target.md",
+      "title": "诊断资料 08 target",
+      "origin": "assistant-authored-synthetic"
+    },
+    {
+      "file": "control_confuser.md",
+      "title": "诊断资料 08 confuser",
+      "origin": "assistant-authored-synthetic"
+    }
+  ]
+}

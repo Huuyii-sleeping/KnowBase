@@ -1,0 +1,32 @@
+{
+  "version": "context-ablation-v1",
+  "dataset": "knowbase-recall-v3",
+  "contexts": ["body", "title", "title-heading"],
+  "route_budget_pairs": [
+    [10, 10],
+    [15, 15],
+    [30, 10]
+  ],
+  "split": "all",
+  "selection_split": "development",
+  "exposed_regression_splits": ["regression", "validation"],
+  "encoding": "plain",
+  "lexical": "cjk",
+  "embedding_model": "nomic-embed-text",
+  "chunk_size": 1000,
+  "chunk_overlap": 150,
+  "final_k": 5,
+  "selection_rule": "Compare context modes at identical budgets; prefer development candidate-pool gates, then pool evidence, then selected evidence, then smaller candidate allocation. Report final Top5 losses and exposed split regressions; do not automatically promote production or claim unseen validation.",
+  "invariants": [
+    "Identical source documents and questions",
+    "Identical body chunks, order and evidence grading",
+    "Separate fresh isolated index per context mode",
+    "Context labels only from document metadata and source headings",
+    "No query expansion, reranking, model or generation changes"
+  ],
+  "limitations": [
+    "Assistant-authored synthetic data with correlated templates",
+    "All validation questions previously measured and exposed",
+    "Single serial timing; no production latency claims"
+  ]
+}

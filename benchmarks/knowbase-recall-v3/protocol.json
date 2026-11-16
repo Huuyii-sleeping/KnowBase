@@ -1,0 +1,61 @@
+{
+  "version": "recall-audit-v3.0",
+  "scope": "Assistant-authored synthetic engineering dataset; source-family disjoint holdout, not independent human evaluation",
+  "development_questions": 96,
+  "validation_questions": 48,
+  "distractor_documents": 120,
+  "budgets_per_route": [5, 10, 15, 30, 60],
+  "selection_rule": "Use development only for recall comparisons; old v2 questions are exposed regression. Freeze configurations before validation. Keep ranking and generation unchanged.",
+  "pool_evidence_recall_min": 0.95,
+  "pool_all_sources_rate_min": 0.95,
+  "pool_all_evidence_rate_min": 0.9,
+  "pool_category_evidence_recall_min": 0.85,
+  "p95_serial_ms_max": 500,
+  "merge_loss_max": 0,
+  "permission_or_stale_generation_leaks_max": 0,
+  "limitations": "All new questions are assistant-authored. Source-family holdout is synthetic rather than independent human data. Negatives measure returned candidates, not answer/refusal correctness. Role/visibility questions test business knowledge, runtime ACLs need integration tests. Single serial timing is not production latency.",
+  "regression_questions": 80,
+  "dataset_contract": {
+    "split_counts": {
+      "regression": 80,
+      "development": 96,
+      "validation": 48
+    },
+    "type_counts": {
+      "answerable": 180,
+      "unanswerable": 44
+    },
+    "document_count": 158,
+    "source_disjoint_splits": ["development", "validation"],
+    "required_positive_categories": [
+      "exact_identifier",
+      "paraphrase",
+      "negation_condition",
+      "boundary_value",
+      "role_scope",
+      "heading_context",
+      "multi_document",
+      "historical_version",
+      "cross_chunk"
+    ],
+    "min_per_category": 4,
+    "required_negative_phenomena": [
+      "missing_fact",
+      "numeric_confuser",
+      "out_of_scope",
+      "false_permission_premise"
+    ],
+    "allowed_origin": "assistant-authored-synthetic"
+  },
+  "route_budget_pairs": [
+    [5, 5],
+    [5, 15],
+    [10, 10],
+    [15, 5],
+    [10, 15],
+    [15, 10],
+    [15, 15],
+    [10, 30],
+    [30, 10]
+  ]
+}

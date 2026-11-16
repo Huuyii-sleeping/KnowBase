@@ -1,0 +1,61 @@
+{
+  "protocol": "body-protection-protocol.json",
+  "results": "body-protection-results.json",
+  "report": "body-protection-audit-v3.md",
+  "status": "explicit_candidate_only",
+  "selection": {
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "keyword_analyzer": "cjk",
+    "keyword_retained": 15,
+    "semantic_retained": 15,
+    "final_k": 5
+  },
+  "scored_requests": 1792,
+  "selection_basis": [
+    "At 15:15, zero individual pool evidence losses against both original body and contextual combined baselines in all exposed splits",
+    "Development pool evidence and heading-context evidence remain 100%",
+    "Development final evidence 56.25%, versus contextual combined 54.86% and weighted 53.47%",
+    "Regression pool evidence restored from contextual combined 95.14% to 96.53%"
+  ],
+  "alternative": {
+    "keyword_policy": "weighted",
+    "retained_per_route": 15,
+    "advantage": "One keyword index request rather than two",
+    "tradeoff": "Same observed pool protection, but lower development final evidence; exposed validation final evidence 59.72% versus combined/body-reserve 65.28% is diagnostic only"
+  },
+  "rejected_smaller_budget": {
+    "retained_per_route": 10,
+    "body_reserve": "val029 still loses one body-baseline evidence despite aggregate gains",
+    "weighted": "Development heading-context pool evidence drops to 62.5%"
+  },
+  "cost": {
+    "keyword_index_requests": 2,
+    "max_hits_per_keyword_request": 45,
+    "max_keyword_hits_read_total": 90,
+    "max_merged_keyword_hits_before_metadata_recheck": 45,
+    "retained_keyword_limit": 15,
+    "latency_conclusion": "One serial fixed-order pass does not establish production latency or throughput"
+  },
+  "defaults": {
+    "context": "body",
+    "keyword_policy": "combined",
+    "keyword_analyzer": "standard",
+    "changed": false
+  },
+  "deployment_performed": false,
+  "business_reindex_performed": false,
+  "limitations": [
+    "All synthetic and exposed; correlated templates; no independent human or real-user acceptance",
+    "Partial body reservation within a fixed budget is not a universal no-regression guarantee",
+    "Original regression misses remain; 96.53% is not overall perfect recall",
+    "Pool evidence protection does not guarantee per-question final Top 5 protection; val009 final evidence is still zero",
+    "No answer quality, refusal, hallucination or new embedding model selection claim",
+    "No production concurrency or load test"
+  ],
+  "rollout_constraints": [
+    "Context/encoding changes require all current RAG generations rebuilt and coordinated query switching",
+    "CJK on existing records requires generation rebuild",
+    "Only switching keyword policy over fully indexed identical context does not require embedding recomputation"
+  ]
+}
