@@ -9,6 +9,12 @@ const assert = require('node:assert/strict');
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const read = async (file) => JSON.parse(await fs.readFile(file, 'utf8'));
 
+async function readBody(request) {
+  const parts = [];
+  for await (const part of request) parts.push(part);
+  return JSON.parse(Buffer.concat(parts).toString('utf8'));
+}
+
 async function run(root, protocol, mode, output) {
   if (!['replay', 'live'].includes(mode))
     throw new Error('mode must be replay or live');
@@ -84,9 +90,7 @@ async function run(root, protocol, mode, output) {
   if (mode === 'replay') {
     server = createServer(async (request, response) => {
       try {
-        let data = '';
-        for await (const part of request) data += part;
-        const body = JSON.parse(data);
+        const body = await readBody(request);
         assert.equal(request.url, '/rerank');
         assert.equal(body.query, current.query);
         assert.deepEqual(
@@ -292,4 +296,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { run };
+module.exports = { run, readBody };
