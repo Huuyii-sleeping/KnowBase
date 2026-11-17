@@ -1,0 +1,322 @@
+{
+  "protocol_sha256": "88139763d0d480005a89dfb2d0435452bf9a314d3d9548774957f77c578b0312",
+  "protocol_freeze_commit": "f07f92c",
+  "runtime_initial_commit": "b479530",
+  "raw_outputs_sha256": {
+    "reports/retrieval-bge-integration/2026-11-17-r1/replay.json": "6b8352f7a595e8a712c5981e9259597dce26a48ebc6336bd693ca13f45622eab",
+    "reports/retrieval-bge-integration/2026-11-17-r1/live.json": "83a5ec9ea5e3b4f466bc6c3a66acd2ff661c4b0a1e53faff5e03b03127777eab"
+  },
+  "adapter_replay": {
+    "passed": true,
+    "pools": 384,
+    "model_inference_reused": true,
+    "unexpected_fallbacks": 0,
+    "membership_order_parity": "all exact",
+    "retrieval": "fixed route fixtures, not new online retrieval"
+  },
+  "live_model_http": {
+    "passed": true,
+    "cases": 12,
+    "unexpected_fallbacks": 0,
+    "exact_selected_membership_and_order": true,
+    "elapsed_ms": {
+      "min": 2428.75,
+      "median": 9247.67,
+      "max": 11422.09
+    },
+    "max_selected_raw_logit_delta": 0,
+    "rows": [
+      {
+        "source": "v3-candidate",
+        "id": "kb003",
+        "elapsed_ms": 11422.094541,
+        "selected": [
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c0:6672c88b-3f16-47e9-962f-804298069c6a",
+          "e1ec68c0-a011-4ebe-8428-98a0bea3589e:v1:c0:7d10515e-becd-4736-929d-d1ff62442bbb",
+          "128af841-0bba-402d-b1da-ebd140488050:v1:c0:b96d1b1d-5ee8-47e3-89c7-5d5d209a205a",
+          "a7187fee-0a3a-4c27-8207-c7ebc882950c:v1:c0:6c6909e5-fa5f-4f6b-8c44-83cdf13312e8",
+          "c2bbed77-c168-4742-8bc3-01150f8ddec2:v1:c0:c0eff1ae-6ded-492f-823d-85b2eee7c4ba"
+        ],
+        "baseline_grounded": [
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c0:6672c88b-3f16-47e9-962f-804298069c6a"
+        ],
+        "bge_grounded": [
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c0:6672c88b-3f16-47e9-962f-804298069c6a"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "kb028",
+        "elapsed_ms": 9550.345459,
+        "selected": [
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "c2bbed77-c168-4742-8bc3-01150f8ddec2:v1:c0:c0eff1ae-6ded-492f-823d-85b2eee7c4ba",
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c0:6672c88b-3f16-47e9-962f-804298069c6a",
+          "22e8da32-56b8-4b03-9ade-ba9cfa2f6320:v1:c0:6438994d-a66f-4a48-949d-126f106d224f",
+          "3969a5c9-2002-457a-bd92-e92e287d571e:v1:c0:1ef4a33f-e287-4f42-800b-137e3e8bbf81"
+        ],
+        "baseline_grounded": [
+          "c2bbed77-c168-4742-8bc3-01150f8ddec2:v1:c0:c0eff1ae-6ded-492f-823d-85b2eee7c4ba"
+        ],
+        "bge_grounded": [
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val010",
+        "elapsed_ms": 10741.993625,
+        "selected": [
+          "1d5f99a9-a927-4fd3-a9e4-88a7eba3970a:v1:c0:a94ccc22-53ac-4706-aebf-42e1f383432c",
+          "ea67664f-5810-46e2-bb1b-ae353a1d2dd2:v1:c0:8ecd63c3-4aa1-42af-85b6-63ff02ecb754",
+          "ae897c99-7351-40eb-b09d-0e166fc11eae:v1:c0:75e1b995-2040-4b2a-b143-f249c35326f5",
+          "98177417-8d5e-45e6-a285-7e1c9f40333b:v1:c0:c004aeb0-7ed8-457b-9c71-2b0364531a83",
+          "258b3668-6a69-4d17-9224-60ac25b19c6d:v1:c0:20170f91-f76b-4087-8004-923e0b6df297"
+        ],
+        "baseline_grounded": [
+          "1d5f99a9-a927-4fd3-a9e4-88a7eba3970a:v1:c0:a94ccc22-53ac-4706-aebf-42e1f383432c"
+        ],
+        "bge_grounded": [
+          "1d5f99a9-a927-4fd3-a9e4-88a7eba3970a:v1:c0:a94ccc22-53ac-4706-aebf-42e1f383432c"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_contract_06",
+        "elapsed_ms": 5939.736834000003,
+        "selected": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "152194fe-cd90-452d-9599-6f941efe1a82:v1:c5:0ad10814-b75d-49fe-84d8-89a0985b5468"
+        ],
+        "baseline_grounded": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3"
+        ],
+        "bge_grounded": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_training_09",
+        "elapsed_ms": 6428.848208999996,
+        "selected": [
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c0:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "c8e5d570-f897-4845-a0df-54ca41b0beb9:v1:c0:b81dccb0-b4b6-4703-b67c-96b67a81d743",
+          "88ef3b9e-89a8-4c65-954c-a7ff9cd493d3:v1:c0:e60dfab3-f992-4400-b0c9-d592bb44eb77",
+          "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474"
+        ],
+        "baseline_grounded": [
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c0:8bb41ba1-ea27-42de-aa8b-290ff4aded78"
+        ],
+        "bge_grounded": [
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_vehicle_02",
+        "elapsed_ms": 9722.5795,
+        "selected": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c1:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716",
+          "8ab72680-7b2d-457d-bc92-cbb5c02068d7:v1:c0:af4e18ca-a8d1-43b2-9424-71c7c3a74083"
+        ],
+        "baseline_grounded": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e"
+        ],
+        "bge_grounded": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_vehicle_05",
+        "elapsed_ms": 11346.407125000005,
+        "selected": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3"
+        ],
+        "baseline_grounded": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e"
+        ],
+        "bge_grounded": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_travel_08",
+        "elapsed_ms": 9097.604749999999,
+        "selected": [
+          "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "76d883e1-fc30-4cee-82cf-a2d4db6700f6:v1:c0:15624bf5-bdd2-4fca-aedf-3848e8956661",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "44ae09e2-17b7-4466-91cc-b13e223f5b46:v1:c0:46e4a961-68c6-4cc0-abcd-b28810da2d2a"
+        ],
+        "baseline_grounded": [
+          "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530"
+        ],
+        "bge_grounded": [
+          "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_purchase_08",
+        "elapsed_ms": 9397.72987499999,
+        "selected": [
+          "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3"
+        ],
+        "baseline_grounded": [
+          "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d"
+        ],
+        "bge_grounded": [
+          "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_training_08",
+        "elapsed_ms": 8260.326916999999,
+        "selected": [
+          "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474"
+        ],
+        "baseline_grounded": [
+          "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900"
+        ],
+        "bge_grounded": [
+          "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "holdout-default",
+        "id": "holdout-cold-chain-samples-08",
+        "elapsed_ms": 2428.7469160000037,
+        "selected": [
+          "19fce2d1-5f69-4811-a206-844888cdd294:v1:c3:a155ce76-5efb-46c1-b5a2-89439087d958",
+          "19fce2d1-5f69-4811-a206-844888cdd294:v1:c0:a155ce76-5efb-46c1-b5a2-89439087d958",
+          "58444d9e-34b3-4412-9875-36ffa2e330b8:v1:c0:e73ed060-c55f-4573-9ce9-ade3084e2976",
+          "c6ac1851-3fb6-4d19-9a16-58a37c41d950:v1:c0:b60fb0c2-76bf-4de7-ae91-e1e25a9daee7",
+          "0f4bee9c-e378-4d8f-8b67-ddb511d33a14:v1:c0:3cdea28b-c32a-40e8-b6b9-b71fb8e9fed3"
+        ],
+        "baseline_grounded": [
+          "19fce2d1-5f69-4811-a206-844888cdd294:v1:c3:a155ce76-5efb-46c1-b5a2-89439087d958"
+        ],
+        "bge_grounded": [
+          "19fce2d1-5f69-4811-a206-844888cdd294:v1:c3:a155ce76-5efb-46c1-b5a2-89439087d958"
+        ],
+        "max_selected_logit_delta": 0
+      },
+      {
+        "source": "holdout-candidate",
+        "id": "holdout-reef-dive-07",
+        "elapsed_ms": 8217.472875000007,
+        "selected": [
+          "e55851bb-52fc-4535-bc7f-a3132cdf054f:v1:c0:d942d9ff-8c10-4d92-8e2f-36fc186a54b0",
+          "5e796fc4-4285-4c23-b49f-fc0c115fb494:v1:c0:8f1c1b64-7d63-4bca-ad7e-f26fe2866520",
+          "5e796fc4-4285-4c23-b49f-fc0c115fb494:v1:c1:8f1c1b64-7d63-4bca-ad7e-f26fe2866520",
+          "d1cc17b9-abb2-4a52-b7b5-2f2bad142e61:v1:c0:f4a53cc6-8024-466a-baa5-81c9424ef349",
+          "0921290c-20b3-4e07-a344-e0e551070a72:v1:c0:aa192f89-0aff-4b12-bfa2-fab4a8b1addf"
+        ],
+        "baseline_grounded": [
+          "e55851bb-52fc-4535-bc7f-a3132cdf054f:v1:c0:d942d9ff-8c10-4d92-8e2f-36fc186a54b0"
+        ],
+        "bge_grounded": [
+          "e55851bb-52fc-4535-bc7f-a3132cdf054f:v1:c0:d942d9ff-8c10-4d92-8e2f-36fc186a54b0"
+        ],
+        "max_selected_logit_delta": 0
+      }
+    ],
+    "scope": "single serial smoke pass on exposed fixed pools, not SLA or independent quality acceptance"
+  },
+  "historical_top5_quality": {
+    "source": "benchmarks/knowbase-rerank-v2/experiments/order-results.json",
+    "sha256": "62f1ac6863fbfe4ebf9e63d9f801b251c7b339832ef2d2918554693c36d8c37b",
+    "decision": {
+      "development_candidate": "bge-m3-anchor2-model-order",
+      "development_gain": 0.375,
+      "development_gain_gate": true,
+      "regression_gates": [
+        {
+          "source": "holdout-candidate",
+          "split": "validation",
+          "no_new_evidence_loss": true,
+          "no_source_completeness_regression": true
+        },
+        {
+          "source": "holdout-default",
+          "split": "validation",
+          "no_new_evidence_loss": true,
+          "no_source_completeness_regression": true
+        },
+        {
+          "source": "v3-candidate",
+          "split": "development",
+          "no_new_evidence_loss": false,
+          "no_source_completeness_regression": true
+        },
+        {
+          "source": "v3-candidate",
+          "split": "regression",
+          "no_new_evidence_loss": true,
+          "no_source_completeness_regression": true
+        },
+        {
+          "source": "v3-candidate",
+          "split": "validation",
+          "no_new_evidence_loss": true,
+          "no_source_completeness_regression": true
+        }
+      ],
+      "accepted": false,
+      "business_defaults_changed": false,
+      "scope": "Exposed synthetic fixed-pool regression only; no production or answer acceptance"
+    },
+    "literal_loss_instances": 3
+  },
+  "unchanged_grounding": {
+    "evidence_gained_instances": 109,
+    "evidence_lost_instances": 17,
+    "unique_lost_question_ids": 14,
+    "all_lost_evidence_remains_in_top5": true,
+    "final_answer_accuracy_measured": false
+  },
+  "default_switch": {
+    "accepted": false,
+    "default": "rule",
+    "reason": [
+      "Historical zero-new-literal-loss gate still fails (3 extra quota facts)",
+      "Unchanged default single-context consumer loses17 baseline source-query-evidence instances across14question IDs; all remain in BGE Top5, but never enter the consumed context",
+      "Actual model smoke latency remains seconds; no production concurrency or answer-generation acceptance"
+    ],
+    "business_env_changed": false
+  }
+}
