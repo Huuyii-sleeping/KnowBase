@@ -13,6 +13,7 @@
 | 未采用方向 | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭 | 本文对应实验章节 |
 | 最新留出检查 | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步 | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md) |
 | 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则 | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
+| 专用重排模型 | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md) |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
