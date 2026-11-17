@@ -1,0 +1,67 @@
+{
+  "reviewer": "same assistant, exposed synthetic data, post-result explanation; not independent acceptance",
+  "strategy": "mminilm-anchor2",
+  "protocol_freeze_commit": "06e3722",
+  "precision": "float16",
+  "scope": "All three literal baseline losses of this strategy; final complete anchor replay must reproduce these exact selections",
+  "primary_score_changed": false,
+  "summary": {
+    "core_answer_supported_additional_numeric_evidence_missing": 3
+  },
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08",
+      "question": "旧版差旅报销表格把额度写成2500元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效，不能据此驳回；遗漏现行具体额度数值。问题及参考答案未要求新的具体额度，保留原金标计分，同时不将数值漏选直接等同于核心答案错误。",
+      "retained_support": {
+        "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+        "quote": "2025 年单次普通额度曾为2500元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现2500元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+        "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+      },
+      "raw_model_had_this_literal_loss": false
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08",
+      "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效，不能据此驳回；遗漏现行具体额度数值。问题及参考答案未要求新的具体额度，保留原金标计分，同时不将数值漏选直接等同于核心答案错误。",
+      "retained_support": {
+        "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+        "quote": "2025 年单次普通额度曾为10000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现10000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+        "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+      },
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08",
+      "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效，不能据此驳回；遗漏现行具体额度数值。问题及参考答案未要求新的具体额度，保留原金标计分，同时不将数值漏选直接等同于核心答案错误。",
+      "retained_support": {
+        "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+        "quote": "2025 年单次普通额度曾为1250元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1250元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+        "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+      },
+      "raw_model_had_this_literal_loss": true
+    }
+  ]
+}

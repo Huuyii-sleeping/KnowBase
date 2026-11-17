@@ -1,0 +1,111 @@
+{
+  "version": "knowbase-rerank-v2-anchor2",
+  "status_at_freeze": "No anchor outcome scored; FP16 mminilm results exposed; BGE FP16 inference in progress, quality unscored",
+  "motivation": "Test one fixed rule-top2 plus model-fill composition to protect baseline high-ranked context; no ratio search or per-question fallback",
+  "parent_protocol": "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json",
+  "files_sha256": {
+    "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json": "d6b936f209ee910596886448268d8eb47689fffcbeadb2fc0cfa97e1f187ea2c",
+    "tools/rag-evaluation/rerank-anchor.cjs": "5f4cd7c499017201dd774009b5f8440c2623f2bd068467f9c6e332a8a6cf59ef",
+    "tools/rag-evaluation/rerank-anchor-replay.cjs": "beb6cfb4b3044b92168541115b9bf915fed184f301b2a65b1624365599d42fc9"
+  },
+  "sources": [
+    {
+      "id": "v3-candidate",
+      "dataset": "benchmarks/knowbase-recall-v3",
+      "run": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/off-r1",
+      "budget": "k30-s15",
+      "trace_sha256": "c5b44c8c1bdd36b907c4e7d90e1b2efe42eb45fb6d9b7d14ae9985ac8a3d148e",
+      "files_sha256": {
+        "metadata.json": "9b1df57fd76d9395f7d395cc14e3a84dc380e5c157d1121c54c8a48e440ae518",
+        "indexed-corpus.json": "875fbc811b74a59f4ec263fd08691a1f7a35f2d909c7776a221e18214d8f1a77",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-default",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-default/2026-11-14T14-54-21-258Z-7543",
+      "budget": 15,
+      "trace_sha256": "02a947fdffbfc06f19616c79614bff8d94566f6ab67c51dc43bb02bfb546b074",
+      "files_sha256": {
+        "metadata.json": "73ccca2fc0f15cd5212be98ab1dfd0110fd4dd4c2685f46ebea7f437a4bd8df3",
+        "indexed-corpus.json": "6739024e87e17c813653cb96fc8b903a63fc90c5966462a0c6ae15b5f4e70ece",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-candidate",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-candidate/2026-11-14T14-56-04-614Z-8148",
+      "budget": "k30-s15",
+      "trace_sha256": "72f56402966b9ee1bbe1ab5a2f712c0755d03fcb692d485f746873a681b493c4",
+      "files_sha256": {
+        "metadata.json": "5be6ff3f4e7afc73821b741e589752a96d008b9a123f434bec6dfc8996bae044",
+        "indexed-corpus.json": "7c9f07d2a90c403bbcf72978ea0ec2ed90482b99c4e83eac8f3d58205d881949",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    }
+  ],
+  "strategies": [
+    {
+      "id": "rule",
+      "kind": "rule"
+    },
+    {
+      "id": "rrf",
+      "kind": "rrf",
+      "diagnostic": true
+    },
+    {
+      "id": "mminilm",
+      "kind": "model",
+      "diagnostic": true
+    },
+    {
+      "id": "bge-m3",
+      "kind": "model",
+      "diagnostic": true
+    },
+    {
+      "id": "mminilm-anchor2",
+      "kind": "anchor",
+      "model": "mminilm",
+      "anchorCount": 2
+    },
+    {
+      "id": "bge-m3-anchor2",
+      "kind": "anchor",
+      "model": "bge-m3",
+      "anchorCount": 2
+    }
+  ],
+  "fixed_constraints": {
+    "topK": 5,
+    "maxChunksPerDocument": 2,
+    "maxContextCharacters": 6000,
+    "first_oversized_candidate": "production exception preserved"
+  },
+  "selection": {
+    "source": "v3-candidate",
+    "split": "development",
+    "minimum_development_gain": 0.02,
+    "tie_break": [
+      "evidence_recall",
+      "all_evidence_found",
+      "evidence_mrr",
+      "frozen_strategy_order"
+    ],
+    "regression_gates": "No new evidence losses and no aggregate source completeness regression on every source/split, including development. Failure stops this candidate; do not select another using regression scores."
+  },
+  "policy": "Reserve first two actual final rule-selected chunks in order; fill remaining places by descending model score, exclude duplicate anchors, apply unchanged Top5/doccap2/6000 constraints and first-oversized exception. Reserve count can be smaller when baseline is short. No guarantee that rule positions3-5 survive.",
+  "boundaries": [
+    "No retrieval, answer generation, publication/ACL runtime retest or production configuration changes",
+    "RRF cap5 is diagnostic only: same Top5/6000 but changed document distribution; cannot pass adoption gate",
+    "No parameter sweeps, model substitution by observed scores, question-specific business keyword rules, label edits or silent fallback",
+    "All corpora exposed and assistant-authored; best observed candidate is not independent production acceptance",
+    "New model weights fetched from ModelScope mirror with pinned mirror commit and individual SHA256, not claimed byte-equivalent to unavailable Hugging Face revision",
+    "Independent post-mminilm experiment, not an amendment to the primary frozen protocol; reuse only verified complete FP16 scores via the parent replay validator",
+    "Raw models and RRF are diagnostic in this experiment; only the two fixed anchor2 strategies are eligible; choose on development only, do not switch runner-up after regression failure",
+    "Not independent validation of a hypothesis suggested by already exposed model losses"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "development_candidate": "bge-m3",
+  "development_gain": 0.375,
+  "development_gain_gate": true,
+  "regression_gates": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "no_new_evidence_loss": false,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "no_new_evidence_loss": true,
+      "no_source_completeness_regression": true
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "no_new_evidence_loss": false,
+      "no_source_completeness_regression": true
+    }
+  ],
+  "accepted": false,
+  "business_defaults_changed": false,
+  "scope": "Exposed synthetic fixed-pool regression only; no production or answer acceptance"
+}

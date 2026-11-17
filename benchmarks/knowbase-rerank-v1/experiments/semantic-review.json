@@ -1,0 +1,1007 @@
+{
+  "version": "knowbase-rerank-v1-semantic-loss-review-1",
+  "reviewer": "assistant; same author as synthetic dataset; not independent human acceptance",
+  "scope": "All 10 originally reported RRF literal-evidence losses; complete rule and RRF selected bodies reviewed for these cases only; no answer generation or full relevance scoring",
+  "inputs_sha256": {
+    "benchmarks/knowbase-rerank-v1/experiments/protocol.json": "28a27a692620351eb3095e5b3227a35d574527b6f37c3e0bc4001c1c44178551",
+    "benchmarks/knowbase-rerank-v1/experiments/decision.json": "eb5af4469ef8808fb199722b1c7a8b45e2568ff1709bd8e944324167c08dd438",
+    "benchmarks/knowbase-rerank-v1/experiments/results.json": "75f0ac50741d57e4a19638b13019fde8f4c2adf2aba21fe8c9cba97eb200a8bb",
+    "reports/retrieval-rerank-v1/2026-11-16-frozen-r1/rerank-replay.json": "d91c92639dca07a71f9351283992632e905895b99990c738255e9b9d4968432a",
+    "reports/retrieval-rerank-v1/2026-11-16-frozen-r1/rerank-audit.json": "230f28951471e738c2243d5a2f627522f70278ecc2933018b15311a5da53d6e9",
+    "benchmarks/knowbase-recall-v3/questions.json": "1ab9c25501b44346668f488216eb651bff977a5dd602b5d68b828988072819a7",
+    "tools/rag-evaluation/recall_audit.py": "e8305aac39b6a3360941f0473f645cfabc3ac8b18dd607beeb6be2743e357e59"
+  },
+  "frozen_protocol_fingerprint": "05a56359ab2c1d5e51bccd9233d66da7dacba6810befaa559335615ada6d6616",
+  "frozen_experiment_modified": false,
+  "business_changes": false,
+  "summary": {
+    "equivalent_support": 4,
+    "partial_support": 1,
+    "required_facts_missing": 5
+  },
+  "excluded_gold_skip_reasons": {
+    "document_cap": 8,
+    "top_k": 2
+  },
+  "limitations": [
+    "Post-result interpretive review on exposed synthetic cases",
+    "No independent reviewer or new blind set",
+    "98 gained evidence instances not comprehensively reviewed",
+    "No revised aggregate semantic score, precision, answer accuracy or adoption gate"
+  ],
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_02",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "我想办合同用印，谁有最后拍板的权力？主管点头是否就算办完？",
+      "reference_answer": "需要法务审批员批准，主管只确认用途。",
+      "original_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "法务审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      },
+      "classification": "equivalent_support",
+      "required_facts": [
+        "法务审批员完成业务最终批准",
+        "主管确认用途不等于完成最终批准"
+      ],
+      "missing_explicit_facts": [],
+      "rationale": "配套现行规则文档保留最终批准者与主管用途确认的区别，足以支持问题的核心答案；原评分只接受主规则文档的指定原句。",
+      "selected_order": {
+        "rule": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "5365ca73-b165-4103-aff2-c8f8737b0f1d:v1:c0:85fcd1f7-0e7d-4b99-8653-e37cc903fd27"
+        ],
+        "rrf": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c2:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50"
+        ]
+      },
+      "excluded_gold_chunk": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 1,
+          "score": 0.9101127798832138,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 3,
+          "score": 0.031099324975891997,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "quote": "申请人提出申请、主管确认用途、系统管理员维护系统，都不等于法务审批员完成业务最终批准。",
+          "applicable_rule": "CT-SEAL-08",
+          "already_selected_by_rule": true
+        }
+      ],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c2:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "assessment": "记录整理与操作核对，正文明确不新增额度、角色或时间规则，未补足本题关键事实。"
+        },
+        {
+          "chunk_id": "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_05",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "外组同事拿到了合同用印的编号，是否就能打开我们组批准的详情？",
+      "reference_answer": "编号不能代替逐人授权。",
+      "original_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "采购组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      },
+      "classification": "partial_support",
+      "required_facts": ["其他组需要逐人授权", "知道记录编号不构成访问权限"],
+      "missing_explicit_facts": [
+        "其他组需要逐人授权",
+        "知道记录编号不构成访问权限"
+      ],
+      "rationale": "仍可支持查看详情需另过权限检查这一较弱回答；缺少正常跨组访问的逐人授权与编号不构成权限的明确条款，不能用归档恢复或专项审批条件补齐。",
+      "selected_order": {
+        "rule": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "5365ca73-b165-4103-aff2-c8f8737b0f1d:v1:c0:85fcd1f7-0e7d-4b99-8653-e37cc903fd27"
+        ],
+        "rrf": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50"
+        ]
+      },
+      "excluded_gold_chunk": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 2,
+          "score": 0.8911218721600114,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 5,
+          "score": 0.030834914611005692,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "quote": "导出列表不包含附件正文，查看详情需要单独通过权限检查。",
+          "already_selected_by_rule": true
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "quote": "专项审批也不能默认扩展为跨组查看权限。",
+          "already_selected_by_rule": true
+        }
+      ],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_06",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "合同用印批准后还允许撤销多久，时间应从什么时候起算？",
+      "reference_answer": "30分钟，自最终批准起算。",
+      "original_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "允许窗口为30分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      },
+      "classification": "required_facts_missing",
+      "required_facts": [
+        "允许撤回窗口为30分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "missing_explicit_facts": [
+        "允许撤回窗口为30分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "rationale": "完整复核入选五块正文，均没有目标业务的窗口时长和起算点；归档恢复、一般审批、相邻业务或运维资料不能替代。",
+      "selected_order": {
+        "rule": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "5365ca73-b165-4103-aff2-c8f8737b0f1d:v1:c0:85fcd1f7-0e7d-4b99-8653-e37cc903fd27",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce"
+        ],
+        "rrf": [
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50"
+        ]
+      },
+      "excluded_gold_chunk": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 2,
+          "score": 0.9036098624431903,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "rank": 9,
+          "score": 0.029236022193768675,
+          "reason": "top_k"
+        }
+      },
+      "retained_support": [],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_02",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "我想办软件上线，谁有最后拍板的权力？主管点头是否就算办完？",
+      "reference_answer": "需要发布经理批准，主管只确认用途。",
+      "original_evidence": {
+        "doc": "release_rules.md",
+        "quote": "发布经理负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      },
+      "classification": "equivalent_support",
+      "required_facts": [
+        "发布经理完成业务最终批准",
+        "主管确认用途不等于完成最终批准"
+      ],
+      "missing_explicit_facts": [],
+      "rationale": "配套现行规则文档保留最终批准者与主管用途确认的区别，足以支持问题的核心答案；原评分只接受主规则文档的指定原句。",
+      "selected_order": {
+        "rule": [
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c1:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "19f19314-30b5-4a67-9436-98cdde2626ac:v1:c0:dfbf6ad2-67a3-48ca-95a8-75dea228cc36",
+          "2fc6de90-0137-42ec-bb5b-7402e5f85070:v1:c0:56b81411-85f8-43be-a511-5a59397c27ee"
+        ],
+        "rrf": [
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c2:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c3:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "19f19314-30b5-4a67-9436-98cdde2626ac:v1:c0:dfbf6ad2-67a3-48ca-95a8-75dea228cc36",
+          "2fc6de90-0137-42ec-bb5b-7402e5f85070:v1:c0:56b81411-85f8-43be-a511-5a59397c27ee"
+        ]
+      },
+      "excluded_gold_chunk": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "rank": 1,
+          "score": 0.9157754518267097,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "rank": 4,
+          "score": 0.030798389007344232,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "quote": "申请人提出申请、主管确认用途、系统管理员维护系统，都不等于发布经理完成业务最终批准。",
+          "applicable_rule": "SW-REL-35",
+          "already_selected_by_rule": true
+        }
+      ],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c2:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "assessment": "记录整理与操作核对，正文明确不新增额度、角色或时间规则，未补足本题关键事实。"
+        },
+        {
+          "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c3:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_06",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "软件上线批准后还允许撤销多久，时间应从什么时候起算？",
+      "reference_answer": "60分钟，自最终批准起算。",
+      "original_evidence": {
+        "doc": "release_rules.md",
+        "quote": "允许窗口为60分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      },
+      "classification": "required_facts_missing",
+      "required_facts": [
+        "允许撤回窗口为60分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "missing_explicit_facts": [
+        "允许撤回窗口为60分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "rationale": "完整复核入选五块正文，均没有目标业务的窗口时长和起算点；归档恢复、一般审批、相邻业务或运维资料不能替代。",
+      "selected_order": {
+        "rule": [
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c5:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "19f19314-30b5-4a67-9436-98cdde2626ac:v1:c0:dfbf6ad2-67a3-48ca-95a8-75dea228cc36",
+          "2fc6de90-0137-42ec-bb5b-7402e5f85070:v1:c0:56b81411-85f8-43be-a511-5a59397c27ee"
+        ],
+        "rrf": [
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c3:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "19f19314-30b5-4a67-9436-98cdde2626ac:v1:c0:dfbf6ad2-67a3-48ca-95a8-75dea228cc36",
+          "2fc6de90-0137-42ec-bb5b-7402e5f85070:v1:c0:56b81411-85f8-43be-a511-5a59397c27ee"
+        ]
+      },
+      "excluded_gold_chunk": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c5:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c5:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "rank": 2,
+          "score": 0.9117529532451946,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c5:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "rank": 7,
+          "score": 0.030303030303030304,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c3:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_06",
+      "split": "development",
+      "evidence_index": 0,
+      "question": "培训报名批准后还允许撤销多久，时间应从什么时候起算？",
+      "reference_answer": "48分钟，自最终批准起算。",
+      "original_evidence": {
+        "doc": "training_rules.md",
+        "quote": "允许窗口为48分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      },
+      "classification": "required_facts_missing",
+      "required_facts": [
+        "允许撤回窗口为48分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "missing_explicit_facts": [
+        "允许撤回窗口为48分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "rationale": "完整复核入选五块正文，均没有目标业务的窗口时长和起算点；归档恢复、一般审批、相邻业务或运维资料不能替代。",
+      "selected_order": {
+        "rule": [
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c0:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c5:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "dc1ea62a-be9d-43bc-81d4-b29fc0dce34f:v1:c0:55c0501e-5d94-47e1-ae35-d5150e646d4a",
+          "66d1c7d9-bd18-440c-a40e-faf3972bbd5c:v1:c0:8addc721-8606-422e-a2fd-52f227ef6b8f"
+        ],
+        "rrf": [
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c0:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "dc1ea62a-be9d-43bc-81d4-b29fc0dce34f:v1:c0:55c0501e-5d94-47e1-ae35-d5150e646d4a"
+        ]
+      },
+      "excluded_gold_chunk": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c5:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c5:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "rank": 2,
+          "score": 0.9097449092417843,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c5:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "rank": 9,
+          "score": 0.02964426877470356,
+          "reason": "top_k"
+        }
+      },
+      "retained_support": [],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_02",
+      "split": "validation",
+      "evidence_index": 0,
+      "question": "我想办公务用车，谁有最后拍板的权力？主管点头是否就算办完？",
+      "reference_answer": "需要车队调度员批准，主管只确认用途。",
+      "original_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "车队调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      },
+      "classification": "equivalent_support",
+      "required_facts": [
+        "车队调度员完成业务最终批准",
+        "主管确认用途不等于完成最终批准"
+      ],
+      "missing_explicit_facts": [],
+      "rationale": "配套现行规则文档保留最终批准者与主管用途确认的区别，足以支持问题的核心答案；原评分只接受主规则文档的指定原句。",
+      "selected_order": {
+        "rule": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c1:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "57ff81be-c3fc-40fe-bde7-755778870328:v1:c0:9efc3a8b-bd62-4846-9077-cd2fd318c115",
+          "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716"
+        ],
+        "rrf": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c2:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716",
+          "57ff81be-c3fc-40fe-bde7-755778870328:v1:c0:9efc3a8b-bd62-4846-9077-cd2fd318c115"
+        ]
+      },
+      "excluded_gold_chunk": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "rank": 1,
+          "score": 0.9183912041959678,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "rank": 4,
+          "score": 0.03128054740957967,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "quote": "申请人提出申请、主管确认用途、系统管理员维护系统，都不等于车队调度员完成业务最终批准。",
+          "applicable_rule": "CAR-BOOK-23",
+          "already_selected_by_rule": true
+        }
+      ],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c2:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "assessment": "记录整理与操作核对，正文明确不新增额度、角色或时间规则，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_06",
+      "split": "validation",
+      "evidence_index": 0,
+      "question": "公务用车批准后还允许撤销多久，时间应从什么时候起算？",
+      "reference_answer": "180分钟，自最终批准起算。",
+      "original_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "允许窗口为180分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      },
+      "classification": "required_facts_missing",
+      "required_facts": [
+        "允许撤回窗口为180分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "missing_explicit_facts": [
+        "允许撤回窗口为180分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "rationale": "完整复核入选五块正文，均没有目标业务的窗口时长和起算点；归档恢复、一般审批、相邻业务或运维资料不能替代。",
+      "selected_order": {
+        "rule": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "57ff81be-c3fc-40fe-bde7-755778870328:v1:c0:9efc3a8b-bd62-4846-9077-cd2fd318c115",
+          "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716"
+        ],
+        "rrf": [
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "57ff81be-c3fc-40fe-bde7-755778870328:v1:c0:9efc3a8b-bd62-4846-9077-cd2fd318c115",
+          "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716"
+        ]
+      },
+      "excluded_gold_chunk": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "rank": 3,
+          "score": 0.9058869320760601,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "rank": 6,
+          "score": 0.029236022193768675,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_02",
+      "split": "validation",
+      "evidence_index": 0,
+      "question": "我想办数据导出，谁有最后拍板的权力？主管点头是否就算办完？",
+      "reference_answer": "需要数据审批员批准，主管只确认用途。",
+      "original_evidence": {
+        "doc": "data_rules.md",
+        "quote": "数据审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      },
+      "classification": "equivalent_support",
+      "required_facts": [
+        "数据审批员完成业务最终批准",
+        "主管确认用途不等于完成最终批准"
+      ],
+      "missing_explicit_facts": [],
+      "rationale": "配套现行规则文档保留最终批准者与主管用途确认的区别，足以支持问题的核心答案；原评分只接受主规则文档的指定原句。",
+      "selected_order": {
+        "rule": [
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c1:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "ea67664f-5810-46e2-bb1b-ae353a1d2dd2:v1:c0:8ecd63c3-4aa1-42af-85b6-63ff02ecb754",
+          "9c21b47c-543d-4591-9db1-2dd4fb526646:v1:c0:7a90430e-16e2-498c-8e73-19f26a3a76d9"
+        ],
+        "rrf": [
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c2:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c1:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "ea67664f-5810-46e2-bb1b-ae353a1d2dd2:v1:c0:8ecd63c3-4aa1-42af-85b6-63ff02ecb754"
+        ]
+      },
+      "excluded_gold_chunk": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "rank": 1,
+          "score": 0.9122231454942809,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "rank": 5,
+          "score": 0.031024531024531024,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "quote": "申请人提出申请、主管确认用途、系统管理员维护系统，都不等于数据审批员完成业务最终批准。",
+          "applicable_rule": "DATA-OUT-86",
+          "already_selected_by_rule": true
+        }
+      ],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c2:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "assessment": "记录整理与操作核对，正文明确不新增额度、角色或时间规则，未补足本题关键事实。"
+        },
+        {
+          "chunk_id": "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_06",
+      "split": "validation",
+      "evidence_index": 0,
+      "question": "数据导出批准后还允许撤销多久，时间应从什么时候起算？",
+      "reference_answer": "20分钟，自最终批准起算。",
+      "original_evidence": {
+        "doc": "data_rules.md",
+        "quote": "允许窗口为20分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+      },
+      "classification": "required_facts_missing",
+      "required_facts": [
+        "允许撤回窗口为20分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "missing_explicit_facts": [
+        "允许撤回窗口为20分钟",
+        "窗口从最终批准时间开始计算",
+        "到达边界时仍可撤回"
+      ],
+      "rationale": "完整复核入选五块正文，均没有目标业务的窗口时长和起算点；归档恢复、一般审批、相邻业务或运维资料不能替代。",
+      "selected_order": {
+        "rule": [
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c5:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c"
+        ],
+        "rrf": [
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c3:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "3cc45587-f9ff-4943-b00e-f600fe410317:v1:c0:c5c90bd3-92f9-489a-ae99-af16e6272dd6"
+        ]
+      },
+      "excluded_gold_chunk": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c5:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "excluded_gold_decisions": {
+        "rule": {
+          "chunkId": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c5:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "rank": 2,
+          "score": 0.9140335014483125,
+          "reason": "selected"
+        },
+        "rrf": {
+          "chunkId": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c5:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "rank": 6,
+          "score": 0.030303030303030304,
+          "reason": "document_cap"
+        }
+      },
+      "retained_support": [],
+      "newly_selected_assessment": [
+        {
+          "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c3:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+          "assessment": "归档恢复条件，不能替代本题所问的最终审批、正常跨组授权或撤回窗口。"
+        },
+        {
+          "chunk_id": "3cc45587-f9ff-4943-b00e-f600fe410317:v1:c0:c5c90bd3-92f9-489a-ae99-af16e6272dd6",
+          "assessment": "相邻业务或软件运维资料，适用对象不同，未补足本题关键事实。"
+        }
+      ]
+    }
+  ],
+  "reviewed_chunks": [
+    {
+      "chunk_id": "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c",
+      "document": "access_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "8f1cd33b7b1679faf23215475634760e2606a3f7e00d7b163f647770f7f77bbd",
+      "source_file_sha256": "ba6bcd0dc7125b8957b2661a90af78d38bfec5bbe7b3480b2fb16fe32ae42076"
+    },
+    {
+      "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+      "document": "contract_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b",
+      "source_file_sha256": "29a30753ec6ead84b3d7b228240be8c008191b5d76a00958db5edee5a6d3607e"
+    },
+    {
+      "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "document": "contract_rules.md",
+      "chunk_index": 0,
+      "content_sha256": "c7b7dea920676d6239829d22ba648d9b3d43a316fde03c06aef062de453ad2e9",
+      "source_file_sha256": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276"
+    },
+    {
+      "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "document": "contract_rules.md",
+      "chunk_index": 1,
+      "content_sha256": "f1fb304cac98971bdbebf33aaf1fe913eb181ce28d5ead0ee7076dd854f4e6b6",
+      "source_file_sha256": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276"
+    },
+    {
+      "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c2:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "document": "contract_rules.md",
+      "chunk_index": 2,
+      "content_sha256": "30250876feece7471cc153afd78957a8aa7ab3ed2760eb4cd03dabbbb0a93650",
+      "source_file_sha256": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276"
+    },
+    {
+      "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c3:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "document": "contract_rules.md",
+      "chunk_index": 3,
+      "content_sha256": "d4784afc653beb751fcda60b368f879c565a8548bba1812d69be00599a6ebc86",
+      "source_file_sha256": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276"
+    },
+    {
+      "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c5:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+      "document": "contract_rules.md",
+      "chunk_index": 5,
+      "content_sha256": "7c44cdddc136d5334ba57c933c98b52ba2231e5896036410f1e6902f310cfeb7",
+      "source_file_sha256": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276"
+    },
+    {
+      "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+      "document": "data_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936",
+      "source_file_sha256": "2b8d998df513e07fd3cab59ee349aecabb3504bf30bf5bac75debd8834684043"
+    },
+    {
+      "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c0:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "document": "data_rules.md",
+      "chunk_index": 0,
+      "content_sha256": "ecc1f3f50521180feb4fe174ea0ed11679f41fd825c1c4e1b8d35b3e040d10c6",
+      "source_file_sha256": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80"
+    },
+    {
+      "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c1:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "document": "data_rules.md",
+      "chunk_index": 1,
+      "content_sha256": "1516206846f118037692cbdb436df25826dc4100fd5f44583dc45b6aefc8ef52",
+      "source_file_sha256": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80"
+    },
+    {
+      "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c2:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "document": "data_rules.md",
+      "chunk_index": 2,
+      "content_sha256": "2952fb8f97c79b9c384a90a61bed3d39a9c280c87169bd41c83b983080d30f6e",
+      "source_file_sha256": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80"
+    },
+    {
+      "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c3:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "document": "data_rules.md",
+      "chunk_index": 3,
+      "content_sha256": "262d33f932e3d4b17beda609e187a5bd7bea59a4abde4d1f36aa1289fea95af5",
+      "source_file_sha256": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80"
+    },
+    {
+      "chunk_id": "06ff3e7e-2764-48da-8a0e-62d29eae26bb:v1:c5:b235be46-8c1b-42ea-9de6-eb41ca5891d1",
+      "document": "data_rules.md",
+      "chunk_index": 5,
+      "content_sha256": "e32274b171eeac1e7f5ae7fdb49c16018e2f7b86243bf622b22e4a6b557eabef",
+      "source_file_sha256": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80"
+    },
+    {
+      "chunk_id": "3cc45587-f9ff-4943-b00e-f600fe410317:v1:c0:c5c90bd3-92f9-489a-ae99-af16e6272dd6",
+      "document": "kb_deletion.md",
+      "chunk_index": 0,
+      "content_sha256": "d0e6ca37bdb10ac4333334607a1705b72b0a8ff719bd717db16be5c1afb08bc5",
+      "source_file_sha256": "97281c405ffbb5e949b68101081ede36b263d1be377b53b279e09b97d0b0f4e9"
+    },
+    {
+      "chunk_id": "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+      "document": "kb_delivery.md",
+      "chunk_index": 1,
+      "content_sha256": "d766a51b50ffd40f202d99706c050d80f919b2becc3c228ab915a472f88ea54a",
+      "source_file_sha256": "4de3a7438e75c7d79c8e881b38c87a65b1861b172f35d81d904abfa742e20234"
+    },
+    {
+      "chunk_id": "2fc6de90-0137-42ec-bb5b-7402e5f85070:v1:c0:56b81411-85f8-43be-a511-5a59397c27ee",
+      "document": "kb_policy_archive.md",
+      "chunk_index": 0,
+      "content_sha256": "c8102676f29e756d5ee5300db66394f78cd4293e7b6b33a17405e862b5148a65",
+      "source_file_sha256": "93bb8e7f495023bf86b6db715c745de13cc47a0a32c8095296cfad6c4cf27300"
+    },
+    {
+      "chunk_id": "19f19314-30b5-4a67-9436-98cdde2626ac:v1:c0:dfbf6ad2-67a3-48ca-95a8-75dea228cc36",
+      "document": "kb_policy_current.md",
+      "chunk_index": 0,
+      "content_sha256": "7330d0c83dbba8e1e7c50f74eb817553324bacd47ae877bc2e33dbf5ae6fc1c4",
+      "source_file_sha256": "01e5868cd9c2703ba45c92a6e60ec55ba7dfb76a93f2fc78738efb5bf32b6c45"
+    },
+    {
+      "chunk_id": "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+      "document": "noise_04_01.md",
+      "chunk_index": 0,
+      "content_sha256": "3037ff07f395b4f1bda99cfbff3d6c2d540ac9424ce3d9c6d868010405da2f60",
+      "source_file_sha256": "05db24681a4ed2a80fbdfb2f15e38be2bf16b577a8f8c6150e57b87de0d69174"
+    },
+    {
+      "chunk_id": "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50",
+      "document": "noise_04_03.md",
+      "chunk_index": 0,
+      "content_sha256": "e292d1f3a320aca5b1a3b6e5011b6f4b8fb8f188cf4bf9a8e7f3de2b84ac61d9",
+      "source_file_sha256": "90e8e24ec63db408456f0a9ea7ced313d7a0a452e28cb3ab18cbbaf375990332"
+    },
+    {
+      "chunk_id": "5365ca73-b165-4103-aff2-c8f8737b0f1d:v1:c0:85fcd1f7-0e7d-4b99-8653-e37cc903fd27",
+      "document": "noise_04_04.md",
+      "chunk_index": 0,
+      "content_sha256": "ee4f8db8c96d8c05934f501fe1314bd1e4355238a87af0645e59cbcf0d404a19",
+      "source_file_sha256": "b57d1bdf0ece3ca14be12fb6d54c7e37619f206417fecd82568ac5b1fea902bd"
+    },
+    {
+      "chunk_id": "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716",
+      "document": "noise_08_01.md",
+      "chunk_index": 0,
+      "content_sha256": "deb32884ea6d9e69ac48991bd4f5232ff88ac9cd5a53aa6a89f45348e5742cfa",
+      "source_file_sha256": "87ff32f1a7aa43508d777d6af52c9a0bb3bf35d55fde2bea28cb06a74b6cd2a9"
+    },
+    {
+      "chunk_id": "57ff81be-c3fc-40fe-bde7-755778870328:v1:c0:9efc3a8b-bd62-4846-9077-cd2fd318c115",
+      "document": "noise_08_04.md",
+      "chunk_index": 0,
+      "content_sha256": "df0d7c66774297fcbc54c64af3ba9b4c551fd1116363f6d261c741dbe5177b23",
+      "source_file_sha256": "49054c2ab3caf60127ed3f61b6aece8935c2ced2e94bba140f720180d00d5de2"
+    },
+    {
+      "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+      "document": "noise_11_01.md",
+      "chunk_index": 0,
+      "content_sha256": "b0863d4fc610568d7ca3320bc275b1a11cd6ef396e8f2c63435dcba012329649",
+      "source_file_sha256": "c47d3ef040fa8c9e3039459d2840b93c5054447e33c22b9565883f4ec7c15f42"
+    },
+    {
+      "chunk_id": "66d1c7d9-bd18-440c-a40e-faf3972bbd5c:v1:c0:8addc721-8606-422e-a2fd-52f227ef6b8f",
+      "document": "noise_11_03.md",
+      "chunk_index": 0,
+      "content_sha256": "273fd19e4dc1b69a6ef5823f9dcf80ee19c85253fcbabc03160414ce02cfe86b",
+      "source_file_sha256": "d609b28348e5860ce94221161c442da26728c24f0cd9e52fad369d0715f3aeb5"
+    },
+    {
+      "chunk_id": "dc1ea62a-be9d-43bc-81d4-b29fc0dce34f:v1:c0:55c0501e-5d94-47e1-ae35-d5150e646d4a",
+      "document": "noise_11_04.md",
+      "chunk_index": 0,
+      "content_sha256": "19a2e74081171e0d5ffef7bcaab3fbb4bc05ee33e073d6f95b6491e62dbb6bd9",
+      "source_file_sha256": "3b351a72cc1c5d1114c9b836c0f6151f02dae4d84f8029fa97c8aa6caa989d12"
+    },
+    {
+      "chunk_id": "9c21b47c-543d-4591-9db1-2dd4fb526646:v1:c0:7a90430e-16e2-498c-8e73-19f26a3a76d9",
+      "document": "noise_16_01.md",
+      "chunk_index": 0,
+      "content_sha256": "6e5b21986e187067f12d2cf79be115c38a41bc8bd77ec15b1394fcf24366f7fc",
+      "source_file_sha256": "9cfefefce04af0595abec869553c8b41507d43bf0d631aad2990e4a7cd1c0f6f"
+    },
+    {
+      "chunk_id": "ea67664f-5810-46e2-bb1b-ae353a1d2dd2:v1:c0:8ecd63c3-4aa1-42af-85b6-63ff02ecb754",
+      "document": "noise_16_04.md",
+      "chunk_index": 0,
+      "content_sha256": "91dce7dcfd4a22b2604d9125e669886e9ee0c65390edcc945d4c022f16e8d9ed",
+      "source_file_sha256": "df7d5340596caa7c109068fe7dbfa7823f811ee5a1d300091dec4d352af72cc7"
+    },
+    {
+      "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+      "document": "release_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4",
+      "source_file_sha256": "45f1c9fec1435f43ca554891bcd52850701c108c25134a450a63cb363b06d787"
+    },
+    {
+      "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c0:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "document": "release_rules.md",
+      "chunk_index": 0,
+      "content_sha256": "3d365de83d6bd5e263d14b6e73e4fcfa01d1b15e9f10a72cad8c52187564845e",
+      "source_file_sha256": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32"
+    },
+    {
+      "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c1:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "document": "release_rules.md",
+      "chunk_index": 1,
+      "content_sha256": "9c757c867edbcf338c7780760103e6aa443e2e64a7160f0fb149884f5eef5162",
+      "source_file_sha256": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32"
+    },
+    {
+      "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c2:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "document": "release_rules.md",
+      "chunk_index": 2,
+      "content_sha256": "33da80e683ff80310511e72a93f14bf538d0c0aff39dd95e6dbb8397837abc8d",
+      "source_file_sha256": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32"
+    },
+    {
+      "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c3:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "document": "release_rules.md",
+      "chunk_index": 3,
+      "content_sha256": "815488d008035caf16ac53166f55bc7f2a33b9ba7c51ea500bf9fcdb8ede42c6",
+      "source_file_sha256": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32"
+    },
+    {
+      "chunk_id": "bd5f34d4-54bc-4bae-9302-ac71b0c39288:v1:c5:dbf7528f-fe6a-40e1-9425-cd4813fc7886",
+      "document": "release_rules.md",
+      "chunk_index": 5,
+      "content_sha256": "3fb1f2a8360f5049e23d79b6ee0cc11f4f87123fd8f2ffa5146830e1df22b1cf",
+      "source_file_sha256": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32"
+    },
+    {
+      "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+      "document": "training_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9",
+      "source_file_sha256": "68876af1ce537e8229d9bc903ec9ce7e3f6d9479f1995c04a6a6335949be2c77"
+    },
+    {
+      "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c0:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+      "document": "training_rules.md",
+      "chunk_index": 0,
+      "content_sha256": "8a51a4b343efc54a4987a9179c49d6b65b9017977175db198c64bd069a28a856",
+      "source_file_sha256": "48cda0529d6c9c3482203358d3343693142b56d6ac0a5e49d103077b0e0420e6"
+    },
+    {
+      "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+      "document": "training_rules.md",
+      "chunk_index": 3,
+      "content_sha256": "fcc6f7cafff47ae4db87076570052b534d310ff475b21e1f5512c00952c6a143",
+      "source_file_sha256": "48cda0529d6c9c3482203358d3343693142b56d6ac0a5e49d103077b0e0420e6"
+    },
+    {
+      "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c5:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+      "document": "training_rules.md",
+      "chunk_index": 5,
+      "content_sha256": "b0b472e4067cfeb983d2515f543fc5a5cada9dabe3f16085e615137d7bcdb53d",
+      "source_file_sha256": "48cda0529d6c9c3482203358d3343693142b56d6ac0a5e49d103077b0e0420e6"
+    },
+    {
+      "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+      "document": "vehicle_exceptions.md",
+      "chunk_index": 0,
+      "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3",
+      "source_file_sha256": "8cf20146ddcce096b9061501b61bc684e8b41c26860d6d28a2caa8345144d280"
+    },
+    {
+      "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "document": "vehicle_rules.md",
+      "chunk_index": 0,
+      "content_sha256": "d09b77c22d9f07411fc83627493d0636d056b76c2e768280f76eee24fa362b30",
+      "source_file_sha256": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb"
+    },
+    {
+      "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c1:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "document": "vehicle_rules.md",
+      "chunk_index": 1,
+      "content_sha256": "10075aa6ed994987dbcff34454719ac7515d77b54ece06450a812678acbaf94f",
+      "source_file_sha256": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb"
+    },
+    {
+      "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c2:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "document": "vehicle_rules.md",
+      "chunk_index": 2,
+      "content_sha256": "49a93239a90a835e6b5b7960db57f874d182dfff80411239156cda872e644087",
+      "source_file_sha256": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb"
+    },
+    {
+      "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "document": "vehicle_rules.md",
+      "chunk_index": 3,
+      "content_sha256": "9d6a65898c8fb5b7056b9b97112372c45b3b2659336358f1ccd49af2e74c0627",
+      "source_file_sha256": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb"
+    },
+    {
+      "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c5:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+      "document": "vehicle_rules.md",
+      "chunk_index": 5,
+      "content_sha256": "3177bd2c932ae3a80d5c9943fdc77e1cba2f1003f1f459b831ac5adba030c1ea",
+      "source_file_sha256": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb"
+    }
+  ]
+}

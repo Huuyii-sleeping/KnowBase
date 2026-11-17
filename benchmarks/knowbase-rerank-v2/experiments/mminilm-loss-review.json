@@ -1,0 +1,713 @@
+{
+  "reviewer": "same assistant, exposed synthetic data; post-result explanatory review, not independent acceptance",
+  "strategy": "mminilm",
+  "precision": "float16",
+  "run": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1",
+  "scope": "all 14 new literal evidence losses relative to original rule, 13 unique question IDs; cold-chain question appears in two source configs",
+  "primary_score_changed": false,
+  "summary": {
+    "required_fact_missing": 6,
+    "partial_support": 2,
+    "core_answer_supported_additional_numeric_evidence_missing": 6
+  },
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "val010",
+      "split": "regression",
+      "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "kb_upload.md",
+        "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "当前不支持 OCR，扫描图片文字不能直接提取。",
+      "rationale": "五块入选正文均为项目立项模拟资料，没有 OCR 支持状态。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "ea67664f-5810-46e2-bb1b-ae353a1d2dd2:v1:c0:8ecd63c3-4aa1-42af-85b6-63ff02ecb754",
+          "document": "noise_16_04.md",
+          "chunk_index": 0,
+          "content_sha256": "91dce7dcfd4a22b2604d9125e669886e9ee0c65390edcc945d4c022f16e8d9ed"
+        },
+        {
+          "chunk_id": "9c21b47c-543d-4591-9db1-2dd4fb526646:v1:c0:7a90430e-16e2-498c-8e73-19f26a3a76d9",
+          "document": "noise_16_01.md",
+          "chunk_index": 0,
+          "content_sha256": "6e5b21986e187067f12d2cf79be115c38a41bc8bd77ec15b1394fcf24366f7fc"
+        },
+        {
+          "chunk_id": "865c42c5-9f66-4a36-bf3d-972b2df827e9:v1:c0:036a74f4-2281-4c92-ad4c-ae5aa642211c",
+          "document": "noise_16_05.md",
+          "chunk_index": 0,
+          "content_sha256": "dae5fc60eb9ddc57fd9c27bce45a7b5f6b0f09a485366c56d2f32b75b477e1c8"
+        },
+        {
+          "chunk_id": "258b3668-6a69-4d17-9224-60ac25b19c6d:v1:c0:20170f91-f76b-4087-8004-923e0b6df297",
+          "document": "noise_16_03.md",
+          "chunk_index": 0,
+          "content_sha256": "b2119afe9cb76ba8c5279fc738999437f8f67d5095c4975d40110181967ec91e"
+        },
+        {
+          "chunk_id": "98177417-8d5e-45e6-a285-7e1c9f40333b:v1:c0:c004aeb0-7ed8-457b-9c71-2b0364531a83",
+          "document": "noise_16_06.md",
+          "chunk_index": 0,
+          "content_sha256": "25a31ed6f645a950b1463c3d11d6d57e5284593f73060e51e6c1fad7d4d40b75"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_05",
+      "split": "development",
+      "question": "外组同事拿到了合同用印的编号，是否就能打开我们组批准的详情？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "采购组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      },
+      "classification": "partial_support",
+      "required_answer_scope": "外组逐人授权，记录编号本身不授予访问权限。",
+      "rationale": "保留查看详情需单独权限检查这一较弱依据，未保留外组逐人授权及编号不构成权限的明确条款。",
+      "retained_support": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "quote": "导出列表不包含附件正文，查看详情需要单独通过权限检查。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c1:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "document": "contract_rules.md",
+          "chunk_index": 1,
+          "content_sha256": "f1fb304cac98971bdbebf33aaf1fe913eb181ce28d5ead0ee7076dd854f4e6b6"
+        },
+        {
+          "chunk_id": "593d45ae-15f8-4184-a649-ecda08aa7664:v1:c0:9c999438-1ee8-4b60-a3c4-75838b512c50",
+          "document": "noise_04_03.md",
+          "chunk_index": 0,
+          "content_sha256": "e292d1f3a320aca5b1a3b6e5011b6f4b8fb8f188cf4bf9a8e7f3de2b84ac61d9"
+        },
+        {
+          "chunk_id": "da5cb703-ac77-4c89-b169-09049d1d9435:v1:c0:7a68b45e-3bb1-4980-8636-bd8475cf1057",
+          "document": "noise_04_02.md",
+          "chunk_index": 0,
+          "content_sha256": "9a699ee3d04ddd6e2cb133eca1d8fe295bd2a9ee9b51101632dbbc0ed134de20"
+        },
+        {
+          "chunk_id": "f8381ede-5afb-4196-94d0-8c24f41e61c2:v1:c0:f6e3a3ad-5792-4f75-9754-da22c4ccf49b",
+          "document": "noise_04_06.md",
+          "chunk_index": 0,
+          "content_sha256": "05dede2e3fa6db6aa6d09db3ffd1eb621835536e4ae1db2080864c2429af02ca"
+        },
+        {
+          "chunk_id": "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "document": "noise_04_01.md",
+          "chunk_index": 0,
+          "content_sha256": "3037ff07f395b4f1bda99cfbff3d6c2d540ac9424ce3d9c6d868010405da2f60"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_08",
+      "split": "development",
+      "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "单次申请金额不超过10000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "quote": "2025 年单次普通额度曾为5000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现5000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "document": "purchase_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08",
+      "split": "development",
+      "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "quote": "2025 年单次普通额度曾为10000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现10000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "document": "purchase_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_08",
+      "split": "development",
+      "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "release_rules.md",
+        "quote": "单次申请金额不超过6000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "quote": "2025 年单次普通额度曾为3000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现3000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_05",
+      "split": "development",
+      "question": "外组同事拿到了培训报名的编号，是否就能打开我们组批准的详情？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "人事组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+      },
+      "classification": "partial_support",
+      "required_answer_scope": "外组逐人授权，记录编号本身不授予访问权限。",
+      "rationale": "保留查看详情需单独权限检查这一较弱依据，未保留外组逐人授权及编号不构成权限的明确条款。",
+      "retained_support": [
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c1:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "quote": "导出列表不包含附件正文，查看详情需要单独通过权限检查。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "document": "noise_11_01.md",
+          "chunk_index": 0,
+          "content_sha256": "b0863d4fc610568d7ca3320bc275b1a11cd6ef396e8f2c63435dcba012329649"
+        },
+        {
+          "chunk_id": "66d1c7d9-bd18-440c-a40e-faf3972bbd5c:v1:c0:8addc721-8606-422e-a2fd-52f227ef6b8f",
+          "document": "noise_11_03.md",
+          "chunk_index": 0,
+          "content_sha256": "273fd19e4dc1b69a6ef5823f9dcf80ee19c85253fcbabc03160414ce02cfe86b"
+        },
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c1:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "document": "training_rules.md",
+          "chunk_index": 1,
+          "content_sha256": "5b5a7554a6ebc7b83bf91594cbdcdbaf4163a9ce8b49d44cc5a3012ea007a882"
+        },
+        {
+          "chunk_id": "88ef3b9e-89a8-4c65-954c-a7ff9cd493d3:v1:c0:e60dfab3-f992-4400-b0c9-d592bb44eb77",
+          "document": "noise_11_05.md",
+          "chunk_index": 0,
+          "content_sha256": "edd5f376d4fcfaeacfd1ea94a079b5a28d6e8c8267e32087e1dc173f329a6489"
+        },
+        {
+          "chunk_id": "dc1ea62a-be9d-43bc-81d4-b29fc0dce34f:v1:c0:55c0501e-5d94-47e1-ae35-d5150e646d4a",
+          "document": "noise_11_04.md",
+          "chunk_index": 0,
+          "content_sha256": "19a2e74081171e0d5ffef7bcaab3fbb4bc05ee33e073d6f95b6491e62dbb6bd9"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08",
+      "split": "development",
+      "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "quote": "2025 年单次普通额度曾为1250元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1250元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "66d1c7d9-bd18-440c-a40e-faf3972bbd5c:v1:c0:8addc721-8606-422e-a2fd-52f227ef6b8f",
+          "document": "noise_11_03.md",
+          "chunk_index": 0,
+          "content_sha256": "273fd19e4dc1b69a6ef5823f9dcf80ee19c85253fcbabc03160414ce02cfe86b"
+        },
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c4:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "document": "training_rules.md",
+          "chunk_index": 4,
+          "content_sha256": "def8686efaa4c27f580aa21c3031bcefd2b04d7519090ba2e02d5e299e1fbc9a"
+        },
+        {
+          "chunk_id": "88ef3b9e-89a8-4c65-954c-a7ff9cd493d3:v1:c0:e60dfab3-f992-4400-b0c9-d592bb44eb77",
+          "document": "noise_11_05.md",
+          "chunk_index": 0,
+          "content_sha256": "edd5f376d4fcfaeacfd1ea94a079b5a28d6e8c8267e32087e1dc173f329a6489"
+        },
+        {
+          "chunk_id": "cd27bfce-55a5-480d-88d9-4e988729be6d:v1:c0:0045b2c9-bdc6-4f50-b261-e755bb2bafb0",
+          "document": "noise_11_02.md",
+          "chunk_index": 0,
+          "content_sha256": "56ee707a79f0f1eee89a024f5b2990763d6cbc9781efc08ecb7962114dffe19f"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_09",
+      "split": "development",
+      "question": "培训报名请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "超时不等于审批失败，应先查询真实状态避免重复创建。",
+      "rationale": "保留归档恢复核对，通知是否发送与业务审批实际状态不是同一个事实，不能用相似流程替代超时确认。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "c8e5d570-f897-4845-a0df-54ca41b0beb9:v1:c0:b81dccb0-b4b6-4703-b67c-96b67a81d743",
+          "document": "noise_11_06.md",
+          "chunk_index": 0,
+          "content_sha256": "b77d28df9cc3c3a1347ba98c8b9721ca8b088c0fbc47e982f74842a09d8d73c3"
+        },
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "document": "training_rules.md",
+          "chunk_index": 3,
+          "content_sha256": "fcc6f7cafff47ae4db87076570052b534d310ff475b21e1f5512c00952c6a143"
+        },
+        {
+          "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "document": "noise_11_01.md",
+          "chunk_index": 0,
+          "content_sha256": "b0863d4fc610568d7ca3320bc275b1a11cd6ef396e8f2c63435dcba012329649"
+        },
+        {
+          "chunk_id": "66d1c7d9-bd18-440c-a40e-faf3972bbd5c:v1:c0:8addc721-8606-422e-a2fd-52f227ef6b8f",
+          "document": "noise_11_03.md",
+          "chunk_index": 0,
+          "content_sha256": "273fd19e4dc1b69a6ef5823f9dcf80ee19c85253fcbabc03160414ce02cfe86b"
+        },
+        {
+          "chunk_id": "cd27bfce-55a5-480d-88d9-4e988729be6d:v1:c0:0045b2c9-bdc6-4f50-b261-e755bb2bafb0",
+          "document": "noise_11_02.md",
+          "chunk_index": 0,
+          "content_sha256": "56ee707a79f0f1eee89a024f5b2990763d6cbc9781efc08ecb7962114dffe19f"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_02",
+      "split": "validation",
+      "question": "我想办公务用车，谁有最后拍板的权力？主管点头是否就算办完？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "车队调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "车队调度员负责最终批准，主管确认用途不等于最终批准。",
+      "rationale": "入选公务用车窗口背景与办公用品资料，未保留主规则或配套例外的最终审批角色。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "8ab72680-7b2d-457d-bc92-cbb5c02068d7:v1:c0:af4e18ca-a8d1-43b2-9424-71c7c3a74083",
+          "document": "noise_08_02.md",
+          "chunk_index": 0,
+          "content_sha256": "a6db9251ac29fdf7713deb640893f89222fba4a5d398d395e39edf77f422f8b9"
+        },
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c4:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "document": "vehicle_rules.md",
+          "chunk_index": 4,
+          "content_sha256": "91f2ff477d657ed28a1bdc04d47dc2a1f0a3a24d4a0fe1ec4d45d52bbeb656aa"
+        },
+        {
+          "chunk_id": "be0f05d3-dac5-4b8e-8ffa-4fd49b736389:v1:c0:0de6eb56-72a9-4732-8b19-2f1dec969e16",
+          "document": "noise_08_05.md",
+          "chunk_index": 0,
+          "content_sha256": "062dd4b69750cdbf94a0dfed616a0b23c32c16066653dde82ec904a41dae19b3"
+        },
+        {
+          "chunk_id": "83b93e3d-bb24-4d78-895f-13e2826e3bc0:v1:c0:2d380f07-4281-452c-96b0-0239c15d9f94",
+          "document": "noise_08_03.md",
+          "chunk_index": 0,
+          "content_sha256": "aed5ff19153996a22c0f2fa32903bf97d1cc11c7b0f1e81824d6f7023501b869"
+        },
+        {
+          "chunk_id": "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716",
+          "document": "noise_08_01.md",
+          "chunk_index": 0,
+          "content_sha256": "deb32884ea6d9e69ac48991bd4f5232ff88ac9cd5a53aa6a89f45348e5742cfa"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_08",
+      "split": "validation",
+      "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "单次申请金额不超过3500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "quote": "2025 年单次普通额度曾为1750元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1750元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c4:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "document": "vehicle_rules.md",
+          "chunk_index": 4,
+          "content_sha256": "91f2ff477d657ed28a1bdc04d47dc2a1f0a3a24d4a0fe1ec4d45d52bbeb656aa"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_09",
+      "split": "validation",
+      "question": "公务用车请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "超时不等于审批失败，应先查询真实状态避免重复创建。",
+      "rationale": "保留归档恢复核对及 KnowBase 消息重试资料，但软件消费者超时处理不能替代公务用车审批状态确认。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "document": "vehicle_rules.md",
+          "chunk_index": 3,
+          "content_sha256": "9d6a65898c8fb5b7056b9b97112372c45b3b2659336358f1ccd49af2e74c0627"
+        },
+        {
+          "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c1:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+          "document": "vehicle_rules.md",
+          "chunk_index": 1,
+          "content_sha256": "10075aa6ed994987dbcff34454719ac7515d77b54ece06450a812678acbaf94f"
+        },
+        {
+          "chunk_id": "87ecf952-1fb5-4129-a666-5d5cfaaf1fbc:v1:c0:9f891383-4dcb-4e8e-a324-6855f04da1b0",
+          "document": "noise_08_06.md",
+          "chunk_index": 0,
+          "content_sha256": "c0b42843666977b1946385376a217b4dc25064af27af331fabe0d5e02cb622da"
+        },
+        {
+          "chunk_id": "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+          "document": "kb_delivery.md",
+          "chunk_index": 1,
+          "content_sha256": "d766a51b50ffd40f202d99706c050d80f919b2becc3c228ab915a472f88ea54a"
+        },
+        {
+          "chunk_id": "e8e820c6-15c5-4e25-9166-e4cc166ba37e:v1:c0:f97f97b0-ad39-4c2a-b7c2-c84775007716",
+          "document": "noise_08_01.md",
+          "chunk_index": 0,
+          "content_sha256": "deb32884ea6d9e69ac48991bd4f5232ff88ac9cd5a53aa6a89f45348e5742cfa"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_08",
+      "split": "validation",
+      "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "data_rules.md",
+        "quote": "单次申请金额不超过9000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "required_answer_scope": "旧额度已失效，不能继续据此驳回；问题没有询问新的具体额度数值。",
+      "rationale": "实际入选了目标业务的历史例外文档，明确旧规则已失效及不得按旧数值驳回符合现行额度的申请；原标注额外要求另一文档中的现行具体额度，因此该数字证据损失不能直接算作核心答案变差。",
+      "retained_support": [
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "quote": "2025 年单次普通额度曾为4500元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现4500元时，必须核对适用日期，不得据此驳回符合现行额度的申请。"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "483c1f2a-93a2-43a4-b520-c50f5bf83c3a:v1:c0:94add3d6-992e-4a77-98a4-89432c5d9300",
+          "document": "archive_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "eefcb60a9672de001003bcbe60ea8bbbe765ebb5724e1fb9d9b32a293e68effa"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c",
+          "document": "access_exceptions.md",
+          "chunk_index": 0,
+          "content_sha256": "8f1cd33b7b1679faf23215475634760e2606a3f7e00d7b163f647770f7f77bbd"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-08",
+      "split": "validation",
+      "question": "霁川种质冷链清单的重量按什么单位填，归档还必须保留称重台的什么编号？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "cold-chain-samples.md",
+        "quote": "交接清单上的重量统一用克记录，运输公司的千克数需先换算后登记。"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "重量用克记录，运输公司的千克数需先换算。",
+      "rationale": "保留归档称重台校准编号，另外一块同文档名额给了背景札记；其他入选文档未给出重量单位及换算要求。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "19fce2d1-5f69-4811-a206-844888cdd294:v1:c3:a155ce76-5efb-46c1-b5a2-89439087d958",
+          "document": "cold-chain-samples.md",
+          "chunk_index": 3,
+          "content_sha256": "5076fdd93b976a8725ce2e7915487d0c4bc3ceb9111cac8d39745d29d9cbd06d"
+        },
+        {
+          "chunk_id": "19fce2d1-5f69-4811-a206-844888cdd294:v1:c1:a155ce76-5efb-46c1-b5a2-89439087d958",
+          "document": "cold-chain-samples.md",
+          "chunk_index": 1,
+          "content_sha256": "259e93338fcf513ef9187fc009dc91edc254206a2125419a891c15bb6ca7c809"
+        },
+        {
+          "chunk_id": "58444d9e-34b3-4412-9875-36ffa2e330b8:v1:c0:e73ed060-c55f-4573-9ce9-ade3084e2976",
+          "document": "cold-chain-samples-old.md",
+          "chunk_index": 0,
+          "content_sha256": "b4023dbdb2bf69830549f6c19d9dc8f522b11a52f2f1e0700ea5a182501f65bd"
+        },
+        {
+          "chunk_id": "0f4bee9c-e378-4d8f-8b67-ddb511d33a14:v1:c0:3cdea28b-c32a-40e8-b6b9-b71fb8e9fed3",
+          "document": "cold-chain-samples-maintenance.md",
+          "chunk_index": 0,
+          "content_sha256": "47c4331f0926e5e59dbce79a4d7ea9c6589d188b167780e6b1634b631cea0a6b"
+        },
+        {
+          "chunk_id": "c6ac1851-3fb6-4d19-9a16-58a37c41d950:v1:c0:b60fb0c2-76bf-4de7-ae91-e1e25a9daee7",
+          "document": "cold-chain-samples-visitor.md",
+          "chunk_index": 0,
+          "content_sha256": "90afe83a84001011e6966ae91c732d5d122febc316003ffe781b3cbe1ac6cd14"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-08",
+      "split": "validation",
+      "question": "霁川种质冷链清单的重量按什么单位填，归档还必须保留称重台的什么编号？",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "cold-chain-samples.md",
+        "quote": "交接清单上的重量统一用克记录，运输公司的千克数需先换算后登记。"
+      },
+      "classification": "required_fact_missing",
+      "required_answer_scope": "重量用克记录，运输公司的千克数需先换算。",
+      "rationale": "保留归档称重台校准编号，另外一块同文档名额给了背景札记；其他入选文档未给出重量单位及换算要求。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "40aef4ce-537f-4424-8e31-a2ca27600dd7:v1:c3:741ad900-1242-49ea-a685-938091f1ae17",
+          "document": "cold-chain-samples.md",
+          "chunk_index": 3,
+          "content_sha256": "5076fdd93b976a8725ce2e7915487d0c4bc3ceb9111cac8d39745d29d9cbd06d"
+        },
+        {
+          "chunk_id": "40aef4ce-537f-4424-8e31-a2ca27600dd7:v1:c1:741ad900-1242-49ea-a685-938091f1ae17",
+          "document": "cold-chain-samples.md",
+          "chunk_index": 1,
+          "content_sha256": "259e93338fcf513ef9187fc009dc91edc254206a2125419a891c15bb6ca7c809"
+        },
+        {
+          "chunk_id": "10cb9aa1-1442-496b-9421-5c0f182c1e7c:v1:c0:892e6159-1e07-4dab-b2eb-f57e75979c4b",
+          "document": "cold-chain-samples-old.md",
+          "chunk_index": 0,
+          "content_sha256": "b4023dbdb2bf69830549f6c19d9dc8f522b11a52f2f1e0700ea5a182501f65bd"
+        },
+        {
+          "chunk_id": "be8cff46-d134-4bb0-8dbb-0468b4f2ba49:v1:c0:5913d25f-404b-4386-8738-7e73b0dedcd3",
+          "document": "cold-chain-samples-maintenance.md",
+          "chunk_index": 0,
+          "content_sha256": "47c4331f0926e5e59dbce79a4d7ea9c6589d188b167780e6b1634b631cea0a6b"
+        },
+        {
+          "chunk_id": "a0405209-ad5f-44c6-86c1-b57f7ac6ecd6:v1:c0:3ade60fe-94cb-4b7c-9185-f754b7726983",
+          "document": "cold-chain-samples-visitor.md",
+          "chunk_index": 0,
+          "content_sha256": "90afe83a84001011e6966ae91c732d5d122febc316003ffe781b3cbe1ac6cd14"
+        }
+      ]
+    }
+  ]
+}

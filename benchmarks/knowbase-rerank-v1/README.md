@@ -19,6 +19,8 @@ node tools/rag-evaluation/rerank-replay.cjs \
 
 协议与实现先提交为 `0797aede`，随后在该干净提交上执行 3456 次离线选择。RRF 在开发组证据召回提升 13.19 个百分点，但开发/已暴露验证共丢失十条原先入选证据，未通过冻结门槛；其余候选未达到开发增益门槛，业务规则不变。结论、代价与停止方向见 [重排审计](experiments/audit.md)，[results.json](experiments/results.json)保存指纹、分类指标、逐题增减与基线损失。
 
+[逐题语义复核](experiments/semantic-review.md)补充区分了这十条标注损失：4 条仍有等价依据、1 条权限依据不完整、5 条缺少撤回时长与起算点。原指标和冻结决策保留；不能把十条字面损失直接等同于十道题回答变差。
+
 ```bash
 pnpm --filter @knowbase/api build
 node tools/rag-evaluation/rerank-replay.cjs \

@@ -1,0 +1,600 @@
+{
+  "reviewer": "same assistant, exposed synthetic data, post-result explanation; not independent answer acceptance",
+  "precision": "float16",
+  "run": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1",
+  "scope": "All literal baseline losses for BGE and BGE-anchor2, checked against full completed replay; no primary labels or gates changed",
+  "primary_score_changed": false,
+  "summary_by_strategy": {
+    "bge-m3": {
+      "core_answer_supported_additional_numeric_evidence_missing": 8,
+      "required_fact_missing": 1
+    },
+    "bge-m3-anchor2": {
+      "core_answer_supported_additional_numeric_evidence_missing": 3
+    }
+  },
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08",
+      "strategy": "bge-m3",
+      "question": "旧版差旅报销表格把额度写成2500元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "quote": "2025 年单次普通额度曾为2500元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现2500元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        },
+        {
+          "chunk_id": "76d883e1-fc30-4cee-82cf-a2d4db6700f6:v1:c0:15624bf5-bdd2-4fca-aedf-3848e8956661",
+          "document": "repair_exceptions.md",
+          "content_sha256": "3c0f20f504a902932aa45d5790a3f6b1d4bc8f6f7f413e8ca5ea785c35726783"
+        },
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08",
+      "strategy": "bge-m3-anchor2",
+      "question": "旧版差旅报销表格把额度写成2500元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "travel_rules.md",
+        "quote": "单次申请金额不超过5000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "quote": "2025 年单次普通额度曾为2500元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现2500元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        },
+        {
+          "chunk_id": "44ae09e2-17b7-4466-91cc-b13e223f5b46:v1:c0:46e4a961-68c6-4cc0-abcd-b28810da2d2a",
+          "document": "noise_02_03.md",
+          "content_sha256": "ea89bd6cf32e719034d8bf8ba3a033e16dcee7582c847ee078b820958f4502c5"
+        },
+        {
+          "chunk_id": "76d883e1-fc30-4cee-82cf-a2d4db6700f6:v1:c0:15624bf5-bdd2-4fca-aedf-3848e8956661",
+          "document": "repair_exceptions.md",
+          "content_sha256": "3c0f20f504a902932aa45d5790a3f6b1d4bc8f6f7f413e8ca5ea785c35726783"
+        },
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_08",
+      "strategy": "bge-m3",
+      "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "contract_rules.md",
+        "quote": "单次申请金额不超过10000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "quote": "2025 年单次普通额度曾为5000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现5000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "483c1f2a-93a2-43a4-b520-c50f5bf83c3a:v1:c0:94add3d6-992e-4a77-98a4-89432c5d9300",
+          "document": "archive_exceptions.md",
+          "content_sha256": "eefcb60a9672de001003bcbe60ea8bbbe765ebb5724e1fb9d9b32a293e68effa"
+        },
+        {
+          "chunk_id": "b8378c57-afcf-460a-a161-9f5edfa3d43a:v1:c0:9b7a088d-7210-475e-aae9-965ecfbbf530",
+          "document": "travel_exceptions.md",
+          "content_sha256": "218f0d7a62df30dc2d8a80c65c06b3123d59dc6544ca08f6db023cec1e860693"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_08",
+      "strategy": "bge-m3",
+      "question": "旧版临时门禁表格把额度写成400元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "access_rules.md",
+        "quote": "单次申请金额不超过800元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c",
+          "quote": "2025 年单次普通额度曾为400元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现400元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "8f1cd33b7b1679faf23215475634760e2606a3f7e00d7b163f647770f7f77bbd"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c",
+          "document": "access_exceptions.md",
+          "content_sha256": "8f1cd33b7b1679faf23215475634760e2606a3f7e00d7b163f647770f7f77bbd"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "dc830e09-a468-4fab-8b7e-c1c1b903eba0:v1:c0:b961200b-2694-48f6-a0e2-521f81a4d784",
+          "document": "sample_exceptions.md",
+          "content_sha256": "cc66e6d8b1f4b4873cf660435c7e7951520b43245c50e5f97694d6ad85ea83ef"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08",
+      "strategy": "bge-m3",
+      "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "quote": "2025 年单次普通额度曾为10000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现10000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "document": "purchase_exceptions.md",
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08",
+      "strategy": "bge-m3-anchor2",
+      "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "purchase_rules.md",
+        "quote": "单次申请金额不超过20000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "quote": "2025 年单次普通额度曾为10000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现10000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "dfa5825f-2e65-47a4-93c2-f90032e34305:v1:c0:1f836f76-8203-4635-a359-9e80839b831d",
+          "document": "purchase_exceptions.md",
+          "content_sha256": "9ff9637d813ba204995407eb2e98def2dc47076af6f5ab423ba958f3e21b8bb9"
+        },
+        {
+          "chunk_id": "30a13d6a-8644-4fd2-9f47-5afbf14716ec:v1:c0:caa77ff5-c44b-47aa-8439-bf9c141dc2c3",
+          "document": "contract_rules.md",
+          "content_sha256": "c7b7dea920676d6239829d22ba648d9b3d43a316fde03c06aef062de453ad2e9"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_08",
+      "strategy": "bge-m3",
+      "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "release_rules.md",
+        "quote": "单次申请金额不超过6000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "quote": "2025 年单次普通额度曾为3000元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现3000元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "8350aa5d-e495-42c9-9f0c-69e3230d454c:v1:c0:0c406387-49a1-4b86-9ba2-47c4939e9b84",
+          "document": "contract_exceptions.md",
+          "content_sha256": "168c14ab0083c3645a93af0ee5b799ab56e8043c9ffd836dc9f41a682df9701b"
+        },
+        {
+          "chunk_id": "dc830e09-a468-4fab-8b7e-c1c1b903eba0:v1:c0:b961200b-2694-48f6-a0e2-521f81a4d784",
+          "document": "sample_exceptions.md",
+          "content_sha256": "cc66e6d8b1f4b4873cf660435c7e7951520b43245c50e5f97694d6ad85ea83ef"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08",
+      "strategy": "bge-m3",
+      "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "quote": "2025 年单次普通额度曾为1250元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1250元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "cd27bfce-55a5-480d-88d9-4e988729be6d:v1:c0:0045b2c9-bdc6-4f50-b261-e755bb2bafb0",
+          "document": "noise_11_02.md",
+          "content_sha256": "56ee707a79f0f1eee89a024f5b2990763d6cbc9781efc08ecb7962114dffe19f"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08",
+      "strategy": "bge-m3-anchor2",
+      "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "单次申请金额不超过2500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "quote": "2025 年单次普通额度曾为1250元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1250元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "document": "noise_11_01.md",
+          "content_sha256": "b0863d4fc610568d7ca3320bc275b1a11cd6ef396e8f2c63435dcba012329649"
+        },
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_09",
+      "strategy": "bge-m3",
+      "question": "培训报名请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "reference_answer": "先查询真实状态；恢复后核对结论、附件和权限。",
+      "evidence_index": 0,
+      "lost_evidence": {
+        "doc": "training_rules.md",
+        "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+      },
+      "classification": "required_fact_missing",
+      "rationale": "保留归档恢复核对，但同文档另一名额给了通用记录整理，未保留超时后先查询真实审批状态、不要立即重建申请的条款。噪声文档中的通知重复不等同于审批请求超时，通用服务器当前状态说明也没有给出该处理要求。",
+      "retained_support": [],
+      "selected_chunks": [
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c3:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "document": "training_rules.md",
+          "content_sha256": "fcc6f7cafff47ae4db87076570052b534d310ff475b21e1f5512c00952c6a143"
+        },
+        {
+          "chunk_id": "cb4fef5e-bda5-4b1e-adaf-fd59b84b6ea4:v1:c2:8bb41ba1-ea27-42de-aa8b-290ff4aded78",
+          "document": "training_rules.md",
+          "content_sha256": "4b2d16046f28be8819a508b59315984c747fb77816ffd66c2676f8e70de8d291"
+        },
+        {
+          "chunk_id": "c8e5d570-f897-4845-a0df-54ca41b0beb9:v1:c0:b81dccb0-b4b6-4703-b67c-96b67a81d743",
+          "document": "noise_11_06.md",
+          "content_sha256": "b77d28df9cc3c3a1347ba98c8b9721ca8b088c0fbc47e982f74842a09d8d73c3"
+        },
+        {
+          "chunk_id": "88ef3b9e-89a8-4c65-954c-a7ff9cd493d3:v1:c0:e60dfab3-f992-4400-b0c9-d592bb44eb77",
+          "document": "noise_11_05.md",
+          "content_sha256": "edd5f376d4fcfaeacfd1ea94a079b5a28d6e8c8267e32087e1dc173f329a6489"
+        },
+        {
+          "chunk_id": "20f75e26-0eda-43aa-a3a0-c0d72b11b7bb:v1:c0:5ebb1ad8-fc9a-437a-b385-45e9cf616474",
+          "document": "noise_11_01.md",
+          "content_sha256": "b0863d4fc610568d7ca3320bc275b1a11cd6ef396e8f2c63435dcba012329649"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_08",
+      "strategy": "bge-m3",
+      "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "vehicle_rules.md",
+        "quote": "单次申请金额不超过3500元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "quote": "2025 年单次普通额度曾为1750元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现1750元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "e68c65d2-d531-46f7-8e25-e5d416c7c66f:v1:c0:8ba2461b-398f-4c8f-9944-2d26370d562d",
+          "document": "vehicle_exceptions.md",
+          "content_sha256": "5ec83ab77c85ac3263d0b73f55ed68d2d8d12e21bb2f70c1aa1763079a7c38d3"
+        },
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "eeef40b8-e4a4-4bbd-98c8-45324b997c4f:v1:c0:c4097f0b-66b0-4b94-b068-dee74dedeba3",
+          "document": "release_exceptions.md",
+          "content_sha256": "7c87dcb6f46f9234057ea85da1cd7e21816e1d0c233b66f928409ebeba50a5d4"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_08",
+      "strategy": "bge-m3",
+      "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+      "reference_answer": "旧规则已失效，应按现行额度。",
+      "evidence_index": 1,
+      "lost_evidence": {
+        "doc": "data_rules.md",
+        "quote": "单次申请金额不超过9000元时使用普通流程"
+      },
+      "classification": "core_answer_supported_additional_numeric_evidence_missing",
+      "rationale": "已选目标例外文档明确旧额度失效及不得据此驳回。未保留另一文档的现行具体额度，但问题及参考答案没有要求该数字。保留原标注计分，不将这项数字损失直接等同于核心答案错误。",
+      "retained_support": [
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "quote": "2025 年单次普通额度曾为4500元，该规定自 2026 年现行规则启用时失效。旧表格、截图或附件中仍出现4500元时，必须核对适用日期，不得据此驳回符合现行额度的申请。",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        }
+      ],
+      "selected_chunks": [
+        {
+          "chunk_id": "55a1037c-27d9-43f7-8a30-0cec76548c12:v1:c0:8d0a207f-6eef-4897-b61e-3bdf2a44dd10",
+          "document": "data_exceptions.md",
+          "content_sha256": "f7a2bd0e363d371d8304ba5cfec84f29e939b008ad766e7df5f5f4a62db1b936"
+        },
+        {
+          "chunk_id": "1ba69f39-df3a-4b8f-822f-90da0f8ac12c:v1:c0:5551dc9a-c789-450e-803d-d070a677d19c",
+          "document": "access_exceptions.md",
+          "content_sha256": "8f1cd33b7b1679faf23215475634760e2606a3f7e00d7b163f647770f7f77bbd"
+        },
+        {
+          "chunk_id": "248fbefc-ca8f-4c25-9d57-43bbb9daba33:v1:c0:d177f71e-7f2d-410b-b340-c777210aaa6e",
+          "document": "equipment_exceptions.md",
+          "content_sha256": "bd26ff45c947e0e1caf8e40a9c03ad791e47e17ae03877cccab23a018e529c13"
+        },
+        {
+          "chunk_id": "78a50dfa-5cc4-4db4-9724-336595a15d04:v1:c0:5998f97d-c31e-46cd-a4be-4c8268147900",
+          "document": "training_exceptions.md",
+          "content_sha256": "03c67b9e0de84659906a53e3a2d16072b6d312265435f314b473627142a9b3c9"
+        },
+        {
+          "chunk_id": "483c1f2a-93a2-43a4-b520-c50f5bf83c3a:v1:c0:94add3d6-992e-4a77-98a4-89432c5d9300",
+          "document": "archive_exceptions.md",
+          "content_sha256": "eefcb60a9672de001003bcbe60ea8bbbe765ebb5724e1fb9d9b32a293e68effa"
+        }
+      ],
+      "raw_model_had_this_literal_loss": true
+    }
+  ]
+}
