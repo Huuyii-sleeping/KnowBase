@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools/rag-evaluation"))
 from rerank_model_input import aggregate_scores, pair_key, pair_windows
 from rerank_model_cache import run_tasks
+from rerank_model_run import file_hash, load_inputs
 
 
 class Tokenizer:
@@ -125,6 +126,83 @@ class CheckpointTests(unittest.TestCase):
                 run_tasks(
                     tasks, checkpoint, lambda: self.fail("must validate before loading")
                 )
+
+    def test_nonfinite_or_incomplete_inference_never_commits_a_query(self):
+        class BrokenModel:
+            def __init__(self, result):
+                self.result = result
+
+            def score(self, query, candidates):
+                return self.result
+
+        task = self.task("q", "1")
+        for result in [
+            {"scores": [], "diagnostics": [], "elapsed_ms": 1},
+            {
+                "scores": [float("nan")],
+                "diagnostics": [{"windows": 1}],
+                "elapsed_ms": 1,
+            },
+        ]:
+            with tempfile.TemporaryDirectory() as tmp:
+                checkpoint = Path(tmp) / "rows.jsonl"
+                with self.assertRaises(ValueError):
+                    run_tasks([task], checkpoint, lambda: BrokenModel(result))
+                self.assertEqual(checkpoint.read_text(), "")
+
+
+class FrozenInputTests(unittest.TestCase):
+    def test_input_hash_corpus_and_complete_pool_identity_are_checked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            dataset = root / "dataset"
+            dataset.mkdir()
+            question_path = dataset / "questions.json"
+            questions = [{"id": "q", "question": "Question", "split": "development"}]
+            question_path.write_text(json.dumps(questions))
+            source = {"id": "s", "dataset": "dataset"}
+            row = {
+                "id": "q",
+                "pool": [{"chunkId": "a", "title": "Title", "content": "Body"}],
+            }
+            snapshot = {
+                "sources": [
+                    {
+                        **source,
+                        "metadata": {
+                            "recall_audit": {"split": "all"},
+                            "corpus_sha256": {
+                                "questions.json": file_hash(question_path)
+                            },
+                        },
+                        "rows": [row],
+                    }
+                ]
+            }
+            replay = root / "replay.json"
+            replay.write_text(json.dumps(snapshot))
+            protocol = {
+                "input_replay": "replay.json",
+                "input_files_sha256": {"replay.json": file_hash(replay)},
+                "implementation_sha256": {},
+                "sources": [source],
+            }
+            tasks = load_inputs(root, protocol)
+            self.assertEqual(tasks[0]["query"], "Question")
+            self.assertEqual(
+                tasks[0]["pair_keys"], [pair_key("Question", row["pool"][0])]
+            )
+            question_path.write_text("[]")
+            with self.assertRaisesRegex(ValueError, "corpus fingerprint"):
+                load_inputs(root, protocol)
+            question_path.write_text(json.dumps(questions))
+            snapshot["sources"][0]["rows"].append(row)
+            replay.write_text(json.dumps(snapshot))
+            with self.assertRaisesRegex(ValueError, "input fingerprint"):
+                load_inputs(root, protocol)
+            protocol["input_files_sha256"]["replay.json"] = file_hash(replay)
+            with self.assertRaisesRegex(ValueError, "duplicate source rows"):
+                load_inputs(root, protocol)
 
 
 if __name__ == "__main__":

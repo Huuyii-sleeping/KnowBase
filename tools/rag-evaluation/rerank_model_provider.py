@@ -14,6 +14,9 @@ class CrossEncoder:
 
         self.torch = torch
         self.config = input_config
+        precision = model_config.get("precision", "float32")
+        if precision not in ("float32", "float16"):
+            raise ValueError("unsupported model precision")
         snapshot = Path(model_root) / model_config["id"]
         for file, expected in model_config["files_sha256"].items():
             with (snapshot / file).open("rb") as handle:
@@ -33,7 +36,7 @@ class CrossEncoder:
             local_files_only=True,
             trust_remote_code=False,
             use_safetensors=True,
-            torch_dtype=torch.float32,
+            torch_dtype=getattr(torch, precision),
             attn_implementation="eager",
         ).to(self.device)
         self.model.eval()

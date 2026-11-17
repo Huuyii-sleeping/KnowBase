@@ -95,7 +95,7 @@ def main():
             "python": platform.python_version(),
             "platform": platform.platform(),
             "device": "mps" if torch.backends.mps.is_available() else "cpu",
-            "precision": "float32",
+            "precision": config.get("precision", "float32"),
             "cpu_threads": 4,
         },
     }
