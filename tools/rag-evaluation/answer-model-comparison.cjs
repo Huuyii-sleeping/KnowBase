@@ -29,7 +29,7 @@ function caseItems(row, old, strategy) {
   });
 }
 
-async function run(root, protocol, phase, output) {
+async function run(root, protocol, phase, output, modelName) {
   assert.ok(['development', 'validation'].includes(phase), 'invalid phase');
   for (const [file, digest] of Object.entries(protocol.files_sha256)) {
     assert.equal(hash(await fs.readFile(path.join(root, file))), digest, file);
@@ -61,7 +61,11 @@ async function run(root, protocol, phase, output) {
   const tagsResponse = await fetch(protocol.endpoint + '/api/tags');
   assert.ok(tagsResponse.ok, 'model inventory unavailable');
   const tags = (await tagsResponse.json()).models;
-  for (const model of protocol.models) {
+  const models = modelName
+    ? protocol.models.filter((m) => m.name === modelName)
+    : protocol.models;
+  assert.ok(models.length, 'model is not in frozen comparison');
+  for (const model of models) {
     assert.equal(
       tags.find((t) => t.name === model.name)?.digest,
       model.digest,
@@ -73,7 +77,7 @@ async function run(root, protocol, phase, output) {
   await fs.writeFile(output + '.partial.jsonl', '', { flag: 'wx' });
   const rows = [];
   // Keep each model loaded in turn. Never run chat and reranker inference together.
-  for (const descriptor of protocol.models) {
+  for (const descriptor of models) {
     const chat = new ChatOllama({
       baseUrl: protocol.endpoint,
       model: descriptor.name,
@@ -160,10 +164,16 @@ async function run(root, protocol, phase, output) {
   );
 }
 if (require.main === module) {
-  const [file, phase, output] = process.argv.slice(2);
+  const [file, phase, output, modelName] = process.argv.slice(2);
   fs.readFile(file, 'utf8')
     .then((x) =>
-      run(path.resolve(__dirname, '../..'), JSON.parse(x), phase, output),
+      run(
+        path.resolve(__dirname, '../..'),
+        JSON.parse(x),
+        phase,
+        output,
+        modelName,
+      ),
     )
     .catch((e) => {
       console.error(e);
