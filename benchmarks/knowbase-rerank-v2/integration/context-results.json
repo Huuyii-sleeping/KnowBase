@@ -1,0 +1,291 @@
+{
+  "date": "2026-11-18",
+  "scope": "Exposed fixed-pool context evidence, unchanged labels; NOT generated answer accuracy",
+  "context_protocol": "benchmarks/knowbase-rerank-v2/integration/context-protocol.json",
+  "context_protocol_commit": "890a7a7",
+  "context_summaries": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "questions": 80,
+      "strategies": {
+        "rule_single": {
+          "evidence_recall": 0.609375,
+          "all_evidence_found": 0.484375,
+          "all_sources_found": 0.625,
+          "negative_empty_rate": 0.5625
+        },
+        "bge_single": {
+          "evidence_recall": 0.8125,
+          "all_evidence_found": 0.6875,
+          "all_sources_found": 0.8125,
+          "negative_empty_rate": 0.5
+        },
+        "rule_multi": {
+          "evidence_recall": 0.6796875,
+          "all_evidence_found": 0.625,
+          "all_sources_found": 0.6875,
+          "negative_empty_rate": 0.5625
+        },
+        "bge_multi": {
+          "evidence_recall": 0.9375,
+          "all_evidence_found": 0.9375,
+          "all_sources_found": 0.9375,
+          "negative_empty_rate": 0.5
+        }
+      },
+      "changes": {
+        "rule_fix": {
+          "gained": 9,
+          "lost": 0
+        },
+        "bge_fix": {
+          "gained": 16,
+          "lost": 0
+        },
+        "bge_vs_rule_multi": {
+          "gained": 20,
+          "lost": 0
+        },
+        "bge_multi_vs_old_default": {
+          "gained": 29,
+          "lost": 0
+        }
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "questions": 80,
+      "strategies": {
+        "rule_single": {
+          "evidence_recall": 0.453125,
+          "all_evidence_found": 0.34375,
+          "all_sources_found": 0.46875,
+          "negative_empty_rate": 0.5625
+        },
+        "bge_single": {
+          "evidence_recall": 0.8125,
+          "all_evidence_found": 0.6875,
+          "all_sources_found": 0.8125,
+          "negative_empty_rate": 0.5
+        },
+        "rule_multi": {
+          "evidence_recall": 0.5,
+          "all_evidence_found": 0.4375,
+          "all_sources_found": 0.515625,
+          "negative_empty_rate": 0.5625
+        },
+        "bge_multi": {
+          "evidence_recall": 0.9375,
+          "all_evidence_found": 0.9375,
+          "all_sources_found": 0.9375,
+          "negative_empty_rate": 0.5
+        }
+      },
+      "changes": {
+        "rule_fix": {
+          "gained": 6,
+          "lost": 0
+        },
+        "bge_fix": {
+          "gained": 16,
+          "lost": 0
+        },
+        "bge_vs_rule_multi": {
+          "gained": 34,
+          "lost": 0
+        },
+        "bge_multi_vs_old_default": {
+          "gained": 40,
+          "lost": 0
+        }
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "questions": 96,
+      "strategies": {
+        "rule_single": {
+          "evidence_recall": 0.4236111111111111,
+          "all_evidence_found": 0.3055555555555556,
+          "all_sources_found": 0.4583333333333333,
+          "negative_empty_rate": 0.16666666666666666
+        },
+        "bge_single": {
+          "evidence_recall": 0.7361111111111112,
+          "all_evidence_found": 0.5694444444444444,
+          "all_sources_found": 0.7638888888888888,
+          "negative_empty_rate": 0.08333333333333333
+        },
+        "rule_multi": {
+          "evidence_recall": 0.5208333333333334,
+          "all_evidence_found": 0.4444444444444444,
+          "all_sources_found": 0.5138888888888888,
+          "negative_empty_rate": 0.16666666666666666
+        },
+        "bge_multi": {
+          "evidence_recall": 0.9166666666666666,
+          "all_evidence_found": 0.8472222222222222,
+          "all_sources_found": 0.8888888888888888,
+          "negative_empty_rate": 0.08333333333333333
+        }
+      },
+      "changes": {
+        "rule_fix": {
+          "gained": 10,
+          "lost": 0
+        },
+        "bge_fix": {
+          "gained": 20,
+          "lost": 0
+        },
+        "bge_vs_rule_multi": {
+          "gained": 36,
+          "lost": 0
+        },
+        "bge_multi_vs_old_default": {
+          "gained": 46,
+          "lost": 0
+        }
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "questions": 80,
+      "strategies": {
+        "rule_single": {
+          "evidence_recall": 0.4375,
+          "all_evidence_found": 0.375,
+          "all_sources_found": 0.4861111111111111,
+          "negative_empty_rate": 0.25
+        },
+        "bge_single": {
+          "evidence_recall": 0.7291666666666666,
+          "all_evidence_found": 0.6527777777777778,
+          "all_sources_found": 0.7222222222222222,
+          "negative_empty_rate": 0.25
+        },
+        "rule_multi": {
+          "evidence_recall": 0.4722222222222222,
+          "all_evidence_found": 0.4305555555555556,
+          "all_sources_found": 0.5555555555555556,
+          "negative_empty_rate": 0.25
+        },
+        "bge_multi": {
+          "evidence_recall": 0.8888888888888888,
+          "all_evidence_found": 0.875,
+          "all_sources_found": 0.8888888888888888,
+          "negative_empty_rate": 0.25
+        }
+      },
+      "changes": {
+        "rule_fix": {
+          "gained": 4,
+          "lost": 0
+        },
+        "bge_fix": {
+          "gained": 19,
+          "lost": 0
+        },
+        "bge_vs_rule_multi": {
+          "gained": 37,
+          "lost": 0
+        },
+        "bge_multi_vs_old_default": {
+          "gained": 41,
+          "lost": 0
+        }
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "questions": 48,
+      "strategies": {
+        "rule_single": {
+          "evidence_recall": 0.5,
+          "all_evidence_found": 0.3611111111111111,
+          "all_sources_found": 0.5833333333333334,
+          "negative_empty_rate": 0.16666666666666666
+        },
+        "bge_single": {
+          "evidence_recall": 0.6666666666666666,
+          "all_evidence_found": 0.5,
+          "all_sources_found": 0.7222222222222222,
+          "negative_empty_rate": 0.08333333333333333
+        },
+        "rule_multi": {
+          "evidence_recall": 0.625,
+          "all_evidence_found": 0.5555555555555556,
+          "all_sources_found": 0.6666666666666666,
+          "negative_empty_rate": 0.16666666666666666
+        },
+        "bge_multi": {
+          "evidence_recall": 0.8611111111111112,
+          "all_evidence_found": 0.8055555555555556,
+          "all_sources_found": 0.8888888888888888,
+          "negative_empty_rate": 0.08333333333333333
+        }
+      },
+      "changes": {
+        "rule_fix": {
+          "gained": 7,
+          "lost": 0
+        },
+        "bge_fix": {
+          "gained": 11,
+          "lost": 0
+        },
+        "bge_vs_rule_multi": {
+          "gained": 11,
+          "lost": 0
+        },
+        "bge_multi_vs_old_default": {
+          "gained": 18,
+          "lost": 0
+        }
+      }
+    }
+  ],
+  "previous_single_context_loss_instances": 17,
+  "unrecovered_previous_loss_instances": 0,
+  "bge_vs_rule_multi_new_literal_evidence_loss_instances": 0,
+  "attention": {
+    "protocol": "benchmarks/knowbase-rerank-v2/integration/attention-protocol-v2.json",
+    "actual_classes": {
+      "eager": "XLMRobertaSelfAttention",
+      "sdpa": "XLMRobertaSdpaSelfAttention"
+    },
+    "paired_cases": 12,
+    "eager_median_ms": 8578.781916992739,
+    "sdpa_median_ms": 7550.6121040234575,
+    "median_latency_reduction": 0.11985032641203941,
+    "faster_cases": 12,
+    "max_absolute_logit_delta": 0.01171875,
+    "adopted": false,
+    "reason": "12% reduction does not meet frozen 20% speed gate; do not replace runtime or infer full-pool parity."
+  },
+  "answer_smoke": {
+    "protocol": "benchmarks/knowbase-rerank-v2/integration/answer-smoke-protocol-v2.json",
+    "cases": 7,
+    "strategies": 4,
+    "generations": 28,
+    "acceptance_passed": false,
+    "reason": "Missing subfacts, unsupported additions, incorrect refusal and citation mismatch with current 0.5B generator. Context literal coverage is not answer accuracy."
+  },
+  "default_decision": {
+    "multi_context_fix": "Implemented as default in branch, pending end-to-end acceptance before main merge. No new selector flag.",
+    "bge": "rule remains default; unchanged Top5 literal-loss gate and generated-answer acceptance not passed.",
+    "merge": "draft PR only; no main merge while generated-answer regressions remain."
+  },
+  "artifacts_sha256": {
+    "reports/retrieval-bge-context/2026-11-18-r1/replay.json": "559f0e9c72f34cbf63186798153971d341f904a0a7724ff209cd9c1c74a68f61",
+    "reports/retrieval-bge-context/2026-11-18-r1/audit.json": "1be78dbdf3107e76e924987fed3db85dd6d7ec7cd0bbb7f5ddfeabda8636afaa",
+    "reports/retrieval-bge-context/2026-11-18-r1/attention-v2.json": "7d36eff553eb98ee9ca49b1c622d985dc83ed6150c85a6efc89a9e459ed84804",
+    "reports/retrieval-bge-context/2026-11-18-r1/answer-smoke.json": "f154fc86235ea8b9da7a2cdf7c05ad690ff0266f6f92324d9f45c92fac64d791",
+    "reports/retrieval-bge-context/2026-11-18-r1/answer-smoke-v2.json": "34be067caa9eb6704f6de28aa9467190176e3cb187fcae0d4bcc36564b4117e3"
+  }
+}

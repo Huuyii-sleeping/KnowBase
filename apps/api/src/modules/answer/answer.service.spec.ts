@@ -34,7 +34,7 @@ describe('AnswerService', () => {
     };
     const prompt = { build: vi.fn().mockReturnValue('prompt') };
     const chatModel = { generate: vi.fn().mockResolvedValue('可以使用混合检索。[S1]') };
-    const citations = { build: vi.fn().mockReturnValue([{
+    const citations = { hasValidMarkers: vi.fn().mockReturnValue(true), build: vi.fn().mockReturnValue([{
       sourceId: 'S1',
       documentId: 'doc-1',
       title: '搜索指南',

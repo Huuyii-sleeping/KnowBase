@@ -79,8 +79,9 @@ export class AnswerService {
       }
 
       const answer = this.isRefusal(generated)
+        || !this.citations.hasValidMarkers(generated, groundedItems.length)
         ? AnswerService.REFUSAL
-        : this.ensureCitationMarker(generated);
+        : generated.trim();
       const answerable = answer !== AnswerService.REFUSAL;
       const result = {
         question,
@@ -121,13 +122,6 @@ export class AnswerService {
       title: item.title,
       score: item.rerankScore,
     }));
-  }
-
-  private ensureCitationMarker(answer: string): string {
-    const normalized = answer.trim();
-    return normalized && !/\[S\d+\]/.test(normalized)
-      ? `${normalized} [S1]`
-      : normalized;
   }
 
   private isRefusal(answer: string): boolean {

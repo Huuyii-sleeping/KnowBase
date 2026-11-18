@@ -1,18 +1,18 @@
-import { describe, expect, it, vi } from "vitest";
-import { AnswerService } from "./answer.service";
-import { AnswerGroundingService } from "./answer-grounding.service";
-import { AnswerPromptService } from "./answer-prompt.service";
-import { AnswerCitationService } from "./answer-citation.service";
-import { HybridSearchItem } from "../search/hybrid-search.service";
+import { describe, expect, it, vi } from 'vitest';
+import { AnswerService } from './answer.service';
+import { AnswerGroundingService } from './answer-grounding.service';
+import { AnswerPromptService } from './answer-prompt.service';
+import { AnswerCitationService } from './answer-citation.service';
+import { HybridSearchItem } from '../search/hybrid-search.service';
 
 const passage = (
   chunkId: string,
   content: string,
   rerankScore: number,
 ): HybridSearchItem => ({
-  documentId: "rules",
+  documentId: 'rules',
   chunkId,
-  title: "培训资料规则",
+  title: '培训资料规则',
   content,
   category: null,
   team: null,
@@ -20,7 +20,7 @@ const passage = (
   score: 1,
   keywordScore: 1,
   semanticScore: null,
-  sources: ["keyword"],
+  sources: ['keyword'],
   rerankScore,
 });
 
@@ -44,72 +44,89 @@ function setup(items: HybridSearchItem[], answer: string) {
   return { service, chat };
 }
 
-describe("answer evidence flow", () => {
-  it("passes both subfacts to generation and preserves each citation identity", async () => {
+describe('answer evidence flow', () => {
+  it('passes both subfacts to generation and preserves each citation identity', async () => {
     const items = [
-      passage("restore", "培训归档资料需管理员审批后恢复。", 0.9),
-      passage("timeout", "培训在线预览超时为 30 秒。", 0.8),
+      passage('restore', '培训归档资料需管理员审批后恢复。', 0.9),
+      passage('timeout', '培训在线预览超时为 30 秒。', 0.8),
     ];
     const { service, chat } = setup(
       items,
-      "预览超时为 30 秒。[S2] 归档后需审批恢复。[S1]",
+      '预览超时为 30 秒。[S2] 归档后需审批恢复。[S1]',
     );
     const result = await service.answer({
-      question: "培训预览超时多久，归档后怎么恢复？",
+      question: '培训预览超时多久，归档后怎么恢复？',
       topK: 5,
     });
     const prompt = chat.generate.mock.calls[0][0];
     for (const item of items) expect(prompt).toContain(item.content);
-    expect(prompt).toContain("[S1] 文档：培训资料规则");
+    expect(prompt).toContain('[S1] 文档：培训资料规则');
     expect(result.contexts.map((x) => [x.sourceId, x.chunkId])).toEqual([
-      ["S1", "restore"],
-      ["S2", "timeout"],
+      ['S1', 'restore'],
+      ['S2', 'timeout'],
     ]);
     expect(result.citations.map((x) => [x.sourceId, x.chunkId])).toEqual([
-      ["S2", "timeout"],
-      ["S1", "restore"],
+      ['S2', 'timeout'],
+      ['S1', 'restore'],
     ]);
   });
 
-  it("keeps unsupported and empty contexts out of generation", async () => {
+  it('keeps unsupported and empty contexts out of generation', async () => {
     const { service, chat } = setup(
       [
-        passage("irrelevant", "培训采用线下签到。", 0.9),
-        passage("empty", "", 0.8),
+        passage('irrelevant', '培训采用线下签到。', 0.9),
+        passage('empty', '', 0.8),
       ],
-      "不应生成",
+      '不应生成',
     );
     expect(
-      await service.answer({ question: "火星表面温度是多少？", topK: 5 }),
+      await service.answer({ question: '火星表面温度是多少？', topK: 5 }),
     ).toMatchObject({
-      answer: "知识库中没有找到足够信息",
+      answer: '知识库中没有找到足够信息',
       contexts: [],
       citations: [],
     });
     expect(chat.generate).not.toHaveBeenCalled();
   });
 
+  it.each(['没有引用的事实', '事实 [S9]', '事实 [S1][S9]', ''])(
+    'does not invent or accept a source for invalid output: %s',
+    async (answer) => {
+      const { service } = setup(
+        [passage('a', '培训预览规则需要审批。', 0.9)],
+        answer,
+      );
+      expect(
+        await service.answer({ question: '培训预览规则是什么？', topK: 5 }),
+      ).toMatchObject({
+        answer: '知识库中没有找到足够信息',
+        contexts: [],
+        citations: [],
+      });
+    },
+  );
+
   it.each([
-    "知识库中没有找到足够信息 [S1][S2]",
-    "[S1] 知识库中没有找到足够信息。",
-    "[S1] 知识库中没有找到足够信息 [S2]。",
+    '知识库中没有找到足够信息 [S1][S2]',
+    '[S1] 知识库中没有找到足够信息。',
+    '[S1] 知识库中没有找到足够信息 [S2]。',
   ])(
-    "does not expose contexts or citations for a marked refusal: %s",
+    'does not expose contexts or citations for a marked refusal: %s',
     async (answer) => {
       const { service } = setup(
         [
-          passage("a", "培训预览规则待定。", 0.9),
-          passage("b", "培训归档规则待定。", 0.8),
+          passage('a', '培训预览规则待定。', 0.9),
+          passage('b', '培训归档规则待定。', 0.8),
         ],
         answer,
       );
       expect(
         await service.answer({
-          question: "培训预览和归档有什么规则？",
+          question: '培训预览和归档有什么规则？',
           topK: 5,
         }),
       ).toMatchObject({
-        answer: "知识库中没有找到足够信息",
+        answer: '知识库中没有找到足够信息',
         contexts: [],
         citations: [],
       });
