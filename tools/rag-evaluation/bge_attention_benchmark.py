@@ -1,6 +1,7 @@
 """Serial paired eager/SDPA experiment on frozen whole-body BGE smoke inputs."""
 
 import argparse
+import copy
 import hashlib
 import json
 import sys
@@ -26,6 +27,28 @@ def main():
     source = read(ROOT / protocol["replay"])
     parent = read(ROOT / protocol["model_protocol"])
     model = CrossEncoder(manifest["model"], manifest["model_input"], args.model_root)
+    from transformers import AutoModelForSequenceClassification
+
+    sdpa = copy.copy(model)
+    sdpa.model = AutoModelForSequenceClassification.from_pretrained(
+        args.model_root / manifest["model"]["id"],
+        local_files_only=True,
+        trust_remote_code=False,
+        use_safetensors=True,
+        torch_dtype=model.torch.float16,
+        attn_implementation="sdpa",
+    ).to(model.device)
+    sdpa.model.eval()
+    providers = {"eager": model, "sdpa": sdpa}
+    classes = {
+        k: type(v.model.roberta.encoder.layer[0].attention.self).__name__
+        for k, v in providers.items()
+    }
+    if classes != {
+        "eager": "XLMRobertaSelfAttention",
+        "sdpa": "XLMRobertaSdpaSelfAttention",
+    }:
+        raise ValueError("attention kernel was not actually changed: " + str(classes))
     rows = []
     for case_index, case in enumerate(protocol["cases"]):
         row = next(
@@ -40,9 +63,9 @@ def main():
         # Alternate execution order to reduce systematic warm-up/thermal bias.
         order = ["eager", "sdpa"] if case_index % 2 == 0 else ["sdpa", "eager"]
         for implementation in order:
-            model.model.set_attn_implementation(implementation)
-            model.score("warmup", [{"title": "warmup", "content": "warmup"}])
-            variants[implementation] = model.score(query, row["pool"])
+            provider = providers[implementation]
+            provider.score("warmup", [{"title": "warmup", "content": "warmup"}])
+            variants[implementation] = provider.score(query, row["pool"])
         result = {**case, "variants": variants}
         rows.append(result)
         print(
@@ -60,6 +83,7 @@ def main():
             {
                 "complete": True,
                 "device": model.device,
+                "attention_classes": classes,
                 "rows": rows,
                 "protocol_sha256": hashlib.sha256(
                     json.dumps(
