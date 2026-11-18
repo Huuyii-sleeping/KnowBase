@@ -1,0 +1,163 @@
+{
+  "version": "knowbase-answer-model-comparison-v3",
+  "status_at_freeze": "0.5B v2 development21 andvalidation36 attempted;1 validation provider error recorded. 3B v2 development21 complete, all5 BGE-multi positives refused. Role-only3B diagnostic21 also failed. 7B fully downloaded and verified; NO7B inference yet. Same combined-message inputs/parameters/gates; only runner added an unused role-mode branch, preserve controls with exact prompt hashes.",
+  "files_sha256": {
+    "apps/api/src/modules/answer/answer.service.ts": "dba65ab7b186744353f5bd522dc753b663ee545678dd3509d02031f7250a479d",
+    "apps/api/src/modules/answer/chat-model.service.ts": "6881182f54f485e020525e98c52003d7bd52d26cad39483bc6b3ddfccbffbfb8",
+    "apps/api/src/modules/answer/answer-citation.service.ts": "c7fd69dcbbea2c06f71ac764ccc5b6dcf170a887c116f04ba40cb9812cba45db",
+    "apps/api/src/modules/answer/answer-prompt.service.ts": "670fde6612447aed3f743e355896f843920210bf5bde9776271e86ea2d87d509",
+    "apps/api/src/modules/answer/answer-grounding.service.ts": "47197423fa1ed885fb31f3d26b5f6a975b50f3f33b0e33d142cff266d2db5175",
+    "apps/api/src/modules/answer/answer-context-budget.ts": "8c7c2193f63459a83d9fccfaebc229337987882aba9e599e6b51ceb4e9bd9e69",
+    "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json": "b452ca48e3ebabf3e83903dd2dc33802b0c2757090d630142404f613ba3bd1b3",
+    "reports/retrieval-bge-integration/2026-11-17-r1/replay.json": "6b8352f7a595e8a712c5981e9259597dce26a48ebc6336bd693ca13f45622eab",
+    "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json": "d6b936f209ee910596886448268d8eb47689fffcbeadb2fc0cfa97e1f187ea2c",
+    "tools/rag-evaluation/answer-model-comparison.cjs": "823f529ea7cf50aab14288ccb65ccdc374a0e42305dd0ef44e5041f62f2a0b18",
+    "benchmarks/knowbase-recall-v3/questions.json": "1ab9c25501b44346668f488216eb651bff977a5dd602b5d68b828988072819a7",
+    "benchmarks/knowbase-holdout-v1/questions.json": "a0c7dd21fe42f66502c500695a9a1ab399cc279ff8c0c82e038d91c2ec0b5871",
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-05b-dev.json": "9c85667546c36700a4cef4cda00632addb4b71f68ff23601c42556281cdfe32b",
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-05b-val.json": "a03ad6a04478ad2e2d998ae935a46800af57f25d3e1d9d35e1eb9039b953f4d1",
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-3b-dev.json": "dbf76a9252d55870f0fb6f5a435dba3b2568c446abdfb90e3c2cf4c5e588eddb"
+  },
+  "endpoint": "http://127.0.0.1:11434",
+  "models": [
+    {
+      "name": "qwen2.5:0.5b",
+      "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67"
+    },
+    {
+      "name": "qwen2.5:3b",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b"
+    },
+    {
+      "name": "qwen2.5:7b",
+      "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+    }
+  ],
+  "num_ctx": 16384,
+  "num_predict": 512,
+  "timeout_ms": 90000,
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "kb028",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb033",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_09",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_05",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb038",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb039",
+      "phase": "development"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb001",
+      "phase": "validation"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb004",
+      "phase": "validation"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb006",
+      "phase": "validation"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb007",
+      "phase": "validation"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb040",
+      "phase": "validation"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_10",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-07",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-07",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-08",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-ceramics-kiln-08",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-09",
+      "phase": "validation"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-10",
+      "phase": "validation"
+    }
+  ],
+  "strategies": [
+    "rule_single",
+    "rule_multi",
+    "bge_multi"
+  ],
+  "replay": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json",
+  "single_replay": "reports/retrieval-bge-integration/2026-11-17-r1/replay.json",
+  "model_protocol": "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json",
+  "selection": {
+    "phase": "development",
+    "policy": "Manual unchanged reference review of 5 positives and2 negatives. For BGE-multi, require all asked supported subfacts, no unsupported additions, correct citations, zero wrong negative answers. If both new models pass choose smaller3B; if neither pass no default switch. Controls distinguish retrieval absence and multi-context effects, not used to relabel answers.",
+    "validation": "12 additional exposed regression cases frozen before new-model outputs:8 positives4 negatives; no prompt/model tuning after observing. Need no new correctness/citation regression vs old0.5B single, >=90% fully correct positives where necessary evidence is present, all negatives correctly refuse; quality assessed semantically, text matches alone insufficient.",
+    "runtime": "Report generation time and prompt/eval counts incl cold-load; no SLA from small serial sample. Truncated output fails correctness.",
+    "default": "Only adopt after both gates pass, update real default and config example; never mark prior rerank Top5 gate passed from this answer experiment.",
+    "provider_failure": "Record every attempted request; complete means all attempted, NOT quality pass. A provider error has null result and counts as failed; no automatic retry or fabricated refusal. Preserve aborted v1 prefixes separately."
+  },
+  "boundaries": [
+    "All questions/context are exposed assistant-authored synthetic data; validation is prospective to this particular model comparison, NOT blind or real-user acceptance.",
+    "Same prompts, support filter, current citation validation, input caps andtemperature0/seed42 for every model; no model-specific prompt.",
+    "Actual AnswerService, prompt, citation and grounding; ChatOllama used directly to retain provider usage metadata. Not online retrieval, ACL/index verification or production capacity test."
+  ],
+  "prompt_mode": "combined",
+  "controls": [
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-05b-dev.json",
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-05b-val.json",
+    "reports/retrieval-bge-context/2026-11-18-r1/model-v2-3b-dev.json"
+  ]
+}
