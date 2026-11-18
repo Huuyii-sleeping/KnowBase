@@ -39,4 +39,20 @@ describe('AnswerGroundingService', () => {
     expect(selected).toHaveLength(1);
     expect(selected.every((candidate) => candidate.content?.includes('embedding'))).toBe(true);
   });
+
+  it('keeps different required subfacts instead of discarding all but the first passage', () => {
+    const first = { ...item('超时后先查实际审批状态，不要立即重复申请。'), chunkId: 'c0' };
+    const second = { ...item('归档恢复后核对审批结论、附件引用和权限。'), chunkId: 'c3', rerankScore: 0.7 };
+    const selected = new AnswerGroundingService().selectSupportedItems(
+      '申请超时怎么办，归档恢复后核对什么？', [first, second],
+    );
+    expect(selected).toEqual([first, second]);
+  });
+
+  it('retains current and archived sources for comparisons with stable model order', () => {
+    const current = { ...item('现行上传上限为100MiB。'), documentId: 'current', chunkId: 'c0' };
+    const archive = { ...item('历史上传上限为20MiB。'), documentId: 'archive', chunkId: 'c0', rerankScore: 0.6 };
+    expect(new AnswerGroundingService().selectSupportedItems('新旧上传上限有什么变化？', [current, archive]))
+      .toEqual([current, archive]);
+  });
 });
