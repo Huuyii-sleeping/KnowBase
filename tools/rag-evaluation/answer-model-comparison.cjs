@@ -29,6 +29,25 @@ function caseItems(row, old, strategy) {
   });
 }
 
+async function measureAnswer(service, question) {
+  const started = performance.now();
+  try {
+    const result = await service.answer({ question, topK: 5 });
+    return {
+      status: 'completed',
+      result,
+      elapsed_ms: performance.now() - started,
+    };
+  } catch {
+    // A failed provider request is not an answer or a knowledge refusal.
+    return {
+      status: 'provider_error',
+      result: null,
+      elapsed_ms: performance.now() - started,
+    };
+  }
+}
+
 async function run(root, protocol, phase, output, modelName) {
   assert.ok(['development', 'validation'].includes(phase), 'invalid phase');
   for (const [file, digest] of Object.entries(protocol.files_sha256)) {
@@ -95,7 +114,7 @@ async function run(root, protocol, phase, output, modelName) {
       assert.ok(archived, 'missing archive');
       for (const strategy of protocol.strategies) {
         const items = caseItems(row, archived, strategy);
-        let usage, metadata, promptSha;
+        let usage, metadata, promptSha, rawGeneration;
         const model = {
           generate: async (prompt) => {
             promptSha = hash(prompt);
@@ -105,6 +124,8 @@ async function run(root, protocol, phase, output, modelName) {
             usage = response.usage_metadata;
             metadata = response.response_metadata;
             assert.equal(typeof response.content, 'string', 'non-text output');
+            assert.equal(metadata.done, true, 'incomplete model response');
+            rawGeneration = response.content;
             return response.content.trim();
           },
         };
@@ -116,20 +137,16 @@ async function run(root, protocol, phase, output, modelName) {
           new AnswerGroundingService(),
           observability,
         );
-        const started = performance.now();
-        const result = await service.answer({
-          question: queries[c.source][c.id],
-          topK: 5,
-        });
+        const measured = await measureAnswer(service, queries[c.source][c.id]);
         const record = {
           ...c,
           model: descriptor.name,
           strategy,
           prompt_sha256: promptSha,
-          elapsed_ms: performance.now() - started,
+          ...measured,
           usage,
           metadata,
-          result,
+          raw_generation: rawGeneration,
         };
         rows.push(record);
         // Retain a complete prefix if a later request fails; never report it as complete.
@@ -144,7 +161,8 @@ async function run(root, protocol, phase, output, modelName) {
             model: descriptor.name,
             id: c.id,
             strategy,
-            answer: result.answer,
+            status: measured.status,
+            answer: measured.result?.answer,
           }),
         );
       }
@@ -154,6 +172,7 @@ async function run(root, protocol, phase, output, modelName) {
     output,
     JSON.stringify({
       complete: true,
+      failed_requests: rows.filter((r) => r.status === 'provider_error').length,
       phase,
       protocol_sha256: hash(JSON.stringify(protocol)),
       scope:
@@ -180,4 +199,4 @@ if (require.main === module) {
       process.exitCode = 1;
     });
 }
-module.exports = { caseItems, run };
+module.exports = { caseItems, measureAnswer, run };

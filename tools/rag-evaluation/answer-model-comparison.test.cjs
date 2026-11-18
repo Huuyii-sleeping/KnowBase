@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { caseItems } = require('./answer-model-comparison.cjs');
+const { caseItems, measureAnswer } = require('./answer-model-comparison.cjs');
 
 test('model comparison retains full original evidence, source identities and stable strategy order', () => {
   const row = {
@@ -36,4 +36,23 @@ test('model comparison retains full original evidence, source identities and sta
   assert.throws(() => caseItems(row, old, 'rule_multi'), /duplicate/);
   row.options.rule.selected = ['outside'];
   assert.throws(() => caseItems(row, old, 'rule_multi'), /outside/);
+});
+
+test('failed generation counts as a provider error, never as an answer or refusal', async () => {
+  const result = { answer: '事实 [S1]', citations: [] };
+  assert.deepEqual(
+    (await measureAnswer({ answer: async () => result }, 'question')).result,
+    result,
+  );
+  const failed = await measureAnswer(
+    {
+      answer: async () => {
+        throw new Error('incomplete stream');
+      },
+    },
+    'question',
+  );
+  assert.equal(failed.status, 'provider_error');
+  assert.equal(failed.result, null);
+  assert.ok(failed.elapsed_ms >= 0);
 });
