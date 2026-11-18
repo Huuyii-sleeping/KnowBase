@@ -6,15 +6,15 @@
 
 后续召回诊断使用 `knowbase-recall-v2/v3`，新来源检查使用 `knowbase-holdout-v1`；历史基线不被新结果覆盖。所有已评分数据现均为已暴露回归数据，同作者合成留出不能当作独立人工验收。
 
-| 项目             | 当前状态                                                                                                           | 依据                                                                                                                                           |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 业务默认         | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算                                                  | [检索设计](retrieval.md)                                                                                                                       |
-| 冻结实验候选     | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署                                                           | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)                                                     |
-| 未采用方向       | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭                                                         | 本文对应实验章节                                                                                                                               |
-| 最新留出检查     | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步                                                         | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)                                                                         |
-| 固定池重排诊断   | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则    | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
-| 专用重排模型     | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md)          |
-| BGE 业务接入验收 | 可选适配器完成 384 池传输回放及 12 例真实推理；上下文消费仍有原有证据损失，保持规则默认                            | [接入验收报告](../benchmarks/knowbase-rerank-v2/integration/audit.md)、[接入设计](rerank.md)                                                   |
+| 项目 | 当前状态 | 依据 |
+| --- | --- | --- |
+| 业务默认 | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算 | [检索设计](retrieval.md) |
+| 冻结实验候选 | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署 | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md) |
+| 未采用方向 | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭 | 本文对应实验章节 |
+| 最新留出检查 | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步 | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md) |
+| 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则 | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
+| 专用重排模型 | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md) |
+| BGE 业务接入验收 | 可选适配器完成 384 池传输回放及 12 例真实推理；上下文消费仍有原有证据损失，保持规则默认 | [接入验收报告](../benchmarks/knowbase-rerank-v2/integration/audit.md)、[接入设计](rerank.md) |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
@@ -258,7 +258,3 @@ recall suite 的 `--query-mode off|clauses-keyword|clauses-both` 只作用于内
 它只提供相对于旧调参数据的前瞻性合成留出检查，作者仍是同一助手，了解旧问题，存在风格和模板相关性；不能称为独立人工或真实用户盲测。查看结果后即转为已暴露回归集。绝对门槛、逐证据退步和最终选择分别报告，不以通过合成门槛宣布业务部署或生产验收。
 
 160 次计分已完成，见[留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)。相同 64 个原始 Chunk、模型摘要及语料指纹下，两套方案池证据均 100%，无新增池损失，候选通过冻结的池门槛；默认也通过，因此存在上限，不能宣称候选池更优。最终证据从 50.00% 提高到 71.09%，同时存在一条最终证据退步，业务不切换。来源仍为合成且仅八主题；这批题现已暴露，后续只用作回归。
-
-## 答案证据消费与本机模型对照
-
-本轮[上下文修复](../benchmarks/knowbase-rerank-v2/integration/context-audit.md)分别统计固定池中进入生成器的证据；[0.5B/3B/7B 对照](../benchmarks/knowbase-rerank-v2/integration/answer-model-audit.md)另外检查真实生成的必要事实、语义引用及 provider 失败。来源编号存在、引用文件正确、上下文含有 gold，均不能代替逐片段的语义支持检查；所有资料已经暴露，验证组不称为盲测。

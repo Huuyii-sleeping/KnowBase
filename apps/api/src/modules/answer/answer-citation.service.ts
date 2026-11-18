@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { normalizeCitationMarkers } from './answer-citation-markers';
-import {
-  HybridSearchItem,
-  HybridSearchSource,
-} from '../search/hybrid-search.service';
+import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.service';
 
 export interface AnswerCitation {
   sourceId: string;
@@ -17,33 +13,15 @@ export interface AnswerCitation {
 
 @Injectable()
 export class AnswerCitationService {
-  hasValidMarkers(answer: string, sourceCount: number): boolean {
-    const markers = [
-      ...normalizeCitationMarkers(answer).matchAll(/\[S([^\]]*)\]/g),
-    ];
-    return (
-      markers.length > 0 &&
-      markers.every((match) => {
-        const index = Number(match[1]);
-        return (
-          /^[1-9]\d*$/.test(match[1]) &&
-          Number.isSafeInteger(index) &&
-          index <= sourceCount
-        );
-      })
-    );
-  }
-
   build(answer: string, items: HybridSearchItem[]): AnswerCitation[] {
-    const citedSourceIds = [
-      ...normalizeCitationMarkers(answer).matchAll(/\[S(\d+)\]/g),
-    ]
+    const citedSourceIds = [...answer.matchAll(/\[S(\d+)\]/g)]
       .map((match) => Number(match[1]))
-      .filter(
-        (index) =>
-          Number.isInteger(index) && index > 0 && index <= items.length,
-      );
-    const indexes = [...new Set(citedSourceIds)];
+      .filter((index) => Number.isInteger(index) && index > 0 && index <= items.length);
+    const indexes = citedSourceIds.length
+      ? [...new Set(citedSourceIds)]
+      : items.length
+        ? [1]
+        : [];
 
     return indexes.map((index) => {
       const item = items[index - 1];
@@ -60,8 +38,6 @@ export class AnswerCitationService {
   }
 
   private sourceType(item: HybridSearchItem): HybridSearchSource {
-    return item.sources.includes('graph')
-      ? 'graph'
-      : (item.sources[0] ?? 'semantic');
+    return item.sources.includes('graph') ? 'graph' : item.sources[0] ?? 'semantic';
   }
 }

@@ -8,7 +8,6 @@ import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.se
 import { ObservabilityService } from '../observability/observability.service';
 import { AuthUser } from '../auth/auth.types';
 import { AnswerRetrievalService } from './answer-retrieval.service';
-import { normalizeCitationMarkers } from './answer-citation-markers';
 
 export interface AnswerResult {
   question: string;
@@ -79,11 +78,9 @@ export class AnswerService {
         );
       }
 
-      const normalized = normalizeCitationMarkers(generated);
-      const answer = this.isRefusal(normalized)
-        || !this.citations.hasValidMarkers(normalized, groundedItems.length)
+      const answer = this.isRefusal(generated)
         ? AnswerService.REFUSAL
-        : normalized.trim();
+        : this.ensureCitationMarker(generated);
       const answerable = answer !== AnswerService.REFUSAL;
       const result = {
         question,
@@ -126,9 +123,17 @@ export class AnswerService {
     }));
   }
 
+  private ensureCitationMarker(answer: string): string {
+    const normalized = answer.trim();
+    return normalized && !/\[S\d+\]/.test(normalized)
+      ? `${normalized} [S1]`
+      : normalized;
+  }
+
   private isRefusal(answer: string): boolean {
     return answer
-      .replace(/\[S\d+\]/g, '')
+      .trim()
+      .replace(/(?:\s*\[S\d+\])+\s*$/g, '')
       .trim()
       .replace(/[。！？.!?]+$/g, '')
       .trim() === AnswerService.REFUSAL;

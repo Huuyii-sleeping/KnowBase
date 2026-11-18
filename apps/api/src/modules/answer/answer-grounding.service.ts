@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { HybridSearchItem } from '../search/hybrid-search.service';
-import { fitAnswerContexts } from './answer-context-budget';
 
 @Injectable()
 export class AnswerGroundingService {
@@ -11,16 +10,16 @@ export class AnswerGroundingService {
   selectSupportedItems(
     question: string,
     items: HybridSearchItem[],
-    limit = 5,
+    limit = 1,
   ): HybridSearchItem[] {
     const terms = this.extractTerms(question);
     const latinTerms = terms.filter((term) => /[a-z0-9]/i.test(term));
     const chineseTerms = terms.filter((term) => !/[a-z0-9]/i.test(term));
     if (!terms.length) {
-      return fitAnswerContexts(items, limit);
+      return items.slice(0, limit);
     }
 
-    const supported = items
+    return items
       .map((item, index) => ({
         item,
         index,
@@ -32,8 +31,8 @@ export class AnswerGroundingService {
         || right.support - left.support
         || left.index - right.index,
       )
+      .slice(0, limit)
       .map(({ item }) => item);
-    return fitAnswerContexts(supported, limit);
   }
 
   private supportScore(

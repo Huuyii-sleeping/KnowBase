@@ -10,7 +10,7 @@
 
 本轮先验证正文关键词召回和 Chunk 合并，再单独测量扩大候选池的效果；Embedding、分块和规则权重保持固定。原始语料、问题和标注也保持固定，基线与计分口径见 [评测指南](evaluation.md)。该开发集可用于定位问题，仍需真实问题保留集验证泛化效果。
 
-问答消费时，本分支的 `AnswerGroundingService.selectSupportedItems` 已修复默认单片段漏证据，改为预算内最多五条完整正文并保留引用身份。384 池回放恢复了此前 17 处单块损失，但实际生成仍有漏答/引用问题，当前改动未合并主分支，详见[上下文修复验收](../benchmarks/knowbase-rerank-v2/integration/context-audit.md)。检索层的证据召回不能直接当作答案正确率。
+问答消费时，`AnswerGroundingService.selectSupportedItems` 当前默认只保留一个片段，可能再次丢失已召回的多来源证据。上下文组装、引用和拒答应在独立问答评测中验证，检索层的证据召回不能直接当作答案正确率。
 
 ## 召回层排查边界
 

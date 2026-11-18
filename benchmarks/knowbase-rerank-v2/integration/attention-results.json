@@ -1,0 +1,15 @@
+{
+  "scope": "Reranker kernel experiment only, same model/pairs/windows/precision/batch. No answer generation or model selection.",
+  "protocol": "benchmarks/knowbase-rerank-v2/integration/attention-protocol-v2.json",
+  "protocol_commit": "cafc661",
+  "report_sha256": "7d36eff553eb98ee9ca49b1c622d985dc83ed6150c85a6efc89a9e459ed84804",
+  "cases": 12,
+  "eager_median_ms": 8578.781916992739,
+  "sdpa_median_ms": 7550.6121040234575,
+  "median_reduction": 0.11985032641203941,
+  "faster_cases": 12,
+  "max_absolute_logit_difference": 0.01171875,
+  "adopted": false,
+  "reason": "11.99% median reduction below frozen20% gate; no runtime/default change. No full-pool SDPA quality claim.",
+  "attempt_note": "First protocol used unsupported dynamic switching; stopped without a complete result. V2 loads separate models and verifies attention classes before timing."
+}
