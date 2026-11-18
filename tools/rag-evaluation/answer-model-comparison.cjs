@@ -48,6 +48,17 @@ async function measureAnswer(service, question) {
   }
 }
 
+function promptInput(prompt, mode = 'combined') {
+  if (mode === 'combined') return prompt;
+  assert.equal(mode, 'roles', 'unknown prompt mode');
+  const boundary = prompt.indexOf('\n\n问题：');
+  assert.ok(boundary > 0, 'missing instruction boundary');
+  return [
+    { role: 'system', content: prompt.slice(0, boundary) },
+    { role: 'user', content: prompt.slice(boundary + 2) },
+  ];
+}
+
 async function run(root, protocol, phase, output, modelName) {
   assert.ok(['development', 'validation'].includes(phase), 'invalid phase');
   for (const [file, digest] of Object.entries(protocol.files_sha256)) {
@@ -118,9 +129,12 @@ async function run(root, protocol, phase, output, modelName) {
         const model = {
           generate: async (prompt) => {
             promptSha = hash(prompt);
-            const response = await chat.invoke(prompt, {
-              signal: AbortSignal.timeout(protocol.timeout_ms),
-            });
+            const response = await chat.invoke(
+              promptInput(prompt, protocol.prompt_mode),
+              {
+                signal: AbortSignal.timeout(protocol.timeout_ms),
+              },
+            );
             usage = response.usage_metadata;
             metadata = response.response_metadata;
             assert.equal(typeof response.content, 'string', 'non-text output');
@@ -199,4 +213,4 @@ if (require.main === module) {
       process.exitCode = 1;
     });
 }
-module.exports = { caseItems, measureAnswer, run };
+module.exports = { caseItems, measureAnswer, promptInput, run };

@@ -1,6 +1,10 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { caseItems, measureAnswer } = require('./answer-model-comparison.cjs');
+const {
+  caseItems,
+  measureAnswer,
+  promptInput,
+} = require('./answer-model-comparison.cjs');
 
 test('model comparison retains full original evidence, source identities and stable strategy order', () => {
   const row = {
@@ -55,4 +59,18 @@ test('failed generation counts as a provider error, never as an answer or refusa
   assert.equal(failed.status, 'provider_error');
   assert.equal(failed.result, null);
   assert.ok(failed.elapsed_ms >= 0);
+});
+
+test('role diagnostic preserves all instruction/query/evidence text and refuses unknown formats', () => {
+  const prompt =
+    'instruction\nsecond instruction\n\n问题：question\n\n问题：quoted question\n\n知识库上下文：body';
+  assert.equal(promptInput(prompt), prompt);
+  const messages = promptInput(prompt, 'roles');
+  assert.deepEqual(
+    messages.map((m) => m.role),
+    ['system', 'user'],
+  );
+  assert.equal(messages.map((m) => m.content).join('\n\n'), prompt);
+  assert.throws(() => promptInput('no boundary', 'roles'));
+  assert.throws(() => promptInput(prompt, 'unknown'));
 });
