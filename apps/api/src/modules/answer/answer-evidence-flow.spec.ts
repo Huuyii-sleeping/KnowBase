@@ -89,20 +89,30 @@ describe("answer evidence flow", () => {
     expect(chat.generate).not.toHaveBeenCalled();
   });
 
-  it("does not expose contexts or citations when the model refuses with multiple sources", async () => {
-    const { service } = setup(
-      [
-        passage("a", "培训预览规则待定。", 0.9),
-        passage("b", "培训归档规则待定。", 0.8),
-      ],
-      "知识库中没有找到足够信息 [S1][S2]",
-    );
-    expect(
-      await service.answer({ question: "培训预览和归档有什么规则？", topK: 5 }),
-    ).toMatchObject({
-      answer: "知识库中没有找到足够信息",
-      contexts: [],
-      citations: [],
-    });
-  });
+  it.each([
+    "知识库中没有找到足够信息 [S1][S2]",
+    "[S1] 知识库中没有找到足够信息。",
+    "[S1] 知识库中没有找到足够信息 [S2]。",
+  ])(
+    "does not expose contexts or citations for a marked refusal: %s",
+    async (answer) => {
+      const { service } = setup(
+        [
+          passage("a", "培训预览规则待定。", 0.9),
+          passage("b", "培训归档规则待定。", 0.8),
+        ],
+        answer,
+      );
+      expect(
+        await service.answer({
+          question: "培训预览和归档有什么规则？",
+          topK: 5,
+        }),
+      ).toMatchObject({
+        answer: "知识库中没有找到足够信息",
+        contexts: [],
+        citations: [],
+      });
+    },
+  );
 });

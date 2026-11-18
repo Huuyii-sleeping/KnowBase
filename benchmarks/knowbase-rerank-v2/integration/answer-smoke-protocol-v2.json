@@ -1,0 +1,57 @@
+{
+  "version": "knowbase-bge-answer-smoke-v2",
+  "status_at_freeze": "First smoke exposed weak 0.5B generation despite complete evidence, no general answer-accuracy claim. Add missing original rule-single control and fix generic refusal normalization of prefix citations. Prompt and context admission unchanged, no question-specific tuning.",
+  "files_sha256": {
+    "tools/rag-evaluation/bge_answer_smoke.cjs": "55fa5f93fa81e0e8cfc345f8c8400e2e899873ee5d890d32ccccef78ce377ebf",
+    "apps/api/src/modules/answer/answer.service.ts": "40143cca9a7208c19d920cab7f3955d28dcff88db0e28177932dfa258cad4182",
+    "apps/api/src/modules/answer/chat-model.service.ts": "6881182f54f485e020525e98c52003d7bd52d26cad39483bc6b3ddfccbffbfb8",
+    "apps/api/src/modules/answer/answer-citation.service.ts": "4d28c92cb599ed4b51fe3e840c129dc663c528834db928fd2de8b00c7d7a7653",
+    "apps/api/src/modules/answer/answer-prompt.service.ts": "670fde6612447aed3f743e355896f843920210bf5bde9776271e86ea2d87d509",
+    "apps/api/src/modules/answer/answer-grounding.service.ts": "47197423fa1ed885fb31f3d26b5f6a975b50f3f33b0e33d142cff266d2db5175",
+    "apps/api/src/modules/answer/answer-context-budget.ts": "8c7c2193f63459a83d9fccfaebc229337987882aba9e599e6b51ceb4e9bd9e69",
+    "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json": "b452ca48e3ebabf3e83903dd2dc33802b0c2757090d630142404f613ba3bd1b3",
+    "reports/retrieval-bge-integration/2026-11-17-r1/replay.json": "6b8352f7a595e8a712c5981e9259597dce26a48ebc6336bd693ca13f45622eab",
+    "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json": "d6b936f209ee910596886448268d8eb47689fffcbeadb2fc0cfa97e1f187ea2c"
+  },
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "kb028"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb033"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_09"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_05"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb038"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb039"
+    }
+  ],
+  "replay": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json",
+  "single_replay": "reports/retrieval-bge-integration/2026-11-17-r1/replay.json",
+  "model_protocol": "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json",
+  "chat_config": {
+    "OLLAMA_BASE_URL": "http://127.0.0.1:11434",
+    "OLLAMA_CHAT_MODEL": "qwen2.5:0.5b",
+    "OLLAMA_CHAT_TEMPERATURE": "0",
+    "OLLAMA_CHAT_SEED": "42"
+  },
+  "model_digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+  "acceptance": "Manual review against unchanged reference/evidence: all asked subfacts answered, no old rule as current, no invented answer on negatives, source markers point to supporting body. A small targeted smoke cannot establish general model accuracy."
+}

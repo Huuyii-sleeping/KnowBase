@@ -42,13 +42,19 @@ async function run(root, protocol, output) {
     const row = source.rows.find((r) => r.id === c.id);
     const old = single.rows.find((r) => r.source === c.source && r.id === c.id);
     const pool = new Map(row.pool.map((p) => [p.chunkId, p]));
-    for (const strategy of ["bge_single", "rule_multi", "bge_multi"]) {
-      const ids =
-        strategy === "bge_single"
-          ? old.bge_grounded
-          : row.options[
-              strategy === "rule_multi" ? "rule" : "bge-m3-anchor2-model-order"
-            ].selected;
+    for (const strategy of [
+      "rule_single",
+      "bge_single",
+      "rule_multi",
+      "bge_multi",
+    ]) {
+      const ids = strategy.endsWith("_single")
+        ? strategy === "rule_single"
+          ? old.baseline_grounded
+          : old.bge_grounded
+        : row.options[
+            strategy === "rule_multi" ? "rule" : "bge-m3-anchor2-model-order"
+          ].selected;
       const items = ids.map((id, i) => ({
         ...pool.get(id),
         rerankScore: (ids.length - i) / (ids.length + 1),

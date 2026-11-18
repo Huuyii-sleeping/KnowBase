@@ -132,8 +132,7 @@ export class AnswerService {
 
   private isRefusal(answer: string): boolean {
     return answer
-      .trim()
-      .replace(/(?:\s*\[S\d+\])+\s*$/g, '')
+      .replace(/\[S\d+\]/g, '')
       .trim()
       .replace(/[。！？.!?]+$/g, '')
       .trim() === AnswerService.REFUSAL;
