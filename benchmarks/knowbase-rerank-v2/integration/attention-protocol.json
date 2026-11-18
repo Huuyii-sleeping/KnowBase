@@ -1,0 +1,73 @@
+{
+  "version": "knowbase-bge-attention-v1",
+  "status_at_freeze": "No SDPA timings/scores observed yet; input/model/windows/precision unchanged; candidate kernels only eager vs SDPA.",
+  "files_sha256": {
+    "tools/rag-evaluation/bge_attention_benchmark.py": "c9916e30f0aa63f3c93525a9553237557e6ad9000ffcbb28002ac23df87e8318",
+    "services/reranker/knowbase_reranker/model.py": "f0772fbc2c6e2b9b2d7f23032c0fb1aba09123dfced33394f114e440b080501d",
+    "services/reranker/knowbase_reranker/manifest.json": "9984506200d6d2e641b1628ad3458262ec6f4b4a7136bce0b4b0ac26e552e6cc",
+    "services/reranker/knowbase_reranker/windows.py": "a30738cd7327b2c7c18bd121b615d8509d21a35933c0d2768912176035005444",
+    "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json": "b452ca48e3ebabf3e83903dd2dc33802b0c2757090d630142404f613ba3bd1b3",
+    "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json": "d6b936f209ee910596886448268d8eb47689fffcbeadb2fc0cfa97e1f187ea2c"
+  },
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "kb003"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb028"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val010"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_06"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_09"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_02"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_05"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08"
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08"
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-08"
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-07"
+    }
+  ],
+  "replay": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json",
+  "model_protocol": "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json",
+  "acceptance": {
+    "speed": "Paired median latency improves >=20%; at least 10 of 12 cases faster. Single paired run is exploratory, not SLA.",
+    "quality": "Exact admitted IDs and order for all 12; complete scores finite and max abs difference <=0.5 vs eager; repeat full fixed-pool scoring if adopting."
+  },
+  "boundaries": [
+    "Alternating paired local inference after per-kernel warmup; no concurrent model use.",
+    "Same whole-body windows and batch size; no truncation, quantization, or per-case heuristics.",
+    "Only MPS host measured, CPU performance not asserted."
+  ]
+}
