@@ -71,6 +71,25 @@ describe('answer evidence flow', () => {
     ]);
   });
 
+  it('keeps an explicitly grouped multi-source answer with correct source identities', async () => {
+    const { service } = setup(
+      [
+        passage('current', '培训现行上限为100人。', 0.9),
+        passage('archive', '培训历史上限为20人。', 0.8),
+      ],
+      '培训上限从20人改为100人 [S1, S2]。',
+    );
+    const result = await service.answer({
+      question: '培训新旧上限如何变化？',
+      topK: 5,
+    });
+    expect(result.answer).toBe('培训上限从20人改为100人 [S1][S2]。');
+    expect(result.citations.map((c) => [c.sourceId, c.chunkId])).toEqual([
+      ['S1', 'current'],
+      ['S2', 'archive'],
+    ]);
+  });
+
   it('keeps unsupported and empty contexts out of generation', async () => {
     const { service, chat } = setup(
       [
@@ -89,7 +108,13 @@ describe('answer evidence flow', () => {
     expect(chat.generate).not.toHaveBeenCalled();
   });
 
-  it.each(['没有引用的事实', '事实 [S9]', '事实 [S1][S9]', ''])(
+  it.each([
+    '没有引用的事实',
+    '事实 [S9]',
+    '事实 [S1][S9]',
+    '事实 [S1, S9]',
+    '',
+  ])(
     'does not invent or accept a source for invalid output: %s',
     async (answer) => {
       const { service } = setup(
@@ -110,6 +135,7 @@ describe('answer evidence flow', () => {
     '知识库中没有找到足够信息 [S1][S2]',
     '[S1] 知识库中没有找到足够信息。',
     '[S1] 知识库中没有找到足够信息 [S2]。',
+    '知识库中没有找到足够信息 [S1, S2]。',
   ])(
     'does not expose contexts or citations for a marked refusal: %s',
     async (answer) => {

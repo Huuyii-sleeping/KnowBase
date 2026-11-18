@@ -8,6 +8,7 @@ import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.se
 import { ObservabilityService } from '../observability/observability.service';
 import { AuthUser } from '../auth/auth.types';
 import { AnswerRetrievalService } from './answer-retrieval.service';
+import { normalizeCitationMarkers } from './answer-citation-markers';
 
 export interface AnswerResult {
   question: string;
@@ -78,10 +79,11 @@ export class AnswerService {
         );
       }
 
-      const answer = this.isRefusal(generated)
-        || !this.citations.hasValidMarkers(generated, groundedItems.length)
+      const normalized = normalizeCitationMarkers(generated);
+      const answer = this.isRefusal(normalized)
+        || !this.citations.hasValidMarkers(normalized, groundedItems.length)
         ? AnswerService.REFUSAL
-        : generated.trim();
+        : normalized.trim();
       const answerable = answer !== AnswerService.REFUSAL;
       const result = {
         question,

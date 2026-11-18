@@ -1,4 +1,4 @@
-import { HybridSearchItem } from "../search/hybrid-search.service";
+import { HybridSearchItem } from '../search/hybrid-search.service';
 
 // Keep complete passages and their citation identities; never cut a condition in half.
 export function fitAnswerContexts(
@@ -6,7 +6,7 @@ export function fitAnswerContexts(
   limit: number,
 ): HybridSearchItem[] {
   if (!Number.isInteger(limit) || limit < 1 || limit > 5) {
-    throw new Error("Answer context limit must be 1..5");
+    throw new Error('Answer context limit must be 1..5');
   }
   const selected: HybridSearchItem[] = [];
   const identities = new Set<string>();

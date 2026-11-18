@@ -64,3 +64,7 @@ node tools/rag-evaluation/bge_answer_smoke.cjs benchmarks/knowbase-rerank-v2/int
 ```
 
 旧协议指纹不因代码演进而重写；重现历史实验须检出相应提交。完整生成内容、候选正文和模型分数保留在忽略的 reports 目录，仓库只新增摘要、协议和小型测试。不能在生成验收失败时把“测试命令执行成功”写成“答案验收通过”。
+
+## 后续模型与引用复核
+
+0.5B/3B/7B 对照、分组引用格式修复和未切换决定见[答案模型报告](answer-model-audit.md)。旧上下文证据与生成烟测结果保留原样，不能用新报告覆盖或宣称此前验收通过。

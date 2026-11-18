@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { normalizeCitationMarkers } from './answer-citation-markers';
 import {
   HybridSearchItem,
   HybridSearchSource,
@@ -17,7 +18,9 @@ export interface AnswerCitation {
 @Injectable()
 export class AnswerCitationService {
   hasValidMarkers(answer: string, sourceCount: number): boolean {
-    const markers = [...answer.matchAll(/\[S([^\]]*)\]/g)];
+    const markers = [
+      ...normalizeCitationMarkers(answer).matchAll(/\[S([^\]]*)\]/g),
+    ];
     return (
       markers.length > 0 &&
       markers.every((match) => {
@@ -32,7 +35,9 @@ export class AnswerCitationService {
   }
 
   build(answer: string, items: HybridSearchItem[]): AnswerCitation[] {
-    const citedSourceIds = [...answer.matchAll(/\[S(\d+)\]/g)]
+    const citedSourceIds = [
+      ...normalizeCitationMarkers(answer).matchAll(/\[S(\d+)\]/g),
+    ]
       .map((match) => Number(match[1]))
       .filter(
         (index) =>

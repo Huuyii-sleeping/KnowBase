@@ -1,6 +1,6 @@
 # BGE 重排接入与切换
 
-`RAG_RERANKER=rule|bge` 控制混合检索的排序器，默认 `rule`。BGE 是可选的模型接入，当前尚未通过默认切换验收；后续[证据消费修复与真实生成检查](../benchmarks/knowbase-rerank-v2/integration/context-audit.md)已定位新的生成层阻塞，当前分支保持 draft。[接入测试结果](../benchmarks/knowbase-rerank-v2/integration/audit.md)记录原因。它不修改索引、召回、权限复查或问答生成，不需要重建向量。
+`RAG_RERANKER=rule|bge` 控制混合检索的排序器，默认 `rule`。BGE 是可选的模型接入，当前尚未通过默认切换验收；后续[证据消费修复与真实生成检查](../benchmarks/knowbase-rerank-v2/integration/context-audit.md)已定位新的生成层阻塞，当前分支保持 draft。后续[3B/7B 生成对照](../benchmarks/knowbase-rerank-v2/integration/answer-model-audit.md)也未通过语义引用验收，未更换默认生成模型。[接入测试结果](../benchmarks/knowbase-rerank-v2/integration/audit.md)记录原因。BGE 适配器不修改索引、召回或权限复查，不需要重建向量；同一分支同时修复了问答证据与引用消费，见[问答合约](answer.md)。
 
 ## 职责与排序合约
 
