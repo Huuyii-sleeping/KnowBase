@@ -1,5 +1,5 @@
-import { RerankedCandidate } from './rerank.service';
-import { RerankableCandidate, RerankOptions } from './rerank.types';
+import { RerankedCandidate } from "./rerank.service";
+import { RerankableCandidate, RerankOptions } from "./rerank.types";
 
 // Reserve membership first; model scores determine final order for all consumers.
 export function selectBge<T extends RerankableCandidate>(
@@ -26,7 +26,7 @@ export function selectBge<T extends RerankableCandidate>(
   for (const item of admission) {
     if (selected.length >= options.topK) break;
     if (
-      (counts.get(item.documentId) ?? 0) >= (options.maxChunksPerDocument ?? 2)
+      (counts.get(item.documentId) ?? 0) >= (options.maxChunksPerDocument ?? 3)
     )
       continue;
     const size = item.content?.length ?? 0;
