@@ -4,6 +4,8 @@
 
 后续的漏选、输入组合、选择约束和推理耗时四项定向试验见[复核报告](../benchmarks/knowbase-rerank-v2/refinement/audit.md)。每文档 3 块有覆盖收益，但原数字证据漏选与性能门槛仍未解决，业务约束和默认方案保持原样。
 
+最新[窗口诊断与排名融合试验](../benchmarks/knowbase-rerank-v2/fusion/audit.md)确认三条目标证据均为完整单窗口输入。原规则与 BGE 的等权 RRF 融合补回这三条，但相对当前 BGE 新增 4 条、丢失 30 条证据；用户明确选择丢弃融合，保留现有 BGE 候选。后续单项优化按收益和副作用逐项决定，不沿用旧的整体切换门槛自动否决局部收益。
+
 ## 职责与排序合约
 
 `RerankService` 保持原同步规则，历史离线评测仍调用它。业务 `HybridSearchService` 在合并已复查的 Chunk 后，等待 `HybridRerankService`：规则模式直接返回原结果；BGE 模式由 `BgeHttpService` 请求本机 Python 模型运行时，然后使用独立的 `selectBge` 选择器。
