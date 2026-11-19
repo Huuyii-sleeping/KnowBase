@@ -2,6 +2,8 @@
 
 `RAG_RERANKER=rule|bge` 控制混合检索的排序器，默认 `rule`。BGE 是可选的模型接入，当前尚未通过默认切换验收；[接入测试结果](../benchmarks/knowbase-rerank-v2/integration/audit.md)记录原因。它不修改索引、召回、权限复查或问答生成，不需要重建向量。
 
+后续的漏选、输入组合、选择约束和推理耗时四项定向试验见[复核报告](../benchmarks/knowbase-rerank-v2/refinement/audit.md)。每文档 3 块有覆盖收益，但原数字证据漏选与性能门槛仍未解决，业务约束和默认方案保持原样。
+
 ## 职责与排序合约
 
 `RerankService` 保持原同步规则，历史离线评测仍调用它。业务 `HybridSearchService` 在合并已复查的 Chunk 后，等待 `HybridRerankService`：规则模式直接返回原结果；BGE 模式由 `BgeHttpService` 请求本机 Python 模型运行时，然后使用独立的 `selectBge` 选择器。

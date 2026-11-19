@@ -114,12 +114,13 @@ def performance_summary(scores, replay, protocol):
             items = [by_id[c] for c in selected[name]]
             paired = evidence_changes(q, [by_id[c] for c in selected["title"]], items, mapping)
             current = evidence_changes(q, [by_id[c] for c in row["options"]["bge-m3-anchor2-model-order"]["selected"]], items, mapping)
+            rule = evidence_changes(q, [by_id[c] for c in row["options"]["rule"]["selected"]], items, mapping)
             trials.append({"source": r["source"], "id": r["id"], "repeat": r["repeat"], "variant": name,
                            "baseline_ms": base["elapsed_ms"], "ms": result["elapsed_ms"],
                            "same_membership": set(selected[name]) == set(selected["title"]),
                            "same_order": selected[name] == selected["title"],
                            "max_score_difference": max(abs(a-b) for a, b in zip(base["scores"], result["scores"])),
-                           "paired_evidence_changes": paired, "current_evidence_changes": current,
+                           "paired_evidence_changes": paired, "current_evidence_changes": current, "rule_evidence_changes": rule,
                            "query_tokens_dropped": sum(d["query_tokens_dropped"] for d in result["diagnostics"]),
                            "windows": sum(d["windows"] for d in result["diagnostics"])})
     summaries = []
@@ -134,6 +135,7 @@ def performance_summary(scores, replay, protocol):
                           "paired_evidence_lost": sum(len(r["paired_evidence_changes"]["lost"]) for r in rows),
                           "paired_evidence_gained": sum(len(r["paired_evidence_changes"]["gained"]) for r in rows),
                           "current_evidence_lost": sum(len(r["current_evidence_changes"]["lost"]) for r in rows),
+                          "rule_evidence_lost": sum(len(r["rule_evidence_changes"]["lost"]) for r in rows),
                           "query_tokens_dropped": sum(r["query_tokens_dropped"] for r in rows),
                           "speed_gate": after <= before * 0.8 and faster >= 10})
     return {"summaries": summaries, "trials": trials}

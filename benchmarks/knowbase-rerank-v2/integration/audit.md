@@ -79,3 +79,5 @@ Nest 模块装配另通过构建产物创建真实应用上下文验证（不读
 重排层保留 eager/SDPA 的同输入对照：12份池的中位耗时从8579ms到7551ms，减少11.99%，未达到事先冻结的20%门槛，因此没有改动业务推理内核。输入窗口、权重、FP16与batch8保持一致，实际attention类分别校验；第一版不支持动态切换而停止的试验不计为有效结果。协议见[attention-protocol-v2.json](attention-protocol-v2.json)，摘要见[attention-results.json](attention-results.json)。没有把这些耗时当作生产SLA或全池质量验收。
 
 收回范围后重新通过API252项、Node50项、Python45+11+11项及API构建，384份池重放仍与冻结的BGE入选集合和顺序完全一致。确认问答目录相对主分支无差异，未重跑或更换生成模型。
+
+后续四项优化的独立协议、实际停止范围和结果见[定向复核](../refinement/audit.md)；未用该试验改写本轮原始分数或验收结论。
