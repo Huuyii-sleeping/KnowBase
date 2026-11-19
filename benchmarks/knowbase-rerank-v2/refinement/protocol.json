@@ -1,6 +1,6 @@
 {
-  "version": "knowbase-rerank-refinement-v1",
-  "status_at_freeze": "Original BGE outcomes and three numeric losses known. No new ablation outcomes observed. Exposed synthetic regression, not a blind evaluation.",
+  "version": "knowbase-rerank-refinement-v2",
+  "status_at_freeze": "Original selection ablations now observed. First input run interrupted after 11 complete cases for code formatting; no input quality graded. Only JS formatting changes; all experimental parameters and gates unchanged. V1 incomplete checkpoint preserved; V2 reruns input from scratch.",
   "model_protocol": "benchmarks/knowbase-rerank-v2/experiments/precision-protocol.json",
   "replay": "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json",
   "files_sha256": {
@@ -8,10 +8,10 @@
     "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/order-replay.json": "b452ca48e3ebabf3e83903dd2dc33802b0c2757090d630142404f613ba3bd1b3",
     "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/bge-m3-scores.json": "93f39ef524ae230a238ab4bf817e5f0e6e208f8f66bf147c247c41de906b7258",
     "reports/retrieval-rerank-v2/2026-11-17-fp16-r1/mminilm-scores.json": "0ffb355720ddcd4dc44832ce0dd119b360f01426902e04f06dea82c2dfc001f0",
-    "tools/rag-evaluation/rerank-refinement.cjs": "56632f373f050b6efade3f641817f15e4059ac4ab0a890136476e2e165a6f336",
+    "tools/rag-evaluation/rerank-refinement.cjs": "b9fd9f06ef6143b3d3d006448b5a055782e8ffd9a1804f73d90723a94d803661",
     "tools/rag-evaluation/rerank_refinement_input.py": "d67cd4ebf7e2224d3bece7a48776b0218c1472553434f2b4f1fa4ae09b85b677",
     "tools/rag-evaluation/rerank_refinement_run.py": "8ef5a21c63da7ad28d6ed9d495e0ca76127e6bc0ad29e8f8bbb5eb2d3b346628",
-    "tools/rag-evaluation/rerank-refinement.test.cjs": "0bdbdaf95a94bc2f4ddf3031c67b4b6489bb545f6f8124d56c9f5363d860c71f",
+    "tools/rag-evaluation/rerank-refinement.test.cjs": "05775efb0542f457522b621b14b7aba18b411ce4add4fcd3edefeec5550ea2b6",
     "tools/rag-evaluation/test_rerank_refinement.py": "40dac2c0bc80c72d38926657863c13fc144e4641d85a73f10ec34897466b5728",
     "tools/rag-evaluation/rerank_model_input.py": "58e12a242efdac40a14d3c32a4eb5ef5792234408645e25422c61ade94ad114f",
     "tools/rag-evaluation/rerank_model_cache.py": "b9136e0916b909406418252c00ea7c142dff4fee7bf1997419fec0848ee52bbc",
@@ -226,7 +226,8 @@
     "benchmarks/knowbase-holdout-v1/docs/reef-dive-maintenance.md": "301cf349295d0cc109caad2ea34a1e5bdf934b1bc2e736d47b4d2749600b4e76",
     "benchmarks/knowbase-holdout-v1/docs/wetland-survey-old.md": "39949cbf5b6cee2dc01b5d5c0758a074e101cedd4ed82ba7c1298392ea1abe94",
     "benchmarks/knowbase-holdout-v1/docs/ceramics-kiln-maintenance.md": "e8bd40ed65e80042717e01f0e5e25f3831c0b8b658bebf8492bf2088bf08f6c9",
-    "benchmarks/knowbase-holdout-v1/docs/theatre-rigging-old.md": "c7aa830a7cc2640d76effe17ca3a8c5f3a3ae6470c26a90147994a112ba73bbc"
+    "benchmarks/knowbase-holdout-v1/docs/theatre-rigging-old.md": "c7aa830a7cc2640d76effe17ca3a8c5f3a3ae6470c26a90147994a112ba73bbc",
+    "benchmarks/knowbase-rerank-v2/refinement/protocol-v1.json": "61371629c7f463688b9e46a987a23bace52e93ef3b7c132470cb04a6acb559ff"
   },
   "constraints": {
     "topK": 5,
