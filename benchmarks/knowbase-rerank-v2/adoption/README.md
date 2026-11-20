@@ -1,5 +1,7 @@
 # 已确认的候选上限与短窗口验证
 
+两项默认值均已落地；质量、耗时及接受的一处退步见 [audit.md](audit.md)，完整统计及原始产物哈希见 [results.json](results.json)。
+
 用户接受 BGE 每文档候选上限 2→3 的覆盖收益，即使首条命中略降；后续计划单独改为消费多条证据，本轮不修改问答代码。选择器的默认上限已改为 3，显式调用参数仍优先，Top 5 和 6000 UTF-16 字符不变，原规则回退不变。
 
 短窗口按 256 token / 重叠 32 token 执行原有完整正文滑窗，不丢正文尾部，窗口取最高原始 logit。与 512 / 重叠128 的对照共用已经批准的每文档 3 块，因此不会把候选上限收益混算成窗口收益。
@@ -17,6 +19,9 @@ node tools/rag-evaluation/rerank-short-window.cjs \
   benchmarks/knowbase-rerank-v2/adoption/protocol.json \
   reports/retrieval-rerank-adoption/<run>/scores.json \
   reports/retrieval-rerank-adoption/<run>/replay.json
+PYTHONPATH=tools/rag-evaluation python -c \
+  'import json,sys; from pathlib import Path; from rerank_refinement_audit import grade_replay; p=Path(sys.argv[1]); (p/"audit.json").write_text(json.dumps(grade_replay(json.loads((p/"replay.json").read_text())),ensure_ascii=False,indent=2)+"\n")' \
+  reports/retrieval-rerank-adoption/<run>
 ```
 
 计分使用 `rerank_refinement_audit.grade_replay` 的原标注指标，不调用其历史整体切换决策。回放同时逐池验证真实编译后的 BGE 选择器与独立离线选择器的入选集合、顺序、正文一致。真实推理过程只保存完整题断点，协议或权重变化拒绝恢复。

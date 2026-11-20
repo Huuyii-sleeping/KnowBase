@@ -25,10 +25,10 @@
     "sentencepiece": "0.2.3"
   },
   "model_input": {
-    "max_length": 512,
+    "max_length": 256,
     "query_tokens": 128,
     "title_tokens": 64,
-    "overlap_tokens": 128,
+    "overlap_tokens": 32,
     "batch_size": 8
   }
 }

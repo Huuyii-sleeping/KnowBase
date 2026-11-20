@@ -1,0 +1,543 @@
+{
+  "protocol_sha256": "0d6c654780c0302162b5d61a97d85e6e29d98f971314f033da4e322a54642441",
+  "complete": true,
+  "pools": 384,
+  "raw_artifacts": {
+    "reports/retrieval-rerank-adoption/2026-11-19-r1/scores.json": "21643b9d117dd71f606c717f6dedd8c356ccdf471366349c3b0807693ee8f5fb",
+    "reports/retrieval-rerank-adoption/2026-11-19-r1/replay.json": "fda735981de1c5cec10edbcbba267b6352ebe937adfd68d4078399725d76772d",
+    "reports/retrieval-rerank-adoption/2026-11-19-r1/audit.json": "3206ea3da7ab8b87aca3f3c47759de6622d73ca946edf126029e6da9d5e94878",
+    "benchmarks/knowbase-rerank-v2/adoption/protocol.json": "7421a38ab5137de53951358c5df457cfa1017c0371dba1ca7656fb445289a624"
+  },
+  "summaries": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "current",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 22,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "previousCap2",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 22,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 80,
+      "evidence_recall": 0.7109375,
+      "all_evidence_found": 0.65625,
+      "all_sources_found": 0.75,
+      "evidence_mrr": 0.765625,
+      "top1_hit": 0.765625,
+      "rule_gained": 0,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 22
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "short",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 22,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "current",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 38,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "previousCap2",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 38,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 80,
+      "evidence_recall": 0.5,
+      "all_evidence_found": 0.4375,
+      "all_sources_found": 0.5625,
+      "evidence_mrr": 0.5625,
+      "top1_hit": 0.5625,
+      "rule_gained": 0,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 38
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "short",
+      "questions": 80,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "all_sources_found": 1,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 38,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "current",
+      "questions": 96,
+      "evidence_recall": 0.9652777777777778,
+      "all_evidence_found": 0.9305555555555556,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 0.9444444444444444,
+      "top1_hit": 0.8888888888888888,
+      "rule_gained": 39,
+      "rule_lost": 3,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "previousCap2",
+      "questions": 96,
+      "evidence_recall": 0.9375,
+      "all_evidence_found": 0.8888888888888888,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 0.9444444444444444,
+      "top1_hit": 0.9027777777777778,
+      "rule_gained": 36,
+      "rule_lost": 3,
+      "current_gained": 0,
+      "current_lost": 3
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "rule",
+      "questions": 96,
+      "evidence_recall": 0.5625,
+      "all_evidence_found": 0.5277777777777778,
+      "all_sources_found": 0.6111111111111112,
+      "evidence_mrr": 0.5694444444444444,
+      "top1_hit": 0.5416666666666666,
+      "rule_gained": 0,
+      "rule_lost": 0,
+      "current_gained": 3,
+      "current_lost": 39
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "short",
+      "questions": 96,
+      "evidence_recall": 0.9652777777777778,
+      "all_evidence_found": 0.9305555555555556,
+      "all_sources_found": 0.9583333333333334,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 39,
+      "rule_lost": 3,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "current",
+      "questions": 80,
+      "evidence_recall": 0.9513888888888888,
+      "all_evidence_found": 0.9444444444444444,
+      "all_sources_found": 0.9583333333333334,
+      "evidence_mrr": 0.8981481481481481,
+      "top1_hit": 0.8472222222222222,
+      "rule_gained": 41,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "previousCap2",
+      "questions": 80,
+      "evidence_recall": 0.9513888888888888,
+      "all_evidence_found": 0.9444444444444444,
+      "all_sources_found": 0.9583333333333334,
+      "evidence_mrr": 0.8981481481481481,
+      "top1_hit": 0.8472222222222222,
+      "rule_gained": 41,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "rule",
+      "questions": 80,
+      "evidence_recall": 0.4861111111111111,
+      "all_evidence_found": 0.4444444444444444,
+      "all_sources_found": 0.5694444444444444,
+      "evidence_mrr": 0.5208333333333334,
+      "top1_hit": 0.5138888888888888,
+      "rule_gained": 0,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 41
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "short",
+      "questions": 80,
+      "evidence_recall": 0.9375,
+      "all_evidence_found": 0.9305555555555556,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 0.8842592592592593,
+      "top1_hit": 0.8333333333333334,
+      "rule_gained": 40,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 1
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "current",
+      "questions": 48,
+      "evidence_recall": 0.9722222222222222,
+      "all_evidence_found": 0.9444444444444444,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 0.9444444444444444,
+      "top1_hit": 0.8888888888888888,
+      "rule_gained": 14,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "previousCap2",
+      "questions": 48,
+      "evidence_recall": 0.8888888888888888,
+      "all_evidence_found": 0.8611111111111112,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 0.875,
+      "top1_hit": 0.8333333333333334,
+      "rule_gained": 11,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 3
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 48,
+      "evidence_recall": 0.6527777777777778,
+      "all_evidence_found": 0.6111111111111112,
+      "all_sources_found": 0.7222222222222222,
+      "evidence_mrr": 0.6620370370370371,
+      "top1_hit": 0.6388888888888888,
+      "rule_gained": 0,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 14
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "short",
+      "questions": 48,
+      "evidence_recall": 0.9722222222222222,
+      "all_evidence_found": 0.9444444444444444,
+      "all_sources_found": 0.9444444444444444,
+      "evidence_mrr": 1.0,
+      "top1_hit": 1,
+      "rule_gained": 14,
+      "rule_lost": 0,
+      "current_gained": 0,
+      "current_lost": 0
+    }
+  ],
+  "overall": {
+    "short": {
+      "answerable_pool_instances": 308,
+      "evidence_recall_mean": 0.974025974025974,
+      "evidence_hits": 399,
+      "top1_hits": 296,
+      "all_sources_found": 299
+    },
+    "long": {
+      "answerable_pool_instances": 308,
+      "evidence_recall_mean": 0.9772727272727273,
+      "evidence_hits": 400,
+      "top1_hits": 285,
+      "all_sources_found": 299
+    }
+  },
+  "evidence_gained_vs_cap3_long": 0,
+  "evidence_lost_vs_cap3_long": 1,
+  "changes": [
+    {
+      "source": "v3-candidate",
+      "id": "kb013",
+      "split": "regression",
+      "category": "paraphrase",
+      "question": "同一条消息收到了两遍，怎么避免重复执行已经完成的工作？",
+      "reference_answer": "按 event_id 查询 receipt，已完成的事件跳过副作用。",
+      "gained": [],
+      "lost": [
+        {
+          "index": 0,
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ],
+      "short_evidence_hits": [false],
+      "long_evidence_hits": [true],
+      "short_selected": [
+        {
+          "chunkId": "4299c663-0c5c-400b-a1cd-f4121c098bae:v1:c0:42088aaa-102c-4d32-8783-bb6435097acf",
+          "doc": "noise_03_06.md",
+          "content_sha256": "3c01fde578c1baf1fa76303d689885c597e32aaa3c45dc46ed11b5c395938384"
+        },
+        {
+          "chunkId": "f193695a-6d2a-43be-bee3-4a09eb28c9a7:v1:c0:0d199e67-8de3-45f7-bc02-0f968e073382",
+          "doc": "noise_06_06.md",
+          "content_sha256": "bd0c59510fd93551b973c92bbf70436f51caceb1a2ff59d5a0a55c7677eef692"
+        },
+        {
+          "chunkId": "396ecfb5-170e-4e44-9091-f1aa8d03efcb:v1:c0:2c37dcef-8011-4cba-85d5-e90042e4c3ce",
+          "doc": "noise_04_01.md",
+          "content_sha256": "3037ff07f395b4f1bda99cfbff3d6c2d540ac9424ce3d9c6d868010405da2f60"
+        },
+        {
+          "chunkId": "d8e4d1ad-0f35-45c6-98d7-5cd906ce0ea2:v1:c0:07cd36da-06ad-4a74-9b17-ac2e4d37b7b5",
+          "doc": "noise_07_01.md",
+          "content_sha256": "99059d8fe9af4712ffed2d9f632f0611acc1eaa81fc476a0e82e7da707d6879e"
+        },
+        {
+          "chunkId": "5365ca73-b165-4103-aff2-c8f8737b0f1d:v1:c0:85fcd1f7-0e7d-4b99-8653-e37cc903fd27",
+          "doc": "noise_04_04.md",
+          "content_sha256": "ee4f8db8c96d8c05934f501fe1314bd1e4355238a87af0645e59cbcf0d404a19"
+        }
+      ]
+    }
+  ],
+  "top1_changes": [
+    {
+      "source": "v3-candidate",
+      "id": "kb009",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb013",
+      "before": true,
+      "after": false
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb018",
+      "before": true,
+      "after": false
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "before": true,
+      "after": false
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_05",
+      "before": false,
+      "after": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_05",
+      "before": false,
+      "after": true
+    }
+  ],
+  "inference": {
+    "fresh_pairs": 11412,
+    "cached_pairs": 1575,
+    "fully_uncached_pools": 304,
+    "fully_uncached_p50_ms": 9102.20197896706,
+    "query_tokens_dropped": 0,
+    "title_tokens_dropped": 0
+  },
+  "scope": "Exposed synthetic fixed pools; repeated holdout questions are separate source-config instances, not unique user queries. Cross-run/cached times not used to estimate speedup.",
+  "version": "knowbase-short-window-adoption-result-v1",
+  "production_config": {
+    "max_length": 256,
+    "query_tokens": 128,
+    "title_tokens": 64,
+    "overlap_tokens": 32,
+    "batch_size": 8,
+    "maxChunksPerDocument": 3,
+    "topK": 5,
+    "maxContextCharacters": 6000
+  },
+  "previous_cap2_comparison": {
+    "current": {
+      "gained_evidence": 6,
+      "lost_evidence": 0
+    },
+    "short": {
+      "gained_evidence": 6,
+      "lost_evidence": 1
+    }
+  },
+  "speed": {
+    "source": "reports/retrieval-rerank-refinement/2026-11-19-r2/performance-audit.json",
+    "sha256": "d7fc53ea89dc0b4ef14a35a8a49661144161e5114499e30e7865eb3cc8e0a263",
+    "fresh_paired_pools": 12,
+    "repeats": 2,
+    "summaries": [
+      {
+        "repeat": 0,
+        "baseline_p50_ms": 12032.994125009282,
+        "p50_ms": 9680.717188020935,
+        "median_reduction": 0.19548558842054053,
+        "faster_cases": 10
+      },
+      {
+        "repeat": 1,
+        "baseline_p50_ms": 12023.525021009846,
+        "p50_ms": 9680.996791488724,
+        "median_reduction": 0.194828739943386,
+        "faster_cases": 11
+      }
+    ],
+    "scope": "Same weights/FP16/eager/batch8. Joint window512/overlap128 -> window256/overlap32 change. Model inference only, not end-to-end requests. Not derived from cached full-run timing."
+  },
+  "decision": {
+    "cap3": "adopted; user explicitly accepts top1 tradeoff for additional selected evidence",
+    "short_window": "adopted under user authorization for a small quality cost with meaningful speed gain; 1 isolated new evidence loss in 384 pool instances, 0 gains vs cap3 long, mean evidence recall -0.3247 percentage points, top1 +11 answerable pool instances",
+    "known_loss": "v3-candidate/kb013 receipt/event_id deduplication evidence no longer in Top5; not fixed or waived as a false positive",
+    "model_comparison": "TODO; no replacement or training",
+    "generation": "unchanged; multi-chunk consumption deferred",
+    "business_default": "RAG_RERANKER remains rule; adopted defaults apply inside BGE path only; no local env changes, live restart or merge"
+  }
+}

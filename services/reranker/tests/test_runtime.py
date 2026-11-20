@@ -177,6 +177,36 @@ class Tokenizer:
 
 
 class FrozenInputParityTests(unittest.TestCase):
+    def test_production_windows_cover_entire_body_with_bounded_overlapping_inputs(self):
+        manifest_path = (
+            Path(__file__).resolve().parents[1] / "knowbase_reranker/manifest.json"
+        )
+        manifest = json.loads(manifest_path.read_text())
+        config = manifest["model_input"]
+        tokenizer = Tokenizer()
+        # Maximal query/title reservations exercise the smallest body capacity.
+        query, title = "q" * config["query_tokens"], "t" * config["title_tokens"]
+        for body in ["", "tail", "abcdef" * 200]:
+            with self.subTest(body_length=len(body)):
+                windows, stats = pair_windows(tokenizer, query, title, body, config)
+                restored = []
+                prefix = 1 + len(query) + 1 + config["title_tokens"]
+                for index, window in enumerate(windows):
+                    self.assertLessEqual(
+                        len(window["input_ids"]), config["max_length"]
+                    )
+                    self.assertEqual(
+                        len(window["attention_mask"]), len(window["input_ids"])
+                    )
+                    passage = window["input_ids"][prefix:-1]
+                    if index:
+                        overlap = config["overlap_tokens"]
+                        self.assertEqual(passage[:overlap], restored[-overlap:])
+                        passage = passage[overlap:]
+                    restored.extend(passage)
+                self.assertEqual(restored, tokenizer.encode(body))
+                self.assertEqual(stats["windows"], len(windows))
+
     def test_window_input_matches_frozen_experiment_without_modifying_archived_code(
         self,
     ):
