@@ -28,6 +28,9 @@ def summarize(rows):
         "answerable_empty": sum(r["selected_count"] == 0 for r in answerable),
         "answerable_empty_rate": mean(r["selected_count"] == 0 for r in answerable) if answerable else None,
         "rejection_reasons": dict(Counter(reason for r in rows for reason in r["rejection_reasons"])),
+        "selection_diagnostics": {key: sum(r.get("selection_diagnostics", {}).get(key, 0) for r in rows)
+                                  for key in ["nearPairs085", "nearPairs095", "exactBodyPairs",
+                                              "changedOrderOrMembership", "changedMembership"]},
     }
 
 
@@ -43,6 +46,7 @@ def audit(replay):
                 detail = details[source["id"], row["id"], strategy]
                 rows.append({**detail, "type": q["type"], "selected_count": len(option["selected"]),
                              "characters": option["characters"],
+                             "selection_diagnostics": option.get("selectionDiagnostics", {}),
                              "rejection_reasons": [d["reason"] for d in option["decisions"] if d["reason"] not in ["selected", "top_k", "document_cap", "character_budget"]]})
                 gained, lost = detail["vs_current"]["gained"], detail["vs_current"]["lost"]
                 if gained or lost:

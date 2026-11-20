@@ -3,8 +3,33 @@ const fs = require("node:fs");
 const { createHash } = require("node:crypto");
 const { fingerprint } = require("./rerank-model-replay.cjs");
 const { validateScoreRows } = require("./rerank-short-window.cjs");
-const { selectTrial } = require("./rerank-selection-trials.cjs");
+const { selectTrial, isDuplicate } = require("./rerank-selection-trials.cjs");
 const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
+
+function selectionDiagnostics(row, option, baseline) {
+  const byId = new Map(row.pool.map((p) => [p.chunkId, p]));
+  const items = option.selected.map((id) => byId.get(id));
+  let nearPairs085 = 0,
+    nearPairs095 = 0,
+    exactBodyPairs = 0;
+  for (let i = 0; i < items.length; i++)
+    for (let j = i + 1; j < items.length; j++) {
+      if (items[i].content && items[i].content === items[j].content)
+        exactBodyPairs++;
+      if (isDuplicate(items[i], items[j], 0.85)) nearPairs085++;
+      if (isDuplicate(items[i], items[j], 0.95)) nearPairs095++;
+    }
+  return {
+    nearPairs085,
+    nearPairs095,
+    exactBodyPairs,
+    changedOrderOrMembership:
+      JSON.stringify(option.selected) !== JSON.stringify(baseline.selected),
+    changedMembership:
+      JSON.stringify([...option.selected].sort()) !==
+      JSON.stringify([...baseline.selected].sort()),
+  };
+}
 
 function validateAlternative(original, scores, protocol, queries) {
   const model = protocol.models.find((m) => m.id === scores.model?.id);
@@ -69,6 +94,12 @@ function replay(protocol, alternatives = []) {
             { kind: "model" },
             protocol.constraints,
           );
+        for (const option of Object.values(options))
+          option.selectionDiagnostics = selectionDiagnostics(
+            row,
+            option,
+            options.current,
+          );
         index++;
         return { ...row, options };
       }),
@@ -85,4 +116,4 @@ if (require.main === module) {
   );
 }
 
-module.exports = { validateAlternative, replay };
+module.exports = { validateAlternative, replay, selectionDiagnostics };

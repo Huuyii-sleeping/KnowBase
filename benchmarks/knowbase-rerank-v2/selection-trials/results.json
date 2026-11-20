@@ -1,0 +1,7070 @@
+{
+  "version": "knowbase-rerank-selection-trials-results-v1",
+  "complete": true,
+  "scope": "Exposed synthetic pools; repeated holdout questions count as source-config instances. Literal evidence annotations are not complete relevance labels; no Precision claim.",
+  "baseline": {
+    "model": "bge-m3",
+    "input": {
+      "max_length": 256,
+      "query_tokens": 128,
+      "title_tokens": 64,
+      "overlap_tokens": 32,
+      "batch_size": 8
+    },
+    "constraints": {
+      "topK": 5,
+      "maxChunksPerDocument": 3,
+      "maxContextCharacters": 6000
+    },
+    "anchor_count": 2
+  },
+  "overall": {
+    "bge-base": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.9431818181818182,
+      "top1_hit": 0.8766233766233766,
+      "all_sources_found": 0.9707792207792207,
+      "gained": 0,
+      "lost": 11,
+      "mean_selected_count": 5,
+      "mean_characters": 2381.1197916666665,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 44,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 359,
+        "changedMembership": 300
+      }
+    },
+    "current": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.974025974025974,
+      "top1_hit": 0.961038961038961,
+      "all_sources_found": 0.9707792207792207,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2346.3802083333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 31,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    "cutoff-1": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.8766233766233766,
+      "top1_hit": 0.8896103896103896,
+      "all_sources_found": 0.8636363636363636,
+      "gained": 0,
+      "lost": 37,
+      "mean_selected_count": 2.0104166666666665,
+      "mean_characters": 871.1979166666666,
+      "negative_empty": 42,
+      "negative_empty_rate": 0.5526315789473685,
+      "answerable_empty": 29,
+      "answerable_empty_rate": 0.09415584415584416,
+      "rejection_reasons": {
+        "weak_score": 11754
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 14,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 360,
+        "changedMembership": 360
+      }
+    },
+    "cutoff-3": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.9496753246753247,
+      "top1_hit": 0.9448051948051948,
+      "all_sources_found": 0.9383116883116883,
+      "gained": 0,
+      "lost": 9,
+      "mean_selected_count": 2.6197916666666665,
+      "mean_characters": 1235.4947916666667,
+      "negative_empty": 26,
+      "negative_empty_rate": 0.34210526315789475,
+      "answerable_empty": 8,
+      "answerable_empty_rate": 0.025974025974025976,
+      "rejection_reasons": {
+        "weak_score": 10522
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 20,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 307,
+        "changedMembership": 307
+      }
+    },
+    "cutoff0": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.7987012987012987,
+      "top1_hit": 0.8214285714285714,
+      "all_sources_found": 0.7824675324675324,
+      "gained": 0,
+      "lost": 66,
+      "mean_selected_count": 1.4895833333333333,
+      "mean_characters": 610.5911458333334,
+      "negative_empty": 44,
+      "negative_empty_rate": 0.5789473684210527,
+      "answerable_empty": 52,
+      "answerable_empty_rate": 0.16883116883116883,
+      "rejection_reasons": {
+        "weak_score": 12289
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 10,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 377,
+        "changedMembership": 377
+      }
+    },
+    "cutoff1": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.7126623376623377,
+      "top1_hit": 0.7467532467532467,
+      "all_sources_found": 0.6883116883116883,
+      "gained": 0,
+      "lost": 97,
+      "mean_selected_count": 1.0494791666666667,
+      "mean_characters": 420.2994791666667,
+      "negative_empty": 48,
+      "negative_empty_rate": 0.631578947368421,
+      "answerable_empty": 76,
+      "answerable_empty_rate": 0.24675324675324675,
+      "rejection_reasons": {
+        "weak_score": 12561
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 4,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 382,
+        "changedMembership": 382
+      }
+    },
+    "dedup085": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.9626623376623377,
+      "top1_hit": 0.9577922077922078,
+      "all_sources_found": 0.9707792207792207,
+      "gained": 0,
+      "lost": 7,
+      "mean_selected_count": 5,
+      "mean_characters": 2370.5572916666665,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 705
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 20,
+        "changedMembership": 20
+      }
+    },
+    "dedup095": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.974025974025974,
+      "top1_hit": 0.961038961038961,
+      "all_sources_found": 0.9707792207792207,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2346.3802083333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 4
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 31,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    "mminilm": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.9594155844155844,
+      "top1_hit": 0.8863636363636364,
+      "all_sources_found": 0.9512987012987013,
+      "gained": 2,
+      "lost": 9,
+      "mean_selected_count": 5,
+      "mean_characters": 2389.9427083333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 23,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 361,
+        "changedMembership": 311
+      }
+    },
+    "rule": {
+      "pools": 384,
+      "answerable": 308,
+      "unanswerable": 76,
+      "evidence_recall": 0.573051948051948,
+      "top1_hit": 0.5974025974025974,
+      "all_sources_found": 0.6331168831168831,
+      "gained": 3,
+      "lost": 153,
+      "mean_selected_count": 5,
+      "mean_characters": 2151.4765625,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 133,
+        "nearPairs095": 1,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 383,
+        "changedMembership": 381
+      }
+    }
+  },
+  "groups": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "bge-base",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 0.96875,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1830.85,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 74,
+        "changedMembership": 54
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "current",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1767.4125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.9375,
+      "all_sources_found": 0.9375,
+      "gained": 0,
+      "lost": 4,
+      "mean_selected_count": 1.1875,
+      "mean_characters": 349.7,
+      "negative_empty": 11,
+      "negative_empty_rate": 0.6875,
+      "answerable_empty": 4,
+      "answerable_empty_rate": 0.0625,
+      "rejection_reasons": {
+        "weak_score": 2102
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 79,
+        "changedMembership": 79
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "cutoff-3",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 1.6125,
+      "mean_characters": 560.5,
+      "negative_empty": 6,
+      "negative_empty_rate": 0.375,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 2062
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 77,
+        "changedMembership": 77
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.8359375,
+      "top1_hit": 0.84375,
+      "all_sources_found": 0.84375,
+      "gained": 0,
+      "lost": 11,
+      "mean_selected_count": 1,
+      "mean_characters": 282.5875,
+      "negative_empty": 12,
+      "negative_empty_rate": 0.75,
+      "answerable_empty": 10,
+      "answerable_empty_rate": 0.15625,
+      "rejection_reasons": {
+        "weak_score": 2118
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.6953125,
+      "top1_hit": 0.71875,
+      "all_sources_found": 0.6875,
+      "gained": 0,
+      "lost": 21,
+      "mean_selected_count": 0.8,
+      "mean_characters": 203.45,
+      "negative_empty": 14,
+      "negative_empty_rate": 0.875,
+      "answerable_empty": 18,
+      "answerable_empty_rate": 0.28125,
+      "rejection_reasons": {
+        "weak_score": 2137
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "dedup085",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1767.4125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "dedup095",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1767.4125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "mminilm",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 0.96875,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1812.6125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 73,
+        "changedMembership": 57
+      }
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.7109375,
+      "top1_hit": 0.765625,
+      "all_sources_found": 0.75,
+      "gained": 0,
+      "lost": 22,
+      "mean_selected_count": 5,
+      "mean_characters": 1099.1875,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "bge-base",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 0.96875,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1740.55,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 73,
+        "changedMembership": 54
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "current",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1684.8375,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.9375,
+      "all_sources_found": 0.9375,
+      "gained": 0,
+      "lost": 4,
+      "mean_selected_count": 1.175,
+      "mean_characters": 341.5375,
+      "negative_empty": 11,
+      "negative_empty_rate": 0.6875,
+      "answerable_empty": 4,
+      "answerable_empty_rate": 0.0625,
+      "rejection_reasons": {
+        "weak_score": 2020
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 79,
+        "changedMembership": 79
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "cutoff-3",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 1.5875,
+      "mean_characters": 551.575,
+      "negative_empty": 6,
+      "negative_empty_rate": 0.375,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 1982
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 77,
+        "changedMembership": 77
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.8359375,
+      "top1_hit": 0.84375,
+      "all_sources_found": 0.84375,
+      "gained": 0,
+      "lost": 11,
+      "mean_selected_count": 0.9875,
+      "mean_characters": 274.425,
+      "negative_empty": 12,
+      "negative_empty_rate": 0.75,
+      "answerable_empty": 10,
+      "answerable_empty_rate": 0.15625,
+      "rejection_reasons": {
+        "weak_score": 2036
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.6953125,
+      "top1_hit": 0.71875,
+      "all_sources_found": 0.6875,
+      "gained": 0,
+      "lost": 21,
+      "mean_selected_count": 0.8,
+      "mean_characters": 203.45,
+      "negative_empty": 14,
+      "negative_empty_rate": 0.875,
+      "answerable_empty": 18,
+      "answerable_empty_rate": 0.28125,
+      "rejection_reasons": {
+        "weak_score": 2053
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "dedup085",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1684.8375,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "dedup095",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 1,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1684.8375,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "mminilm",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 1,
+      "top1_hit": 0.96875,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 1809.6125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 73,
+        "changedMembership": 55
+      }
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "rule",
+      "pools": 80,
+      "answerable": 64,
+      "unanswerable": 16,
+      "evidence_recall": 0.5,
+      "top1_hit": 0.5625,
+      "all_sources_found": 0.5625,
+      "gained": 0,
+      "lost": 38,
+      "mean_selected_count": 5,
+      "mean_characters": 826.7,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "bge-base",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9166666666666666,
+      "top1_hit": 0.875,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 4,
+      "mean_selected_count": 5,
+      "mean_characters": 2857.25,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 16,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 90,
+        "changedMembership": 82
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "current",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9652777777777778,
+      "top1_hit": 1,
+      "all_sources_found": 0.9583333333333334,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2806.8020833333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 12,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "cutoff-1",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 1,
+      "all_sources_found": 0.9166666666666666,
+      "gained": 0,
+      "lost": 3,
+      "mean_selected_count": 3.5625,
+      "mean_characters": 1751.21875,
+      "negative_empty": 8,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 2966
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 8,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "cutoff-3",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9652777777777778,
+      "top1_hit": 1,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 4.1875,
+      "mean_characters": 2206.1458333333335,
+      "negative_empty": 4,
+      "negative_empty_rate": 0.16666666666666666,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 2272
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 9,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 52,
+        "changedMembership": 52
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "cutoff0",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 1,
+      "all_sources_found": 0.9027777777777778,
+      "gained": 0,
+      "lost": 3,
+      "mean_selected_count": 2.5,
+      "mean_characters": 1175.71875,
+      "negative_empty": 8,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 3298
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 4,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 91,
+        "changedMembership": 91
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "cutoff1",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9166666666666666,
+      "top1_hit": 0.9722222222222222,
+      "all_sources_found": 0.8611111111111112,
+      "gained": 0,
+      "lost": 5,
+      "mean_selected_count": 1.6041666666666667,
+      "mean_characters": 774.03125,
+      "negative_empty": 8,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 2,
+      "answerable_empty_rate": 0.027777777777777776,
+      "rejection_reasons": {
+        "weak_score": 3449
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 3,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 94,
+        "changedMembership": 94
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "dedup085",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9305555555555556,
+      "top1_hit": 0.9861111111111112,
+      "all_sources_found": 0.9583333333333334,
+      "gained": 0,
+      "lost": 5,
+      "mean_selected_count": 5,
+      "mean_characters": 2857.6041666666665,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 333
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 10,
+        "changedMembership": 10
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "dedup095",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9652777777777778,
+      "top1_hit": 1,
+      "all_sources_found": 0.9583333333333334,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2806.8020833333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 12,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "mminilm",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.9027777777777778,
+      "top1_hit": 0.7916666666666666,
+      "all_sources_found": 0.875,
+      "gained": 1,
+      "lost": 8,
+      "mean_selected_count": 5,
+      "mean_characters": 2918.7395833333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 5,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 94,
+        "changedMembership": 88
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "rule",
+      "pools": 96,
+      "answerable": 72,
+      "unanswerable": 24,
+      "evidence_recall": 0.5625,
+      "top1_hit": 0.5416666666666666,
+      "all_sources_found": 0.6111111111111112,
+      "gained": 3,
+      "lost": 39,
+      "mean_selected_count": 5,
+      "mean_characters": 3158.46875,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 68,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 96,
+        "changedMembership": 96
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "bge-base",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.8680555555555556,
+      "top1_hit": 0.7222222222222222,
+      "all_sources_found": 0.875,
+      "gained": 0,
+      "lost": 6,
+      "mean_selected_count": 5,
+      "mean_characters": 2807.8125,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 17,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 76,
+        "changedMembership": 67
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "current",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.8333333333333334,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2851.825,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 9,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.6666666666666666,
+      "top1_hit": 0.6388888888888888,
+      "all_sources_found": 0.6666666666666666,
+      "gained": 0,
+      "lost": 24,
+      "mean_selected_count": 1.025,
+      "mean_characters": 475.7,
+      "negative_empty": 8,
+      "negative_empty_rate": 1,
+      "answerable_empty": 21,
+      "answerable_empty_rate": 0.2916666666666667,
+      "rejection_reasons": {
+        "weak_score": 3116
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.8333333333333334,
+      "top1_hit": 0.7638888888888888,
+      "all_sources_found": 0.8194444444444444,
+      "gained": 0,
+      "lost": 9,
+      "mean_selected_count": 1.8625,
+      "mean_characters": 952.3875,
+      "negative_empty": 8,
+      "negative_empty_rate": 1,
+      "answerable_empty": 8,
+      "answerable_empty_rate": 0.1111111111111111,
+      "rejection_reasons": {
+        "weak_score": 2959
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 3,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 76,
+        "changedMembership": 76
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.5138888888888888,
+      "top1_hit": 0.5138888888888888,
+      "all_sources_found": 0.5,
+      "gained": 0,
+      "lost": 39,
+      "mean_selected_count": 0.675,
+      "mean_characters": 292.925,
+      "negative_empty": 8,
+      "negative_empty_rate": 1,
+      "answerable_empty": 32,
+      "answerable_empty_rate": 0.4444444444444444,
+      "rejection_reasons": {
+        "weak_score": 3144
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.4513888888888889,
+      "top1_hit": 0.4722222222222222,
+      "all_sources_found": 0.4444444444444444,
+      "gained": 0,
+      "lost": 46,
+      "mean_selected_count": 0.5625,
+      "mean_characters": 243.3375,
+      "negative_empty": 8,
+      "negative_empty_rate": 1,
+      "answerable_empty": 36,
+      "answerable_empty_rate": 0.5,
+      "rejection_reasons": {
+        "weak_score": 3153
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 80,
+        "changedMembership": 80
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "dedup085",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.8333333333333334,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2869.7625,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 166
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 4,
+        "changedMembership": 4
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "dedup095",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.8333333333333334,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2851.825,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 1
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 9,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "mminilm",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.9375,
+      "top1_hit": 0.8333333333333334,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 1,
+      "lost": 1,
+      "mean_selected_count": 5,
+      "mean_characters": 2708,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 12,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 74,
+        "changedMembership": 67
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "rule",
+      "pools": 80,
+      "answerable": 72,
+      "unanswerable": 8,
+      "evidence_recall": 0.4861111111111111,
+      "top1_hit": 0.5138888888888888,
+      "all_sources_found": 0.5694444444444444,
+      "gained": 0,
+      "lost": 40,
+      "mean_selected_count": 5,
+      "mean_characters": 2787.85,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 40,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 79,
+        "changedMembership": 77
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "bge-base",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 0.8611111111111112,
+      "all_sources_found": 1,
+      "gained": 0,
+      "lost": 1,
+      "mean_selected_count": 5,
+      "mean_characters": 2702.4375,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 11,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 46,
+        "changedMembership": 43
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "current",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9722222222222222,
+      "top1_hit": 1,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2650.6458333333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 10,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 1,
+      "all_sources_found": 0.8888888888888888,
+      "gained": 0,
+      "lost": 2,
+      "mean_selected_count": 3.3125,
+      "mean_characters": 1522.25,
+      "negative_empty": 4,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 1550
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 6,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 42,
+        "changedMembership": 42
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "cutoff-3",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9722222222222222,
+      "top1_hit": 1,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 4.145833333333333,
+      "mean_characters": 2030.8958333333333,
+      "negative_empty": 2,
+      "negative_empty_rate": 0.16666666666666666,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 1247
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 8,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 25,
+        "changedMembership": 25
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 1,
+      "all_sources_found": 0.8888888888888888,
+      "gained": 0,
+      "lost": 2,
+      "mean_selected_count": 2.4791666666666665,
+      "mean_characters": 1116.7291666666667,
+      "negative_empty": 4,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "weak_score": 1693
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 6,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 46,
+        "changedMembership": 46
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.8888888888888888,
+      "top1_hit": 0.9444444444444444,
+      "all_sources_found": 0.8333333333333334,
+      "gained": 0,
+      "lost": 4,
+      "mean_selected_count": 1.5833333333333333,
+      "mean_characters": 730.6041666666666,
+      "negative_empty": 4,
+      "negative_empty_rate": 0.3333333333333333,
+      "answerable_empty": 2,
+      "answerable_empty_rate": 0.05555555555555555,
+      "rejection_reasons": {
+        "weak_score": 1769
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 1,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 48,
+        "changedMembership": 48
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "dedup085",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9444444444444444,
+      "top1_hit": 1,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 2,
+      "mean_selected_count": 5,
+      "mean_characters": 2712.5625,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 206
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 0,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 6,
+        "changedMembership": 6
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "dedup095",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9722222222222222,
+      "top1_hit": 1,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2650.6458333333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {
+        "near_duplicate": 3
+      },
+      "selection_diagnostics": {
+        "nearPairs085": 10,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 0,
+        "changedMembership": 0
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "mminilm",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.9722222222222222,
+      "top1_hit": 0.8888888888888888,
+      "all_sources_found": 0.9444444444444444,
+      "gained": 0,
+      "lost": 0,
+      "mean_selected_count": 5,
+      "mean_characters": 2731.6875,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 6,
+        "nearPairs095": 0,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 47,
+        "changedMembership": 44
+      }
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "pools": 48,
+      "answerable": 36,
+      "unanswerable": 12,
+      "evidence_recall": 0.6527777777777778,
+      "top1_hit": 0.6388888888888888,
+      "all_sources_found": 0.7222222222222222,
+      "gained": 0,
+      "lost": 14,
+      "mean_selected_count": 5,
+      "mean_characters": 3038.6458333333335,
+      "negative_empty": 0,
+      "negative_empty_rate": 0,
+      "answerable_empty": 0,
+      "answerable_empty_rate": 0,
+      "rejection_reasons": {},
+      "selection_diagnostics": {
+        "nearPairs085": 25,
+        "nearPairs095": 1,
+        "exactBodyPairs": 0,
+        "changedOrderOrMembership": 48,
+        "changedMembership": 48
+      }
+    }
+  ],
+  "evidence_changes": [
+    {
+      "source": "v3-candidate",
+      "id": "kb009",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "文件明明上传成功了，为什么其他人还搜不到？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "上传成功不表示文档已经发布或可检索。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb009",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "文件明明上传成功了，为什么其他人还搜不到？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "上传成功不表示文档已经发布或可检索。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb009",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "文件明明上传成功了，为什么其他人还搜不到？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "上传成功不表示文档已经发布或可检索。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb010",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb010",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb010",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb010",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "扫描件只有图片没有可复制文字，目前能直接把图片里的字读出来吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb011",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb011",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb011",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb011",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb011",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "为什么打开文件列表很快，却不把整篇正文一起返回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb012",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb012",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb012",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb012",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "消息服务临时断了，是不是连文档发布也必须失败？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb013",
+      "split": "regression",
+      "strategy": "mminilm",
+      "question": "同一条消息收到了两遍，怎么避免重复执行已经完成的工作？",
+      "gained": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ],
+      "lost": []
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb014",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "重新建索引建到一半报错，会不会把原来可以查到的内容弄没了？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb014",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "重新建索引建到一半报错，会不会把原来可以查到的内容弄没了？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb014",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "重新建索引建到一半报错，会不会把原来可以查到的内容弄没了？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb015",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "删掉资料后，之前还在跑的任务会不会又把它变回可搜索？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb016",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb016",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb016",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb016",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "找到了正确文件，为什么交给 AI 的那一小段内容仍可能答不了问题？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb017",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb017",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb017",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb017",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "草稿提交审核前需要满足什么解析条件，谁负责审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb018",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "审核发布接口成功返回，能否认为全文、向量和图谱已经同时就绪？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "HTTP 发布成功表示发布状态和任务已经持久化，不表示三路索引已经全部就绪。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb020",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb020",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb020",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb020",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "新索引从构建到可查询，需要在最后检查哪些信息？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb022",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "问答接口没有足够证据时会怎么做，会继续请求对话模型吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "没有足够的可用上下文时，系统返回“知识库中没有找到足够信息”，不调用对话模型。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb027",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb027",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb027",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb027",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb027",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "完整正文放在哪里，做语义检索时使用哪个向量索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb028",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb028",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb028",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb029",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "修改已发布正文时，审核状态如何变化，旧索引还能继续作为当前修订查询吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb029",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "修改已发布正文时，审核状态如何变化，旧索引还能继续作为当前修订查询吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb029",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "修改已发布正文时，审核状态如何变化，旧索引还能继续作为当前修订查询吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb030",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "文档级与段落级命中为什么都要检查，关键词候选能直接作为 AI 正文证据吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb030",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "文档级与段落级命中为什么都要检查，关键词候选能直接作为 AI 正文证据吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb035",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "任务持续失败默认最多处理几次，人工恢复死信之前和之后分别要做什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb035",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "任务持续失败默认最多处理几次，人工恢复死信之前和之后分别要做什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "kb036",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "文档列表和详情分别如何读取，跨存储故障应该按什么顺序核对？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val001",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "想了解四种办公文件的文字抽取：PDF、Excel 表格、Word 和幻灯片各用了哪个库？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "PDF 使用 pdf-parse 提取文字，XLSX 使用 exceljs 读取工作表，DOCX 使用 mammoth 转 HTML 后再转 Markdown，PPTX 使用 jszip 读取幻灯片 XML"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val001",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "想了解四种办公文件的文字抽取：PDF、Excel 表格、Word 和幻灯片各用了哪个库？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "PDF 使用 pdf-parse 提取文字，XLSX 使用 exceljs 读取工作表，DOCX 使用 mammoth 转 HTML 后再转 Markdown，PPTX 使用 jszip 读取幻灯片 XML"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val002",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "文件的标题权限、转换后的 Markdown、上传原件分别落在哪几套持久化系统？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "PostgreSQL 的 kh_document 保存标题、文件名、版本、审核状态、权限和当前 content_id。MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。RustFS 通过 S3 兼容接口保存原始文件和提取出的图片等资源。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val002",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "文件的标题权限、转换后的 Markdown、上传原件分别落在哪几套持久化系统？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "PostgreSQL 的 kh_document 保存标题、文件名、版本、审核状态、权限和当前 content_id。MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。RustFS 通过 S3 兼容接口保存原始文件和提取出的图片等资源。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val003",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "消息中间件不可用时，为何审核通过还能成功，任务以后怎么补发？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val004",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "部署多个轮询投递进程时，靠什么数据库机制避免它们抢到相同任务？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "Relay 轮询 Outbox，使用 SKIP LOCKED 避免多个 Relay 争抢同一条记录"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val005",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "一份文档不修改正文也可以重复建索引，那修订号与构建批号分别表示什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "version 是文档的业务修订号，generation 是一次索引构建的唯一批次号。同一个文档版本可以多次重建，每次得到不同的 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val007",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val007",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val007",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val007",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val007",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "把知识正文转换成向量的本地模型名称和默认输出长度各是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val008",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_graph.md",
+          "quote": "实体 key 由实体类型和归一化名称组成。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val008",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_graph.md",
+          "quote": "实体 key 由实体类型和归一化名称组成。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val008",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_graph.md",
+          "quote": "实体 key 由实体类型和归一化名称组成。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val008",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_graph.md",
+          "quote": "实体 key 由实体类型和归一化名称组成。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val008",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "图谱对相同实体去重时，唯一标识取了哪些组成部分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_graph.md",
+          "quote": "实体 key 由实体类型和归一化名称组成。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val009",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "我刚传好附件，同事立即检索没有结果；上传成功和检索可见之间还差什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "上传成功不表示文档已经发布或可检索。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val010",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val010",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val010",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val010",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "拿手机拍的文件做成 PDF 后文字不能选中，项目现在可以识别里面的字吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_upload.md",
+          "quote": "扫描版 PDF 需要 OCR 才能提取图像里的文字；当前接入流程尚未提供 OCR。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val011",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val011",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val011",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val011",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val011",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "文件列表展示时为何只给摘要信息，用户点开详情才会加载长文？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val012",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "如果 Broker 停机，批准发布请求是否一定要回滚，还是能把工作留待恢复？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val012",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "如果 Broker 停机，批准发布请求是否一定要回滚，还是能把工作留待恢复？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val012",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "如果 Broker 停机，批准发布请求是否一定要回滚，还是能把工作留待恢复？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "RabbitMQ 暂时停机时，发布仍然可以完成，任务保留在数据库等待投递。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val013",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "消费者处理过的事件再次送来，要用什么标识判断无需再做一次？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val013",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "消费者处理过的事件再次送来，要用什么标识判断无需再做一次？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val013",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "消费者处理过的事件再次送来，要用什么标识判断无需再做一次？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val013",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "消费者处理过的事件再次送来，要用什么标识判断无需再做一次？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "消费者依靠 event_id 对应的 receipt 完成记录跳过重复副作用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val014",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "同一修订重新生成向量时失败，上一轮已经完整的索引会被清空吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "同版本重建期间，原来的完整批次继续可见；新批次失败只清理本次构建。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val015",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "资料删除以后，有个迟到的索引消费者刚做完任务，它能让删除内容重新出现吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val015",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "资料删除以后，有个迟到的索引消费者刚做完任务，它能让删除内容重新出现吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val015",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "资料删除以后，有个迟到的索引消费者刚做完任务，它能让删除内容重新出现吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "永久删除标记会阻止迟到的旧索引任务重新激活文档。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val016",
+      "split": "regression",
+      "strategy": "mminilm",
+      "question": "搜索已命中文件名，可 AI 收到的正文仍缺关键细节，这两种命中差在哪里？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val019",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "只调整已发布资料的分类标签和标题，业务状态与审核要求如何变化？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val019",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "只调整已发布资料的分类标签和标题，业务状态与审核要求如何变化？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val020",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "一个暂存索引批次在成为当前可见批次之前，最后必须比对哪些文档属性？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val020",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "一个暂存索引批次在成为当前可见批次之前，最后必须比对哪些文档属性？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val020",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "一个暂存索引批次在成为当前可见批次之前，最后必须比对哪些文档属性？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_generations.md",
+          "quote": "激活前再次锁住文档，核对状态、version 和 content_id，符合条件才切换可见指针。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val021",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "移除资料时产生的几种后台清理工作，分别负责什么资源？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val021",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "移除资料时产生的几种后台清理工作，分别负责什么资源？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val021",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "移除资料时产生的几种后台清理工作，分别负责什么资源？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val021",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "移除资料时产生的几种后台清理工作，分别负责什么资源？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_deletion.md",
+          "quote": "四条清理任务分别清理全文索引、向量索引、图谱索引和源数据。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val022",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "知识库拿不出足够上下文时，系统怎样回应，还会把问题发送给大模型吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "没有足够的可用上下文时，系统返回“知识库中没有找到足够信息”，不调用对话模型。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val023",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "本地程序连接 AMQP 与人在浏览器打开 RabbitMQ 控制台，端口怎么区分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| RabbitMQ AMQP | 15672 | 应用连接消息 Broker |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| RabbitMQ Management | 15673 | 消息管理界面 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val023",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "本地程序连接 AMQP 与人在浏览器打开 RabbitMQ 控制台，端口怎么区分？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| RabbitMQ AMQP | 15672 | 应用连接消息 Broker |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| RabbitMQ Management | 15673 | 消息管理界面 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val024",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "我要从电脑宿主机连关系库和正文库，两者端口分别是多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| MongoDB | 17017 | Markdown 正文 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val024",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "我要从电脑宿主机连关系库和正文库，两者端口分别是多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| MongoDB | 17017 | Markdown 正文 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val024",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "我要从电脑宿主机连关系库和正文库，两者端口分别是多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| MongoDB | 17017 | Markdown 正文 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val024",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "我要从电脑宿主机连关系库和正文库，两者端口分别是多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| PostgreSQL | 15432 | 结构化元数据 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| MongoDB | 17017 | Markdown 正文 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val025",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "Neo4j 给程序使用的连接和给人查看的页面，各自映射到哪个端口？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| Neo4j Bolt | 17687 | 应用访问图数据库 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| Neo4j Browser | 17474 | 图数据库管理界面 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val025",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "Neo4j 给程序使用的连接和给人查看的页面，各自映射到哪个端口？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_ports.md",
+          "quote": "| Neo4j Bolt | 17687 | 应用访问图数据库 |"
+        },
+        {
+          "doc": "kb_ports.md",
+          "quote": "| Neo4j Browser | 17474 | 图数据库管理界面 |"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val027",
+      "split": "regression",
+      "strategy": "cutoff-3",
+      "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val027",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+        },
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val027",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+        },
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val027",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "MongoDB 的 document_content 保存完整 Markdown、解析警告和资源引用。"
+        },
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val027",
+      "split": "regression",
+      "strategy": "bge-base",
+      "question": "长篇 Markdown 的权威正文在哪里保存，向量搜索实际读取的索引又叫什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "默认使用 Ollama 的 nomic-embed-text 生成 768 维向量，写入 Elasticsearch 的 kh_chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val028",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "既要保证发布任务故障后不丢，又要保证晚完成的旧任务不覆盖新结果，分别靠什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val028",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "既要保证发布任务故障后不丢，又要保证晚完成的旧任务不覆盖新结果，分别靠什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val028",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "既要保证发布任务故障后不丢，又要保证晚完成的旧任务不覆盖新结果，分别靠什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val028",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "既要保证发布任务故障后不丢，又要保证晚完成的旧任务不覆盖新结果，分别靠什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "发布状态与 Outbox 任务在同一个 PostgreSQL 事务内保存。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "旧版本任务即使较晚完成也无法覆盖新版，暂存或部分写入的批次不会被查询使用。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val029",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "已发布内容被编辑之后会变成什么状态，先前那轮索引能否继续代表当前版本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val029",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "已发布内容被编辑之后会变成什么状态，先前那轮索引能否继续代表当前版本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val029",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "已发布内容被编辑之后会变成什么状态，先前那轮索引能否继续代表当前版本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val029",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "已发布内容被编辑之后会变成什么状态，先前那轮索引能否继续代表当前版本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_review.md",
+          "quote": "修改正文或有意义的标题、标签、分类、权限等元数据会增加文档修订号，并把业务状态重置为 DRAFT。"
+        },
+        {
+          "doc": "kb_generations.md",
+          "quote": "查询只使用当前已发布修订对应的有效 generation。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val030",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "如果只找到文档信息却没找到有用段落，能否把这些元数据当成回答依据？为什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        },
+        {
+          "doc": "kb_search.md",
+          "quote": "关键词候选如果没有正文，只包含文档元数据，不能直接作为 AI 回答的正文证据。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val030",
+      "split": "regression",
+      "strategy": "cutoff-1",
+      "question": "如果只找到文档信息却没找到有用段落，能否把这些元数据当成回答依据？为什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val030",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "如果只找到文档信息却没找到有用段落，能否把这些元数据当成回答依据？为什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val030",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "如果只找到文档信息却没找到有用段落，能否把这些元数据当成回答依据？为什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_rag.md",
+          "quote": "文档级命中不等于关键段落命中；即使找到正确文档，也可能取错其中的 Chunk。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val033",
+      "split": "regression",
+      "strategy": "cutoff0",
+      "question": "对照上传业务的新旧两版规则，文件大小限制从多少调整到了多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_policy_archive.md",
+          "quote": "历史单文件上传上限为 20 MiB。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val033",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "对照上传业务的新旧两版规则，文件大小限制从多少调整到了多少？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_policy_current.md",
+          "quote": "当前单文件上传上限为 100 MiB。"
+        },
+        {
+          "doc": "kb_policy_archive.md",
+          "quote": "历史单文件上传上限为 20 MiB。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val034",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "模拟上传制度的现行版由哪个岗位审批，有没有无需人工审核的例外？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_policy_current.md",
+          "quote": "当前审批责任人为知识库管理员，审批要求为人工审核。该策略没有规定自动批准或免审流程。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val035",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "发布消息一直处理失败要尝试几回，死信修复后人工再次投递的检查顺序是什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_delivery.md",
+          "quote": "失败处理采用持久化重试，默认最多处理 3 次，重试间隔为 5 秒、10 秒。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val036",
+      "split": "regression",
+      "strategy": "rule",
+      "question": "资料列表及详情分别查什么存储，跨系统引用出故障时应依次核查什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        },
+        {
+          "doc": "kb_storage.md",
+          "quote": "定位跨存储故障时，排查顺序是核对元数据引用、确认正文记录、检查对象键，再判断是否需要补偿"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "val036",
+      "split": "regression",
+      "strategy": "cutoff1",
+      "question": "资料列表及详情分别查什么存储，跨系统引用出故障时应依次核查什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "kb_storage.md",
+          "quote": "文档列表只读 PostgreSQL，打开详情时才按 content_id 读取 MongoDB 的长正文。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办设备借用，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "资产管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_02",
+      "split": "development",
+      "strategy": "bge-base",
+      "question": "我想办设备借用，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "资产管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了设备借用的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "研发组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_05",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "外组同事拿到了设备借用的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "研发组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_06",
+      "split": "development",
+      "strategy": "rule",
+      "question": "设备借用批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "允许窗口为45分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_07",
+      "split": "development",
+      "strategy": "rule",
+      "question": "设备借用低于普通额度但涉及跨组共享时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_exceptions.md",
+          "quote": "涉及跨组共享时，即使金额未超过普通额度，也必须转专项审批"
+        },
+        {
+          "doc": "equipment_rules.md",
+          "quote": "必须同时满足用途登记且保管状态核验通过，才可以提交设备借用申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_09",
+      "split": "development",
+      "strategy": "rule",
+      "question": "设备借用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "equipment_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_09",
+      "split": "development",
+      "strategy": "dedup085",
+      "question": "设备借用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_equipment_09",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "设备借用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "equipment_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "equipment_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办差旅报销，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "财务复核员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_02",
+      "split": "development",
+      "strategy": "cutoff1",
+      "question": "我想办差旅报销，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "财务复核员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_02",
+      "split": "development",
+      "strategy": "bge-base",
+      "question": "我想办差旅报销，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "财务复核员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_03",
+      "split": "development",
+      "strategy": "rule",
+      "question": "差旅报销只做到了“付款截图齐全”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "必须同时满足行程结束且电子发票验真通过，才可以提交差旅报销申请。付款截图齐全不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了差旅报销的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "市场组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_06",
+      "split": "development",
+      "strategy": "rule",
+      "question": "差旅报销批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "允许窗口为72分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_07",
+      "split": "development",
+      "strategy": "rule",
+      "question": "差旅报销低于普通额度但涉及海外差旅时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "必须同时满足行程结束且电子发票验真通过，才可以提交差旅报销申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_08",
+      "split": "development",
+      "strategy": "rule",
+      "question": "旧版差旅报销表格把额度写成2500元，现在是否仍应按它驳回？",
+      "gained": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "单次申请金额不超过5000元时使用普通流程"
+        }
+      ],
+      "lost": []
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_09",
+      "split": "development",
+      "strategy": "rule",
+      "question": "差旅报销请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "travel_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_09",
+      "split": "development",
+      "strategy": "dedup085",
+      "question": "差旅报销请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_09",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "差旅报销请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "travel_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_travel_09",
+      "split": "development",
+      "strategy": "bge-base",
+      "question": "差旅报销请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "travel_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_08",
+      "split": "development",
+      "strategy": "cutoff-1",
+      "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "contract_rules.md",
+          "quote": "单次申请金额不超过10000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_08",
+      "split": "development",
+      "strategy": "cutoff0",
+      "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "contract_rules.md",
+          "quote": "单次申请金额不超过10000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_contract_08",
+      "split": "development",
+      "strategy": "cutoff1",
+      "question": "旧版合同用印表格把额度写成5000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "contract_rules.md",
+          "quote": "单次申请金额不超过10000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办临时门禁，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "园区安保员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_03",
+      "split": "development",
+      "strategy": "rule",
+      "question": "临时门禁只做到了“已有接待日历邀请”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "必须同时满足访客实名核验且被访人确认，才可以提交临时门禁申请。已有接待日历邀请不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了临时门禁的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "访客服务组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_06",
+      "split": "development",
+      "strategy": "rule",
+      "question": "临时门禁批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "允许窗口为120分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_07",
+      "split": "development",
+      "strategy": "rule",
+      "question": "临时门禁低于普通额度但涉及跨园区通行时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "必须同时满足访客实名核验且被访人确认，才可以提交临时门禁申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_08",
+      "split": "development",
+      "strategy": "cutoff-1",
+      "question": "旧版临时门禁表格把额度写成400元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "单次申请金额不超过800元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_08",
+      "split": "development",
+      "strategy": "cutoff0",
+      "question": "旧版临时门禁表格把额度写成400元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "单次申请金额不超过800元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_08",
+      "split": "development",
+      "strategy": "cutoff1",
+      "question": "旧版临时门禁表格把额度写成400元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "单次申请金额不超过800元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_09",
+      "split": "development",
+      "strategy": "rule",
+      "question": "临时门禁请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "access_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_access_09",
+      "split": "development",
+      "strategy": "dedup085",
+      "question": "临时门禁请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "access_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办采购申请，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "采购审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_03",
+      "split": "development",
+      "strategy": "rule",
+      "question": "采购申请只做到了“已经收到报价邮件”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "必须同时满足预算已锁定且供应商准入通过，才可以提交采购申请申请。已经收到报价邮件不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了采购申请的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "运维组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_05",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "外组同事拿到了采购申请的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "运维组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_06",
+      "split": "development",
+      "strategy": "rule",
+      "question": "采购申请批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "允许窗口为24分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_07",
+      "split": "development",
+      "strategy": "rule",
+      "question": "采购申请低于普通额度但涉及紧急采购时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_exceptions.md",
+          "quote": "涉及紧急采购时，即使金额未超过普通额度，也必须转专项审批"
+        },
+        {
+          "doc": "purchase_rules.md",
+          "quote": "必须同时满足预算已锁定且供应商准入通过，才可以提交采购申请申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_08",
+      "split": "development",
+      "strategy": "rule",
+      "question": "旧版采购申请表格把额度写成10000元，现在是否仍应按它驳回？",
+      "gained": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "单次申请金额不超过20000元时使用普通流程"
+        }
+      ],
+      "lost": []
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_09",
+      "split": "development",
+      "strategy": "rule",
+      "question": "采购申请请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "purchase_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_09",
+      "split": "development",
+      "strategy": "dedup085",
+      "question": "采购申请请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_purchase_09",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "采购申请请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "purchase_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "purchase_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办档案调阅，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "档案管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_02",
+      "split": "development",
+      "strategy": "cutoff1",
+      "question": "我想办档案调阅，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "档案管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_02",
+      "split": "development",
+      "strategy": "bge-base",
+      "question": "我想办档案调阅，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "档案管理员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_03",
+      "split": "development",
+      "strategy": "rule",
+      "question": "档案调阅只做到了“已经知道档案编号”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "必须同时满足档案密级核验且用途审批通过，才可以提交档案调阅申请。已经知道档案编号不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了档案调阅的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "审计组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_06",
+      "split": "development",
+      "strategy": "rule",
+      "question": "档案调阅批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "允许窗口为90分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_07",
+      "split": "development",
+      "strategy": "rule",
+      "question": "档案调阅低于普通额度但涉及外借原件时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "必须同时满足档案密级核验且用途审批通过，才可以提交档案调阅申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_08",
+      "split": "development",
+      "strategy": "mminilm",
+      "question": "旧版档案调阅表格把额度写成600元，现在是否仍应按它驳回？",
+      "gained": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "单次申请金额不超过1200元时使用普通流程"
+        }
+      ],
+      "lost": []
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_09",
+      "split": "development",
+      "strategy": "rule",
+      "question": "档案调阅请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "archive_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_archive_09",
+      "split": "development",
+      "strategy": "dedup085",
+      "question": "档案调阅请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "archive_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_03",
+      "split": "development",
+      "strategy": "rule",
+      "question": "软件上线只做到了“开发人员已经自测”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "release_rules.md",
+          "quote": "必须同时满足回归测试通过且回滚方案审批完成，才可以提交软件上线申请。开发人员已经自测不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_05",
+      "split": "development",
+      "strategy": "rule",
+      "question": "外组同事拿到了软件上线的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "release_rules.md",
+          "quote": "平台组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_08",
+      "split": "development",
+      "strategy": "cutoff-1",
+      "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "release_rules.md",
+          "quote": "单次申请金额不超过6000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_08",
+      "split": "development",
+      "strategy": "cutoff0",
+      "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "release_rules.md",
+          "quote": "单次申请金额不超过6000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_release_08",
+      "split": "development",
+      "strategy": "cutoff1",
+      "question": "旧版软件上线表格把额度写成3000元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "release_rules.md",
+          "quote": "单次申请金额不超过6000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_02",
+      "split": "development",
+      "strategy": "rule",
+      "question": "我想办培训报名，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "training_rules.md",
+          "quote": "培训协调员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_training_08",
+      "split": "development",
+      "strategy": "rule",
+      "question": "旧版培训报名表格把额度写成1250元，现在是否仍应按它驳回？",
+      "gained": [
+        {
+          "doc": "training_rules.md",
+          "quote": "单次申请金额不超过2500元时使用普通流程"
+        }
+      ],
+      "lost": []
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我想办样品领用，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "样品保管员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样品领用只做到了“已在群里说明用途”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。已在群里说明用途不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "外组同事拿到了样品领用的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "质检组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样品领用批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "允许窗口为36分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样品领用低于普通额度但涉及外部机构借样时，能否直接走普通流程？还需要满足哪些前提？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_09",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样品领用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "sample_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_sample_09",
+      "split": "validation",
+      "strategy": "dedup085",
+      "question": "样品领用请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我想办维修派单，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "维修调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_02",
+      "split": "validation",
+      "strategy": "bge-base",
+      "question": "我想办维修派单，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "维修调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "外组同事拿到了维修派单的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "设施组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "维修派单批准后还允许撤销多久，时间应从什么时候起算？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "允许窗口为15分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_09",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "维修派单请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。"
+        },
+        {
+          "doc": "repair_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_repair_09",
+      "split": "validation",
+      "strategy": "dedup085",
+      "question": "维修派单请求超时后怎样避免重复办理，归档恢复后又要核对哪些内容？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "恢复完成后必须再次核对审批结论、附件引用和操作者权限，三项核对全部通过后才允许恢复详情访问。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我想办公务用车，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "车队调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "公务用车只做到了“已经在日历占位”，能否先发起审批、之后补手续？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "必须同时满足出行事由批准且驾驶员资质核验通过，才可以提交公务用车申请。已经在日历占位不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_08",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "单次申请金额不超过3500元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_08",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "单次申请金额不超过3500元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_08",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "旧版公务用车表格把额度写成1750元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "单次申请金额不超过3500元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我想办数据导出，谁有最后拍板的权力？主管点头是否就算办完？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "data_rules.md",
+          "quote": "数据审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "外组同事拿到了数据导出的编号，是否就能打开我们组批准的详情？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "data_rules.md",
+          "quote": "分析组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_08",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "data_rules.md",
+          "quote": "单次申请金额不超过9000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_08",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "data_rules.md",
+          "quote": "单次申请金额不超过9000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_data_08",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "旧版数据导出表格把额度写成4500元，现在是否仍应按它驳回？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "data_rules.md",
+          "quote": "单次申请金额不超过9000元时使用普通流程"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-01",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "WET-ACOU-73对应什么用途，哪些服务或行为不包含在内？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "监测批次 WET-ACOU-73 使用离线声学记录器采集蛙鸣，不采集游客谈话。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-03",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-04",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "一轮已经连续录了37分钟，还能接着录吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "一轮已经连续录了37分钟，还能接着录吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样带的位置挪动了，谁有权确认新的坐标？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "东岸回声复核需要间隔多久录几次，什么情况下算清洁样本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "采用相隔11秒的两次短录音；两次均无机械噪声才可标记为清洁样本。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "资料交接时必须同时移交设备校时照片，只有音频文件不能完成交接。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-08",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-wetland-survey-08",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-planetarium-visit-04",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "现在离夜观开场只剩18分钟了，还来得及办这场团体签到吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "团体最晚应在开场前19分钟完成签到，距离开场不足19分钟不再受理该场签到。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-planetarium-visit-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我们带队老师可以自己移动赤道仪配重吗，应该找谁？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-planetarium-visit-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我们带队老师可以自己移动赤道仪配重吗，应该找谁？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-planetarium-visit-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        },
+        {
+          "doc": "planetarium-visit-companion.md",
+          "quote": "夜观团体的失物由前厅接待员登记，闭馆后移交安保值班室保管。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-planetarium-visit-07",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "封条完整，但一路测温的记录仪找不到了，这箱种子能先放正式库位吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "封条完整，但一路测温的记录仪找不到了，这箱种子能先放正式库位吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "物流接收员能签字放行待查种子箱吗，应由谁签？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "霜层目视检查用什么光，看到连续霜带需要留下哪些照片？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "使用侧向白光观察箱盖边缘，发现连续霜带即拍摄四角照片并标注方向。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-cold-chain-samples-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "待查种子箱由谁签字放行，供样方名称填错则找谁核对更正？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "演员还站在杆子下面，我在对讲机里提醒了，能开始升降吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "吊杆下方有人停留时禁止启动，无线口头提醒不能替代清场确认。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "灯光师能直接下吊杆运动口令吗，谁可以下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-theatre-rigging-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "软景折痕缓释要降到什么高度、停多久，能不能再挂重物拉平？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "将布景降至距台面半米并保持悬垂九分钟，不可悬挂额外配重拉平。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "古籍原件已经看满52分钟，继续看之前需要做什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "每次原件阅览最长为52分钟，到时先合册，续阅须重新检查书叶状态。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "谱牒里的折页由谁同意才能打开，志愿讲解员说可以算吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "虫蚀孔洞描记画在什么材料上，能直接压在古籍纸面上画吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "在透明描记片上用编号圆圈标出孔洞，描记片应悬离原件，不得覆压纸面。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "展开谱牒折页需要谁确认，公开引用馆藏图像又先找谁核对权利？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-manuscript-reading-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "听雨特藏调阅以什么码登记，归还时缺少哪张卡会变成待复核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "特藏调阅按馆藏架位码登记，作者生卒年不能代替架位码。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-01",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "RAD-MESH-62对应什么用途，哪些服务或行为不包含在内？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "任务标记 RAD-MESH-62 使用山脊中继站转发位置简报，不传送伤员面部影像。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "备用电池外壳好好的，只是还没做负载检查，可以先装机救急吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "备用电池未通过负载检查时不得装入中继机，外观完好不能替代负载检查。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-04",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "位置简报发出后过了22秒没回执，现在能重发吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "简报重发间隔至少为23秒，等待不足23秒不得再次发送同条简报。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-mountain-radio-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "岑岭中继救援位置主要按什么登记，撤站时除了设备还必须交哪份图？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "救援位置使用网格坐标登记，景区路牌名称仅作辅助描述。"
+        },
+        {
+          "doc": "mountain-radio.md",
+          "quote": "撤站时须移交天线方位草图，只有设备箱和电池不构成完整撤站交接。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "试烧小样上有小针眼，是直接塞进下一窑再烧一次吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "试烧小样上有小针眼，是直接塞进下一窑再烧一次吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "窑温未降至规定冷却区间不得开启窑门，切断电源也不代表可以开门。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "窑温未降至规定冷却区间不得开启窑门，切断电源也不代表可以开门。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "流釉边界判读从哪里量、用什么单位，还要和什么东西一起拍照？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "沿试片底缘量取最远流痕，记录到毫米，并与同窑空白垫片一起拍照。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-07",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-ceramics-kiln-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "栖陶试烧数据按哪个批号关联，小样交接少了什么就不能出结论？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "试烧数据以坯土批号关联，商品展示名不能作为批号。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我的潜水电脑看着正常，但还没和潜伴互查气源，可以先下水吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "潜伴未完成气源互检时禁止下潜，个人电脑显示正常不能替代互检。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "摄影记录员为了画面好看可以挪样线锚点吗，需要谁同意？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "移动样线锚点由谁同意，发现渔网缠绕又由哪个岗位联系清理队？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "移动样线锚点需调查领队同意，摄影记录员不得因构图需要自行移动。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-default",
+      "id": "holdout-reef-dive-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "珊湾潜调照片按什么编号归档，结束归档还必须附哪份观测页？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "潜调照片按样线桩号归档，船只名称不能替代桩号。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-01",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "WET-ACOU-73对应什么用途，哪些服务或行为不包含在内？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "监测批次 WET-ACOU-73 使用离线声学记录器采集蛙鸣，不采集游客谈话。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "昨晚录到的蛙叫数据是现场上传，还是回来以后再拷贝？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "存储卡当晚封存后，由次日值班员复制到隔离工作站，野外设备不直接联网。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-03",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "东岸水位已经降下来了，但另一名同伴还没到，我能先进去架机器吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "只有水位低于警戒桩且两名观察员同时到场，才允许进入东岸样带；只到一人时不得进入。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-04",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "一轮已经连续录了37分钟，还能接着录吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "一轮已经连续录了37分钟，还能接着录吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "单次录音持续不得超过37分钟，达到37分钟应立即停止本轮采集。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "样带的位置挪动了，谁有权确认新的坐标？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "样带坐标发生偏移时，由生态监测负责人确认新位置，志愿者只能记录偏移。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-06",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "东岸回声复核需要间隔多久录几次，什么情况下算清洁样本？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "采用相隔11秒的两次短录音；两次均无机械噪声才可标记为清洁样本。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-08",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-wetland-survey-08",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "这个夜间声学项目用哪个时区记时间，最后交资料时还要带什么校时凭证？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "wetland-survey.md",
+          "quote": "本手册的现场记录统一采用北京时间，设备本地时区必须在出发前校正。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-04",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "现在离夜观开场只剩18分钟了，还来得及办这场团体签到吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "团体最晚应在开场前19分钟完成签到，距离开场不足19分钟不再受理该场签到。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我们带队老师可以自己移动赤道仪配重吗，应该找谁？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我们带队老师可以自己移动赤道仪配重吗，应该找谁？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-planetarium-visit-07",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "夜观时想调整配重应找哪个岗位，结束后遗失物又由谁登记？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "planetarium-visit.md",
+          "quote": "调整望远镜赤道仪配重只能由器材指导员操作，带队老师不具备此权限。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "送来的种子冷箱外面全是水珠，是马上开标签扫描，还是先处理一下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "运输箱外有凝露时，先在缓冲室静置并擦干外壁，再读取箱内标签。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "封条完整，但一路测温的记录仪找不到了，这箱种子能先放正式库位吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "封条完整，但一路测温的记录仪找不到了，这箱种子能先放正式库位吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "温度记录仪缺失或封签破损任一项出现时，整箱转入待查区，不得直接上架。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "物流接收员能签字放行待查种子箱吗，应由谁签？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-cold-chain-samples-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "待查种子箱由谁签字放行，供样方名称填错则找谁核对更正？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "cold-chain-samples.md",
+          "quote": "待查箱的放行由种质保藏主管签字，物流接收员不能自行放行。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "景杆升到一半听到怪声，要不要来回动几下确认是哪儿响？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "出现不明异响时先停止升降并保持现有位置，检查期间不反复点动试声。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "演员还站在杆子下面，我在对讲机里提醒了，能开始升降吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "吊杆下方有人停留时禁止启动，无线口头提醒不能替代清场确认。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "排练想一次升1.8米，可以直接执行吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "排练阶段单次升降行程不得超过1.7米，超过该值必须另做移动分段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "灯光师能直接下吊杆运动口令吗，谁可以下？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging.md",
+          "quote": "吊杆运动口令仅由舞台监督发出，灯光操作员只能报告灯位干涉。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-theatre-rigging-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "吊杆运动口令由谁发出，布景阻燃证明最后由谁复核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "theatre-rigging-companion.md",
+          "quote": "布景阻燃证明由制作统筹收集并交技术总监复核，现场复印件只作参考。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "翻家谱发现纸边一碰就掉，能自己垫张纸继续看吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "书叶边缘脆裂时，读者停止翻页并保持书托角度，由修复助理放置隔离纸。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff-1",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "我打算只用铅笔做笔记，包里的签字笔还需要先寄存吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "未交存随身签字笔不得进入原件桌区，使用自己的铅笔也不免除交存要求。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-04",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "古籍原件已经看满52分钟，继续看之前需要做什么？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "每次原件阅览最长为52分钟，到时先合册，续阅须重新检查书叶状态。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "谱牒里的折页由谁同意才能打开，志愿讲解员说可以算吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-07",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "展开谱牒折页需要谁确认，公开引用馆藏图像又先找谁核对权利？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "同意展开折叠附页须由当班典藏员确认，读者和志愿讲解员不能自行展开。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-manuscript-reading-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "听雨特藏调阅以什么码登记，归还时缺少哪张卡会变成待复核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "manuscript-reading.md",
+          "quote": "特藏调阅按馆藏架位码登记，作者生卒年不能代替架位码。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-01",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "RAD-MESH-62对应什么用途，哪些服务或行为不包含在内？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "任务标记 RAD-MESH-62 使用山脊中继站转发位置简报，不传送伤员面部影像。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-03",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "备用电池外壳好好的，只是还没做负载检查，可以先装机救急吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "备用电池未通过负载检查时不得装入中继机，外观完好不能替代负载检查。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-05",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "小组联络员发现杂音能自行让全队换频道吗，该谁决定？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "切换全队工作信道由通信指挥员决定，小组联络员只负责报告干扰。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-mountain-radio-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "岑岭中继救援位置主要按什么登记，撤站时除了设备还必须交哪份图？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "mountain-radio.md",
+          "quote": "救援位置使用网格坐标登记，景区路牌名称仅作辅助描述。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-ceramics-kiln-02",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "试烧小样上有小针眼，是直接塞进下一窑再烧一次吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-ceramics-kiln-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "试烧小样上有小针眼，是直接塞进下一窑再烧一次吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "釉面出现针孔时先隔离对应试片并保留窑位记录，不立即混入下一批重烧。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-ceramics-kiln-03",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "电源已经断了但温度还高，能先把窑门打开一点吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "窑温未降至规定冷却区间不得开启窑门，切断电源也不代表可以开门。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-ceramics-kiln-07",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "修改升温曲线由谁签认，外来颜料存放条件又交谁审核？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "ceramics-kiln.md",
+          "quote": "试烧曲线的变更由窑务负责人签认，配釉学员无权修改升温段。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-02",
+      "split": "validation",
+      "strategy": "cutoff0",
+      "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-02",
+      "split": "validation",
+      "strategy": "cutoff1",
+      "question": "拍珊瑚时镜头前全是悬浮沙，是扇几下脚蹼清掉再拍吗？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "照片出现悬浮物遮挡时先沿原路径退半个身位，待沉降后重拍，不用脚蹼拨动水体。"
+        }
+      ]
+    },
+    {
+      "source": "holdout-candidate",
+      "id": "holdout-reef-dive-08",
+      "split": "validation",
+      "strategy": "rule",
+      "question": "珊湾潜调照片按什么编号归档，结束归档还必须附哪份观测页？",
+      "gained": [],
+      "lost": [
+        {
+          "doc": "reef-dive.md",
+          "quote": "潜调照片按样线桩号归档，船只名称不能替代桩号。"
+        }
+      ]
+    }
+  ],
+  "model_inference": {
+    "mminilm": {
+      "pools": 384,
+      "fresh_pairs": 11412,
+      "cached_pairs": 1575,
+      "query_tokens_dropped": 0,
+      "title_tokens_dropped": 0
+    },
+    "bge-base": {
+      "pools": 384,
+      "fresh_pairs": 11412,
+      "cached_pairs": 1575,
+      "query_tokens_dropped": 0,
+      "title_tokens_dropped": 0
+    }
+  },
+  "timing": {
+    "complete": true,
+    "trials": 72,
+    "summaries": [
+      {
+        "repeat": 0,
+        "model": "bge-m3",
+        "pools": 12,
+        "baseline_p50_ms": 6538.90812501777,
+        "p50_ms": 6538.90812501777,
+        "p50_reduction": 0.0,
+        "faster_pools": 0
+      },
+      {
+        "repeat": 0,
+        "model": "mminilm",
+        "pools": 12,
+        "baseline_p50_ms": 6538.90812501777,
+        "p50_ms": 792.0056255243253,
+        "p50_reduction": 0.8788780006719894,
+        "faster_pools": 12
+      },
+      {
+        "repeat": 0,
+        "model": "bge-base",
+        "pools": 12,
+        "baseline_p50_ms": 6538.90812501777,
+        "p50_ms": 2025.6545205193106,
+        "p50_reduction": 0.6902151732688848,
+        "faster_pools": 12
+      },
+      {
+        "repeat": 1,
+        "model": "bge-m3",
+        "pools": 12,
+        "baseline_p50_ms": 6412.564416503301,
+        "p50_ms": 6412.564416503301,
+        "p50_reduction": 0.0,
+        "faster_pools": 0
+      },
+      {
+        "repeat": 1,
+        "model": "mminilm",
+        "pools": 12,
+        "baseline_p50_ms": 6412.564416503301,
+        "p50_ms": 711.3311874854844,
+        "p50_reduction": 0.8890722741661962,
+        "faster_pools": 12
+      },
+      {
+        "repeat": 1,
+        "model": "bge-base",
+        "pools": 12,
+        "baseline_p50_ms": 6412.564416503301,
+        "p50_ms": 1920.8969170285854,
+        "p50_reduction": 0.7004479343575891,
+        "faster_pools": 12
+      }
+    ],
+    "max_score_difference_from_full_run": 0.0,
+    "scope": "Fresh uncached full-pool inference, model loading/warmup excluded. All models resident. No HTTP, end-to-end latency or throughput claim."
+  },
+  "score_overlap": {
+    "answerable_best_evidence_score": {
+      "minimum": -6.44140625,
+      "median": 2.427734375,
+      "maximum": 7.859375
+    },
+    "unanswerable_max_candidate_score": {
+      "minimum": -5.98828125,
+      "median": -2.4375,
+      "maximum": 3.892578125
+    },
+    "answerable_lowest": [
+      {
+        "source": "v3-candidate",
+        "id": "val006",
+        "max_evidence_score": -6.44140625
+      },
+      {
+        "source": "v3-candidate",
+        "id": "kb015",
+        "max_evidence_score": -4.8671875
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val021",
+        "max_evidence_score": -4.3828125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val008",
+        "max_evidence_score": -3.67578125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val010",
+        "max_evidence_score": -3.6640625
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val018",
+        "max_evidence_score": -3.380859375
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val003",
+        "max_evidence_score": -3.3125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val024",
+        "max_evidence_score": -3.236328125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "kb011",
+        "max_evidence_score": -3.08984375
+      },
+      {
+        "source": "v3-candidate",
+        "id": "val013",
+        "max_evidence_score": -2.97265625
+      }
+    ],
+    "unanswerable_highest": [
+      {
+        "source": "v3-candidate",
+        "id": "v3_repair_10",
+        "max_score": 3.892578125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_contract_10",
+        "max_score": 3.70703125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_purchase_12",
+        "max_score": 3.5703125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_travel_12",
+        "max_score": 3.248046875
+      },
+      {
+        "source": "holdout-default",
+        "id": "holdout-manuscript-reading-10",
+        "max_score": 3.1953125
+      },
+      {
+        "source": "holdout-candidate",
+        "id": "holdout-manuscript-reading-10",
+        "max_score": 3.1953125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_release_12",
+        "max_score": 3.10546875
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_data_10",
+        "max_score": 3.08984375
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_access_10",
+        "max_score": 3.078125
+      },
+      {
+        "source": "v3-candidate",
+        "id": "v3_vehicle_10",
+        "max_score": 3.06640625
+      }
+    ]
+  },
+  "decisions": {
+    "dedup095": "discard: all 384 final lists identical; no measured selected-set duplicate reduction or quality gain",
+    "dedup085": "discard: 31 near-duplicate selected pairs removed but 7 source-specific evidence losses, 0 gains; repeated template clauses from different business documents are not interchangeable",
+    "thresholds": "discard these fixed thresholds: cutoff -3 already loses 9 evidence instances and empties 8 answerable pools, despite emptying 26 unanswerable pools; stricter cutoffs worsen losses. No general conclusion against calibrated relevance filtering.",
+    "model_comparison": "User explicitly chose retain current BGE, prioritize quality. Do not integrate either alternative. mMiniLM trades 1.461 percentage points mean evidence coverage and 7.468 points top1 for 87.89%/88.91% lower paired inference P50; BGE base has lower aggregate coverage/top1 and higher latency than mMiniLM.",
+    "business_scope": "No production changes, new toggles, generation/recall/index modifications, training, env changes, API restart or merge."
+  },
+  "checks": {
+    "api_tests": 253,
+    "node_tests": 63,
+    "retrieval_python_tests": 45,
+    "tools_python_tests": 30,
+    "runtime_tests": 12,
+    "total": 403,
+    "api_build": "passed",
+    "format": "passed",
+    "test_compose_configs": 3
+  },
+  "raw_artifacts_sha256": {
+    "benchmarks/knowbase-rerank-v2/selection-trials/protocol.json": "7f3a9b840701529bcbc1dbb403fe144da493fe11a9d0778488292d8d8d32496a",
+    "benchmarks/knowbase-rerank-v2/selection-trials/timing-protocol.json": "4f112f1943eee2347ea3d29ac86f7c2e01d1ad740c0f7dcda0a020008bed9641",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/final-replay.json": "a5cb2de1f0fdee3e46b53666fd73f6d1bdbcdc76d79ca3266553d0ee60139811",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/final-audit.json": "02ad52452d051acd6618b94502bb1e1ecee82d0f89a7835723a4754341caa630",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/timing.json": "af4e1f68f76fdc60f1ed12e66d719fe73a6da9ec31a49358d4ec8a10f654f501",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/timing-audit.json": "86b6403376d2c0cde7d343220e2abea59692014a760d4def3c08240ad78646c6",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/score-overlap.json": "19b3f841254a12a90654ff0f51b4ce3fe7bc14a94f8fb87dc8e287ada0132194",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/mminilm-scores.json": "684732bda11e7f07acfc4ba72d9abf50fdb15d234520f283c51af0728afea949",
+    "reports/retrieval-rerank-selection-trials/2026-11-20-r1/bge-base-scores.json": "0b1454a85a3ec645a6bcafd7ed5cf4f6c0af487f247513deb7e0726a0d88c4df"
+  },
+  "analysis_implementation_sha256": {
+    "tools/rag-evaluation/rerank-trials-replay.cjs": "8d22e49c22c7c64f85f7ccbdbe7ccf11fd3748a2710818af8ad2c9bec3ddc8f0",
+    "tools/rag-evaluation/rerank-trials-replay.test.cjs": "4b7e7f8ba3c3ae47cdac28dfa22fe22ffad15a6ffdefcde6367dd5c5e028e6a3",
+    "tools/rag-evaluation/rerank_trials_audit.py": "ac956ba309f3705fcc12a7d36ba6ad9b7273b253ceaec2a4b87334808c53ab70",
+    "tools/rag-evaluation/test_trials_audit.py": "2e194062117165f8d84536ab084084c09837c322b2be1fcb1ec752785af54807",
+    "tools/rag-evaluation/rerank_models_timing_audit.py": "37e7fa689cdeddd00e728882cef022dbf4800610c3b5867d0c4c8596e80ac76f",
+    "tools/rag-evaluation/test_models_timing_audit.py": "e457d10823749412374ac5ec46f4df6e600cee0df4828277a830967bc1c7f0a4"
+  },
+  "user_decision": {
+    "answer": "保留当前 BGE，优先质量（推荐）",
+    "result": "All three trial directions complete; none integrated. Current BGE256/cap3/Top5 retained."
+  }
+}

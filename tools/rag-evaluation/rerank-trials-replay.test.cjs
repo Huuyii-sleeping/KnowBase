@@ -1,7 +1,37 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { validateAlternative } = require("./rerank-trials-replay.cjs");
+const {
+  validateAlternative,
+  selectionDiagnostics,
+} = require("./rerank-trials-replay.cjs");
 const { fingerprint } = require("./rerank-model-replay.cjs");
+
+test("diagnostics distinguish duplicate occupancy, membership and order", () => {
+  const row = {
+    pool: [
+      { chunkId: "a", content: "identical" },
+      { chunkId: "b", content: "identical" },
+      { chunkId: "c", content: "different" },
+    ],
+  };
+  const baseline = { selected: ["a", "b"] };
+  const reversed = selectionDiagnostics(
+    row,
+    { selected: ["b", "a"] },
+    baseline,
+  );
+  assert.equal(reversed.exactBodyPairs, 1);
+  assert.equal(reversed.nearPairs095, 1);
+  assert.equal(reversed.changedMembership, false);
+  assert.equal(reversed.changedOrderOrMembership, true);
+  const replaced = selectionDiagnostics(
+    row,
+    { selected: ["a", "c"] },
+    baseline,
+  );
+  assert.equal(replaced.exactBodyPairs, 0);
+  assert.equal(replaced.changedMembership, true);
+});
 
 test("alternative replay rejects mismatched model/input/protocol and incomplete scores", () => {
   const original = {
