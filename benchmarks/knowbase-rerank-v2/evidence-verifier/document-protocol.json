@@ -1,0 +1,21 @@
+{
+  "version": "knowbase-document-first-pilot-v1",
+  "status_at_freeze": "Current BGE scores exposed, no document-first selections graded. Fixed two aggregation methods, no per-query overrides.",
+  "replay": "reports/retrieval-rerank-adoption/2026-11-19-r1/replay.json",
+  "constraints": {
+    "topK": 5,
+    "maxChunksPerDocument": 3,
+    "maxContextCharacters": 6000
+  },
+  "aggregations": [
+    "max",
+    "top2mean"
+  ],
+  "files_sha256": {
+    "reports/retrieval-rerank-adoption/2026-11-19-r1/replay.json": "fda735981de1c5cec10edbcbba267b6352ebe937adfd68d4078399725d76772d",
+    "tools/rag-evaluation/rerank-document-order.cjs": "cfdc7483a3cbe1c7ef2ba6239dc4eef7db162a12590a93698c47b90f16b3208f",
+    "tools/rag-evaluation/rerank-document-order.test.cjs": "e332c50f31a32d449ce729f7ae8e41f51180ce80c8fa0f7c976c39454ed20d62",
+    "tools/rag-evaluation/rerank-policies.cjs": "c1ef4ec427aabea8b141fb51d0176a540a2c3665781e46c55416784b697dc4ec"
+  },
+  "scope": "384 exposed fixed pools, reuse current BGE256 score vectors. Preserve two rule anchors, cap3/Top5/budget6000, original body, final model score order. Independent alternatives, not fused with verifier."
+}
