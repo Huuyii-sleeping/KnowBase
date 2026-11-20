@@ -1,0 +1,17 @@
+{
+  "version": "knowbase-window-cascade-diagnostic-v1",
+  "status_at_freeze": "All long/short scores exposed; receipt loss known, no cascade combined output graded. Diagnostic only, not blind model evaluation.",
+  "replay": "reports/retrieval-rerank-adoption/2026-11-19-r1/replay.json",
+  "trigger": "max(short_scores) < 0; rerun with long input, keep all finite candidates. Not a probability or abstention decision.",
+  "constraints": {
+    "topK": 5,
+    "maxChunksPerDocument": 3,
+    "maxContextCharacters": 6000
+  },
+  "files_sha256": {
+    "reports/retrieval-rerank-adoption/2026-11-19-r1/replay.json": "fda735981de1c5cec10edbcbba267b6352ebe937adfd68d4078399725d76772d",
+    "tools/rag-evaluation/rerank-window-cascade.cjs": "d864517a0281c93d9ef8e07e2a7bd18f7579676d599278b6ee2dca915a927ff3",
+    "tools/rag-evaluation/rerank-window-cascade.test.cjs": "e2ea71ad61a9e929aeddbc569ed1e3dfd616a772b7fe7fe2d968b8447c1d401c"
+  },
+  "decisions": "One fixed trigger, no parameter search. Compare full384 pooled long/short replay. Any quality gain must be paired with fresh added-latency validation before adoption; no production default changes from diagnostic alone."
+}
