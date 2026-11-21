@@ -8,7 +8,9 @@ from statistics import mean, median
 from rerank_model_input import fingerprint
 from rerank_verifier import validate_verdict
 from rerank_verifier_run import ROOT, prepare
-from rerank_trials_audit import audit
+from recall_audit import evidence_hits
+from rerank_metrics import evidence_changes, grade_selection
+from rerank_trials_audit import summarize
 
 
 def replay_verdicts(protocol, result):
@@ -49,6 +51,37 @@ def replay_verdicts(protocol, result):
     return {"sources": sources}
 
 
+def grade_pilot(replay):
+    rows, changes = [], []
+    for source in replay["sources"]:
+        questions = {q["id"]: q for q in json.loads((ROOT / source["dataset"] / "questions.json").read_text())}
+        mapping = {d["file"]: d["id"] for d in source["metadata"]["document_mapping"]}
+        for row in source["rows"]:
+            q = questions[row["id"]]
+            pool = {p["chunkId"]: p for p in row["pool"]}
+            baseline = [pool[i] for i in row["options"]["current"]["selected"]]
+            for strategy, option in row["options"].items():
+                selected = [pool[i] for i in option["selected"]]
+                difference = evidence_changes(q, baseline, selected, mapping)
+                rows.append({"source": source["id"], "id": row["id"], "strategy": strategy,
+                             "split": q["split"], "type": q["type"],
+                             "metrics": grade_selection(q, row["pool"], selected, mapping),
+                             "top1_hit": any(evidence_hits(q, selected[:1], mapping)),
+                             "vs_current": difference, "selected_count": len(selected),
+                             "characters": option["characters"], "rejection_reasons": []})
+                if any(difference.values()):
+                    changes.append({"source": source["id"], "id": row["id"], "strategy": strategy,
+                                    "question": q["question"], **{k: [q["evidence"][i] for i in indices]
+                                                                   for k, indices in difference.items()}})
+    overall = {strategy: summarize([r for r in rows if r["strategy"] == strategy])
+               for strategy in sorted({r["strategy"] for r in rows})}
+    groups = [{"source": source, "split": split, "strategy": strategy,
+               **summarize([r for r in rows if (r["source"], r["split"], r["strategy"]) == (source, split, strategy)])}
+              for source, split, strategy in sorted({(r["source"], r["split"], r["strategy"]) for r in rows})]
+    return {"overall": overall, "groups": groups, "changes": changes,
+            "scope": "24 deliberately selected exposed diagnostic cases, not a full or blind regression. Negative-only groups have null evidence metrics."}
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("protocol", type=Path)
@@ -57,7 +90,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     p, result = json.loads(args.protocol.read_text()), json.loads(args.verdicts.read_text())
     replay = replay_verdicts(p, result)
-    graded = audit(replay)
+    graded = grade_pilot(replay)
     graded["latency"] = {"p50_ms": median(r["elapsed_ms"] for r in result["rows"]),
                          "mean_ms": mean(r["elapsed_ms"] for r in result["rows"]),
                          "scope": "Additional local verifier wall time including cold model load, not BGE or full request time."}

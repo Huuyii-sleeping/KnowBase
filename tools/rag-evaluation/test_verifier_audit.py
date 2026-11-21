@@ -9,6 +9,20 @@ import rerank_verifier_audit as verifier
 
 
 class VerifierAuditTests(unittest.TestCase):
+    def test_negative_only_pilot_group_has_null_evidence_metric(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "questions.json").write_text(json.dumps([
+                {"id": "q", "question": "unanswerable", "split": "regression", "type": "unanswerable", "evidence": [], "gold_docs": []}
+            ]))
+            option = {"selected": [], "characters": 0, "decisions": []}
+            source = {"id": "s", "dataset": ".", "metadata": {"document_mapping": []},
+                      "rows": [{"id": "q", "pool": [], "options": {"current": option, "verified": option}}]}
+            with patch.object(verifier, "ROOT", root):
+                result = verifier.grade_pilot({"sources": [source]})
+            self.assertIsNone(result["overall"]["verified"]["evidence_recall"])
+            self.assertEqual(result["overall"]["verified"]["negative_empty_rate"], 1)
+
     def test_alias_mapping_preserves_body_and_applies_utf16_constraints(self):
         protocol = {"replay": "replay.json", "constraints": {"maxChunksPerDocument": 1, "maxContextCharacters": 2}}
         pool = [{"chunkId": "a", "documentId": "doc", "content": "😀"},

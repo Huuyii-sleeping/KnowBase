@@ -8,6 +8,8 @@
 
 随后完成的[去重、弱相关过滤与替代模型对比](../benchmarks/knowbase-rerank-v2/selection-trials/audit.md)仍支持保留当前 BGE 和 3/5 约束。保守去重没有改变最终列表，较强去重丢失 7 条证据；最宽松的固定分数阈值也丢失 9 条。mMiniLM 推理约快 88%，但覆盖和首条命中下降，用户明确选择保留当前 BGE、优先质量，因此两款替代模型均不接入。本轮不增加业务策略开关。
 
+对剩余问题的[后续验证](../benchmarks/knowbase-rerank-v2/evidence-verifier/audit.md)已完成：文档分层选择无净收益，独立 Qwen7B 复核补回三条但丢失八条；条件长窗口能补回 receipt，却使该题耗时增至约 37–44 秒、超过当前 20 秒期限，均不接入。当前参数下的真实隔离 HTTP 串行、并发回退、超时和恢复检查通过；生产负载和真实问题验收仍未完成。
+
 ## 职责与排序合约
 
 `RerankService` 保持原同步规则，历史离线评测仍调用它。业务 `HybridSearchService` 在合并已复查的 Chunk 后，等待 `HybridRerankService`：规则模式直接返回原结果；BGE 模式由 `BgeHttpService` 请求本机 Python 模型运行时，然后使用独立的 `selectBge` 选择器。
