@@ -1,5 +1,5 @@
-import { RerankedCandidate } from "./rerank.service";
-import { RerankableCandidate, RerankOptions } from "./rerank.types";
+import { RerankedCandidate } from './rerank.service';
+import { RerankableCandidate, RerankOptions } from './rerank.types';
 
 // Reserve membership first; model scores determine final order for all consumers.
 export function selectBge<T extends RerankableCandidate>(

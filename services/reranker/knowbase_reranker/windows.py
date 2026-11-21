@@ -4,19 +4,7 @@ The benchmark copy is archived to preserve its committed fingerprints.
 Runtime changes must be checked against that frozen evaluation, not edited there.
 """
 
-import hashlib
-import json
 import math
-
-
-def fingerprint(value):
-    return hashlib.sha256(
-        json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode()
-    ).hexdigest()
-
-
-def pair_key(query, candidate):
-    return fingerprint([query, candidate["title"], candidate.get("content") or ""])
 
 
 def pair_windows(tokenizer, query, title, content, config):
