@@ -1,6 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import { HybridSearchService } from './hybrid-search.service';
 import { RerankService } from '../retrieval/rerank/rerank.service';
+import { HybridRerankService } from '../retrieval/rerank/hybrid-rerank.service';
+import { BgeHttpService } from '../retrieval/rerank/bge-http.service';
+import { ConfigService } from '@nestjs/config';
+
+const reranker = () =>
+  new HybridRerankService(
+    new RerankService(),
+    new BgeHttpService(new ConfigService()),
+  );
 
 const chunk = (chunkId: string, score: number) => ({
   chunkId,
@@ -22,10 +31,7 @@ describe('HybridSearchService', () => {
         .fn()
         .mockResolvedValue({ items: [chunk('a', 0.9), chunk('c', 0.8)] }),
     };
-    const service = new HybridSearchService(
-      ragQuery as any,
-      new RerankService(),
-    );
+    const service = new HybridSearchService(ragQuery as any, reranker());
     const user = { id: 'user', role: 'MEMBER' as const, team: 'team' };
     const result = await service.search({ query: '  证据  ', topK: 2 }, user);
     expect(result).toMatchObject({ query: '证据', topK: 2 });
@@ -48,7 +54,7 @@ describe('HybridSearchService', () => {
           .mockResolvedValue({ items: [chunk('a', 10)] }),
         search: vi.fn().mockResolvedValue({ items: [] }),
       } as any,
-      new RerankService(),
+      reranker(),
     );
     expect(
       (await service.search({ query: '证据', topK: 1 })).items[0],
@@ -62,7 +68,7 @@ describe('HybridSearchService', () => {
     };
     const result = await new HybridSearchService(
       ragQuery as any,
-      new RerankService(),
+      reranker(),
     ).search({ query: '证据', topK: 20 });
     expect(result).toEqual({ query: '证据', topK: 20, items: [] });
     for (const route of [ragQuery.search, ragQuery.searchKeywordChunks]) {
@@ -81,7 +87,7 @@ describe('HybridSearchService', () => {
           .mockRejectedValue(new Error('index unavailable')),
         search: vi.fn().mockResolvedValue({ items: [] }),
       } as any,
-      new RerankService(),
+      reranker(),
     );
     await expect(service.search({ query: '证据', topK: 1 })).rejects.toThrow(
       'index unavailable',

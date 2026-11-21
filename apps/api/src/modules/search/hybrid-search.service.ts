@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RagQueryService } from '../rag/rag-query.service';
-import { RerankService } from '../retrieval/rerank/rerank.service';
+import { HybridRerankService } from '../retrieval/rerank/hybrid-rerank.service';
 import {
   hybridCandidateCount,
   mergeChunkCandidates,
@@ -36,7 +36,7 @@ export interface HybridSearchResult {
 export class HybridSearchService {
   constructor(
     private readonly ragQuery: RagQueryService,
-    private readonly rerank: RerankService,
+    private readonly rerank: HybridRerankService,
   ) {}
 
   async search(
@@ -56,7 +56,7 @@ export class HybridSearchService {
       keywordResult.items,
       semanticResult.items,
     );
-    const reranked = this.rerank.rerank(normalizedQuery, candidates, {
+    const reranked = await this.rerank.rerank(normalizedQuery, candidates, {
       topK: query.topK,
     });
 
