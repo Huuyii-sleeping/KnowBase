@@ -25,6 +25,7 @@ export class AnswerPromptService {
       instructions,
       `问题：${question}\n\n知识库上下文：\n${context}\n\n`,
       this.taskReview(),
+      '最终核对（以原问题的必答事实为准）：核对每条结论的主体、属性与引句中的主体、属性是否一致。其他机构、项目或相近术语的真实数字不能移给问题中的对象；来源标题含相同编号或“甲乙”不代表属于所问业务。找不到所问对象的依据时使用 insufficient，不用相似业务代答。',
     ].join('\n\n');
   }
 

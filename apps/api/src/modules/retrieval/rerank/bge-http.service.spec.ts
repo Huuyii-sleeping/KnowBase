@@ -119,7 +119,10 @@ describe('BGE HTTP adapter', () => {
   });
 
   it('validates config before startup rather than silently using a different mode', () => {
-    expect(bgeConfig(new ConfigService()).mode).toBe('rule');
+    expect(bgeConfig(new ConfigService()).mode).toBe('bge');
+    expect(bgeConfig(new ConfigService({ RAG_RERANKER: 'rule' })).mode).toBe(
+      'rule',
+    );
     for (const values of [
       { RAG_RERANKER: 'typo' },
       { BGE_RERANK_TIMEOUT_MS: 0 },

@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 
 export function bgeConfig(config: ConfigService) {
-  const mode = config.get<string>('RAG_RERANKER', 'rule');
+  const mode = config.get<string>('RAG_RERANKER', 'bge');
   if (mode !== 'rule' && mode !== 'bge') {
     throw new Error('RAG_RERANKER must be rule or bge');
   }

@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { createRequire } = require('node:module');
 const path = require('node:path');
 
-test('compiled Nest rerank module resolves providers and rule mode without a running model', async () => {
+test('compiled Nest rerank module resolves providers and handles an empty pool without a running model', async () => {
   const root = path.resolve(__dirname, '../..');
   const apiRequire = createRequire(path.join(root, 'apps/api/package.json'));
   apiRequire('reflect-metadata');

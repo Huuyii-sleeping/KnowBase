@@ -4,7 +4,7 @@
 
 关键词路在已有 `content` 文本字段上使用 Elasticsearch BM25，不需要新增索引或重建向量。两路均限制为当前用户允许访问、当前已发布修订对应的有效 RAG generation；应用层再次检查文档是否存在、发布状态和版本，避免删除、改稿或重建中的暂存正文进入上下文。
 
-原生关键词与向量分数、候选正文、来源和 Chunk ID 均保留。规则重排仍按语义、关键词、覆盖率和双路命中奖励打分，最多保留同文档 2 个 Chunk、默认 6000 字符。具体策略与候选预算以 `search/hybrid-candidates.ts` 的导出策略为准，评测运行器从构建产物读取并记录实际策略。
+原生关键词与向量分数、候选正文、来源和 Chunk ID 均保留。当前默认使用 [BGE 重排](rerank.md)，模型不可用时回退规则。规则重排按语义、关键词、覆盖率和双路命中奖励打分，最多保留同文档 2 个 Chunk、默认 6000 字符。具体策略与候选预算以 `search/hybrid-candidates.ts` 的导出策略为准，评测运行器从构建产物读取并记录实际策略。
 
 混合检索将最终 TopK 与候选池分开：两路各召回 3 倍候选、最多各 60 个，再合并重排并裁剪到用户请求的数量。扩大候选池可能增加查询、权限复查和重排成本，因此要同时记录延迟。元数据工作台搜索和独立语义接口的返回预算不受这项策略影响。
 
@@ -22,7 +22,7 @@
 
 `kh_chunk.content` 保留原来的 standard 分词，并新增 `content.cjk` 多字段，使用 Elasticsearch 内置 `cjk` analyzer，无需安装插件。standard 通常把中文拆成单字；CJK 生成相邻双字，能区分“上传”“审核”等词组。英文术语和下划线标识仍通过 analyzer 处理，实际兼容性由真实索引测试验证。
 
-`RAG_KEYWORD_ANALYZER=standard|cjk` 只控制 RAG 正文关键词路，默认 `standard` 保持已有安装的查询行为。选择 `cjk` 后查询 `content.cjk`；工作台文档元数据搜索不受影响。非法配置启动报错，不静默回退。
+`RAG_KEYWORD_ANALYZER=standard|cjk` 只控制 RAG 正文关键词路，当前默认 `cjk`；显式 `standard` 可保留已有安装的查询行为。选择 `cjk` 后查询 `content.cjk`；工作台文档元数据搜索不受影响。非法配置启动报错，不静默回退。
 
 旧索引添加多字段不会为已有记录自动生成新词项。升级时保持 `standard`，部署新增映射的代码，通过已有重建入口重建全部当前发布文档的 RAG generation，确认各批次激活，再将所有查询进程切为 `cjk`。重建沿用完整批次激活规则，暂存批次、过期版本和不可见文档不能进入召回。回退查询配置至 `standard` 无需删索引；不要在未重建完时切换，否则旧文档会漏召回。
 
@@ -36,21 +36,21 @@
 
 ## 标题与章节上下文对照
 
-`RAG_RETRIEVAL_CONTEXT=body|title|title-heading` 默认 `body`。`title` 为原有每个 Chunk 添加文档标题，`title-heading` 再添加 Chunk 起始位置所属的 Markdown 标题路径。标题来源为当前文档元数据，章节路径来源为原文，不调用模型补写；识别 ATX/Setext 标题，忽略围栏代码块内的示例。分块边界与重叠保持原样，标题标签限制每段 160 字符并归一化空白。
+`RAG_RETRIEVAL_CONTEXT=body|title|title-heading` 当前默认 `title-heading`。`title` 为原有每个 Chunk 添加文档标题，`title-heading` 再添加 Chunk 起始位置所属的 Markdown 标题路径。标题来源为当前文档元数据，章节路径来源为原文，不调用模型补写；识别 ATX/Setext 标题，忽略围栏代码块内的示例。分块边界与重叠保持原样，标题标签限制每段 160 字符并归一化空白。
 
-`content` 始终保存原始 Chunk，返回内容、引用与证据计分继续使用它。辅助文本单独保存为 `retrieval_text`，Embedding 对同一辅助文本编码；启用上下文后关键词路按配置查询 `retrieval_text` 或 `retrieval_text.cjk`。不把辅助标题当作原文答案，也不改规则重排、查询扩展、工作台搜索或图谱处理。默认正文模式仍查询原 `content`，旧 Chunk 不受新增字段影响。
+`content` 始终保存原始 Chunk，返回内容、引用与证据计分继续使用它。辅助文本单独保存为 `retrieval_text`，Embedding 对同一辅助文本编码；启用上下文后关键词路按配置查询 `retrieval_text` 或 `retrieval_text.cjk`。不把辅助标题当作原文答案，也不改规则重排、查询扩展、工作台搜索或图谱处理。显式正文模式仍查询原 `content`；旧索引升级时必须按下文协调重建和查询切换。
 
 每次更改上下文模式都必须重建全部当前 RAG generations。辅助文本映射不会回填旧记录；新向量与旧向量的编码输入也不同。先在隔离环境完成对照，线上统一安排重建与查询切换，不能只改查询配置。回退到正文模式时也应重建正文向量。批次激活、失败清理、版本和可见范围规则继续适用；本次不自动修改线上配置。
 
 ## 正文候选保护实验
 
-`RAG_KEYWORD_POLICY=combined|weighted|body-reserve` 默认 `combined`，只在启用标题上下文时生效；正文模式始终按原 `content` 检索。`combined` 保留既有的辅助文本单字段匹配。`weighted` 用 Elasticsearch `best_fields` 分别计算 `content^2` 和 `retrieval_text`，tie_breaker 为 0.1：正文仍使用独立词频/长度统计，辅助字段仍包含标题章节及正文，不伪称只有标题。
+`RAG_KEYWORD_POLICY=combined|weighted|body-reserve` 当前默认 `body-reserve`，只在启用标题上下文时生效；正文模式始终按原 `content` 检索。`combined` 保留既有的辅助文本单字段匹配。`weighted` 用 Elasticsearch `best_fields` 分别计算 `content^2` 和 `retrieval_text`，tie_breaker 为 0.1：正文仍使用独立词频/长度统计，辅助字段仍包含标题章节及正文，不伪称只有标题。
 
 `body-reserve` 并发查询正文与辅助文本，使用相同活跃 generation 和允许文档范围；按“两条正文、一条辅助”交替选取，Chunk ID 去重、不足回填，再经过原有批量元数据复查和路由裁剪。不做跨文档得分转移，不改变最终返回预算；它最多增加一倍关键词索引读取，不增加保留候选数。每个候选保留实际被选中命中的原生分数；不同字段分数未做统一标定，因此还要检查最终选择退步。固定混合预算无法保证保留全部原正文候选，不能把预留部分名额称为完整保底。
 
 这两种策略复用现有 `content` 与 `retrieval_text` 映射；已完整建立相同上下文模式索引时，只切关键词策略不需要重新计算向量。上下文模式或向量输入变化仍按前文要求重建。本轮只修复召回候选受标题影响的问题，不更换模型或重排。
 
-1792 次计分后的候选选型为 `title-heading + body-reserve + cjk + 15:15`，逐证据回归、替代方案、额外读取成本及适用边界统一记录在[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。默认配置保持正文/combined/standard；本轮没有部署或重建业务文档，也不把合成集上的池证据恢复视为最终 Top 5 或答案质量验收。
+1792 次计分后的候选选型为 `title-heading + body-reserve + cjk + 15:15`，逐证据回归、替代方案、额外读取成本及适用边界统一记录在[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。当时默认配置保持正文/combined/standard；该轮没有部署或重建业务文档，也不把合成集上的池证据恢复视为最终 Top 5 或答案质量验收。
 
 `RAG_KEYWORD_BODY_SLOTS=1|2|3` 控制每取一条辅助候选之前预留几条正文，默认 2；重复仍去重、不足回填，名额不构成绝对正文保底。仅调整查询选取比例不需要重建索引。评测对应 `--body-slots`，固定矩阵见 `benchmarks/knowbase-recall-v3/experiments/recall-boundaries-protocol.json`，不自动改变业务候选预算。
 
@@ -72,6 +72,12 @@
 
 后续[专用模型与候选保护对照](../benchmarks/knowbase-rerank-v2/experiments/audit.md)已比较 mMiniLM、BGE v2 M3、固定规则候选名额及独立的最终顺序。模型输入覆盖正文尾部，保留相同候选池与最终约束；准入名额保护与输出排序分别验证。完整收益、逐证据损失复核、首条排序变化及本机推理成本见报告，冻结协议与复现命令见 [README](../benchmarks/knowbase-rerank-v2/README.md)。
 
-该工具仍只处理固定池重排，不是新的检索或答案测试，全部合成数据已经暴露。业务默认、接口和问答消费逻辑保持原样，没有接入模型服务。后续接入需单独验证模型超时/不可用回退、分数与排序合约和并发延迟；问答端再次排序及默认只取一条也不能由离线 Top 5 结果代替验收。
+该工具仍只处理固定池重排，不是新的检索或答案测试，全部合成数据已经暴露。当时业务默认、接口和问答消费逻辑保持原样，没有接入模型服务。后续接入需单独验证模型超时/不可用回退、分数与排序合约和并发延迟；问答端再次排序及默认只取一条也不能由离线 Top 5 结果代替验收。
 
-后续已增加 [BGE 业务适配器](rerank.md)，默认仍为规则。模型模式采用规则前 2 块准入保护、每文档最多 3 块及短窗口完整正文评分；超时、异常或繁忙时返回完整规则结果。最终排序与模型原始分数分别保存，输入、部署及已知质量边界以该设计文档为准。
+后续已增加 [BGE 业务适配器](rerank.md)，当前代码默认已改为 BGE。模型模式采用规则前 2 块准入保护、每文档最多 3 块及短窗口完整正文评分；超时、异常或繁忙时返回完整规则结果。最终排序与模型原始分数分别保存，输入、部署及已知质量边界以该设计文档为准。
+
+## 当前默认与已有安装升级
+
+端到端问题修复将代码默认与已验证方案对齐：CJK、标题章节、正文保护 2:1、BGE；HTTP 预算仍是两路各 3K，Top 5 时为 15:15，未采用实验的 30:15。采用依据、修复验证与剩余问题见[端到端修复报告](answer-e2e-fix-validation.md)。上文各实验记录保留当时状态，不代表当前默认。
+
+显式环境配置优先于代码默认，升级代码不会覆盖已有 `.env` 或自动重启进程。旧安装先显式保留 `standard/body/combined/rule`；维护窗口内暂停问答流量并停止旧 RAG Worker，再以 `cjk/title-heading/body-reserve` 启动新 Worker，然后按[重建入口](pipeline.md#升级和重建)为全部当前发布文档排队。确认每个新 RAG 任务成功且相应 generation 已替换为本次新批次后，再将所有 API 查询进程改为相同配置并恢复问答。不能仅检查已有 generation 非空，也不能让旧 Worker 消费这些重建任务；否则可能仍使用正文向量。重建期间避免发布变更，防止核验清单失效。先启动并检查固定版本 BGE 运行时，再启用 `RAG_RERANKER=bge`。本次未改用户环境、未执行业务索引迁移或重启主项目；仅在隔离环境验证新默认。

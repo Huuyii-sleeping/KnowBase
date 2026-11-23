@@ -49,6 +49,11 @@ describe('AnswerPromptService', () => {
       prompt.indexOf('知识库上下文：'),
     );
     expect(prompt).toContain('不输出核对过程');
+    expect(prompt).toContain('主体、属性与引句中的主体、属性是否一致');
+    expect(prompt).toContain('不用相似业务代答');
+    expect(prompt.lastIndexOf('最终核对')).toBeGreaterThan(
+      prompt.indexOf('回答前先核对'),
+    );
   });
 
   it('labels graph paths separately from document chunks', () => {

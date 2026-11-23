@@ -18,7 +18,7 @@ export class RagChunkTextService {
     config: ConfigService,
   ) {
     this.mode = retrievalContext(
-      config.get<string>('RAG_RETRIEVAL_CONTEXT', 'body'),
+      config.get<string>('RAG_RETRIEVAL_CONTEXT', 'title-heading'),
     );
   }
 

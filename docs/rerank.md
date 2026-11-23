@@ -1,6 +1,6 @@
 # BGE 重排
 
-混合检索支持规则排序与本机 BGE v2 M3。`RAG_RERANKER=rule|bge` 指定模式，默认 `rule`；合并代码不会自动启动模型或切换运行中的 API。BGE 接入只改变候选选择与排序，不修改索引、召回、权限复查或问答生成，不需要重建向量。
+混合检索支持规则排序与本机 BGE v2 M3。`RAG_RERANKER=rule|bge` 指定模式，当前默认 `bge`；合并代码不会自动启动模型或切换运行中的 API。BGE 接入只改变候选选择与排序，不修改索引、召回、权限复查或问答生成，不需要重建向量。
 
 ## 职责与选择合约
 
@@ -40,7 +40,7 @@ BGE_RERANK_TIMEOUT_MS=20000
 BGE_RERANK_COOLDOWN_MS=30000
 ```
 
-恢复 `RAG_RERANKER=rule` 并重启即可回退，无需重新入库。项目的默认配置仍为规则模式。
+恢复 `RAG_RERANKER=rule` 并重启即可回退，无需重新入库。显式旧配置仍会优先于新代码默认；启动模型并重启 API 才会切换实际运行行为。默认对齐的端到端验证见[修复报告](answer-e2e-fix-validation.md)。
 
 ## 故障与容量边界
 

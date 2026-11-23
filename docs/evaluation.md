@@ -6,14 +6,14 @@
 
 后续召回诊断使用 `knowbase-recall-v2/v3`，新来源检查使用 `knowbase-holdout-v1`；历史基线不被新结果覆盖。所有已评分数据现均为已暴露回归数据，同作者合成留出不能当作独立人工验收。
 
-| 项目           | 当前状态                                                                                                           | 依据                                                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 业务默认       | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算                                                  | [检索设计](retrieval.md)                                                                                                                       |
-| 冻结实验候选   | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署                                                           | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)                                                     |
-| 未采用方向     | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭                                                         | 本文对应实验章节                                                                                                                               |
-| 最新留出检查   | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步                                                         | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)                                                                         |
-| 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则    | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
-| 专用重排模型   | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md)          |
+| 项目           | 当前状态                                                                                                        | 依据                                                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| 业务默认       | 标题章节、CJK、正文保护 2:1、BGE；HTTP 两路等额预算；旧索引须协调重建                                           | [检索设计](retrieval.md)                                                                                                                       |
+| 冻结实验候选   | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署                                                        | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)                                                     |
+| 未采用方向     | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭                                                      | 本文对应实验章节                                                                                                                               |
+| 最新留出检查   | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步                                                      | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)                                                                         |
+| 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，当时未替换规则 | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
+| 专用重排模型   | 两模型完成同池对照；当前默认 BGE，保留规则前 2 块准入保护；显式旧配置仍优先                                     | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md)          |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
@@ -186,7 +186,7 @@ python tools/rag-evaluation/evaluate_retrieval.py \
 
 ## 问答评测基线
 
-当前[上下文与引用设计](answer-context.md)按完整输入预算保留上游重排候选，使用结构化状态、逐结论来源和原文引句校验；采用决定见[收尾验证](answer-refinement-validation.md)。30 篇新来源、48 题的固定候选与完整 HTTP 验收，以及容量、并发、外部服务故障检查见[第二轮验收](answer-acceptance-validation.md)；随后任务核对及预算修复的 248 次回归见[修复报告](answer-repair-validation.md)。消息分层、长证据补充及逐项解释的分别对照与 306 次采用版本回归见[提示词优化报告](answer-prompt-optimization-validation.md)。此前结果保留于[质量验收报告](answer-quality-validation.md)。来源编号和逐字引句均不能证明语义支持或回答完整，应同时检查实际回答、无答案误答和必答项遗漏。
+当前[上下文与引用设计](answer-context.md)按完整输入预算保留上游重排候选，使用结构化状态、逐结论来源和原文引句校验；采用决定见[收尾验证](answer-refinement-validation.md)。30 篇新来源、48 题的固定候选与完整 HTTP 验收，以及容量、并发、外部服务故障检查见[第二轮验收](answer-acceptance-validation.md)；随后任务核对及预算修复的 248 次回归见[修复报告](answer-repair-validation.md)。消息分层、长证据补充及逐项解释的分别对照与 306 次采用版本回归见[提示词优化报告](answer-prompt-optimization-validation.md)。40 篇新文档、64 题在两套配置下的真实 HTTP 问答、同请求阶段定位和权限/版本检查见[端到端评测](answer-e2e-validation.md)。随后图谱路由、配置对齐与主体核对的修复及真实回归见[端到端修复报告](answer-e2e-fix-validation.md)。此前结果保留于[质量验收报告](answer-quality-validation.md)。来源编号和逐字引句均不能证明语义支持或回答完整，应同时检查实际回答、无答案误答和必答项遗漏。
 
 问答数据集位于 `benchmarks/ragbench-cn/questions/answers_zh.json`，每条样本包含参考答案、关键事实、标准来源以及是否应该拒答。运行器会真实调用 `/rag/answer`，输出以下可解释指标：
 
@@ -214,7 +214,7 @@ python tools/rag-evaluation/evaluate_answer.py \
 
 本轮冻结参数位于 `benchmarks/knowbase-recall-v3/experiments/context-protocol.json`：三种上下文、每种 10:10 / 15:15 / 30:10，模型/编码/分块/重排固定，`--split all` 同时报告开发与已暴露回归组；只按 development 比较配置，旧 validation 不再称未见验证。不得根据已测结果修改题目或答案。
 
-已完成的 2016 次计分、全部正文 Chunk 不变检查及逐题损失见[上下文对照报告](../benchmarks/knowbase-recall-v3/experiments/context-audit-v3.md)。标题加章节在开发组 15:15 时池证据 100%、最终证据 54.86%，正文同预算为 94.44% / 52.78%；但旧题 val009 的原始关键词排名由 9 降至 20，被保留 15 条的预算截掉。因此保留为可显式开启的实验模式，默认 `body`，不宣布召回层验收。
+已完成的 2016 次计分、全部正文 Chunk 不变检查及逐题损失见[上下文对照报告](../benchmarks/knowbase-recall-v3/experiments/context-audit-v3.md)。标题加章节在开发组 15:15 时池证据 100%、最终证据 54.86%，正文同预算为 94.44% / 52.78%；但旧题 val009 的原始关键词排名由 9 降至 20，被保留 15 条的预算截掉。当时因此保留为可显式开启的实验模式、默认 `body`；后续正文保护及端到端修复另行验证，不覆盖该历史结论。
 
 语料发布后最多等待 600 秒完成 Search/RAG generation 激活，并打印发布数与激活数；早先两次 180 秒等待超时的运行不包含完整计分，失败状态单独保留。每次对照正常完成后清理本轮容器与卷。
 
@@ -222,7 +222,7 @@ python tools/rag-evaluation/evaluate_answer.py \
 
 `--keyword-policy combined|weighted|body-reserve` 选择标题上下文下的关键词策略，默认 combined；配置、模型及实际预算记录到元数据。冻结矩阵见 `benchmarks/knowbase-recall-v3/experiments/body-protection-protocol.json`。正文基线与三种标题章节策略分别新建隔离索引，固定各路 10 / 15，开发与已暴露回归全部运行；逐条比较原文证据命中的获得与丢失，不能只比较平均分。body-reserve 的两次索引请求不隐藏为一次同成本召回。
 
-本轮 1792 次计分已完成，候选为 `title-heading + body-reserve + cjk + 15:15`；测量、逐题边界和复现命令见[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。结果与决策 JSON 同目录保留。此前上下文实验的正文退步由本轮继续处理，历史报告不覆盖；所有现有分组已暴露，不能作为未见验收数据。默认配置不随评测自动切换。
+本轮 1792 次计分已完成，候选为 `title-heading + body-reserve + cjk + 15:15`；测量、逐题边界和复现命令见[正文保护报告](../benchmarks/knowbase-recall-v3/experiments/body-protection-audit-v3.md)。结果与决策 JSON 同目录保留。此前上下文实验的正文退步由本轮继续处理，历史报告不覆盖；所有现有分组已暴露，不能作为未见验收数据。该轮未随评测自动切换默认配置；当前默认以本文开头状态表为准。
 
 后续[候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)增加合格候选阶段与逐证据排名，区分元数据复查和预算截断；1120 次冻结计分比较 `--body-slots 1|2|3` 及关键词 15/20/30、固定向量 15。保留 2:1 比例，实验候选为 30:15；收益与停止无效方向的结论见该报告。30:15 仅代表实验 IPC 配置，业务 HTTP 预算规则未切换。
 
