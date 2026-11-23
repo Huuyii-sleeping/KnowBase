@@ -2,6 +2,34 @@ import { describe, expect, it } from 'vitest';
 import { markdownBlocks } from './markdown-blocks';
 
 describe('Markdown structure', () => {
+  it('keeps HTML tables atomic, preserves adjacent prose and ignores table markup inside code', () => {
+    const table = '<table><tr><th>A</th></tr><tr><td>1</td></tr></table>';
+    const input =
+      '# Table\n\n前文。\n' + table + '后文。\n\n```html\n' + table + '\n```';
+    const blocks = markdownBlocks(input);
+    expect(blocks.map((block) => block.kind)).toEqual([
+      'heading',
+      'paragraph',
+      'table',
+      'paragraph',
+      'code',
+    ]);
+    expect(blocks[2]).toMatchObject({
+      text: table,
+      table: { columnCount: 1, rowCount: 2 },
+    });
+    expect(blocks[3].text).toBe('后文。');
+    for (const block of blocks)
+      expect(input.slice(block.start, block.end)).toBe(block.text);
+  });
+
+  it('rejects unclosed HTML tables and tables crossing explicit source partitions', () => {
+    expect(() => markdownBlocks('<table><tr><td>x')).toThrow('Unclosed');
+    const table = '<table>\n<tr><td>x</td></tr>\n</table>';
+    expect(() =>
+      markdownBlocks(table, [{ start: 0, end: 8, source: { page: 1 } }]),
+    ).toThrow('crosses');
+  });
   it('keeps display equations atomic and retains headings across source blocks on one page', () => {
     const text = '# Math\n\n$$\nx^2=1\n$$\n';
     const split = text.indexOf('$$');
@@ -53,6 +81,29 @@ describe('Markdown structure', () => {
       source: { page: 2 },
     });
     expect(markdownBlocks(input)[1].source).toBeUndefined();
+  });
+
+  it('rejects an HTML table starting outside and crossing into a source section', () => {
+    const input = '<table>\n<tr><td>x</td></tr>\n</table>';
+    expect(() =>
+      markdownBlocks(input, [
+        { start: 8, end: input.length, source: { page: 2 } },
+      ]),
+    ).toThrow('crosses');
+  });
+
+  it('does not terminate tables at closing-tag text inside comments, attributes or scripts', () => {
+    const source =
+      '<table data-note="</table>"><tr><td><!-- </table> -->值<script>const x = "</table>";</script></td></tr><tr><td>后行</td></tr></table>后文';
+    const blocks = markdownBlocks(source);
+    expect(blocks).toHaveLength(2);
+    expect(blocks[0].table?.cells.map((cell) => cell.text)).toEqual([
+      '值',
+      '后行',
+    ]);
+    expect(blocks[1].text).toBe('后文');
+    expect(source.slice(blocks[0].start, blocks[0].end)).toBe(blocks[0].text);
+    expect(() => markdownBlocks('<table><tr><td>no close')).toThrow('Unclosed');
   });
 
   it.each([

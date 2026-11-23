@@ -2,8 +2,9 @@ import { createHash } from 'node:crypto';
 import { DocumentBlock } from '../../ingestion/document-structure';
 import { blockFragments } from './block-fragments';
 import { ChunkOptions, StructuredChunk } from './chunk.types';
+import { structuredTableFragments } from './table-fragments';
 
-export const CHUNK_STRATEGY = 'structure-v2';
+export const CHUNK_STRATEGY = 'structure-v3';
 
 export async function structuredChunks(
   blocks: DocumentBlock[],
@@ -57,12 +58,29 @@ export async function structuredChunks(
     let prefix = titles.join('\n');
     if (prefix) prefix += '\n\n';
     const budget = options.size - prefix.length;
-    const fragments = await blockFragments(block, budget, options.overlap);
-    for (const body of fragments) {
+    const fragments = block.table
+      ? structuredTableFragments(block.table, budget)
+      : (await blockFragments(block, budget, options.overlap)).map((text) => ({
+          text,
+          rowStart: undefined,
+          rowEnd: undefined,
+        }));
+    for (const fragment of fragments) {
+      const body = fragment.text;
       const range = {
         start: block.start,
         end: block.end,
         ...(block.source ? { source: block.source } : {}),
+        ...(block.table
+          ? {
+              source: {
+                ...block.source,
+                tableId: block.table.id,
+                tableRowStart: fragment.rowStart,
+                tableRowEnd: fragment.rowEnd,
+              },
+            }
+          : {}),
       };
       if (
         block.kind === 'table' ||

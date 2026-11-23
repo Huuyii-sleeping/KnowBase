@@ -1,3 +1,5 @@
+import type { TableData } from './tables/table.types';
+
 export interface SourceLocation {
   page?: number;
   slide?: number;
@@ -7,6 +9,10 @@ export interface SourceLocation {
   blockIndex?: number;
   bbox?: number[];
   partition?: number;
+  // Logical rows within a parsed table; never presented as original sheet rows.
+  tableId?: string;
+  tableRowStart?: number;
+  tableRowEnd?: number;
 }
 
 // Offsets are UTF-16 positions in the stored Markdown, never binary file offsets.
@@ -23,6 +29,9 @@ export interface DocumentBlock {
   end: number;
   headingPath: string[];
   source?: SourceLocation;
+  table?: TableData;
+  // Persisted blocks refer to the canonical table stored once in content.tables.
+  tableId?: string;
 }
 
 export const PARSE_STRATEGY = 'structured-markdown-v1';

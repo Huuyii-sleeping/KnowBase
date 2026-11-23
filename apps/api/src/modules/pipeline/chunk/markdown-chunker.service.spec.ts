@@ -2,6 +2,44 @@ import { describe, expect, it, vi } from 'vitest';
 import { MarkdownChunkerService } from './markdown-chunker.service';
 
 describe('MarkdownChunkerService', () => {
+  it('turns merged HTML tables into bounded search rows with canonical table evidence', async () => {
+    const service = new MarkdownChunkerService({
+      get: (key: string, fallback: unknown) =>
+        key === 'RAG_CHUNK_SIZE'
+          ? 100
+          : key === 'RAG_CHUNK_OVERLAP'
+            ? 0
+            : fallback,
+    } as any);
+    const markdown =
+      '# 季度\n\n<table><tr><th rowspan="2">部门</th><th colspan="2">预算</th></tr><tr><th>Q1</th><th>Q2</th></tr>' +
+      Array.from(
+        { length: 12 },
+        (_, i) => `<tr><td>部门${i}</td><td>${i}</td><td>${i + 1}</td></tr>`,
+      ).join('') +
+      '</table>';
+    const chunks = await service.splitStructured(markdown, [
+      { start: 0, end: markdown.length, source: { page: 3 } },
+    ]);
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(
+      chunks.every(
+        (chunk) =>
+          chunk.content.length <= 100 &&
+          chunk.content.includes('预算 / Q1') &&
+          !chunk.content.includes('<td'),
+      ),
+    ).toBe(true);
+    expect(chunks[0].ranges[0].source).toMatchObject({
+      page: 3,
+      tableId: expect.stringMatching(/^table-/),
+      tableRowStart: 3,
+    });
+    expect(chunks.at(-1)?.ranges[0].source?.tableRowEnd).toBe(14);
+    expect(
+      chunks.every((chunk) => chunk.strategy.startsWith('structure-v3:')),
+    ).toBe(true);
+  });
   it('preserves the nearest heading when the document title is very long', async () => {
     const service = new MarkdownChunkerService({
       get: (key: string, fallback: unknown) =>

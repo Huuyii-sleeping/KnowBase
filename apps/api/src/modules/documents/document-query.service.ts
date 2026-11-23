@@ -81,6 +81,7 @@ export class DocumentQueryService {
             characterCount: content.characterCount,
             quality: content.quality,
             provenance: content.provenance,
+            tables: content.tables,
           }
         : undefined,
     };
@@ -123,6 +124,7 @@ export class DocumentQueryService {
             characterCount: content.characterCount,
             quality: content.quality,
             provenance: content.provenance,
+            tables: content.tables,
           }
         : undefined,
     };

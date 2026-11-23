@@ -13,6 +13,53 @@ function parserResult(parser: string) {
 }
 
 describe('FileParserService', () => {
+  it('cleans uploaded assets when a remote result contains an unsupported table', async () => {
+    const asset = {
+      type: 'attachment',
+      objectKey: 'assets/doc/raw.json',
+      url: '/raw',
+    };
+    const uploader = { upload: vi.fn(async () => asset), discard: vi.fn() };
+    const remote = {
+      parse: vi.fn(async (_buffer, _name, context) => {
+        await context.uploadAsset({
+          fileName: 'raw.json',
+          contentType: 'application/json',
+          data: Buffer.from('{}'),
+        });
+        return {
+          ...parserResult('mineru'),
+          markdown: '<table><tr><td rowspan="0">unsupported</td></tr></table>',
+        };
+      }),
+    };
+    const unused = { parse: vi.fn() };
+    const service = new FileParserService(
+      unused as any,
+      unused as any,
+      unused as any,
+      unused as any,
+      unused as any,
+      unused as any,
+      unused as any,
+      uploader as any,
+      remote as any,
+    );
+    const result = await service.parse(
+      Buffer.from('file'),
+      'report.html',
+      'doc',
+    );
+    expect(result.ready).toBe(false);
+    expect(result.assets).toEqual([]);
+    expect(uploader.discard).toHaveBeenCalledWith('doc', [asset]);
+    expect(unused.parse).not.toHaveBeenCalled();
+    await expect(
+      service.parse(Buffer.from('file'), 'report.html', 'doc', {
+        signal: new AbortController().signal,
+      }),
+    ).rejects.toThrow('span');
+  });
   it('defaults binary documents to MinerU and keeps TXT/MD local', async () => {
     const native = { parse: vi.fn(async () => parserResult('text')) };
     const remote = { parse: vi.fn(async () => parserResult('mineru')) };

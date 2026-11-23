@@ -6,13 +6,14 @@ export async function blockFragments(
   budget: number,
   overlap: number,
 ): Promise<string[]> {
+  if (block.kind === 'table')
+    throw new Error('Table blocks require structured table fragments');
   if (block.kind === 'equation') {
     if (block.text.length > budget)
       throw new Error('Equation exceeds RAG_CHUNK_SIZE; increase the budget.');
     return [block.text];
   }
   if (block.text.length <= budget && block.kind !== 'code') return [block.text];
-  if (block.kind === 'table') return tableFragments(block.text, budget);
   if (block.kind === 'code') return codeFragments(block.text, budget);
   return proseFragments(block.text, budget, overlap);
 }
@@ -62,28 +63,6 @@ async function proseFragments(
   }
   if (group.length) output.push(group.join('').trim());
   return output.filter(Boolean);
-}
-
-function tableFragments(text: string, budget: number): string[] {
-  const [header, delimiter, ...rows] = text.split('\n');
-  const prefix = `${header}\n${delimiter}`;
-  const output: string[] = [];
-  let group = prefix;
-  for (const row of rows) {
-    if (prefix.length + row.length + 1 > budget)
-      throw new Error(
-        'Table header and row exceed RAG_CHUNK_SIZE; increase the budget or simplify the source table.',
-      );
-    if (group.length + row.length + 1 > budget) {
-      output.push(group);
-      group = prefix;
-    }
-    group += '\n' + row;
-  }
-  if (group.length > budget)
-    throw new Error('Table header exceeds RAG_CHUNK_SIZE.');
-  output.push(group);
-  return output;
 }
 
 async function codeFragments(text: string, budget: number): Promise<string[]> {

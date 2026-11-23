@@ -179,6 +179,64 @@ test('content serialization preserves source blocks; manual edits have no inheri
   assert.equal(await content.findByContentId('parsed'), null);
 });
 
+test('canonical table serialization, chunk provenance and deletion survive a real Mongo round trip', async () => {
+  const { tableFixtures } = require('./table-fixtures.cjs');
+  const fixture = tableFixtures()[0];
+  const source = {
+    markdown: fixture.table,
+    sections: [
+      {
+        start: 0,
+        end: fixture.table.length,
+        source: { page: 4, blockIndex: 2 },
+      },
+    ],
+  };
+  await content.create({
+    ...source,
+    contentId: 'table-body',
+    documentId: 'table-doc',
+    parser: 'mineru',
+    warnings: [],
+    assets: [],
+    version: 1,
+  });
+  const stored = await content.findByContentId('table-body');
+  const table = stored.tables[0];
+  assert.equal(table.cells.length, fixture.canonicalCells);
+  assert.equal(table.cells.find((cell) => cell.text === '研发').rowSpan, 2);
+  assert.equal(stored.blocks[0].table, undefined);
+  assert.equal(stored.blocks[0].tableId, table.id);
+  assert.deepEqual(table.source, { page: 4, blockIndex: 2 });
+  const { sumTableCells } = load('ingestion/tables/table-sum.js');
+  assert.equal(
+    sumTableCells(table, fixture.sum.cells).value,
+    fixture.sum.value,
+  );
+  const chunks = new DocumentChunksService(
+    new MarkdownChunkerService(
+      new ConfigService({ RAG_CHUNK_SIZE: 130, RAG_CHUNK_OVERLAP: 0 }),
+    ),
+    artifacts,
+  );
+  const first = await chunks.forContent('table-doc', 'table-body', stored);
+  assert.deepEqual(
+    await chunks.forContent('table-doc', 'table-body', stored),
+    first,
+  );
+  assert.ok(
+    first.every(
+      (chunk) =>
+        chunk.ranges[0].source.tableId === table.id &&
+        chunk.ranges[0].source.page === 4,
+    ),
+  );
+  await content.deleteByDocumentId('table-doc');
+  await artifacts.deleteDocument('table-doc');
+  assert.equal(await content.findByContentId('table-body'), null);
+  assert.equal(await chunkModel.countDocuments({ documentId: 'table-doc' }), 0);
+});
+
 test('document deletion keeps asset references until storage removal succeeds', async () => {
   const { DocumentSourceCleanupService } = load(
     'documents/document-source-cleanup.service.js',

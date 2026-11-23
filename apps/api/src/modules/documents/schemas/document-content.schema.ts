@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { ParseQuality } from '../parsing/file-parser.types';
+import { TableEvidence } from '../../ingestion/tables/table.types';
 import {
   DocumentBlock,
   SourceSection,
@@ -56,6 +57,9 @@ export class DocumentContent {
 
   @Prop({ type: [Object], default: undefined })
   sections?: SourceSection[];
+
+  @Prop({ type: [Object], default: undefined })
+  tables?: TableEvidence[];
 
   @Prop()
   parseStrategy?: string;

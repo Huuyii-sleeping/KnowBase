@@ -92,6 +92,38 @@ export interface DocumentContent {
     issues: Array<{ code: string; page?: number; message: string }>;
   };
   provenance?: Record<string, string>;
+  tables?: DocumentTableEvidence[];
+}
+
+export interface DocumentTableEvidence {
+  schema: 'table-v1';
+  id: string;
+  format: 'html' | 'markdown';
+  rowCount: number;
+  columnCount: number;
+  headerRows: number[];
+  caption?: string;
+  start: number;
+  end: number;
+  source?: {
+    page?: number;
+    slide?: number;
+    sheet?: string;
+    rowStart?: number;
+    rowEnd?: number;
+    blockIndex?: number;
+    bbox?: number[];
+    partition?: number;
+  };
+  cells: Array<{
+    row: number;
+    column: number;
+    rowSpan: number;
+    columnSpan: number;
+    text: string;
+    header: boolean;
+    scope?: 'row' | 'col' | 'rowgroup' | 'colgroup';
+  }>;
 }
 
 export interface DocumentDetail extends DocumentMeta {

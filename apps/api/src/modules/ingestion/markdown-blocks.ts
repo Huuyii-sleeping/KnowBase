@@ -3,11 +3,14 @@ import {
   SourceSection,
   validateSections,
 } from './document-structure';
+import { parseTable } from './tables/parse-table';
+import { htmlTableEnd } from './tables/html-table-boundary';
 
 const heading = /^ {0,3}(#{1,6})[ \t]+(.+?)\s*$/;
 const fence = /^ {0,3}(`{3,}|~{3,})(.*)$/;
 const equation = /^\s*(\$\$|\\\[)\s*$/;
 const list = /^\s*(?:[-+*]|\d+[.)])\s+/;
+const htmlTable = /^ {0,3}<table(?:\s|>)/i;
 const tableDelimiter = (line: string) => {
   const cells = line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|');
   return (
@@ -36,6 +39,7 @@ export function markdownBlocks(
     heading.test(lines[i].text) ||
     fence.test(lines[i].text) ||
     equation.test(lines[i].text) ||
+    htmlTable.test(lines[i].text) ||
     isTable(i);
 
   for (let i = 0; i < lines.length;) {
@@ -94,6 +98,23 @@ export function markdownBlocks(
         level: title[1].length,
         text: title[2].replace(/[ \t]+#+\s*$/, ''),
       });
+    } else if (htmlTable.test(lines[i].text)) {
+      kind = 'table';
+      const tableEnd = start + htmlTableEnd(markdown.slice(start));
+      if (
+        (section >= 0 && tableEnd > sections[section].end) ||
+        (section < 0 &&
+          sections.some((part) => part.start > start && part.start < tableEnd))
+      )
+        throw new Error('HTML table crosses a source section');
+      while (endLine < lines.length && lines[endLine].start < tableEnd)
+        endLine++;
+      const last = lines[endLine - 1];
+      const trailing = last.text.slice(tableEnd - last.start);
+      if (trailing) {
+        lines.splice(endLine, 0, { text: trailing, start: tableEnd });
+        last.text = last.text.slice(0, tableEnd - last.start);
+      }
     } else if (isTable(i)) {
       kind = 'table';
       endLine = i + 2;
@@ -120,6 +141,9 @@ export function markdownBlocks(
       end,
       headingPath: headings.map((entry) => entry.text),
       ...(section < 0 ? {} : { source: { ...sections[section].source } }),
+      ...(kind === 'table'
+        ? { table: parseTable(markdown.slice(start, end), String(start)) }
+        : {}),
     });
     i = endLine;
   }

@@ -17,7 +17,8 @@
     "benchmark:mineru": "pnpm build && node test/ingestion/compare-mineru.cjs",
     "benchmark:before-after": "pnpm build && node test/ingestion/compare-native.cjs",
     "benchmark:ingestion-performance": "pnpm build && node test/ingestion/compare-performance.cjs",
-    "test:mineru-extended": "pnpm build && node test/ingestion/verify-extended-mineru.cjs"
+    "test:mineru-extended": "pnpm build && node test/ingestion/verify-extended-mineru.cjs",
+    "benchmark:tables": "pnpm build && node test/ingestion/compare-tables.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",
@@ -38,6 +39,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "exceljs": "^4.4.0",
+    "htmlparser2": "^10.1.0",
     "jszip": "^3.10.1",
     "langfuse": "^3.38.20",
     "mammoth": "^1.12.0",
