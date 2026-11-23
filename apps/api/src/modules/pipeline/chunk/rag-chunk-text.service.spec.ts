@@ -18,7 +18,7 @@ function fixture(mode = 'body', size = 90) {
 }
 
 describe('RagChunkTextService', () => {
-  it('preserves body chunks, order and empty documents in the default mode', async () => {
+  it('preserves body chunks, order and empty documents in the explicit body mode', async () => {
     const { chunker, service } = fixture();
     const markdown =
       '# Root\n## Window\n' + 'A repeated explanation. '.repeat(20);
@@ -27,6 +27,24 @@ describe('RagChunkTextService', () => {
       expected.map((content) => ({ content, retrievalText: content })),
     );
     expect(await service.prepare('', 'Title')).toEqual([]);
+  });
+
+  it('indexes title and heading context by default without changing the original evidence', async () => {
+    const { chunker } = fixture('body', 1000);
+    const service = new RagChunkTextService(chunker, {
+      get: (_key: string, fallback: unknown) => fallback,
+    } as any);
+    const result = await service.prepare(
+      '# Guide\n\n## Approval\n\nApproval needs a receipt.',
+      'Policy',
+    );
+    expect(result.map((item) => item.content)).toEqual(
+      await chunker.split(
+        '# Guide\n\n## Approval\n\nApproval needs a receipt.',
+      ),
+    );
+    expect(result[0].retrievalText).toContain('文档：Policy');
+    expect(result[0].retrievalText).toContain('章节：Guide');
   });
 
   it('adds only the document title in the title ablation, with sanitized bounded labels', async () => {

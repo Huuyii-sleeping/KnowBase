@@ -116,10 +116,7 @@ export class VectorIndexService implements OnModuleDestroy {
       this.chunkIndex,
       this.schema,
     );
-    const keywordAnalyzer = config.get<string>(
-      'RAG_KEYWORD_ANALYZER',
-      'standard',
-    );
+    const keywordAnalyzer = config.get<string>('RAG_KEYWORD_ANALYZER', 'cjk');
     if (keywordAnalyzer !== 'standard' && keywordAnalyzer !== 'cjk')
       throw new Error('RAG_KEYWORD_ANALYZER must be standard or cjk');
     this.chunks = new ElasticsearchChunkReader(
@@ -128,9 +125,10 @@ export class VectorIndexService implements OnModuleDestroy {
       this.schema,
       this.generations,
       keywordAnalyzer,
-      retrievalContext(config.get<string>('RAG_RETRIEVAL_CONTEXT', 'body')) !==
-        'body',
-      keywordPolicy(config.get<string>('RAG_KEYWORD_POLICY', 'combined')),
+      retrievalContext(
+        config.get<string>('RAG_RETRIEVAL_CONTEXT', 'title-heading'),
+      ) !== 'body',
+      keywordPolicy(config.get<string>('RAG_KEYWORD_POLICY', 'body-reserve')),
       bodySlots(config.get<string>('RAG_KEYWORD_BODY_SLOTS', '2')),
     );
   }

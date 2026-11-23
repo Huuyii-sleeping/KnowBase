@@ -19,23 +19,32 @@ describe('AnswerRetrievalService', () => {
   it('adds graph paths for relationship questions', async () => {
     const graphQuery = {
       search: vi.fn().mockResolvedValue({
-        items: [{
-          seed: { name: 'RAG', type: '系统' },
-          entities: [
-            { name: 'RAG', type: '系统' },
-            { name: 'Ollama', type: '技术' },
-          ],
-          relations: [{ documentId: 'doc-1', chunkId: 'chunk-1', type: '使用' }],
-        }],
+        items: [
+          {
+            seed: { name: 'RAG', type: '系统' },
+            entities: [
+              { name: 'RAG', type: '系统' },
+              { name: 'Ollama', type: '技术' },
+            ],
+            relations: [
+              { documentId: 'doc-1', chunkId: 'chunk-1', type: '使用' },
+            ],
+          },
+        ],
       }),
     };
     const service = new AnswerRetrievalService(
       { search: vi.fn().mockResolvedValue({ items: [hybridItem] }) } as any,
       graphQuery as any,
-      { shouldUseGraph: vi.fn().mockReturnValue(true), extractTerms: vi.fn().mockReturnValue(['rag', 'ollama']) } as any,
+      {
+        shouldUseGraph: vi.fn().mockReturnValue(true),
+        extractTerms: vi.fn().mockReturnValue(['rag', 'ollama']),
+      } as any,
     );
 
-    const result = await service.retrieve('RAG 和 Ollama 有什么关系？', 3, { id: 'user-1' } as any);
+    const result = await service.retrieve('RAG 和 Ollama 有什么关系？', 3, {
+      id: 'user-1',
+    } as any);
 
     expect(result.graphUsed).toBe(true);
     expect(result.items).toHaveLength(2);
@@ -53,10 +62,15 @@ describe('AnswerRetrievalService', () => {
     const service = new AnswerRetrievalService(
       { search: vi.fn().mockResolvedValue({ items: [hybridItem] }) } as any,
       graphQuery as any,
-      { shouldUseGraph: vi.fn().mockReturnValue(false), extractTerms: vi.fn() } as any,
+      {
+        shouldUseGraph: vi.fn().mockReturnValue(false),
+        extractTerms: vi.fn(),
+      } as any,
     );
 
-    await expect(service.retrieve('RAG 的基本流程是什么？', 3, { id: 'user-1' } as any)).resolves.toEqual({
+    await expect(
+      service.retrieve('RAG 的基本流程是什么？', 3, { id: 'user-1' } as any),
+    ).resolves.toEqual({
       items: [hybridItem],
       graphUsed: false,
     });
@@ -66,26 +80,102 @@ describe('AnswerRetrievalService', () => {
   it('degrades to hybrid results when graph retrieval fails', async () => {
     const service = new AnswerRetrievalService(
       { search: vi.fn().mockResolvedValue({ items: [hybridItem] }) } as any,
-      { search: vi.fn().mockRejectedValue(new Error('neo4j unavailable')) } as any,
-      { shouldUseGraph: vi.fn().mockReturnValue(true), extractTerms: vi.fn().mockReturnValue(['rag']) } as any,
+      {
+        search: vi.fn().mockRejectedValue(new Error('neo4j unavailable')),
+      } as any,
+      {
+        shouldUseGraph: vi.fn().mockReturnValue(true),
+        extractTerms: vi.fn().mockReturnValue(['rag']),
+      } as any,
     );
 
-    await expect(service.retrieve('RAG 和 Ollama 有什么关系？', 3, { id: 'user-1' } as any)).resolves.toEqual({
+    await expect(
+      service.retrieve('RAG 和 Ollama 有什么关系？', 3, {
+        id: 'user-1',
+      } as any),
+    ).resolves.toEqual({
       items: [hybridItem],
       graphUsed: false,
     });
   });
 
-  it('refuses to use ordinary context when a multi-entity relation has no graph path', async () => {
+  it('preserves authorized document evidence when a multi-entity question has no graph path', async () => {
     const service = new AnswerRetrievalService(
       { search: vi.fn().mockResolvedValue({ items: [hybridItem] }) } as any,
       { search: vi.fn().mockResolvedValue({ items: [] }) } as any,
-      { shouldUseGraph: vi.fn().mockReturnValue(true), extractTerms: vi.fn().mockReturnValue(['rag', 'ollama']) } as any,
+      {
+        shouldUseGraph: vi.fn().mockReturnValue(true),
+        extractTerms: vi.fn().mockReturnValue(['rag', 'ollama']),
+      } as any,
     );
 
-    await expect(service.retrieve('RAG 和 Ollama 有什么关系？', 3, { id: 'user-1' } as any)).resolves.toEqual({
-      items: [],
+    await expect(
+      service.retrieve('RAG 和 Ollama 有什么关系？', 3, {
+        id: 'user-1',
+      } as any),
+    ).resolves.toEqual({
+      items: [hybridItem],
       graphUsed: false,
     });
+  });
+
+  it('does not erase factual download evidence when connection wording triggers the graph', async () => {
+    const { GraphIntentService } = await import('./graph-intent.service');
+    const document = {
+      ...hybridItem,
+      content: '内部连接从签发完成起22分钟失效，审计连接7分钟失效。',
+    };
+    const service = new AnswerRetrievalService(
+      { search: vi.fn().mockResolvedValue({ items: [document] }) } as any,
+      { search: vi.fn().mockResolvedValue({ items: [] }) } as any,
+      new GraphIntentService(),
+    );
+    expect(
+      await service.retrieve('内部和审计下载连接分别多久失效？', 5, {
+        id: 'user-1',
+      } as any),
+    ).toEqual({ items: [document], graphUsed: false });
+  });
+
+  it('does not add irrelevant graph paths while retaining document results', async () => {
+    const service = new AnswerRetrievalService(
+      { search: vi.fn().mockResolvedValue({ items: [hybridItem] }) } as any,
+      {
+        search: vi.fn().mockResolvedValue({
+          items: [
+            {
+              seed: { name: 'Unrelated', type: '系统' },
+              entities: [
+                { name: 'Unrelated', type: '系统' },
+                { name: 'Other', type: '技术' },
+              ],
+              relations: [
+                { documentId: 'doc-2', chunkId: 'chunk-2', type: '使用' },
+              ],
+            },
+          ],
+        }),
+      } as any,
+      {
+        shouldUseGraph: () => true,
+        extractTerms: () => ['rag', 'ollama'],
+      } as any,
+    );
+    expect(
+      await service.retrieve('RAG 和 Ollama 有什么关系？', 5, {
+        id: 'user-1',
+      } as any),
+    ).toEqual({ items: [hybridItem], graphUsed: false });
+  });
+
+  it('still returns no evidence when neither authorized documents nor graph paths exist', async () => {
+    const service = new AnswerRetrievalService(
+      { search: vi.fn().mockResolvedValue({ items: [] }) } as any,
+      { search: vi.fn().mockResolvedValue({ items: [] }) } as any,
+      { shouldUseGraph: () => true, extractTerms: () => ['a', 'b'] } as any,
+    );
+    expect(
+      await service.retrieve('A 和 B 什么关系？', 5, { id: 'user-1' } as any),
+    ).toEqual({ items: [], graphUsed: false });
   });
 });
