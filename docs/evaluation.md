@@ -6,14 +6,14 @@
 
 后续召回诊断使用 `knowbase-recall-v2/v3`，新来源检查使用 `knowbase-holdout-v1`；历史基线不被新结果覆盖。所有已评分数据现均为已暴露回归数据，同作者合成留出不能当作独立人工验收。
 
-| 项目 | 当前状态 | 依据 |
-| --- | --- | --- |
-| 业务默认 | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算 | [检索设计](retrieval.md) |
-| 冻结实验候选 | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署 | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md) |
-| 未采用方向 | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭 | 本文对应实验章节 |
-| 最新留出检查 | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步 | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md) |
-| 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则 | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
-| 专用重排模型 | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md) |
+| 项目           | 当前状态                                                                                                           | 依据                                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| 业务默认       | 正文上下文、standard 分词、combined 关键词策略、HTTP 两路等额预算                                                  | [检索设计](retrieval.md)                                                                                                                       |
+| 冻结实验候选   | 标题章节、CJK、正文保护 2:1、关键词 30 / 向量 15；未部署                                                           | [候选边界对照](../benchmarks/knowbase-recall-v3/experiments/recall-boundaries-audit-v3.md)                                                     |
+| 未采用方向     | 多意图拆解、疑问词降噪、短语加权均无证据召回收益，保持关闭                                                         | 本文对应实验章节                                                                                                                               |
+| 最新留出检查   | 40 文档 / 80 题；两配置池证据均 100%，最终选择仍有一条退步                                                         | [留出评测报告](../benchmarks/knowbase-holdout-v1/experiments/audit.md)                                                                         |
+| 固定池重排诊断 | 384 份候选池 × 9 方案；RRF 总体提高，10 条标注损失经复核为 4 条等价、1 条部分、5 条缺少必要事实，不替换默认规则    | [重排对照](../benchmarks/knowbase-rerank-v1/experiments/audit.md)、[逐题复核](../benchmarks/knowbase-rerank-v1/experiments/semantic-review.md) |
+| 专用重排模型   | 两模型完成同池对照，另测规则名额保护与最终模型排序；已记录收益、逐条损失、首条排序退步及推理成本，业务默认保持原样 | [模型与组合报告](../benchmarks/knowbase-rerank-v2/experiments/audit.md)、[冻结协议与复现](../benchmarks/knowbase-rerank-v2/README.md)          |
 
 原有 [RAGBench-CN](https://github.com/Ace-teng/ragbench-cn) MIT 示例仍保留，但其中 20 道检索题均指向同一标准文档，主要用于演示适配器，不作为本轮质量结论的依据。问答评测是独立入口，见本文后半部分。
 
@@ -185,6 +185,8 @@ python tools/rag-evaluation/evaluate_retrieval.py \
 当前已经有 `POST /api/v1/rag/answer`，但本评测命令仍专注于检索层指标。Faithfulness、Answer Relevancy、Citation Correctness 等问答生成指标将在下一步接入 Ragas 或 DeepEval。
 
 ## 问答评测基线
+
+当前[上下文与引用设计](answer-context.md)按完整输入预算保留上游重排候选，使用结构化状态、逐结论来源和原文引句校验；采用决定见[收尾验证](answer-refinement-validation.md)。30 篇新来源、48 题的固定候选与完整 HTTP 验收，以及容量、并发、外部服务故障检查见[第二轮验收](answer-acceptance-validation.md)；随后任务核对及预算修复的 248 次回归见[修复报告](answer-repair-validation.md)。消息分层、长证据补充及逐项解释的分别对照与 306 次采用版本回归见[提示词优化报告](answer-prompt-optimization-validation.md)。此前结果保留于[质量验收报告](answer-quality-validation.md)。来源编号和逐字引句均不能证明语义支持或回答完整，应同时检查实际回答、无答案误答和必答项遗漏。
 
 问答数据集位于 `benchmarks/ragbench-cn/questions/answers_zh.json`，每条样本包含参考答案、关键事实、标准来源以及是否应该拒答。运行器会真实调用 `/rag/answer`，输出以下可解释指标：
 

@@ -68,6 +68,9 @@ class RetrievalBenchmarkEnvironment extends DeliveryTestEnvironment {
       RAG_KEYWORD_POLICY: keywordPolicy,
       RAG_KEYWORD_BODY_SLOTS: String(bodySlots),
       EMBEDDING_PROVIDER: 'ollama',
+      // Retrieval-only runs load AppModule but never generate answers.
+      // Keep startup independent of remote answer credentials.
+      CHAT_MODEL_PROVIDER: 'ollama',
       OLLAMA_BASE_URL: ollamaUrl,
       OLLAMA_EMBEDDING_MODEL: 'nomic-embed-text',
       EMBEDDING_DOCUMENT_PREFIX:

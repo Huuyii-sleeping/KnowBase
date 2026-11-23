@@ -263,7 +263,12 @@ RAG_EMBEDDING_DIMENSIONS=768
 EMBEDDING_PROVIDER=ollama
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_EMBEDDING_MODEL=nomic-embed-text
-OLLAMA_CHAT_MODEL=qwen2.5:0.5b
+CHAT_MODEL_PROVIDER=deepseek
+DEEPSEEK_API_KEY=
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-pro
+# Optional local answer provider: CHAT_MODEL_PROVIDER=ollama
+OLLAMA_CHAT_MODEL=qwen2.5:7b
 OLLAMA_CHAT_TEMPERATURE=0
 OLLAMA_CHAT_SEED=42
 OLLAMA_KG_MODEL=qwen2.5:0.5b
@@ -276,7 +281,7 @@ Langfuse 配置和问答链路观测见 [docs/observability.md](observability.md
 
 ## AI 问答
 
-AI 问答默认在混合检索之上调用 Ollama 对话模型。问题包含关系、依赖、上下游、多跳、影响等意图时，会追加图谱路径检索；图谱不可用时自动降级为混合检索。问答模块只把带有正文的 Chunk 或图谱路径作为上下文，关键词检索返回的纯文档元数据不会直接交给模型。
+AI 问答默认在混合检索之上调用 DeepSeek API 的 `deepseek-v4-pro`，使用 `DEEPSEEK_API_KEY` 与 `DEEPSEEK_BASE_URL`。本地 Ollama 问答需显式设置 `CHAT_MODEL_PROVIDER=ollama`。接入与配置见[问答模型接入](answer-model-provider.md)。上下文预算、来源校验与质量边界见[问答上下文设计](answer-context.md)。问题包含关系、依赖、上下游、多跳、影响等意图时，会追加图谱路径检索；图谱不可用时自动降级为混合检索。问答模块只把带有正文的 Chunk 或图谱路径作为上下文，关键词检索返回的纯文档元数据不会直接交给模型。
 
 ```http
 POST /api/v1/rag/answer
@@ -285,7 +290,7 @@ Content-Type: application/json
 {"question":"RAG 的基本流程是什么？","topK":5}
 ```
 
-返回结构包含 `answer`、`citations` 和 `contexts`。回答中的 `[S1]` 等来源标记会被转换为结构化引用；没有可用 Chunk 时，接口直接返回“知识库中没有找到足够信息”，不会调用模型。
+返回结构包含 `status`、`answer`、`citations` 和 `contexts`。`status` 区分有答案、信息不足和资料冲突；模型输出逐结论证据后，系统生成 `[S1]` 等来源标记，引用中可返回对应的原文 `quotes`；没有可用 Chunk 时，接口直接返回“知识库中没有找到足够信息”，不会调用模型。
 
 Markdown 使用 `RecursiveCharacterTextSplitter`，优先按标题和段落边界切分。默认使用本地 Ollama `nomic-embed-text` 生成 768 维向量，也可以将 `EMBEDDING_PROVIDER` 改为 `openai`。ES `kh_chunk.embedding` 使用 `dense_vector` 并启用 cosine 相似度。
 

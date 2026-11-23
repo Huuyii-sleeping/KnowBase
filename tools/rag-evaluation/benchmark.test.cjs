@@ -104,6 +104,7 @@ test('environment starts an isolated retrieval API and always tears down after s
     3,
   );
   assert.equal(launch.env.PIPELINE_WORKERS_ENABLED, 'false');
+  assert.equal(launch.env.CHAT_MODEL_PROVIDER, 'ollama');
   assert.equal(launch.env.POSTGRES_DB, 'test');
   assert.equal(launch.env.RAG_RETRIEVAL_CONTEXT, 'title-heading');
   assert.equal(launch.env.RAG_KEYWORD_POLICY, 'weighted');

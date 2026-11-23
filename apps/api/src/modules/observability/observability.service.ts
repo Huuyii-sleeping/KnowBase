@@ -29,7 +29,10 @@ export class ObservabilityService implements OnModuleDestroy {
     this.client = new Langfuse({
       publicKey,
       secretKey,
-      baseUrl: config.get<string>('LANGFUSE_BASE_URL', 'http://localhost:13000'),
+      baseUrl: config.get<string>(
+        'LANGFUSE_BASE_URL',
+        'http://localhost:13000',
+      ),
       environment: config.get<string>('LANGFUSE_ENVIRONMENT', 'local'),
       release: config.get<string>('LANGFUSE_RELEASE', 'knowbase-local'),
       flushAt: 1,
@@ -64,28 +67,40 @@ export class ObservabilityService implements OnModuleDestroy {
     output: { itemCount: number; items: unknown[]; graphUsed?: boolean },
     latencyMs: number,
   ): void {
-    this.endSpan(context.trace?.span({
-      name: 'retrieval.hybrid-search',
-      input,
-    }), {
-      output,
-      metadata: { latencyMs },
-    });
+    this.endSpan(
+      context.trace?.span({
+        name: 'retrieval.hybrid-search',
+        input,
+      }),
+      {
+        output,
+        metadata: { latencyMs },
+      },
+    );
   }
 
   recordGrounding(
     context: AnswerTraceContext,
     input: { question: string; candidateCount: number },
-    output: { selectedCount: number; selectedChunkIds: string[] },
+    output: {
+      selectedCount: number;
+      selectedChunkIds: string[];
+      promptBytes?: number;
+      selectionPolicy?: string;
+      omittedCount?: number;
+    },
     latencyMs: number,
   ): void {
-    this.endSpan(context.trace?.span({
-      name: 'retrieval.grounding',
-      input,
-    }), {
-      output,
-      metadata: { latencyMs },
-    });
+    this.endSpan(
+      context.trace?.span({
+        name: 'retrieval.grounding',
+        input,
+      }),
+      {
+        output,
+        metadata: { latencyMs },
+      },
+    );
   }
 
   recordGeneration(
@@ -168,6 +183,8 @@ export class ObservabilityService implements OnModuleDestroy {
   }
 
   private logFailure(operation: string, error: unknown): void {
-    this.logger.warn(`Langfuse failed to ${operation}: ${this.errorMessage(error)}`);
+    this.logger.warn(
+      `Langfuse failed to ${operation}: ${this.errorMessage(error)}`,
+    );
   }
 }
