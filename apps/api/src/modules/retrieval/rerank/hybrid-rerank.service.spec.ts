@@ -4,7 +4,8 @@ import { BgeHttpService } from './bge-http.service';
 import { HybridRerankService } from './hybrid-rerank.service';
 import { RerankService } from './rerank.service';
 import { candidate } from './bge.fixture';
-import { AnswerGroundingService } from '../../answer/answer-grounding.service';
+import { AnswerContextService } from '../../answer/answer-context.service';
+import { AnswerPromptService } from '../../answer/answer-prompt.service';
 
 describe('HybridRerankService', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -38,8 +39,10 @@ describe('HybridRerankService', () => {
     const result = await service.rerank('正文证据', pool, { topK: 3 });
     expect(result.map((x) => x.chunkId)).toEqual(['c', 'b', 'a']);
     expect(
-      new AnswerGroundingService().selectSupportedItems('正文证据', result)[0]
-        .chunkId,
+      new AnswerContextService(new AnswerPromptService()).build(
+        '正文证据',
+        result,
+      ).items[0].chunkId,
     ).toBe('c');
     expect(score).toHaveBeenCalledWith('正文证据', pool);
   });

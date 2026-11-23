@@ -97,6 +97,12 @@ export interface DocumentListResult {
 
 export type AnswerSourceType = 'keyword' | 'semantic' | 'graph';
 
+// Half-open UTF-16 offsets into the original candidate content (String.slice).
+export interface AnswerContentRange {
+  start: number;
+  end: number;
+}
+
 export interface AnswerCitation {
   sourceId: string;
   documentId: string;
@@ -105,6 +111,8 @@ export interface AnswerCitation {
   title: string;
   score: number;
   sourceType: AnswerSourceType;
+  quotes?: string[];
+  contentRange?: AnswerContentRange;
 }
 
 export interface AnswerContext {
@@ -115,10 +123,12 @@ export interface AnswerContext {
   content?: string;
   score: number;
   sourceType: AnswerSourceType;
+  contentRange?: AnswerContentRange;
 }
 
 export interface AnswerResult {
   question: string;
+  status: 'answered' | 'insufficient' | 'conflict';
   answer: string;
   citations: AnswerCitation[];
   contexts: AnswerContext[];

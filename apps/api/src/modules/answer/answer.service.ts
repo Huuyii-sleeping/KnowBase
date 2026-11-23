@@ -1,16 +1,25 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { AnswerCitation, AnswerCitationService } from './answer-citation.service';
-import { AnswerPromptService } from './answer-prompt.service';
-import { AnswerGroundingService } from './answer-grounding.service';
-import { ChatModelProvider } from './chat-model.types';
+import { Injectable } from '@nestjs/common';
+import {
+  AnswerCitation,
+  AnswerCitationService,
+} from './answer-citation.service';
+import { AnswerContextService } from './answer-context.service';
+import { AnswerGenerationService } from './answer-generation.service';
+import { ANSWER_REFUSAL } from './answer-citation-validation';
 import { AnswerQuestionDto } from './dto/answer-question.dto';
-import { HybridSearchItem, HybridSearchSource } from '../search/hybrid-search.service';
+import {
+  HybridSearchItem,
+  HybridSearchSource,
+} from '../search/hybrid-search.service';
 import { ObservabilityService } from '../observability/observability.service';
 import { AuthUser } from '../auth/auth.types';
 import { AnswerRetrievalService } from './answer-retrieval.service';
+import { AnswerStatus } from './answer-output';
+import { AnswerContentRange, AnswerContextItem } from './answer-context.types';
 
 export interface AnswerResult {
   question: string;
+  status: AnswerStatus;
   answer: string;
   citations: AnswerCitation[];
   contexts: Array<{
@@ -21,80 +30,109 @@ export interface AnswerResult {
     content?: string;
     score: number;
     sourceType: HybridSearchSource;
+    contentRange?: AnswerContentRange;
   }>;
 }
 
 @Injectable()
 export class AnswerService {
-  private static readonly REFUSAL = '知识库中没有找到足够信息';
-
   constructor(
     private readonly retrieval: AnswerRetrievalService,
-    private readonly prompt: AnswerPromptService,
-    @Inject('CHAT_MODEL_PROVIDER')
-    private readonly chatModel: ChatModelProvider,
+    private readonly context: AnswerContextService,
+    private readonly generation: AnswerGenerationService,
     private readonly citations: AnswerCitationService,
-    private readonly grounding: AnswerGroundingService,
     private readonly observability: ObservabilityService,
   ) {}
 
-  async answer(query: AnswerQuestionDto, user?: AuthUser): Promise<AnswerResult> {
+  async answer(
+    query: AnswerQuestionDto,
+    user?: AuthUser,
+  ): Promise<AnswerResult> {
     const question = query.question.trim();
     const trace = this.observability.startAnswerTrace(question, query.topK);
     try {
       const retrievalStartedAt = Date.now();
-      const retrieval = await this.retrieval.retrieve(question, query.topK, user);
+      const retrieval = await this.retrieval.retrieve(
+        question,
+        query.topK,
+        user,
+      );
       const items = retrieval.items.filter((item) => item.content?.trim());
       this.observability.recordRetrieval(
         trace,
         { query: question, topK: query.topK },
-        { itemCount: items.length, items: this.toTraceItems(items), graphUsed: retrieval.graphUsed },
+        {
+          itemCount: items.length,
+          items: this.toTraceItems(items),
+          graphUsed: retrieval.graphUsed,
+        },
         Date.now() - retrievalStartedAt,
       );
 
       const groundingStartedAt = Date.now();
-      const groundedItems = this.grounding.selectSupportedItems(question, items);
+      const context = this.context.build(question, items);
+      const groundedItems = context.items;
       this.observability.recordGrounding(
         trace,
         { question, candidateCount: items.length },
         {
           selectedCount: groundedItems.length,
-          selectedChunkIds: groundedItems.map((item) => item.chunkId ?? item.documentId),
+          promptBytes: context.promptBytes,
+          selectionPolicy: context.selectionPolicy,
+          omittedCount: context.omittedCount,
+          selectedChunkIds: groundedItems.map(
+            (item) => item.chunkId ?? item.documentId,
+          ),
         },
         Date.now() - groundingStartedAt,
       );
 
-      const prompt = groundedItems.length ? this.prompt.build(question, groundedItems) : '';
-      const generatedStartedAt = Date.now();
       const generated = groundedItems.length
-        ? await this.chatModel.generate(prompt)
-        : AnswerService.REFUSAL;
-      if (groundedItems.length) {
+        ? await this.generation.generate(context.prompt, groundedItems)
+        : {
+            modelName: 'none',
+            status: 'insufficient' as const,
+            answer: ANSWER_REFUSAL,
+            sourceIds: [],
+            claims: [],
+            attempts: [],
+            outcome: 'no-context',
+          };
+      for (const attempt of generated.attempts) {
         this.observability.recordGeneration(
           trace,
-          { prompt, model: process.env.OLLAMA_CHAT_MODEL ?? 'qwen2.5:0.5b' },
-          generated,
-          Date.now() - generatedStartedAt,
+          {
+            prompt: attempt.prompt,
+            model: generated.modelName,
+          },
+          attempt.output,
+          attempt.latencyMs,
         );
       }
-
-      const answer = this.isRefusal(generated)
-        ? AnswerService.REFUSAL
-        : this.ensureCitationMarker(generated);
-      const answerable = answer !== AnswerService.REFUSAL;
+      const answer = generated.answer;
+      const answerable = generated.status === 'answered';
       const result = {
         question,
-        answer: answer || AnswerService.REFUSAL,
-        citations: answerable ? this.citations.build(answer, groundedItems) : [],
+        status: generated.status,
+        answer: answer,
+        citations: answerable
+          ? this.citations.build(answer, groundedItems, generated.claims)
+          : [],
         contexts: answerable ? this.toContexts(groundedItems) : [],
       };
-      this.observability.completeAnswer(trace, {
-        answer: result.answer,
-        citations: result.citations,
-        contextCount: result.contexts.length,
-      }, {
-        status: answerable ? 'success' : 'refusal',
-      });
+      this.observability.completeAnswer(
+        trace,
+        {
+          answer: result.answer,
+          citations: result.citations,
+          contextCount: result.contexts.length,
+        },
+        {
+          status: answerable ? 'success' : 'refusal',
+          outcome: generated.outcome,
+          generationAttempts: generated.attempts.length,
+        },
+      );
       return result;
     } catch (error) {
       this.observability.failAnswer(trace, error);
@@ -102,15 +140,18 @@ export class AnswerService {
     }
   }
 
-  private toContexts(items: HybridSearchItem[]) {
+  private toContexts(items: AnswerContextItem[]) {
     return items.map((item, index) => ({
       sourceId: `S${index + 1}`,
       documentId: item.documentId,
       chunkId: item.chunkId,
       title: item.title,
       content: item.content,
+      ...(item.contentRange ? { contentRange: item.contentRange } : {}),
       score: item.rerankScore,
-      sourceType: item.sources.includes('graph') ? 'graph' : item.sources[0] ?? 'semantic',
+      sourceType: item.sources.includes('graph')
+        ? 'graph'
+        : (item.sources[0] ?? 'semantic'),
     }));
   }
 
@@ -121,21 +162,5 @@ export class AnswerService {
       title: item.title,
       score: item.rerankScore,
     }));
-  }
-
-  private ensureCitationMarker(answer: string): string {
-    const normalized = answer.trim();
-    return normalized && !/\[S\d+\]/.test(normalized)
-      ? `${normalized} [S1]`
-      : normalized;
-  }
-
-  private isRefusal(answer: string): boolean {
-    return answer
-      .trim()
-      .replace(/(?:\s*\[S\d+\])+\s*$/g, '')
-      .trim()
-      .replace(/[。！？.!?]+$/g, '')
-      .trim() === AnswerService.REFUSAL;
   }
 }

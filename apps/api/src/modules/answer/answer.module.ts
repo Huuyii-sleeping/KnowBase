@@ -5,7 +5,8 @@ import { AnswerController } from './answer.controller';
 import { AnswerPromptService } from './answer-prompt.service';
 import { AnswerService } from './answer.service';
 import { ChatModelService } from './chat-model.service';
-import { AnswerGroundingService } from './answer-grounding.service';
+import { AnswerContextService } from './answer-context.service';
+import { AnswerGenerationService } from './answer-generation.service';
 import { ObservabilityModule } from '../observability/observability.module';
 import { KnowledgeGraphModule } from '../graph/knowledge-graph.module';
 import { AnswerRetrievalService } from './answer-retrieval.service';
@@ -18,7 +19,8 @@ import { GraphIntentService } from './graph-intent.service';
     AnswerCitationService,
     AnswerPromptService,
     AnswerService,
-    AnswerGroundingService,
+    AnswerContextService,
+    AnswerGenerationService,
     AnswerRetrievalService,
     GraphIntentService,
     ChatModelService,
