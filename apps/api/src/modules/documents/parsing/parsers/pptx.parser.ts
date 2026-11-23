@@ -1,12 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import JSZip from 'jszip';
+import { SourceSection } from '../../../ingestion/document-structure';
 import { tableToMarkdown } from '../markdown-table.util';
-import { FileParserContext, FormatParser, ParsedAsset, ParsedDocument } from '../file-parser.types';
-import { extractXmlText, mimeFromExtension, slideNumber, titleFromFileName } from '../parser.utils';
+import {
+  FileParserContext,
+  FormatParser,
+  ParsedAsset,
+  ParsedDocument,
+} from '../file-parser.types';
+import {
+  extractXmlText,
+  mimeFromExtension,
+  slideNumber,
+  titleFromFileName,
+} from '../parser.utils';
 
 @Injectable()
 export class PptxParser implements FormatParser {
-  async parse(buffer: Buffer, fileName: string, context: FileParserContext): Promise<ParsedDocument> {
+  async parse(
+    buffer: Buffer,
+    fileName: string,
+    context: FileParserContext,
+  ): Promise<ParsedDocument> {
     const zip = await JSZip.loadAsync(buffer);
     const slideNames = Object.keys(zip.files)
       .filter((name) => /^ppt\/slides\/slide\d+\.xml$/.test(name))
@@ -21,10 +36,14 @@ export class PptxParser implements FormatParser {
     for (const slideName of slideNames) {
       const xml = await zip.file(slideName)!.async('string');
       const slideIndex = slideNumber(slideName);
-      const textXml = xml.replace(/<a:tbl[\s\S]*?<\/a:tbl>/g, '');
-      const text = extractXmlText(textXml);
-      const tables = [...xml.matchAll(/<a:tbl[\s\S]*?<\/a:tbl>/g)].map((match) =>
-        this.tableFromXml(match[0]),
+      const parts = [
+        ...xml.matchAll(
+          /<a:tbl[\s\S]*?<\/a:tbl>|<a:t(?:\s[^>]*)?>[\s\S]*?<\/a:t>/g,
+        ),
+      ].map((match) =>
+        match[0].startsWith('<a:tbl')
+          ? this.tableFromXml(match[0])
+          : extractXmlText(match[0]),
       );
       const images = await this.extractImages(zip, slideName, xml, context);
       assets.push(...images);
@@ -32,15 +51,30 @@ export class PptxParser implements FormatParser {
       slides.push(
         [
           `## Slide ${slideIndex}`,
-          text ? text.split('\n').map((line) => line.trim()).filter(Boolean).join('\n\n') : '',
-          ...tables,
-          ...images.map((asset) => `![${asset.alt ?? 'slide image'}](${asset.url})`),
-        ].filter(Boolean).join('\n\n'),
+          ...parts,
+          ...images.map(
+            (asset) => `![${asset.alt ?? 'slide image'}](${asset.url})`,
+          ),
+        ]
+          .filter(Boolean)
+          .join('\n\n'),
       );
     }
 
+    const sections: SourceSection[] = [];
+    let markdown = `# ${titleFromFileName(fileName)}\n\n`;
+    slides.forEach((slide, index) => {
+      const start = markdown.length;
+      markdown += slide + '\n\n';
+      sections.push({
+        start,
+        end: markdown.length,
+        source: { slide: slideNumber(slideNames[index]) },
+      });
+    });
     return {
-      markdown: `# ${titleFromFileName(fileName)}\n\n${slides.join('\n\n')}\n`,
+      markdown,
+      sections,
       assets,
       ready: true,
       parser: 'jszip+pptx-xml',
@@ -50,7 +84,9 @@ export class PptxParser implements FormatParser {
 
   private tableFromXml(xml: string): string {
     const rows = [...xml.matchAll(/<a:tr[\s\S]*?<\/a:tr>/g)].map((row) =>
-      [...row[0].matchAll(/<a:tc[\s\S]*?<\/a:tc>/g)].map((cell) => extractXmlText(cell[0])),
+      [...row[0].matchAll(/<a:tc[\s\S]*?<\/a:tc>/g)].map((cell) =>
+        extractXmlText(cell[0]),
+      ),
     );
     return tableToMarkdown(rows);
   }
@@ -87,13 +123,15 @@ export class PptxParser implements FormatParser {
         continue;
       }
       const extension = mediaName.split('.').pop() || 'bin';
-      assets.push(await context.uploadAsset({
-        fileName: `slide-${slideNumber(slideName)}-image-${assets.length + 1}.${extension}`,
-        data: await mediaFile.async('nodebuffer'),
-        contentType: mimeFromExtension(extension),
-        type: 'image',
-        alt: `slide ${slideNumber(slideName)} image`,
-      }));
+      assets.push(
+        await context.uploadAsset({
+          fileName: `slide-${slideNumber(slideName)}-image-${assets.length + 1}.${extension}`,
+          data: await mediaFile.async('nodebuffer'),
+          contentType: mimeFromExtension(extension),
+          type: 'image',
+          alt: `slide ${slideNumber(slideName)} image`,
+        }),
+      );
     }
     return assets;
   }

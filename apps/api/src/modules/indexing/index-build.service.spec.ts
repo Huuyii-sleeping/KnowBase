@@ -9,7 +9,7 @@ describe('IndexBuildService', () => {
   it('activates only after the entire staged build succeeds', async () => {
     let complete!: () => void;
     const stage = vi.fn(
-      () =>
+      (_generation: string) =>
         new Promise<void>((resolve) => {
           complete = resolve;
         }),

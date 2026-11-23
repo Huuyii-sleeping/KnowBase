@@ -106,6 +106,8 @@ When adding a new retrieval mode or result shape, update the typed API contract,
 
 ## Parser Contract
 
+Structured source locations, chunk artifacts, vector reuse, build budgets, and upgrade rules are maintained in [ingestion.md](ingestion.md). MinerU adapters, quality checks, asynchronous parsing, leases, task APIs and retention are maintained in [mineru-ingestion.md](mineru-ingestion.md). Keep parsers format-specific and reusable computation separate from visibility decisions.
+
 Every format parser implements the shared `FormatParser` contract and returns a `ParsedDocument`:
 
 ```text

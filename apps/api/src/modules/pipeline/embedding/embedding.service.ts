@@ -2,49 +2,98 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIEmbeddings } from '@langchain/openai';
 import { OllamaEmbeddings } from '@langchain/ollama';
-
-export interface EmbeddingProvider {
-  embedDocuments(texts: string[]): Promise<number[][]>;
-}
+import { createHash } from 'node:crypto';
+import { integerOption } from '../../ingestion/numeric-option';
+import { EmbeddingBatcher, EmbeddingProvider } from './embedding-batcher';
+export type { EmbeddingProvider } from './embedding-batcher';
 
 @Injectable()
 export class EmbeddingService implements EmbeddingProvider {
   private readonly embeddings: EmbeddingProvider;
+  readonly fingerprint?: string;
+  readonly dimensions: number;
 
   constructor(config: ConfigService) {
     const provider = config
       .get<string>('EMBEDDING_PROVIDER', 'ollama')
       .toLowerCase();
-
+    this.dimensions = integerOption(config, 'RAG_EMBEDDING_DIMENSIONS', 768);
+    const batchSize = integerOption(config, 'RAG_EMBEDDING_BATCH_SIZE', 32);
+    const concurrency = integerOption(config, 'RAG_EMBEDDING_CONCURRENCY', 2);
+    const timeout = integerOption(config, 'RAG_EMBEDDING_TIMEOUT_MS', 60000);
+    let adapter: EmbeddingProvider;
+    let model: string;
+    let endpoint: string;
     if (provider === 'openai') {
-      this.embeddings = new OpenAIEmbeddings({
+      model = config.get<string>(
+        'OPENAI_EMBEDDING_MODEL',
+        'text-embedding-3-small',
+      );
+      endpoint =
+        config.get<string>('OPENAI_BASE_URL')?.trim() ||
+        'https://api.openai.com/v1';
+      adapter = new OpenAIEmbeddings({
         apiKey: config.get<string>('OPENAI_API_KEY'),
-        model: config.get<string>(
-          'OPENAI_EMBEDDING_MODEL',
-          'text-embedding-3-small',
-        ),
-        configuration: {
-          baseURL: config.get<string>('OPENAI_BASE_URL'),
-        },
+        model,
+        ...(model.startsWith('text-embedding-3-')
+          ? { dimensions: this.dimensions }
+          : {}),
+        configuration: { baseURL: endpoint },
+        batchSize,
+        maxConcurrency: concurrency,
+        maxRetries: 0,
+        timeout,
+        stripNewLines: false,
       });
-      return;
-    }
-
-    if (provider === 'ollama') {
-      this.embeddings = new OllamaEmbeddings({
-        baseUrl: config.get<string>(
-          'OLLAMA_BASE_URL',
-          'http://localhost:11434',
-        ),
-        model: config.get<string>(
-          'OLLAMA_EMBEDDING_MODEL',
-          'nomic-embed-text',
-        ),
+    } else if (provider === 'ollama') {
+      model = config.get<string>('OLLAMA_EMBEDDING_MODEL', 'nomic-embed-text');
+      endpoint =
+        config.get<string>('OLLAMA_BASE_URL')?.trim() ||
+        'http://localhost:11434';
+      adapter = new OllamaEmbeddings({
+        baseUrl: endpoint,
+        model,
+        maxRetries: 0,
+        maxConcurrency: concurrency,
+        fetch: (input, init) =>
+          fetch(input, {
+            ...init,
+            signal: AbortSignal.any([
+              AbortSignal.timeout(timeout),
+              ...(init?.signal
+                ? [init.signal]
+                : input instanceof Request
+                  ? [input.signal]
+                  : []),
+            ]),
+          }),
       });
-      return;
-    }
-
-    throw new Error(`unsupported embedding provider: ${provider}`);
+    } else throw new Error(`unsupported embedding provider: ${provider}`);
+    const revision = config.get<string>('EMBEDDING_MODEL_REVISION', '').trim();
+    // A mutable model alias is insufficient for safe persistent vector reuse.
+    if (revision)
+      this.fingerprint = createHash('sha256')
+        .update(
+          JSON.stringify([
+            provider,
+            endpoint.replace(/\/$/, ''),
+            model,
+            revision,
+            this.dimensions,
+            'verbatim-v1',
+          ]),
+        )
+        .digest('hex');
+    this.embeddings = new EmbeddingBatcher(adapter, {
+      dimensions: this.dimensions,
+      batchSize,
+      concurrency,
+      maxCharacters: integerOption(
+        config,
+        'RAG_EMBEDDING_BATCH_CHARACTERS',
+        24000,
+      ),
+    });
   }
 
   embedDocuments(texts: string[]): Promise<number[][]> {

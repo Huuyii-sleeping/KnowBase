@@ -8,7 +8,23 @@ import {
 } from './document-upload';
 
 describe('document upload policy', () => {
-  it.each(['pdf', 'docx', 'pptx', 'xlsx', 'txt', 'md'])(
+  it.each([
+    'pdf',
+    'docx',
+    'pptx',
+    'xlsx',
+    'txt',
+    'md',
+    'doc',
+    'xls',
+    'ppt',
+    'html',
+    'htm',
+    'png',
+    'jpg',
+    'jpeg',
+    'webp',
+  ])(
     'accepts supported %s files regardless of case or MIME inference',
     (extension) => {
       expect(
@@ -27,7 +43,6 @@ describe('document upload policy', () => {
     'sound.mp3',
     'sound.wav',
     'sound.m4a',
-    'old.doc',
     'archive.zip',
     'README',
     '.pdf',

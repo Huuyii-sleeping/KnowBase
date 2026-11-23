@@ -20,9 +20,14 @@ function fixture() {
   const content = {
     findByContentId: vi.fn().mockResolvedValue({ markdown: '# Source' }),
   };
-  const chunker = { split: vi.fn().mockResolvedValue(['One', 'Two']) };
+  const chunker = {
+    forContent: vi.fn().mockResolvedValue([
+      { content: 'One', embeddingText: 'One' },
+      { content: 'Two', embeddingText: 'Two' },
+    ]),
+  };
   const embedding = {
-    embedDocuments: vi.fn().mockResolvedValue([[0.1], [0.2]]),
+    embed: vi.fn().mockResolvedValue([[0.1], [0.2]]),
   };
   const index = {
     stageChunks: vi.fn(),
@@ -42,9 +47,9 @@ function fixture() {
 describe('RagPipelineService generations', () => {
   it('activates an empty batch without calling the embedding provider', async () => {
     const { service, chunker, embedding, index } = fixture();
-    chunker.split.mockResolvedValueOnce([]);
+    chunker.forContent.mockResolvedValueOnce([]);
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 0 });
-    expect(embedding.embedDocuments).not.toHaveBeenCalled();
+    expect(embedding.embed).not.toHaveBeenCalled();
     expect(index.stageChunks).toHaveBeenCalledWith(
       'doc',
       expect.any(String),
@@ -72,12 +77,12 @@ describe('RagPipelineService generations', () => {
       chunks: 0,
       skipped: true,
     });
-    expect(embedding.embedDocuments).not.toHaveBeenCalled();
+    expect(embedding.embed).not.toHaveBeenCalled();
     expect(index.stageChunks).not.toHaveBeenCalled();
   });
   it('does not activate an invalid embedding batch', async () => {
     const { service, embedding, generations, index } = fixture();
-    embedding.embedDocuments.mockResolvedValueOnce([[0.1]]);
+    embedding.embed.mockResolvedValueOnce([[0.1]]);
     await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
       'embedding count',
     );

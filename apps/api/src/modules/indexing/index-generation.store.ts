@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Optional } from '@nestjs/common';
+import { GenerationRetentionStore } from './generation-retention.store';
 import { DataSource, EntityManager } from 'typeorm';
 import {
   Document,
@@ -9,7 +10,10 @@ export type IndexPipeline = 'search' | 'rag' | 'kg';
 
 @Injectable()
 export class IndexGenerationStore {
-  constructor(private readonly source: DataSource) {}
+  constructor(
+    private readonly source: DataSource,
+    @Optional() private readonly retention?: GenerationRetentionStore,
+  ) {}
 
   async capture(id: string, version: number): Promise<Document | null> {
     if (!Number.isSafeInteger(version) || version <= 0)
@@ -55,6 +59,13 @@ export class IndexGenerationStore {
          RETURNING generation`,
         [document.id, pipeline, generation, document.version],
       );
+      if (rows.length === 1)
+        await this.retention?.activated(
+          manager,
+          document.id,
+          pipeline,
+          generation,
+        );
       return rows.length === 1;
     });
   }
@@ -79,6 +90,7 @@ export class IndexGenerationStore {
     id: string,
     version: number,
   ): Promise<void> {
+    await this.retention?.deleted(manager, id);
     for (const pipeline of ['search', 'rag', 'kg']) {
       await manager.query(
         `INSERT INTO kh_index_head (document_id, pipeline, version, deleted)

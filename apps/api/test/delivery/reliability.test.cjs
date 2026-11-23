@@ -100,6 +100,49 @@ test('publication and partial outbox inserts roll back together in real PostgreS
   );
 });
 
+test('failed parser assets are retried through the durable KG cleanup route', async () => {
+  const { AssetUploaderService } = load(
+    'documents/parsing/asset-uploader.service.js',
+  );
+  const { DocumentAssetsCleanupService } = load(
+    'documents/document-assets-cleanup.service.js',
+  );
+  const { KgPipelineConsumer } = load('pipeline/kg/kg-pipeline.consumer.js');
+  const runtime = env.runtime({ retryMs: 100 });
+  const documentId = randomUUID();
+  const key = `assets/${documentId}/failed-attempt.png`;
+  let calls = 0;
+  const cleanup = new DocumentAssetsCleanupService({
+    removeObject: async (objectKey) => {
+      assert.equal(objectKey, key);
+      if (++calls === 1) throw new Error('object storage temporarily offline');
+    },
+  });
+  await new KgPipelineConsumer(
+    runtime.messages,
+    {
+      rebuildDocument: async () => {
+        throw new Error('asset deletion must not rebuild KG');
+      },
+    },
+    {},
+    cleanup,
+  ).consume();
+  await new AssetUploaderService({}, runtime.outbox).discard(documentId, [
+    { type: 'image', objectKey: key, url: '/image' },
+  ]);
+  const [row] = await env.source.query(
+    'SELECT * FROM kh_pipeline_outbox WHERE routing_key = $1',
+    [routes.ASSETS_DELETE],
+  );
+  runtime.relay.onModuleInit();
+  await eventually(
+    () => receipt(row.event_id, 'COMPLETED'),
+    'asset cleanup completed after retry',
+  );
+  assert.equal(calls, 2);
+});
+
 test(
   'publication survives broker outage; the same relay and three consumers recover without restart',
   { timeout: 120000 },

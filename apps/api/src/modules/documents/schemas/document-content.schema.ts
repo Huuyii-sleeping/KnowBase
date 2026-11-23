@@ -1,5 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { ParseQuality } from '../parsing/file-parser.types';
+import {
+  DocumentBlock,
+  SourceSection,
+} from '../../ingestion/document-structure';
 
 export type DocumentContentDocument = HydratedDocument<DocumentContent>;
 
@@ -45,6 +50,22 @@ export class DocumentContent {
 
   @Prop({ required: true, default: 0 })
   characterCount!: number;
+
+  @Prop({ type: [Object], default: undefined })
+  blocks?: DocumentBlock[];
+
+  @Prop({ type: [Object], default: undefined })
+  sections?: SourceSection[];
+
+  @Prop()
+  parseStrategy?: string;
+
+  @Prop({ type: Object })
+  quality?: ParseQuality;
+
+  @Prop({ type: Object })
+  provenance?: Record<string, string>;
 }
 
-export const DocumentContentSchema = SchemaFactory.createForClass(DocumentContent);
+export const DocumentContentSchema =
+  SchemaFactory.createForClass(DocumentContent);

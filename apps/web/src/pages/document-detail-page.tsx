@@ -24,6 +24,7 @@ import {
 } from '@/lib/api-error';
 import { documentsApi, type DocumentDetail } from '@/lib/api';
 import { formatBytes, formatDateTime, formatRelative } from '@/lib/format';
+import { DocumentParseProgress } from '@/components/document-parse-progress';
 
 function MetaRow({ k, v }: { k: string; v: React.ReactNode }) {
   return (
@@ -62,6 +63,28 @@ export function DocumentDetailPage() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    if (!id || doc?.parseStatus !== 'PENDING' || !doc.ingestion) return;
+    let stopped = false;
+    let inFlight = false;
+    const timer = setInterval(async () => {
+      if (inFlight) return;
+      inFlight = true;
+      try {
+        const next = await documentsApi.detail(id);
+        if (!stopped) setDoc(next);
+      } catch {
+        /* Keep the last readable state; explicit refresh remains available. */
+      } finally {
+        inFlight = false;
+      }
+    }, 3000);
+    return () => {
+      stopped = true;
+      clearInterval(timer);
+    };
+  }, [id, doc?.parseStatus, Boolean(doc?.ingestion)]);
 
   const act = async (fn: () => Promise<unknown>, success: string) => {
     setActing(true);
@@ -125,7 +148,10 @@ export function DocumentDetailPage() {
         <h1 className="flex flex-wrap items-center gap-2.5 break-all text-[26px] font-semibold tracking-tight">
           {doc.title}
           <StatusBadge status={doc.status} />
-          <ParseBadge status={doc.parseStatus} />
+          <ParseBadge
+            status={doc.parseStatus}
+            needsReview={doc.content?.quality?.status === 'needs_review'}
+          />
         </h1>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button
@@ -151,6 +177,11 @@ export function DocumentDetailPage() {
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)_260px] items-start gap-6 max-lg:grid-cols-1">
+        {doc.ingestion && (
+          <div className="col-span-full">
+            <DocumentParseProgress document={doc} onRefresh={load} />
+          </div>
+        )}
         <div className="rounded-lg border border-border bg-background">
           <div className="px-4 pt-3 text-[12px] font-medium text-muted-foreground">
             正文预览
@@ -166,7 +197,9 @@ export function DocumentDetailPage() {
             </div>
           ) : doc.parseStatus === 'FAILED' ? (
             <div className="mx-7 my-5 rounded-md bg-red-50 px-4 py-3.5 text-[13px] text-red-700">
-              {createApiError('DOCUMENT_PARSE_FAILED').message}
+              {doc.content?.quality?.status === 'needs_review'
+                ? '已提取正文，但存在缺页、无文本或无法识别的内容，请对照原文件检查并编辑正文后再提交审核。'
+                : createApiError('DOCUMENT_PARSE_FAILED').message}
             </div>
           ) : (
             <div className="mx-7 my-5 rounded-md bg-sky-50 px-4 py-3.5 text-[13px] text-sky-800">

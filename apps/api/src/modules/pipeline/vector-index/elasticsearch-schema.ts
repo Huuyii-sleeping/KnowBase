@@ -28,6 +28,7 @@ export class ElasticsearchSchema {
       generation_id: { type: 'keyword' },
       document_version: { type: 'integer' },
       chunk_index: { type: 'integer' },
+      ingestion: { type: 'object', enabled: false },
       content: { type: 'text' },
       embedding: {
         type: 'dense_vector',
@@ -59,7 +60,12 @@ export class ElasticsearchSchema {
     // writes; dynamic text mappings would tokenize the generation UUID.
     await this.client.indices.putMapping({
       index,
-      properties: { generation_id: { type: 'keyword' } },
+      properties: {
+        generation_id: { type: 'keyword' },
+        ...(index === this.chunkIndex
+          ? { ingestion: { type: 'object' as const, enabled: false } }
+          : {}),
+      },
     });
   }
 }

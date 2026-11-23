@@ -6,6 +6,8 @@ import { ListDocumentsDto } from './dto/list-documents.dto';
 import { DocumentContentStore } from './document-content.store';
 import { AuthUser } from '../auth/auth.types';
 import { DocumentAccessService } from '../authorization/document-access.service';
+import { ParseTaskStore } from './ingestion/parse-task.store';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DocumentQueryService {
@@ -14,6 +16,8 @@ export class DocumentQueryService {
     private readonly documentRepository: Repository<Document>,
     private readonly contentStore: DocumentContentStore,
     @Optional() private readonly access?: DocumentAccessService,
+    @Optional() private readonly parseTasks?: ParseTaskStore,
+    @Optional() private readonly config?: ConfigService,
   ) {}
 
   async findAll(query: ListDocumentsDto, user?: AuthUser) {
@@ -24,8 +28,12 @@ export class DocumentQueryService {
       builder.andWhere(
         new Brackets((where) => {
           where
-            .where('document.title ILIKE :keyword', { keyword: `%${query.keyword}%` })
-            .orWhere('document.fileName ILIKE :keyword', { keyword: `%${query.keyword}%` });
+            .where('document.title ILIKE :keyword', {
+              keyword: `%${query.keyword}%`,
+            })
+            .orWhere('document.fileName ILIKE :keyword', {
+              keyword: `%${query.keyword}%`,
+            });
         }),
       );
     }
@@ -33,7 +41,9 @@ export class DocumentQueryService {
       builder.andWhere('document.status = :status', { status: query.status });
     }
     if (query.category) {
-      builder.andWhere('document.category = :category', { category: query.category });
+      builder.andWhere('document.category = :category', {
+        category: query.category,
+      });
     }
 
     const page = query.page ?? 1;
@@ -69,6 +79,8 @@ export class DocumentQueryService {
             version: content.version,
             assets: content.assets,
             characterCount: content.characterCount,
+            quality: content.quality,
+            provenance: content.provenance,
           }
         : undefined,
     };
@@ -80,9 +92,26 @@ export class DocumentQueryService {
     const content = includeContent
       ? await this.contentStore.findByContentId(document.contentId)
       : undefined;
+    const enabled = [true, 'true'].includes(
+      this.config?.get('INGESTION_ASYNC_ENABLED', false) ?? false,
+    );
+    const task = enabled ? await this.parseTasks?.latest(id) : undefined;
 
     return {
       ...this.toMetadata(document),
+      ingestion: enabled
+        ? {
+            canManage: user.role === 'ADMIN' || document.uploaderId === user.id,
+            task: task
+              ? {
+                  state: task.state,
+                  stage: task.stage,
+                  attempts: task.attempts,
+                  updatedAt: task.updated_at,
+                }
+              : null,
+          }
+        : undefined,
       content: content
         ? {
             contentId: content.contentId,
@@ -92,6 +121,8 @@ export class DocumentQueryService {
             version: content.version,
             assets: content.assets,
             characterCount: content.characterCount,
+            quality: content.quality,
+            provenance: content.provenance,
           }
         : undefined,
     };

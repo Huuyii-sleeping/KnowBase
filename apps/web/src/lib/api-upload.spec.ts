@@ -17,14 +17,22 @@ describe('document upload API boundary', () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('preserves returned parsing status and sends the form only once', async () => {
+  it.each([
+    'report.pdf',
+    'old.doc',
+    'old.xls',
+    'old.ppt',
+    'page.html',
+    'page.htm',
+    'photo.png',
+  ])('sends %s once and preserves returned parsing status', async (name) => {
     const fetch = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ id: 'saved', parseStatus: 'FAILED' }), {
         status: 201,
       }),
     );
     vi.stubGlobal('fetch', fetch);
-    const file = new File(['damaged file'], 'report.pdf');
+    const file = new File(['damaged file'], name);
     const result = await documentsApi.create(file, {
       title: 'Report',
       tags: ['a', 'b'],
@@ -34,7 +42,7 @@ describe('document upload API boundary', () => {
     const [url, init] = fetch.mock.calls[0];
     expect(url).toBe('/api/v1/documents');
     expect(init.method).toBe('POST');
-    expect(init.body.get('file').name).toBe('report.pdf');
+    expect(init.body.get('file').name).toBe(name);
     expect(init.body.get('title')).toBe('Report');
     expect(init.body.get('tags')).toBe('a,b');
   });

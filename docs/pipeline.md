@@ -1,5 +1,7 @@
 # 发布索引流水线
 
+解析、结构分块、向量复用和批量写入的实现与运行配置见 [ingestion.md](ingestion.md)。以下发布、投递和 generation 可见性协议继续适用。
+
 ## 消息契约
 
 - `document.index`：携带完整元数据和 Markdown，写入 Elasticsearch `kh_document`。
@@ -120,17 +122,18 @@ pnpm --filter @knowbase/api test:delivery
 
 测试通过真实 TypeORM 连接执行文档表初始化和 `004_pipeline_delivery.sql` 迁移，并重复执行迁移验证可重入性。测试结束（包括断言失败）后删除本轮容器和数据卷，不读取 API 的 `.env`，也不修改开发数据库。若测试进程本身被强制终止，需根据 `docker compose ls` 中的 `knowbase-delivery-test-<进程 ID>`，使用同一 Compose 文件执行 `down -v` 清理残留项目。
 
-自动化覆盖以下七种情况：
+自动化覆盖以下八种情况：
 
-| 场景 | 验证结果 |
-| --- | --- |
-| 第二条 Outbox 插入失败 | 文档发布状态、审核信息和已插入任务一起回滚 |
-| RabbitMQ 停机时发布，随后恢复 | 发布状态和三条任务保存成功；原 Relay 和三路消费者自动恢复，无需重新创建应用服务 |
-| Broker 确认后 Outbox 标记事务失败 | 待投递行保留；以相同事件 ID 重投，业务副作用只执行一次 |
-| 两个 Relay 同时领取任务 | `SKIP LOCKED` 允许领取不同任务，不重复领取也不等待另一条行锁 |
-| 完成记录提交后连接关闭，未发送 ACK | Broker 重投消息，消费者根据完成记录跳过副作用 |
-| 消费子进程被 `SIGKILL` | 未提交 receipt 回滚，未确认消息被另一消费者接管并完成 |
-| 重试期间重建 Worker 服务实例，最终持续失败 | 数据库重试时间和处理次数保留；第三次失败后进入死信；死信在 Broker 重启后仍存在 |
+| 场景                                       | 验证结果                                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------------------- |
+| 第二条 Outbox 插入失败                     | 文档发布状态、审核信息和已插入任务一起回滚                                      |
+| RabbitMQ 停机时发布，随后恢复              | 发布状态和三条任务保存成功；原 Relay 和三路消费者自动恢复，无需重新创建应用服务 |
+| Broker 确认后 Outbox 标记事务失败          | 待投递行保留；以相同事件 ID 重投，业务副作用只执行一次                          |
+| 两个 Relay 同时领取任务                    | `SKIP LOCKED` 允许领取不同任务，不重复领取也不等待另一条行锁                    |
+| 完成记录提交后连接关闭，未发送 ACK         | Broker 重投消息，消费者根据完成记录跳过副作用                                   |
+| 消费子进程被 `SIGKILL`                     | 未提交 receipt 回滚，未确认消息被另一消费者接管并完成                           |
+| 重试期间重建 Worker 服务实例，最终持续失败 | 数据库重试时间和处理次数保留；第三次失败后进入死信；死信在 Broker 重启后仍存在  |
+| 解析资源清理首次失败后重试                 | 原 Outbox 事件经 KG 消费者重试清理，不误触发图谱重建                            |
 
 这套测试验证发布服务、Outbox、Relay、确认、receipt 和消费者与真实 PostgreSQL/RabbitMQ 的集成。正文适配器使用固定 Markdown，索引处理器使用独立数据库记录计数，不启动 HTTP API、MongoDB、Elasticsearch、Neo4j 或模型服务，因此不代表三路索引内容正确性或完整上传到检索流程已经验收。生产配置的重试间隔保持 5 秒、10 秒；测试缩短间隔以控制运行时间。
 
@@ -287,7 +290,7 @@ Content-Type: application/json
 
 返回结构包含 `answer`、`citations` 和 `contexts`。回答中的 `[S1]` 等来源标记会被转换为结构化引用；没有可用 Chunk 时，接口直接返回“知识库中没有找到足够信息”，不会调用模型。
 
-Markdown 使用 `RecursiveCharacterTextSplitter`，优先按标题和段落边界切分。默认使用本地 Ollama `nomic-embed-text` 生成 768 维向量，也可以将 `EMBEDDING_PROVIDER` 改为 `openai`。ES `kh_chunk.embedding` 使用 `dense_vector` 并启用 cosine 相似度。
+Markdown 使用结构感知分块，保留标题路径、来源、重复表头与代码围栏，具体预算及复用规则见 [入库说明](ingestion.md#分块规则)。默认使用本地 Ollama `nomic-embed-text` 生成 768 维向量，也可以将 `EMBEDDING_PROVIDER` 改为 `openai`。ES `kh_chunk.embedding` 使用 `dense_vector` 并启用 cosine 相似度。
 
 如果之前已经使用其他维度创建过 `kh_chunk`，需要先删除旧索引再重新构建：
 

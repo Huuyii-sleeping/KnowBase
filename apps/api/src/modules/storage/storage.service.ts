@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from 'minio';
+import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class StorageService {
@@ -9,7 +10,10 @@ export class StorageService {
   private readonly bucket: string;
 
   constructor(private readonly config: ConfigService) {
-    this.bucket = this.config.get<string>('RUSTFS_BUCKET', 'knowbase-documents');
+    this.bucket = this.config.get<string>(
+      'RUSTFS_BUCKET',
+      'knowbase-documents',
+    );
     this.client = new Client({
       endPoint: this.config.getOrThrow<string>('RUSTFS_ENDPOINT'),
       port: this.config.get<number>('RUSTFS_PORT', 9000),
@@ -27,7 +31,11 @@ export class StorageService {
     }
   }
 
-  async putObject(key: string, data: Buffer, contentType: string): Promise<void> {
+  async putObject(
+    key: string,
+    data: Buffer,
+    contentType: string,
+  ): Promise<void> {
     await this.ensureBucket();
     await this.client.putObject(this.bucket, key, data, data.length, {
       'Content-Type': contentType,
@@ -41,7 +49,7 @@ export class StorageService {
     contentType: string;
   }): Promise<{ objectKey: string; url: string }> {
     const safeName = input.fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const objectKey = `assets/${input.documentId}/${Date.now()}-${safeName}`;
+    const objectKey = `assets/${input.documentId}/${randomUUID()}-${safeName}`;
     await this.putObject(objectKey, input.data, input.contentType);
     return { objectKey, url: this.getObjectUrl(objectKey) };
   }

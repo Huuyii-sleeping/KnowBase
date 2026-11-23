@@ -1,3 +1,6 @@
+import { IngestionArtifactsModule } from '../ingestion/artifacts/ingestion-artifacts.module';
+import { DocumentChunksService } from './chunk/document-chunks.service';
+import { DocumentEmbeddingService } from './embedding/document-embedding.service';
 import { Module } from '@nestjs/common';
 import { DocumentsModule } from '../documents/documents.module';
 import { MessageQueueModule } from '../message-queue/message-queue.module';
@@ -15,11 +18,19 @@ import { SearchPipelineConsumer } from './search/search-pipeline.consumer';
 import { SearchPipelineService } from './search/search-pipeline.service';
 import { VectorIndexService } from './vector-index/vector-index.service';
 import { IndexingModule } from '../indexing/indexing.module';
+import { GenerationCleanupService } from './generation-cleanup.service';
 
 @Module({
-  imports: [DocumentsModule, MessageQueueModule, IndexingModule],
+  imports: [
+    DocumentsModule,
+    MessageQueueModule,
+    IndexingModule,
+    IngestionArtifactsModule,
+  ],
   providers: [
     MarkdownChunkerService,
+    DocumentChunksService,
+    DocumentEmbeddingService,
     EmbeddingService,
     VectorIndexService,
     GraphIndexService,
@@ -36,6 +47,7 @@ import { IndexingModule } from '../indexing/indexing.module';
     RagPipelineConsumer,
     KgPipelineConsumer,
     PipelineWorkerService,
+    GenerationCleanupService,
   ],
   exports: [EmbeddingService, VectorIndexService, GraphIndexService],
 })

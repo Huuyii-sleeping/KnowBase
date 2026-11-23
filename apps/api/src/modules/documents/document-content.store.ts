@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ParsedAsset } from './parsing/file-parser.types';
-import { DocumentContent, DocumentContentDocument } from './schemas/document-content.schema';
+import { ParsedAsset, ParseQuality } from './parsing/file-parser.types';
+import { markdownBlocks } from '../ingestion/markdown-blocks';
+import { PARSE_STRATEGY, SourceSection } from '../ingestion/document-structure';
+import {
+  DocumentContent,
+  DocumentContentDocument,
+} from './schemas/document-content.schema';
 
 export interface DocumentContentInput {
   contentId: string;
@@ -12,6 +17,10 @@ export interface DocumentContentInput {
   warnings: string[];
   version: number;
   assets: ParsedAsset[];
+  sections?: SourceSection[];
+  parseStrategy?: string;
+  quality?: ParseQuality;
+  provenance?: Record<string, string>;
 }
 
 @Injectable()
@@ -24,6 +33,8 @@ export class DocumentContentStore {
   async create(input: DocumentContentInput): Promise<void> {
     await new this.contentModel({
       ...input,
+      blocks: markdownBlocks(input.markdown, input.sections),
+      parseStrategy: input.parseStrategy ?? PARSE_STRATEGY,
       characterCount: input.markdown.length,
     }).save();
   }
@@ -38,5 +49,11 @@ export class DocumentContentStore {
 
   async deleteByDocumentId(documentId: string): Promise<void> {
     await this.contentModel.deleteMany({ documentId });
+  }
+
+  async assetKeys(documentId: string): Promise<string[]> {
+    return this.contentModel
+      .distinct('assets.objectKey', { documentId })
+      .exec();
   }
 }

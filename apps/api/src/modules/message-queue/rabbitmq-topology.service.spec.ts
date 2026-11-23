@@ -9,7 +9,12 @@ describe('RabbitMQ topology', () => {
       bindQueue: vi.fn(),
     };
     await new RabbitMqTopologyService().declare(channel as any);
-    expect(channel.assertQueue).toHaveBeenCalledTimes(6);
+    expect(channel.assertQueue).toHaveBeenCalledTimes(8);
+    expect(channel.bindQueue).toHaveBeenCalledWith(
+      'knowbase.document.parse',
+      'knowbase.pipeline',
+      'document.parse',
+    );
     expect(channel.assertQueue).toHaveBeenCalledWith(
       'knowbase.pipeline.search',
       { durable: true },

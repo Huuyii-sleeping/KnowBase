@@ -2,6 +2,127 @@ import { describe, expect, it, vi } from 'vitest';
 import { MarkdownChunkerService } from './markdown-chunker.service';
 
 describe('MarkdownChunkerService', () => {
+  it('preserves the nearest heading when the document title is very long', async () => {
+    const service = new MarkdownChunkerService({
+      get: (key: string, fallback: unknown) =>
+        key === 'RAG_CHUNK_SIZE'
+          ? 100
+          : key === 'RAG_CHUNK_OVERLAP'
+            ? 0
+            : fallback,
+    } as any);
+    const chunks = await service.splitStructured(
+      '# ' + 'Long title '.repeat(30) + '\n\n## 发布\n\n审核正文。',
+    );
+    expect(chunks[0].content).toContain('## 发布');
+    expect(chunks[0].headingPath[0].length).toBeGreaterThan(100);
+    expect(chunks[0].content.length).toBeLessThanOrEqual(100);
+  });
+
+  const create = (size = 120, overlap = 12) =>
+    new MarkdownChunkerService({
+      get: (key: string, fallback: unknown) =>
+        key === 'RAG_CHUNK_SIZE'
+          ? size
+          : key === 'RAG_CHUNK_OVERLAP'
+            ? overlap
+            : fallback,
+    } as any);
+
+  it('keeps Chinese sentence punctuation with each sentence and repairs an open code fence', async () => {
+    const sentences = [
+      '第一句话说明发布。',
+      '第二句话解释审核。',
+      '第三句话介绍索引。',
+      '第四句话说明重试。',
+      '第五句话交代权限。',
+    ];
+    const chunks = await create(32, 0).split(sentences.join(''));
+    for (const sentence of sentences)
+      expect(chunks.some((chunk) => chunk.includes(sentence))).toBe(true);
+    expect(await create().split('```ts\nconst a = 1;')).toEqual([
+      '```ts\nconst a = 1;\n```',
+    ]);
+  });
+
+  it('repeats table headers without losing rows and keeps code fences complete', async () => {
+    const table =
+      '| Key | Value |\n| --- | --- |\n' +
+      Array.from({ length: 20 }, (_, i) => `| key${i} | value${i} |`).join(
+        '\n',
+      );
+    const code =
+      '```ts\n' +
+      Array.from({ length: 20 }, (_, i) => `const v${i} = ${i};`).join('\n') +
+      '\n```';
+    const result = await create().splitStructured(
+      '# Guide\n\n## Table\n\n' + table + '\n\n## Code\n\n' + code,
+    );
+    const tables = result.filter(
+      (chunk) => chunk.headingPath.at(-1) === 'Table',
+    );
+    expect(tables.length).toBeGreaterThan(1);
+    expect(
+      tables.every((chunk) =>
+        chunk.content.includes('| Key | Value |\n| --- | --- |'),
+      ),
+    ).toBe(true);
+    const codes = result.filter((chunk) => chunk.headingPath.at(-1) === 'Code');
+    expect(
+      codes.every(
+        (chunk) =>
+          chunk.content.includes('```ts\n') && chunk.content.endsWith('\n```'),
+      ),
+    ).toBe(true);
+    for (let i = 0; i < 20; i++) {
+      expect(
+        tables.some((chunk) =>
+          chunk.content.includes(`| key${i} | value${i} |`),
+        ),
+      ).toBe(true);
+      expect(
+        codes.some((chunk) => chunk.content.includes(`const v${i} = ${i};`)),
+      ).toBe(true);
+    }
+    expect(result.every((chunk) => chunk.content.length <= 120)).toBe(true);
+  });
+
+  it('keeps content deterministic, carries source ranges and isolates neighboring chapters', async () => {
+    const markdown =
+      '## A\n\n' + '甲乙丙丁。'.repeat(40) + '\n\n## B\n\n另一个章节。';
+    const service = create();
+    const result = await service.splitStructured(markdown);
+    expect(await service.splitStructured(markdown)).toEqual(result);
+    expect(result.at(-1)?.content).not.toContain('甲乙丙丁');
+    expect(result.at(-1)?.headingPath).toEqual(['B']);
+    for (const chunk of result) {
+      expect(chunk.contentHash).toMatch(/^[a-f0-9]{64}$/);
+      expect(chunk.ranges.every((range) => range.end <= markdown.length)).toBe(
+        true,
+      );
+    }
+    expect(await service.split('  ')).toEqual([]);
+  });
+
+  it('refuses an indivisible table row instead of silently truncating it', async () => {
+    await expect(
+      create(60, 0).split(
+        '| Key | Value |\n| --- | --- |\n| A | ' + 'x'.repeat(80) + ' |',
+      ),
+    ).rejects.toThrow('Table header and row');
+  });
+
+  it.each([
+    [0, 0],
+    [120, -1],
+    [120, 120],
+    [NaN, 0],
+    [Infinity, 0],
+    [120.5, 0],
+  ])('rejects invalid budgets (%s, %s)', (size, overlap) => {
+    expect(() => create(size, overlap)).toThrow();
+  });
+
   it('splits markdown by headings and keeps chunks within the configured size', async () => {
     const config = {
       get: vi.fn((key: string, fallback: unknown) => {

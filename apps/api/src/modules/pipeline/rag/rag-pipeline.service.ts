@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
-import { EmbeddingService } from '../embedding/embedding.service';
-import { MarkdownChunkerService } from '../chunk/markdown-chunker.service';
+import { DocumentEmbeddingService } from '../embedding/document-embedding.service';
+import { DocumentChunksService } from '../chunk/document-chunks.service';
+import { ingestionStage } from '../../ingestion/ingestion-stage';
 import {
   VectorChunkInput,
   VectorIndexService,
@@ -13,8 +14,8 @@ import { IndexBuildService } from '../../indexing/index-build.service';
 export class RagPipelineService {
   constructor(
     private readonly contentStore: DocumentContentStore,
-    private readonly chunker: MarkdownChunkerService,
-    private readonly embedding: EmbeddingService,
+    private readonly chunker: DocumentChunksService,
+    private readonly embedding: DocumentEmbeddingService,
     private readonly vectorIndex: VectorIndexService,
     private readonly generations: IndexGenerationStore,
     private readonly builds: IndexBuildService,
@@ -35,9 +36,16 @@ export class RagPipelineService {
       throw new Error(`document content not found: ${document.contentId}`);
     }
 
-    const chunks = await this.chunker.split(content.markdown);
+    const chunks = await this.chunker.forContent(
+      document.id,
+      document.contentId,
+      content,
+    );
     const embeddings = chunks.length
-      ? await this.embedding.embedDocuments(chunks)
+      ? await this.embedding.embed(
+          document.id,
+          chunks.map((chunk) => chunk.embeddingText),
+        )
       : [];
     if (embeddings.length !== chunks.length) {
       throw new Error('embedding count does not match chunk count');
@@ -48,7 +56,15 @@ export class RagPipelineService {
       documentId: document.id,
       version: document.version,
       chunkIndex: index,
-      content: chunk,
+      content: chunk.content,
+      metadata: {
+        strategy: chunk.strategy,
+        contentHash: chunk.contentHash,
+        headingPath: chunk.headingPath,
+        ranges: chunk.ranges,
+        parseStrategy: content.parseStrategy,
+        embeddingFingerprint: this.embedding.fingerprint,
+      },
       embedding: embeddings[index],
     }));
 
@@ -56,7 +72,17 @@ export class RagPipelineService {
       document,
       'rag',
       (generation) =>
-        this.vectorIndex.stageChunks(document.id, generation, vectorChunks),
+        ingestionStage(
+          'index.write',
+          {
+            documentId,
+            pipeline: 'rag',
+            generation,
+            chunks: vectorChunks.length,
+          },
+          () =>
+            this.vectorIndex.stageChunks(document.id, generation, vectorChunks),
+        ),
       (generation) => this.vectorIndex.discardGeneration('rag', generation),
     );
     return activated

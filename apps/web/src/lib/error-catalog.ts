@@ -11,7 +11,7 @@ export const ERROR_CATALOG = {
   FILE_REQUIRED: { message: '请先选择要上传的文件。', action: 'edit_input' },
   FILE_UNSUPPORTED: {
     message:
-      '暂不支持这种文件格式，请上传 PDF、DOCX、PPTX、XLSX、TXT 或 MD 文件。',
+      '暂不支持这种文件格式，请上传 PDF、Word、Excel、PPT、HTML、TXT、MD 或 PNG/JPG/WebP 图片。',
     action: 'edit_input',
   },
   FILE_TOO_LARGE: {

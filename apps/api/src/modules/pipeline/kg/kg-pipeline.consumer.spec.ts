@@ -31,6 +31,7 @@ describe('KgPipelineConsumer', () => {
       messageQueue as any,
       pipeline as any,
       { cleanup: vi.fn() } as any,
+      { cleanup: vi.fn() } as any,
     );
 
     await consumer.consume();
@@ -41,6 +42,7 @@ describe('KgPipelineConsumer', () => {
         MESSAGE_ROUTING_KEYS.KG_REBUILD,
         MESSAGE_ROUTING_KEYS.KG_DELETE,
         MESSAGE_ROUTING_KEYS.SOURCE_DELETE,
+        MESSAGE_ROUTING_KEYS.ASSETS_DELETE,
       ],
       expect.any(Function),
     );
@@ -73,6 +75,7 @@ describe('KgPipelineConsumer', () => {
     const consumer = new KgPipelineConsumer(
       messageQueue as any,
       pipeline as any,
+      { cleanup: vi.fn() } as any,
       { cleanup: vi.fn() } as any,
     );
 

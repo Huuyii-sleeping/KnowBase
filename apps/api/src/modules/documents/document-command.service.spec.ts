@@ -48,7 +48,7 @@ function makeDocument(overrides: Partial<Document> = {}) {
   } as Document;
 }
 
-function makeService(overrides: Record<string, unknown> = {}) {
+function makeService(overrides: Record<string, Record<string, unknown>> = {}) {
   const repository = {
     create: vi.fn((value) => value),
     save: vi.fn(async (value) => value),
@@ -69,6 +69,7 @@ function makeService(overrides: Record<string, unknown> = {}) {
   };
   const fileParser = {
     supports: vi.fn(() => true),
+    assertFileBudget: vi.fn(),
     parse: vi.fn(async () => ({
       markdown: '# notes\n',
       assets: [],
@@ -80,6 +81,7 @@ function makeService(overrides: Record<string, unknown> = {}) {
   };
   const revisions = { updateContent: vi.fn(), updateMetadata: vi.fn() };
   const deletion = { remove: vi.fn() };
+  const parseTasks = { enabled: false, create: vi.fn() };
   return {
     service: new DocumentCommandService(
       repository as any,
@@ -88,6 +90,7 @@ function makeService(overrides: Record<string, unknown> = {}) {
       fileParser as any,
       revisions as any,
       deletion as any,
+      parseTasks as any,
     ),
     repository,
     contentStore,
@@ -95,10 +98,48 @@ function makeService(overrides: Record<string, unknown> = {}) {
     fileParser,
     revisions,
     deletion,
+    parseTasks,
   };
 }
 
 describe('DocumentCommandService', () => {
+  it('submits asynchronous uploads atomically without parsing in the request', async () => {
+    const f = makeService();
+    f.parseTasks.enabled = true;
+    await f.service.create(makeFile(), {}, { id: 'user-1' } as any);
+    expect(f.parseTasks.create).toHaveBeenCalledWith(
+      expect.objectContaining({ parseStatus: 'PENDING', status: 'DRAFT' }),
+    );
+    expect(f.fileParser.parse).not.toHaveBeenCalled();
+    expect(f.contentStore.create).not.toHaveBeenCalled();
+    expect(f.repository.save).not.toHaveBeenCalled();
+  });
+
+  it('rejects an over-budget upload before persisting the original or queueing work', async () => {
+    const f = makeService({
+      fileParser: {
+        assertFileBudget: vi.fn(() => {
+          throw new Error('File exceeds ingestion byte budget');
+        }),
+      },
+    });
+    f.parseTasks.enabled = true;
+    await expect(
+      f.service.create(makeFile(), {}, { id: 'user-1' } as any),
+    ).rejects.toThrow('byte budget');
+    expect(f.storage.putObject).not.toHaveBeenCalled();
+    expect(f.parseTasks.create).not.toHaveBeenCalled();
+  });
+
+  it('preserves the original when an asynchronous create COMMIT might have succeeded', async () => {
+    const f = makeService();
+    f.parseTasks.enabled = true;
+    f.parseTasks.create.mockRejectedValueOnce(new Error('lost COMMIT reply'));
+    await expect(
+      f.service.create(makeFile(), {}, { id: 'user-1' } as any),
+    ).rejects.toThrow('COMMIT');
+    expect(f.storage.removeObject).not.toHaveBeenCalled();
+  });
   it('persists the original file, parsed content, and metadata', async () => {
     const { service, repository, contentStore, storage, fileParser } =
       makeService();
@@ -130,6 +171,36 @@ describe('DocumentCommandService', () => {
     await expect(
       service.create(makeFile(), {}, { id: 'user-1' } as any),
     ).rejects.toThrow('postgres failed');
+    expect(storage.removeObject).toHaveBeenCalledOnce();
+    expect(contentStore.deleteByContentId).toHaveBeenCalledOnce();
+  });
+
+  it('schedules extracted assets for durable cleanup when content persistence fails', async () => {
+    const asset = {
+      type: 'image',
+      objectKey: 'assets/doc/image',
+      url: '/image',
+    };
+    const discardAssets = vi.fn();
+    const { service, contentStore, storage } = makeService({
+      fileParser: {
+        discardAssets,
+        parse: vi.fn().mockResolvedValue({
+          markdown: 'body',
+          assets: [asset],
+          ready: true,
+          parser: 'docx',
+          warnings: [],
+        }),
+      },
+      contentStore: {
+        create: vi.fn().mockRejectedValue(new Error('mongo offline')),
+      },
+    });
+    await expect(
+      service.create(makeFile(), {}, { id: 'user-1' } as any),
+    ).rejects.toThrow('mongo offline');
+    expect(discardAssets).toHaveBeenCalledWith(expect.any(String), [asset]);
     expect(storage.removeObject).toHaveBeenCalledOnce();
     expect(contentStore.deleteByContentId).toHaveBeenCalledOnce();
   });

@@ -11,7 +11,16 @@ export class ElasticsearchGenerationWriter {
     private readonly documentIndex: string,
     private readonly chunkIndex: string,
     private readonly schema: ElasticsearchSchema,
-  ) {}
+    private readonly limits = { maxChunks: 200, maxBytes: 5242880 },
+  ) {
+    if (
+      !Number.isSafeInteger(limits.maxChunks) ||
+      limits.maxChunks < 1 ||
+      !Number.isSafeInteger(limits.maxBytes) ||
+      limits.maxBytes < 1
+    )
+      throw new Error('Invalid Elasticsearch bulk limits');
+  }
 
   async indexDocument(input: SearchDocumentInput): Promise<void> {
     await this.schema.document();
@@ -38,9 +47,18 @@ export class ElasticsearchGenerationWriter {
       return;
     }
 
-    const result = await this.client.bulk({
-      refresh: 'wait_for',
-      operations: chunks.flatMap((chunk) => [
+    let operations: Record<string, unknown>[] = [];
+    let bytes = 0;
+    const flush = async () => {
+      if (!operations.length) return;
+      const result = await this.client.bulk({ refresh: false, operations });
+      if (result.errors)
+        throw new Error('Elasticsearch failed to index one or more chunks');
+      operations = [];
+      bytes = 0;
+    };
+    for (const chunk of chunks) {
+      const pair = [
         {
           index: { _index: this.chunkIndex, _id: `${chunk.id}:${generation}` },
         },
@@ -51,12 +69,30 @@ export class ElasticsearchGenerationWriter {
           chunk_index: chunk.chunkIndex,
           content: chunk.content,
           embedding: chunk.embedding,
+          ...(chunk.metadata ? { ingestion: chunk.metadata } : {}),
         },
-      ]),
-    });
-    if (result.errors) {
-      throw new Error('Elasticsearch failed to index one or more chunks');
+      ];
+      const size = pair.reduce(
+        (sum, item) => sum + Buffer.byteLength(JSON.stringify(item)) + 1,
+        0,
+      );
+      if (size > this.limits.maxBytes)
+        throw new Error('A chunk exceeds ES_BULK_MAX_BYTES');
+      if (
+        operations.length / 2 >= this.limits.maxChunks ||
+        bytes + size > this.limits.maxBytes
+      )
+        await flush();
+      operations.push(...pair);
+      bytes += size;
     }
+    await flush();
+    // Activation follows a single refresh barrier after every batch has succeeded.
+    const refreshed = await this.client.indices.refresh({
+      index: this.chunkIndex,
+    });
+    if (!refreshed._shards || refreshed._shards.failed)
+      throw new Error('Elasticsearch chunk refresh failed');
   }
 
   async discardGeneration(

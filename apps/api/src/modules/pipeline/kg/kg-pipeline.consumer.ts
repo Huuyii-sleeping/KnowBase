@@ -9,9 +9,11 @@ import type {
   DocumentPipelineCommand,
   DocumentIndexDeleteMessage,
   DocumentSourceDeleteMessage,
+  DocumentAssetsDeleteMessage,
 } from '../../message-queue/message-queue.types';
 import { KgPipelineService } from './kg-pipeline.service';
 import { DocumentSourceCleanupService } from '../../documents/document-source-cleanup.service';
+import { DocumentAssetsCleanupService } from '../../documents/document-assets-cleanup.service';
 
 @Injectable()
 export class KgPipelineConsumer {
@@ -19,6 +21,7 @@ export class KgPipelineConsumer {
     private readonly messageQueue: MessageQueueService,
     private readonly pipeline: KgPipelineService,
     private readonly cleanup: DocumentSourceCleanupService,
+    private readonly assets: DocumentAssetsCleanupService,
   ) {}
 
   consume(): Promise<void> {
@@ -27,14 +30,18 @@ export class KgPipelineConsumer {
       | DocumentGraphDeleteMessage
       | DocumentIndexDeleteMessage
       | DocumentSourceDeleteMessage
+      | DocumentAssetsDeleteMessage
     >(
       MESSAGE_QUEUE_NAMES.KG,
       [
         MESSAGE_ROUTING_KEYS.KG_REBUILD,
         MESSAGE_ROUTING_KEYS.KG_DELETE,
         MESSAGE_ROUTING_KEYS.SOURCE_DELETE,
+        MESSAGE_ROUTING_KEYS.ASSETS_DELETE,
       ],
       (message) => {
+        if (message.type === 'DOCUMENT_ASSETS_DELETE')
+          return this.assets.cleanup(message.documentId, message.keys);
         if (message.type === 'DOCUMENT_SOURCE_DELETE') {
           return this.cleanup.cleanup(message.documentId, message.storageKey);
         }

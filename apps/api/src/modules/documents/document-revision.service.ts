@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
 import { randomUUID } from 'node:crypto';
 import {
@@ -12,6 +12,7 @@ import { AuthUser } from '../auth/auth.types';
 import { UpdateContentDto } from './dto/update-content.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { parseDocumentTags } from './document-tags.util';
+import { ParseTaskStore } from './ingestion/parse-task.store';
 
 @Injectable()
 export class DocumentRevisionService {
@@ -19,6 +20,7 @@ export class DocumentRevisionService {
     private readonly source: DataSource,
     private readonly content: DocumentContentStore,
     private readonly access: DocumentAccessService,
+    @Optional() private readonly parseTasks?: ParseTaskStore,
   ) {}
 
   async updateMetadata(
@@ -53,6 +55,12 @@ export class DocumentRevisionService {
       )
         return;
       Object.assign(document, patch);
+      await this.parseTasks?.invalidate(manager, id);
+      if (document.parseStatus === DocumentParseStatus.PENDING) {
+        document.parseStatus = DocumentParseStatus.FAILED;
+        document.parseError =
+          'Document changed during parsing. Retry parsing or edit the content.';
+      }
       document.version++;
       this.resetReview(document);
       await manager.save(Document, document);
@@ -68,6 +76,7 @@ export class DocumentRevisionService {
     try {
       await this.source.transaction(async (manager) => {
         const document = await this.lock(manager, id, user);
+        await this.parseTasks?.invalidate(manager, id);
         await this.content.create({
           contentId,
           documentId: id,

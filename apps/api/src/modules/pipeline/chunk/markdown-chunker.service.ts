@@ -1,23 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
+import { markdownBlocks } from '../../ingestion/markdown-blocks';
+import { SourceSection } from '../../ingestion/document-structure';
+import { integerOption } from '../../ingestion/numeric-option';
+import { structuredChunks, CHUNK_STRATEGY } from './structured-chunks';
+import { ChunkOptions, StructuredChunk } from './chunk.types';
 
 @Injectable()
 export class MarkdownChunkerService {
-  private readonly splitter: RecursiveCharacterTextSplitter;
+  readonly options: ChunkOptions;
+  readonly strategy: string;
 
   constructor(config: ConfigService) {
-    this.splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: Number(config.get<string | number>('RAG_CHUNK_SIZE', 1000)),
-      chunkOverlap: Number(
-        config.get<string | number>('RAG_CHUNK_OVERLAP', 150),
-      ),
-      separators: ['\n# ', '\n## ', '\n### ', '\n\n', '\n', ' ', ''],
-    });
+    this.options = {
+      size: integerOption(config, 'RAG_CHUNK_SIZE', 1000, 16),
+      overlap: integerOption(config, 'RAG_CHUNK_OVERLAP', 150, 0),
+    };
+    if (this.options.overlap >= this.options.size)
+      throw new Error('RAG_CHUNK_OVERLAP must be smaller than RAG_CHUNK_SIZE');
+    this.strategy = `${CHUNK_STRATEGY}:${this.options.size}:${this.options.overlap}`;
+  }
+
+  splitStructured(
+    markdown: string,
+    sections?: SourceSection[],
+  ): Promise<StructuredChunk[]> {
+    return structuredChunks(markdownBlocks(markdown, sections), this.options);
   }
 
   async split(markdown: string): Promise<string[]> {
-    const chunks = await this.splitter.splitText(markdown);
-    return chunks.map((chunk) => chunk.trim()).filter(Boolean);
+    return (await this.splitStructured(markdown)).map((chunk) => chunk.content);
   }
 }

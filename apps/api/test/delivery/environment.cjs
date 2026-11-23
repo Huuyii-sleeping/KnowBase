@@ -109,6 +109,14 @@ class DeliveryTestEnvironment {
       '-f',
       '/schema/migrations/005_index_generations.sql',
       '-f',
+      '/schema/migrations/006_document_parse_tasks.sql',
+      '-f',
+      '/schema/migrations/007_generation_retention.sql',
+      '-f',
+      '/schema/migrations/007_generation_retention.sql',
+      '-f',
+      '/schema/migrations/006_document_parse_tasks.sql',
+      '-f',
       '/schema/migrations/005_index_generations.sql',
       '-f',
       '/schema/migrations/004_pipeline_delivery.sql',
@@ -173,7 +181,7 @@ class DeliveryTestEnvironment {
       }
     });
     await this.source.query(
-      'TRUNCATE kh_pipeline_receipt, kh_pipeline_outbox, kh_index_head, kh_document, delivery_test_effect',
+      'TRUNCATE kh_index_generation_retention, kh_document_parse_task, kh_pipeline_receipt, kh_pipeline_outbox, kh_index_head, kh_document, delivery_test_effect',
     );
   }
 

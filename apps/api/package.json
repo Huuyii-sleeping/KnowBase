@@ -8,8 +8,16 @@
     "start:dev": "nest start --watch",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "test": "vitest run",
+    "benchmark:ingestion": "pnpm build && node test/ingestion/benchmark.cjs",
+    "test:ingestion": "pnpm build && node --test --test-concurrency=1 test/ingestion/persistence.test.cjs",
+    "test:ingestion-quality": "pnpm build && node --test test/ingestion/formats.test.cjs",
     "test:delivery": "pnpm build && node --test --test-concurrency=1 test/delivery/reliability.test.cjs",
-    "test:index-consistency": "pnpm build && node --test --test-concurrency=1 test/indexing/consistency.test.cjs"
+    "test:index-consistency": "pnpm build && node --test --test-concurrency=1 test/indexing/consistency.test.cjs",
+    "test:parse-tasks": "pnpm build && node --test --test-concurrency=1 test/ingestion/tasks.test.cjs",
+    "benchmark:mineru": "pnpm build && node test/ingestion/compare-mineru.cjs",
+    "benchmark:before-after": "pnpm build && node test/ingestion/compare-native.cjs",
+    "benchmark:ingestion-performance": "pnpm build && node test/ingestion/compare-performance.cjs",
+    "test:mineru-extended": "pnpm build && node test/ingestion/verify-extended-mineru.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",

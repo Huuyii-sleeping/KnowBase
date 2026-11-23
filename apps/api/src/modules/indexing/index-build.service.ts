@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Document } from '../documents/entities/document.entity';
 import { IndexGenerationStore, IndexPipeline } from './index-generation.store';
+import { ingestionStage } from '../ingestion/ingestion-stage';
 
 @Injectable()
 export class IndexBuildService {
@@ -32,10 +33,15 @@ export class IndexBuildService {
     }
     // A failed DB COMMIT may have succeeded remotely. Preserve staged data on
     // uncertain activation; deleting it could remove the active generation.
-    const activated = await this.generations.activate(
-      document,
-      pipeline,
-      generation,
+    const activated = await ingestionStage(
+      'index.activate',
+      {
+        documentId: document.id,
+        version: document.version,
+        pipeline,
+        generation,
+      },
+      () => this.generations.activate(document, pipeline, generation),
     );
     if (!activated) await cleanup();
     return activated;

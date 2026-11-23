@@ -20,7 +20,11 @@ function fixture() {
   const content = {
     findByContentId: vi.fn().mockResolvedValue({ markdown: '# Source' }),
   };
-  const chunker = { split: vi.fn().mockResolvedValue(['One']) };
+  const chunker = {
+    forContent: vi
+      .fn()
+      .mockResolvedValue([{ content: 'One', embeddingText: 'One' }]),
+  };
   const extractor = {
     extract: vi
       .fn()

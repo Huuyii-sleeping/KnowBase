@@ -115,4 +115,30 @@ export class DocumentsController {
   ) {
     return this.documentsService.rebuildIndexes(id, user);
   }
+
+  @Post(':id/reparse')
+  @HttpCode(HttpStatus.ACCEPTED)
+  reparse(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.documentsService.reparse(id, user);
+  }
+
+  @Get(':id/parse-status')
+  parseStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.documentsService.parseStatus(id, user);
+  }
+
+  @Post(':id/parse-cancel')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async cancelParse(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    await this.documentsService.cancelParse(id, user);
+  }
 }

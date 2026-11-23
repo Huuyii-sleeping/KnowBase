@@ -13,6 +13,7 @@ export class RabbitMqTopologyService {
       durable: true,
     });
     const bindings = [
+      [MESSAGE_QUEUE_NAMES.PARSE, [MESSAGE_ROUTING_KEYS.PARSE]],
       [
         MESSAGE_QUEUE_NAMES.SEARCH,
         [MESSAGE_ROUTING_KEYS.SEARCH_INDEX, MESSAGE_ROUTING_KEYS.SEARCH_DELETE],
@@ -27,6 +28,7 @@ export class RabbitMqTopologyService {
           MESSAGE_ROUTING_KEYS.KG_REBUILD,
           MESSAGE_ROUTING_KEYS.KG_DELETE,
           MESSAGE_ROUTING_KEYS.SOURCE_DELETE,
+          MESSAGE_ROUTING_KEYS.ASSETS_DELETE,
         ],
       ],
     ] as const;

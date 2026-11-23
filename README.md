@@ -6,7 +6,7 @@
 - MongoDB 保存 Markdown 正文
 - RustFS 保存原始二进制文件
 - NestJS 提供文档上传、CRUD 和审核接口
-- FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
+- 默认由 MinerU 将 PDF、Word/Excel/PPT（含旧格式）、静态 HTML 和图片转为 Markdown，TXT/MD 本地读取
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 - RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
 - 提供基于检索上下文的 Ollama AI 问答接口，并返回引用来源
@@ -43,6 +43,8 @@ Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改�
 已有 PostgreSQL 数据库可执行 `deploy/postgres/migrations` 下的增量 SQL。
 
 ## 启动 API
+
+先按 [MinerU 部署说明](./docs/mineru-ingestion.md#配置与部署) 启动固定版本的解析服务。示例配置默认连接 `http://127.0.0.1:8000` 并启用异步解析；已有数据库需先执行说明中的增量迁移。
 
 ```bash
 pnpm install

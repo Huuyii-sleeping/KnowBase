@@ -31,6 +31,16 @@ import { IndexingModule } from '../indexing/indexing.module';
 import { DocumentRevisionService } from './document-revision.service';
 import { DocumentDeletionService } from './document-deletion.service';
 import { DocumentSourceCleanupService } from './document-source-cleanup.service';
+import { DocumentAssetsCleanupService } from './document-assets-cleanup.service';
+import { IngestionArtifactsModule } from '../ingestion/artifacts/ingestion-artifacts.module';
+import { MineruParser } from './parsing/mineru/mineru.parser';
+import { ParseTaskStore } from './ingestion/parse-task.store';
+import { ParseResultService } from './ingestion/parse-result.service';
+import { ParseJobService } from './ingestion/parse-job.service';
+import { ParseSubmissionService } from './ingestion/parse-submission.service';
+import { ParseWorkerService } from './ingestion/parse-worker.service';
+import { ParseTaskCleanupStore } from './ingestion/parse-task-cleanup.store';
+import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
 
 @Module({
   imports: [
@@ -43,6 +53,7 @@ import { DocumentSourceCleanupService } from './document-source-cleanup.service'
     DeliveryModule,
     IndexingModule,
     AuthorizationModule,
+    IngestionArtifactsModule,
   ],
   controllers: [DocumentsController],
   providers: [
@@ -53,10 +64,19 @@ import { DocumentSourceCleanupService } from './document-source-cleanup.service'
     DocumentRevisionService,
     DocumentDeletionService,
     DocumentSourceCleanupService,
+    DocumentAssetsCleanupService,
     DocumentWorkflowService,
     DocumentPipelinePublisher,
     DocumentPublishService,
     FileParserService,
+    MineruParser,
+    ParseTaskStore,
+    ParseResultService,
+    ParseJobService,
+    ParseSubmissionService,
+    ParseWorkerService,
+    ParseMaintenanceService,
+    ParseTaskCleanupStore,
     AssetUploaderService,
     TextParser,
     MarkdownParser,
@@ -70,6 +90,8 @@ import { DocumentSourceCleanupService } from './document-source-cleanup.service'
     DocumentContentStore,
     DocumentQueryService,
     DocumentSourceCleanupService,
+    DocumentAssetsCleanupService,
+    ParseSubmissionService,
   ],
 })
 export class DocumentsModule {}

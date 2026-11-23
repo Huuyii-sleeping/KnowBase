@@ -4,6 +4,7 @@ export const MESSAGE_QUEUE_NAMES = {
   SEARCH: 'knowbase.pipeline.search',
   RAG: 'knowbase.pipeline.rag',
   KG: 'knowbase.pipeline.kg',
+  PARSE: 'knowbase.document.parse',
 } as const;
 
 export const MESSAGE_ROUTING_KEYS = {
@@ -14,4 +15,6 @@ export const MESSAGE_ROUTING_KEYS = {
   SEARCH_DELETE: 'document.search.delete',
   RAG_DELETE: 'document.rag.delete',
   SOURCE_DELETE: 'document.source.delete',
+  ASSETS_DELETE: 'document.assets.delete',
+  PARSE: 'document.parse',
 } as const;

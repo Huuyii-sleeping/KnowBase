@@ -49,7 +49,8 @@ export const authStorage = {
 
 export const CURRENT_USER_ID = authStorage.getUser()?.id ?? 'anonymous';
 
-export type DocumentStatus = 'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'REJECTED';
+export type DocumentStatus =
+  'DRAFT' | 'PENDING_REVIEW' | 'PUBLISHED' | 'REJECTED';
 export type DocumentParseStatus = 'PENDING' | 'READY' | 'FAILED';
 
 export interface DocumentMeta {
@@ -86,10 +87,24 @@ export interface DocumentContent {
   version: number;
   assets: unknown[];
   characterCount: number;
+  quality?: {
+    status: 'accepted' | 'needs_review' | 'failed';
+    issues: Array<{ code: string; page?: number; message: string }>;
+  };
+  provenance?: Record<string, string>;
 }
 
 export interface DocumentDetail extends DocumentMeta {
   content?: DocumentContent;
+  ingestion?: {
+    canManage: boolean;
+    task: {
+      state: string;
+      stage: string;
+      attempts: number;
+      updatedAt: string;
+    } | null;
+  };
 }
 
 export interface DocumentListResult {
@@ -251,7 +266,16 @@ const httpDocumentsApi = {
     return request(`/documents/${id}`);
   },
 
-  create(file: File, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+  create(
+    file: File,
+    meta: {
+      title?: string;
+      category?: string;
+      team?: string;
+      tags?: string[];
+      visibility?: string;
+    },
+  ): Promise<DocumentDetail> {
     const form = new FormData();
     form.append('file', file);
     if (meta.title) form.append('title', meta.title);
@@ -262,7 +286,16 @@ const httpDocumentsApi = {
     return request('/documents', { method: 'POST', body: form });
   },
 
-  update(id: string, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+  update(
+    id: string,
+    meta: {
+      title?: string;
+      category?: string;
+      team?: string;
+      tags?: string[];
+      visibility?: string;
+    },
+  ): Promise<DocumentDetail> {
     const body: Record<string, string> = {};
     if (meta.title !== undefined) body.title = meta.title;
     if (meta.category !== undefined) body.category = meta.category;
@@ -288,7 +321,11 @@ const httpDocumentsApi = {
     return request(`/documents/${id}/submit-review`, { method: 'POST' });
   },
 
-  review(id: string, approved: boolean, reason?: string): Promise<DocumentDetail> {
+  review(
+    id: string,
+    approved: boolean,
+    reason?: string,
+  ): Promise<DocumentDetail> {
     return request(`/documents/${id}/review`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -309,6 +346,12 @@ function activeDocumentsApi() {
 }
 
 export const documentsApi = {
+  reparse(id: string): Promise<{ queued: boolean; taskId: string }> {
+    return request(`/documents/${id}/reparse`, { method: 'POST' });
+  },
+  cancelParse(id: string): Promise<void> {
+    return request(`/documents/${id}/parse-cancel`, { method: 'POST' });
+  },
   list(query?: ListDocumentsQuery): Promise<DocumentListResult> {
     return activeDocumentsApi().list(query);
   },
@@ -317,7 +360,16 @@ export const documentsApi = {
     return activeDocumentsApi().detail(id);
   },
 
-  async create(file: File, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+  async create(
+    file: File,
+    meta: {
+      title?: string;
+      category?: string;
+      team?: string;
+      tags?: string[];
+      visibility?: string;
+    },
+  ): Promise<DocumentDetail> {
     const error = validateUploadFile(file);
     if (error) throw error;
     const document = await activeDocumentsApi().create(file, meta);
@@ -326,7 +378,16 @@ export const documentsApi = {
     return document;
   },
 
-  update(id: string, meta: { title?: string; category?: string; team?: string; tags?: string[]; visibility?: string }): Promise<DocumentDetail> {
+  update(
+    id: string,
+    meta: {
+      title?: string;
+      category?: string;
+      team?: string;
+      tags?: string[];
+      visibility?: string;
+    },
+  ): Promise<DocumentDetail> {
     return activeDocumentsApi().update(id, meta);
   },
 
@@ -338,7 +399,11 @@ export const documentsApi = {
     return activeDocumentsApi().submitReview(id);
   },
 
-  review(id: string, approved: boolean, reason?: string): Promise<DocumentDetail> {
+  review(
+    id: string,
+    approved: boolean,
+    reason?: string,
+  ): Promise<DocumentDetail> {
     return activeDocumentsApi().review(id, approved, reason);
   },
 
@@ -349,11 +414,14 @@ export const documentsApi = {
 
 export const authApi = {
   async login(username: string, password: string) {
-    const auth = await request<{ accessToken: string; user: AuthUser }>('/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+    const auth = await request<{ accessToken: string; user: AuthUser }>(
+      '/auth/login',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      },
+    );
     authStorage.set(auth);
     return auth;
   },
@@ -379,7 +447,11 @@ export type SearchMode = 'hybrid' | 'keyword' | 'semantic';
 
 export const searchApi = {
   documents(query: string, pageSize = 20): Promise<SearchDocumentResult> {
-    const params = new URLSearchParams({ keyword: query, page: '1', pageSize: String(pageSize) });
+    const params = new URLSearchParams({
+      keyword: query,
+      page: '1',
+      pageSize: String(pageSize),
+    });
     return request(`/search/documents?${params.toString()}`);
   },
 
@@ -401,7 +473,11 @@ export const searchApi = {
 };
 
 const httpGraphApi = {
-  search(query: string, maxHops: number, limit: number): Promise<GraphSearchResult> {
+  search(
+    query: string,
+    maxHops: number,
+    limit: number,
+  ): Promise<GraphSearchResult> {
     const params = new URLSearchParams({
       query,
       maxHops: String(maxHops),
@@ -412,7 +488,15 @@ const httpGraphApi = {
 };
 
 export const graphApi = {
-  search(query: string, maxHops: number, limit: number): Promise<GraphSearchResult> {
-    return (isMockEnabled() ? mockGraphApi : httpGraphApi).search(query, maxHops, limit);
+  search(
+    query: string,
+    maxHops: number,
+    limit: number,
+  ): Promise<GraphSearchResult> {
+    return (isMockEnabled() ? mockGraphApi : httpGraphApi).search(
+      query,
+      maxHops,
+      limit,
+    );
   },
 };

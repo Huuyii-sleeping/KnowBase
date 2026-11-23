@@ -9,6 +9,7 @@ import { DocumentQueryService } from './document-query.service';
 import { DocumentWorkflowService } from './document-workflow.service';
 import { DocumentPublishService } from './document-publish.service';
 import { AuthUser } from '../auth/auth.types';
+import { ParseSubmissionService } from './ingestion/parse-submission.service';
 
 @Injectable()
 export class DocumentsService {
@@ -17,11 +18,22 @@ export class DocumentsService {
     private readonly queryService: DocumentQueryService,
     private readonly workflowService: DocumentWorkflowService,
     private readonly publishService: DocumentPublishService,
+    private readonly parseTasks: ParseSubmissionService,
   ) {}
 
   async rebuildIndexes(id: string, user: AuthUser) {
     await this.publishService.dispatch(id, user);
     return { queued: true };
+  }
+
+  reparse(id: string, user: AuthUser) {
+    return this.parseTasks.reparse(id, user);
+  }
+  parseStatus(id: string, user: AuthUser) {
+    return this.parseTasks.status(id, user);
+  }
+  cancelParse(id: string, user: AuthUser) {
+    return this.parseTasks.cancel(id, user);
   }
 
   async create(

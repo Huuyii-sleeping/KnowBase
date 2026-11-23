@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
-import { MarkdownChunkerService } from '../chunk/markdown-chunker.service';
+import { DocumentChunksService } from '../chunk/document-chunks.service';
+import { ingestionStage } from '../../ingestion/ingestion-stage';
 import { GraphExtractionService } from './graph-extraction.service';
 import { GraphIndexService } from './graph-index.service';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
@@ -10,7 +11,7 @@ import { IndexBuildService } from '../../indexing/index-build.service';
 export class KgPipelineService {
   constructor(
     private readonly contentStore: DocumentContentStore,
-    private readonly chunker: MarkdownChunkerService,
+    private readonly chunker: DocumentChunksService,
     private readonly extractor: GraphExtractionService,
     private readonly graphIndex: GraphIndexService,
     private readonly generations: IndexGenerationStore,
@@ -39,7 +40,11 @@ export class KgPipelineService {
       throw new Error(`document content not found: ${document.contentId}`);
     }
 
-    const chunks = await this.chunker.split(content.markdown);
+    const chunks = await this.chunker.forContent(
+      document.id,
+      document.contentId,
+      content,
+    );
     let counts = { chunks: 0, entities: 0, relations: 0 };
     const activated = await this.builds.build(
       document,
@@ -50,9 +55,13 @@ export class KgPipelineService {
           documentId: document.id,
           version: document.version,
           chunkIndex: index,
-          content: chunk,
+          content: chunk.content,
         }));
-        const extraction = await this.extractor.extract(graphChunks);
+        const extraction = await ingestionStage(
+          'graph.extract',
+          { documentId, chunks: graphChunks.length },
+          () => this.extractor.extract(graphChunks),
+        );
         await this.graphIndex.stageDocument(
           document.id,
           document.version,

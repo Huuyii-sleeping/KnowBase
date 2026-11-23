@@ -5,6 +5,9 @@ const { ConfigService } = require('@nestjs/config');
 const { DeliveryTestEnvironment } = require('../delivery/environment.cjs');
 const { load } = require('../delivery/runtime.cjs');
 const { IndexGenerationStore } = load('indexing/index-generation.store.js');
+const { GenerationRetentionStore } = load(
+  'indexing/generation-retention.store.js',
+);
 const { IndexBuildService } = load('indexing/index-build.service.js');
 const { VectorIndexService } = load(
   'pipeline/vector-index/vector-index.service.js',
@@ -49,11 +52,17 @@ before(
       ELASTICSEARCH_DOCUMENT_INDEX: 'test_document',
       ELASTICSEARCH_CHUNK_INDEX: 'test_chunk',
       RAG_EMBEDDING_DIMENSIONS: 2,
+      // Force separate requests so every RAG scenario exercises the refresh
+      // barrier and a later failed batch after earlier writes have succeeded.
+      ES_BULK_MAX_CHUNKS: 1,
       NEO4J_URI: `bolt://127.0.0.1:${graphPort}`,
       NEO4J_USER: 'neo4j',
       NEO4J_PASSWORD: 'index-test-password',
     });
-    heads = new IndexGenerationStore(env.source);
+    heads = new IndexGenerationStore(
+      env.source,
+      new GenerationRetentionStore(env.source),
+    );
     builds = new IndexBuildService(heads);
     vector = new VectorIndexService(config, heads);
     graph = new GraphIndexService(config, heads);
@@ -98,7 +107,7 @@ after(
 beforeEach(async () => {
   // Keep the infrastructure runtime alive; reset only this isolated database's state.
   await env.source.query(
-    'TRUNCATE kh_index_head, kh_document, kh_pipeline_outbox, kh_pipeline_receipt',
+    'TRUNCATE kh_index_generation_retention, kh_document_parse_task, kh_index_head, kh_document, kh_pipeline_outbox, kh_pipeline_receipt',
   );
 });
 
@@ -447,4 +456,50 @@ test('concurrent metadata revisions serialize and preserve both changes with dis
   assert.equal(result.title, 'New title');
   assert.equal(result.category, 'New category');
   assert.equal(result.status, 'DRAFT');
+});
+
+test('retired generations receive a grace period and collection preserves current and staged data', async () => {
+  const current = await document();
+  const registry = new GenerationRetentionStore(env.source);
+  await build('rag', current, 'Original');
+  const [original] = await heads.active('rag', [current.id]);
+  const staging = randomUUID();
+  await stage('rag', current, staging, 'Staged');
+  await build('rag', current, 'Replacement');
+  const [active] = await heads.active('rag', [current.id]);
+  assert.deepEqual(await registry.candidates(86400000), []);
+  await env.source.query(
+    "UPDATE kh_index_generation_retention SET retired_at=clock_timestamp()-INTERVAL '2 days' WHERE generation=$1",
+    [original],
+  );
+  const candidates = await registry.candidates(86400000);
+  assert.deepEqual(
+    candidates.map((item) => item.generation),
+    [original],
+  );
+  await assert.rejects(
+    registry.collect(original, async () => {
+      throw new Error('cleanup offline');
+    }),
+    /offline/,
+  );
+  assert.equal((await registry.candidates(86400000)).length, 1);
+  await registry.collect(original, () =>
+    vector.discardGeneration('rag', original),
+  );
+  assert.deepEqual(await registry.candidates(86400000), []);
+  assert.deepEqual(await heads.active('rag', [current.id]), [active]);
+  assert.ok(
+    (await visible('rag', current.id)).every((text) => text === 'Replacement'),
+  );
+  const remaining = await vector['client'].search({
+    index: 'test_chunk',
+    query: { term: { generation_id: staging } },
+  });
+  assert.equal(remaining.hits.hits.length, 2);
+  let touched = false;
+  await registry.collect(active, async () => {
+    touched = true;
+  });
+  assert.equal(touched, false);
 });

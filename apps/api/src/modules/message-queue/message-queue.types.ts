@@ -28,11 +28,19 @@ export interface DocumentSourceDeleteMessage {
   storageKey: string;
 }
 
+export interface DocumentAssetsDeleteMessage {
+  type: 'DOCUMENT_ASSETS_DELETE';
+  documentId: string;
+  keys: string[];
+}
+
 export type PipelineMessage =
+  | { type: 'DOCUMENT_PARSE'; taskId: string }
   | DocumentIndexMessage
   | DocumentPipelineCommand
   | DocumentGraphDeleteMessage
   | DocumentIndexDeleteMessage
+  | DocumentAssetsDeleteMessage
   | DocumentSourceDeleteMessage;
 
 export type MessageHandler<T> = (message: T) => Promise<void>;
