@@ -1,0 +1,2206 @@
+{
+  "schema": "complex-document-baseline-v1",
+  "date": "2026-11-24",
+  "scope": "Authored synthetic diagnostic, no production accuracy, MinerU or VLM quality claim.",
+  "stage": {
+    "5.1": "corpus-scoring-report-delivered",
+    "5.2": "pending-real-models"
+  },
+  "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+  "manifest": {
+    "schema": "complex-corpus-v1",
+    "provenance": "authored-synthetic-yuanlan-v1",
+    "layoutSha256": "15eba70d1cb12748a24662b7036b1118bac3965bfdc1f710d29622a6706a83cf",
+    "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+    "generatorSha256": "178886f089f4db808f098aa99b9e31912a1de963faa92cc6ade297bac46a9a56",
+    "fontSha256": "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec",
+    "python": "3.12.14",
+    "libraries": {
+      "reportlab": "4.4.9",
+      "pypdf": "6.21.4",
+      "pypdfium2": "5.13.0",
+      "Pillow": "13.0.0"
+    },
+    "cases": [
+      {
+        "id": "flowchart-development",
+        "category": "flowchart",
+        "split": "development",
+        "file": "flowchart-development.png",
+        "sha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+        "pages": 1
+      },
+      {
+        "id": "chart-development",
+        "category": "chart",
+        "split": "development",
+        "file": "chart-development.png",
+        "sha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+        "pages": 1
+      },
+      {
+        "id": "screenshot-development",
+        "category": "screenshot",
+        "split": "development",
+        "file": "screenshot-development.png",
+        "sha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+        "pages": 1
+      },
+      {
+        "id": "scanned-table-development",
+        "category": "scanned-table",
+        "split": "development",
+        "file": "scanned-table-development.pdf",
+        "sha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+        "pages": 1
+      },
+      {
+        "id": "cross-page-table-development",
+        "category": "cross-page-table",
+        "split": "development",
+        "file": "cross-page-table-development.pdf",
+        "sha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+        "pages": 2
+      },
+      {
+        "id": "multicolumn-development",
+        "category": "multicolumn",
+        "split": "development",
+        "file": "multicolumn-development.pdf",
+        "sha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+        "pages": 1
+      },
+      {
+        "id": "formula-image-development",
+        "category": "formula-image",
+        "split": "development",
+        "file": "formula-image-development.pdf",
+        "sha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+        "pages": 1
+      },
+      {
+        "id": "flowchart-holdout",
+        "category": "flowchart",
+        "split": "holdout",
+        "file": "flowchart-holdout.png",
+        "sha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+        "pages": 1
+      },
+      {
+        "id": "chart-holdout",
+        "category": "chart",
+        "split": "holdout",
+        "file": "chart-holdout.png",
+        "sha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+        "pages": 1
+      },
+      {
+        "id": "screenshot-holdout",
+        "category": "screenshot",
+        "split": "holdout",
+        "file": "screenshot-holdout.png",
+        "sha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+        "pages": 1
+      },
+      {
+        "id": "scanned-table-holdout",
+        "category": "scanned-table",
+        "split": "holdout",
+        "file": "scanned-table-holdout.pdf",
+        "sha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+        "pages": 1
+      },
+      {
+        "id": "cross-page-table-holdout",
+        "category": "cross-page-table",
+        "split": "holdout",
+        "file": "cross-page-table-holdout.pdf",
+        "sha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+        "pages": 2
+      },
+      {
+        "id": "multicolumn-holdout",
+        "category": "multicolumn",
+        "split": "holdout",
+        "file": "multicolumn-holdout.pdf",
+        "sha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+        "pages": 1
+      },
+      {
+        "id": "formula-image-holdout",
+        "category": "formula-image",
+        "split": "holdout",
+        "file": "formula-image-holdout.pdf",
+        "sha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+        "pages": 1
+      }
+    ]
+  },
+  "runs": [
+    {
+      "name": "native-development",
+      "rawReportSha256": "d11582470cefa4df5bdb3dff5f325fe0fde622448c45c1c46e7807063f0faeb0",
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-24T14:56:24.833Z",
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "scope": "Synthetic parser-quality diagnostic; local asset capture, no database/index delivery claim.",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "22ab9d1e55a97f4f9574f2c2cb2a929436c6bd65",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "native",
+        "imageMode": "ocr",
+        "mineruRevision": null,
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "availability": {
+        "available": true
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "partial",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "category": "flowchart",
+          "split": "development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "chart-development",
+          "category": "chart",
+          "split": "development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "screenshot-development",
+          "category": "screenshot",
+          "split": "development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "scanned-table-development",
+          "category": "scanned-table",
+          "split": "development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "elapsedMs": 43.15812500000004,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["source-1", "source-2"]
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["unknown-1"]
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-unit"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "UNKNOWN_NOT_PRESERVED",
+                "id": "unknown-1"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": false
+          }
+        },
+        {
+          "id": "cross-page-table-development",
+          "category": "cross-page-table",
+          "split": "development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 10.906791999999996,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 2,
+              "expectedCells": 18,
+              "matchedCells": 18,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": true
+          }
+        },
+        {
+          "id": "multicolumn-development",
+          "category": "multicolumn",
+          "split": "development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 3.4683330000000296,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": true
+          }
+        },
+        {
+          "id": "formula-image-development",
+          "category": "formula-image",
+          "split": "development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 2.551417000000015,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": false
+          }
+        }
+      ],
+      "holdoutExposure": [],
+      "summary": {
+        "development/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/scanned-table": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {
+            "TABLE_COUNT": 1,
+            "TEXT_MISSING": 3,
+            "CRITICAL_MISSING_OR_CHANGED": 3,
+            "SOURCE_MISMATCH": 2,
+            "UNKNOWN_NOT_PRESERVED": 1,
+            "TABLE_CELL_OR_MERGE": 1
+          },
+          "metrics": {
+            "visible": {
+              "matched": 0,
+              "expected": 3
+            },
+            "critical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "sources": {
+              "matched": 0,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 0,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 1
+            }
+          },
+          "elapsedMs": 43.15812500000004
+        },
+        "development/cross-page-table": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {},
+          "metrics": {
+            "visible": {
+              "matched": 2,
+              "expected": 2
+            },
+            "critical": {
+              "matched": 2,
+              "expected": 2
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 2
+            },
+            "sources": {
+              "matched": 2,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 2,
+              "expected": 2
+            }
+          },
+          "elapsedMs": 10.906791999999996
+        },
+        "development/multicolumn": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {},
+          "metrics": {
+            "visible": {
+              "matched": 8,
+              "expected": 8
+            },
+            "critical": {
+              "matched": 2,
+              "expected": 2
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 2
+            },
+            "sources": {
+              "matched": 2,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 1,
+              "expected": 1
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 0
+            }
+          },
+          "elapsedMs": 3.4683330000000296
+        },
+        "development/formula-image": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {
+            "TEXT_MISSING": 2,
+            "RELATION_NOT_STRUCTURED": 1
+          },
+          "metrics": {
+            "visible": {
+              "matched": 1,
+              "expected": 3
+            },
+            "critical": {
+              "matched": 3,
+              "expected": 3
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "sources": {
+              "matched": 3,
+              "expected": 3
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 1
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 0
+            }
+          },
+          "elapsedMs": 2.551417000000015
+        }
+      },
+      "sourceHashes": {
+        "source": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+        "ingestionSource": "9d15fe5ad8853568113d2bb6d3ae11d34f06b5f93945798fc1f48508566b0f29",
+        "compiled": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+        "tool": "3baf4afe962941df61a98739aa3c936eb74fa3852de0ed42b3683fcddd92e160"
+      }
+    },
+    {
+      "name": "native-holdout",
+      "rawReportSha256": "ac660d4786fd86f2e798c3d2683c97a58599263b079b4873e48b372f61a27736",
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-24T14:56:25.683Z",
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "scope": "Synthetic parser-quality diagnostic; local asset capture, no database/index delivery claim.",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "22ab9d1e55a97f4f9574f2c2cb2a929436c6bd65",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "native",
+        "imageMode": "ocr",
+        "mineruRevision": null,
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "availability": {
+        "available": true
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "partial",
+      "cases": [
+        {
+          "id": "flowchart-holdout",
+          "category": "flowchart",
+          "split": "holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "chart-holdout",
+          "category": "chart",
+          "split": "holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "screenshot-holdout",
+          "category": "screenshot",
+          "split": "holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "unavailable",
+          "reason": "NATIVE_IMAGE_UNSUPPORTED"
+        },
+        {
+          "id": "scanned-table-holdout",
+          "category": "scanned-table",
+          "split": "holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "elapsedMs": 41.17083400000001,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["source-1", "source-2"]
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["unknown-1"]
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-unit"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "UNKNOWN_NOT_PRESERVED",
+                "id": "unknown-1"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": false
+          }
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "category": "cross-page-table",
+          "split": "holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 11.115958000000035,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 0,
+              "expectedCells": 18,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 0,
+                  "expectedCells": 9,
+                  "actualCells": 6,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 0,
+                  "expectedCells": 9,
+                  "actualCells": 6,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "payment-p1"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "payment-p2"
+              }
+            ],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": false
+          }
+        },
+        {
+          "id": "multicolumn-holdout",
+          "category": "multicolumn",
+          "split": "holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 3.0994999999999777,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": true
+          }
+        },
+        {
+          "id": "formula-image-holdout",
+          "category": "formula-image",
+          "split": "holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "completed",
+          "parser": "pdf-parse",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "elapsedMs": 2.3973330000000033,
+          "requests": {
+            "mineru": 0,
+            "vision": 0,
+            "other": 0
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Adapter does not expose provider usage; no inferred cost.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 0,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "manualReview": {
+              "required": false,
+              "unverifiedFacts": [],
+              "unverifiedRelations": [],
+              "freeFormDescriptions": []
+            },
+            "automaticChecksPassed": false
+          }
+        }
+      ],
+      "holdoutExposure": [
+        {
+          "id": "scanned-table-holdout",
+          "at": "2026-11-24T14:56:25.720Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "at": "2026-11-24T14:56:26.111Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "multicolumn-holdout",
+          "at": "2026-11-24T14:56:26.124Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "formula-image-holdout",
+          "at": "2026-11-24T14:56:26.129Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        }
+      ],
+      "summary": {
+        "holdout/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/scanned-table": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {
+            "TABLE_COUNT": 1,
+            "TEXT_MISSING": 3,
+            "CRITICAL_MISSING_OR_CHANGED": 3,
+            "SOURCE_MISMATCH": 2,
+            "UNKNOWN_NOT_PRESERVED": 1,
+            "TABLE_CELL_OR_MERGE": 1
+          },
+          "metrics": {
+            "visible": {
+              "matched": 0,
+              "expected": 3
+            },
+            "critical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "sources": {
+              "matched": 0,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 0,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 1
+            }
+          },
+          "elapsedMs": 41.17083400000001
+        },
+        "holdout/cross-page-table": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {
+            "TABLE_CELL_OR_MERGE": 2
+          },
+          "metrics": {
+            "visible": {
+              "matched": 2,
+              "expected": 2
+            },
+            "critical": {
+              "matched": 2,
+              "expected": 2
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 2
+            },
+            "sources": {
+              "matched": 2,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 2
+            }
+          },
+          "elapsedMs": 11.115958000000035
+        },
+        "holdout/multicolumn": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {},
+          "metrics": {
+            "visible": {
+              "matched": 8,
+              "expected": 8
+            },
+            "critical": {
+              "matched": 2,
+              "expected": 2
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 2
+            },
+            "sources": {
+              "matched": 2,
+              "expected": 2
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 0
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 1,
+              "expected": 1
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 0
+            }
+          },
+          "elapsedMs": 3.0994999999999777
+        },
+        "holdout/formula-image": {
+          "attempted": 1,
+          "completed": 1,
+          "unavailable": 0,
+          "failed": 0,
+          "errors": {
+            "TEXT_MISSING": 2,
+            "RELATION_NOT_STRUCTURED": 1
+          },
+          "metrics": {
+            "visible": {
+              "matched": 1,
+              "expected": 3
+            },
+            "critical": {
+              "matched": 3,
+              "expected": 3
+            },
+            "visualCritical": {
+              "matched": 0,
+              "expected": 3
+            },
+            "sources": {
+              "matched": 3,
+              "expected": 3
+            },
+            "relations": {
+              "matched": 0,
+              "expected": 1
+            },
+            "unknown": {
+              "matched": 1,
+              "expected": 1
+            },
+            "readingOrder": {
+              "matched": 0,
+              "expected": 0
+            },
+            "tables": {
+              "matched": 0,
+              "expected": 0
+            }
+          },
+          "elapsedMs": 2.3973330000000033
+        }
+      },
+      "sourceHashes": {
+        "source": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+        "ingestionSource": "9d15fe5ad8853568113d2bb6d3ae11d34f06b5f93945798fc1f48508566b0f29",
+        "compiled": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+        "tool": "3baf4afe962941df61a98739aa3c936eb74fa3852de0ed42b3683fcddd92e160"
+      }
+    },
+    {
+      "name": "mineru-availability",
+      "rawReportSha256": "8b6772382587dd5fb1fec15490a9ea63b957c34b937123e1f7df994baa571fd5",
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-24T14:56:26.205Z",
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "scope": "Synthetic parser-quality diagnostic; local asset capture, no database/index delivery claim.",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "22ab9d1e55a97f4f9574f2c2cb2a929436c6bd65",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "mineruRevision": null,
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "availability": {
+        "available": false,
+        "code": "MISSING_CONFIGURATION",
+        "missing": ["MINERU_BASE_URL", "QUALITY_MINERU_REVISION"]
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "partial",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "category": "flowchart",
+          "split": "development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "chart-development",
+          "category": "chart",
+          "split": "development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "screenshot-development",
+          "category": "screenshot",
+          "split": "development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "scanned-table-development",
+          "category": "scanned-table",
+          "split": "development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "cross-page-table-development",
+          "category": "cross-page-table",
+          "split": "development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "multicolumn-development",
+          "category": "multicolumn",
+          "split": "development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "formula-image-development",
+          "category": "formula-image",
+          "split": "development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "flowchart-holdout",
+          "category": "flowchart",
+          "split": "holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "chart-holdout",
+          "category": "chart",
+          "split": "holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "screenshot-holdout",
+          "category": "screenshot",
+          "split": "holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "scanned-table-holdout",
+          "category": "scanned-table",
+          "split": "holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "category": "cross-page-table",
+          "split": "holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "multicolumn-holdout",
+          "category": "multicolumn",
+          "split": "holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "formula-image-holdout",
+          "category": "formula-image",
+          "split": "holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        }
+      ],
+      "holdoutExposure": [],
+      "summary": {
+        "development/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/scanned-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/cross-page-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/multicolumn": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/formula-image": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/scanned-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/cross-page-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/multicolumn": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/formula-image": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        }
+      },
+      "sourceHashes": {
+        "source": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+        "ingestionSource": "9d15fe5ad8853568113d2bb6d3ae11d34f06b5f93945798fc1f48508566b0f29",
+        "compiled": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+        "tool": "3baf4afe962941df61a98739aa3c936eb74fa3852de0ed42b3683fcddd92e160"
+      }
+    },
+    {
+      "name": "vision-availability",
+      "rawReportSha256": "d3ac2205b2f506066e80b3c02f6e18c100ff15893455aecad88797c2f37b84ca",
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-24T14:56:26.329Z",
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "scope": "Synthetic parser-quality diagnostic; local asset capture, no database/index delivery claim.",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "22ab9d1e55a97f4f9574f2c2cb2a929436c6bd65",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "describe",
+        "mineruRevision": null,
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "availability": {
+        "available": false,
+        "code": "MISSING_CONFIGURATION",
+        "missing": [
+          "MINERU_BASE_URL",
+          "QUALITY_MINERU_REVISION",
+          "VISION_BASE_URL",
+          "VISION_MODEL",
+          "VISION_MODEL_REVISION"
+        ]
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "partial",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "category": "flowchart",
+          "split": "development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "chart-development",
+          "category": "chart",
+          "split": "development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "screenshot-development",
+          "category": "screenshot",
+          "split": "development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "scanned-table-development",
+          "category": "scanned-table",
+          "split": "development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "cross-page-table-development",
+          "category": "cross-page-table",
+          "split": "development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "multicolumn-development",
+          "category": "multicolumn",
+          "split": "development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "formula-image-development",
+          "category": "formula-image",
+          "split": "development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "flowchart-holdout",
+          "category": "flowchart",
+          "split": "holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "chart-holdout",
+          "category": "chart",
+          "split": "holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "screenshot-holdout",
+          "category": "screenshot",
+          "split": "holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "scanned-table-holdout",
+          "category": "scanned-table",
+          "split": "holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "category": "cross-page-table",
+          "split": "holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "multicolumn-holdout",
+          "category": "multicolumn",
+          "split": "holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        },
+        {
+          "id": "formula-image-holdout",
+          "category": "formula-image",
+          "split": "holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "unavailable",
+          "reason": "MISSING_CONFIGURATION"
+        }
+      ],
+      "holdoutExposure": [],
+      "summary": {
+        "development/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/scanned-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/cross-page-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/multicolumn": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "development/formula-image": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/flowchart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/chart": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/screenshot": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/scanned-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/cross-page-table": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/multicolumn": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        },
+        "holdout/formula-image": {
+          "attempted": 1,
+          "completed": 0,
+          "unavailable": 1,
+          "failed": 0,
+          "errors": {},
+          "metrics": {},
+          "elapsedMs": 0
+        }
+      },
+      "sourceHashes": {
+        "source": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+        "ingestionSource": "9d15fe5ad8853568113d2bb6d3ae11d34f06b5f93945798fc1f48508566b0f29",
+        "compiled": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+        "tool": "3baf4afe962941df61a98739aa3c936eb74fa3852de0ed42b3683fcddd92e160"
+      }
+    }
+  ],
+  "repeat": {
+    "comparableCases": 8,
+    "allMetricDeltasZero": true,
+    "unavailableCases": 6,
+    "note": "Same native parser and inputs repeated; no optimization or speed claim."
+  },
+  "validation": {
+    "nodeQualityTests": 17,
+    "pythonGeneratorTests": 3,
+    "historicalQualityTests": 13,
+    "api": {
+      "files": 103,
+      "tests": 489
+    },
+    "web": {
+      "files": 27,
+      "tests": 248
+    },
+    "apiBuild": "passed",
+    "webBuild": "passed-with-existing-bundle-size-warning",
+    "frozenLock": "passed",
+    "composeConfig": "passed",
+    "visualReview": {
+      "pages": 16,
+      "completed": true,
+      "scope": "All generated PDF pages and PNG inputs; image-only scan assertion and reproducible generation separately tested."
+    }
+  },
+  "limitations": [
+    "No reachable configured MinerU service; no fixed real VLM configured.",
+    "4 native PDF holdout cases exposed; retain them as diagnostic regressions. PNGs visually authored/reviewed, never strict blind tests.",
+    "Native captured no assets; local parsed JSON readback is not production persistence or image-delivery validation.",
+    "Free-form descriptions and unmatched claims need human adjudication; literal checks are not a hallucination detector.",
+    "Small synthetic corpus; no population-level production accuracy inference."
+  ]
+}

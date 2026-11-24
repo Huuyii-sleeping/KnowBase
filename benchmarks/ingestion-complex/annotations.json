@@ -1,0 +1,1068 @@
+{
+  "schema": "complex-gold-v1",
+  "provenance": "authored-synthetic-yuanlan-v1",
+  "cases": [
+    {
+      "id": "flowchart-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["入库登记"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["温度复核"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["隔离复验"]
+        },
+        {
+          "id": "text-4",
+          "aliases": ["准予放行"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["上限：4.5°C"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["复验责任人：未提供"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "edge-1",
+          "to": "温度复核",
+          "relation": "流向",
+          "from": "入库登记"
+        },
+        {
+          "id": "edge-2",
+          "to": "隔离复验",
+          "relation": "不合格",
+          "from": "温度复核"
+        },
+        {
+          "id": "edge-3",
+          "to": "准予放行",
+          "relation": "合格",
+          "from": "温度复核"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["不合格准予放行"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["上限：4.5°C"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "chart-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["返工率"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["统计口径：仅已关闭批次"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["2.5%"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["1.0%"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["0.0%"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["样本量：未披露"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "bar-0",
+          "to": "2.5%",
+          "relation": "返工率",
+          "from": "A线"
+        },
+        {
+          "id": "bar-1",
+          "to": "1.0%",
+          "relation": "返工率",
+          "from": "B线"
+        },
+        {
+          "id": "bar-2",
+          "to": "0.0%",
+          "relation": "返工率",
+          "from": "C线"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["样本量：100"]
+        },
+        {
+          "id": "contradiction-2",
+          "aliases": ["C线返工率大于0"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["2.5%"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["1.0%"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["0.0%"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "screenshot-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["申请号：RF-2026-111"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["财务中心 / 退款申请"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["退款冲减：-1.25万元"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["状态：未批准"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["可支付：0.00万元"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["预计到账日：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["状态：已批准"]
+        },
+        {
+          "id": "contradiction-2",
+          "aliases": ["退款冲减：1.25万元"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["退款冲减：-1.25万元"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["状态：未批准"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["可支付：0.00万元"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "scanned-table-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["校准复核"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["探头甲"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["探头丙"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["-1.25"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["0.00"]
+        },
+        {
+          "id": "value-unit",
+          "aliases": ["偏差（mm）"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["探头丙偏差：未测"]
+        }
+      ],
+      "relations": [],
+      "tables": [
+        {
+          "id": "calibration",
+          "page": 1,
+          "rowCount": 5,
+          "columnCount": 3,
+          "headerRows": [1, 2],
+          "cells": [
+            [1, 1, "校准复核", 1, 3],
+            [2, 1, "设备"],
+            [2, 2, "偏差（mm）"],
+            [2, 3, "状态"],
+            [3, 1, "探头甲"],
+            [3, 2, "-1.25"],
+            [3, 3, "待复核"],
+            [4, 1, "探头乙"],
+            [4, 2, "0.00"],
+            [4, 3, "合格"],
+            [5, 1, "探头丙"],
+            [5, 2, ""],
+            [5, 3, "未测"]
+          ]
+        }
+      ],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["探头丙偏差：0"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["-1.25"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["0.00"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "cross-page-table-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["里程碑付款台账"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["续表"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["36.50"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["未批准"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["收款账号：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [
+        {
+          "id": "payment-p1",
+          "page": 1,
+          "rowCount": 3,
+          "columnCount": 3,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "阶段"],
+            [1, 2, "金额（万元）"],
+            [1, 3, "条件"],
+            [2, 1, "预付"],
+            [2, 2, "36.50"],
+            [2, 3, "合同生效"],
+            [3, 1, "留置"],
+            [3, 2, "0.00"],
+            [3, 3, "未批准"]
+          ]
+        },
+        {
+          "id": "payment-p2",
+          "page": 2,
+          "rowCount": 3,
+          "columnCount": 3,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "阶段"],
+            [1, 2, "金额（万元）"],
+            [1, 3, "条件"],
+            [2, 1, "终验"],
+            [2, 2, "36.50"],
+            [2, 3, "验收通过"],
+            [3, 1, "留置"],
+            [3, 2, "0.00"],
+            [3, 3, "待复核"]
+          ]
+        }
+      ],
+      "readingOrder": [],
+      "contradictions": [],
+      "sources": [
+        {
+          "id": "page-1",
+          "aliases": ["预付"],
+          "page": 1
+        },
+        {
+          "id": "page-2",
+          "aliases": ["终验"],
+          "page": 2
+        }
+      ]
+    },
+    {
+      "id": "multicolumn-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["左栏：审批结论"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["北区尚未批准。"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["南区仅允许试运行。"]
+        },
+        {
+          "id": "text-4",
+          "aliases": ["禁止直接扩大产能。"]
+        },
+        {
+          "id": "text-5",
+          "aliases": ["右栏：后续措施"]
+        },
+        {
+          "id": "text-6",
+          "aliases": ["先完成阀门复核。"]
+        },
+        {
+          "id": "text-7",
+          "aliases": ["再提交专项评审。"]
+        },
+        {
+          "id": "text-8",
+          "aliases": ["最终负责人：未提供。"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["北区尚未批准"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["南区仅允许试运行"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["最终负责人：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [],
+      "readingOrder": [
+        [
+          "左栏：审批结论",
+          "北区尚未批准。",
+          "南区仅允许试运行。",
+          "禁止直接扩大产能。",
+          "右栏：后续措施",
+          "先完成阀门复核。",
+          "再提交专项评审。",
+          "最终负责人：未提供。"
+        ]
+      ],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["北区已经批准"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["北区尚未批准"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["南区仅允许试运行"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "formula-image-development",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["补偿公式：ΔL = α × L × ΔT"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["固定端 A"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["测量端 B"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["系数：0.08 mm/(m·°C)"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["温差：-5.0°C"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["补偿量：-0.40 mm"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["误差区间：未提供"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "diagram-1",
+          "to": "测量端 B",
+          "relation": "连接",
+          "from": "固定端 A"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["补偿量：0.40 mm"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["系数：0.08 mm/(m·°C)"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["温差：-5.0°C"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["补偿量：-0.40 mm"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "flowchart-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["入库登记"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["温度复核"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["隔离复验"]
+        },
+        {
+          "id": "text-4",
+          "aliases": ["准予放行"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["上限：6.2°C"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["复验责任人：未提供"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "edge-1",
+          "to": "温度复核",
+          "relation": "流向",
+          "from": "入库登记"
+        },
+        {
+          "id": "edge-2",
+          "to": "隔离复验",
+          "relation": "不合格",
+          "from": "温度复核"
+        },
+        {
+          "id": "edge-3",
+          "to": "准予放行",
+          "relation": "合格",
+          "from": "温度复核"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["不合格准予放行"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["上限：6.2°C"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "chart-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["返工率"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["统计口径：仅已关闭批次"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["4.2%"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["2.1%"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["0.0%"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["样本量：未披露"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "bar-0",
+          "to": "4.2%",
+          "relation": "返工率",
+          "from": "C线"
+        },
+        {
+          "id": "bar-1",
+          "to": "2.1%",
+          "relation": "返工率",
+          "from": "B线"
+        },
+        {
+          "id": "bar-2",
+          "to": "0.0%",
+          "relation": "返工率",
+          "from": "A线"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["样本量：100"]
+        },
+        {
+          "id": "contradiction-2",
+          "aliases": ["A线返工率大于0"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["4.2%"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["2.1%"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["0.0%"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "screenshot-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["申请号：RF-2026-112"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["财务中心 / 退款申请"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["退款冲减：-3.40万元"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["状态：已驳回"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["可支付：0.00万元"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["预计到账日：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["状态：已批准"]
+        },
+        {
+          "id": "contradiction-2",
+          "aliases": ["退款冲减：3.40万元"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["退款冲减：-3.40万元"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["状态：已驳回"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["可支付：0.00万元"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "scanned-table-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["校准复核"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["探头甲"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["探头丙"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["-3.40"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["0.00"]
+        },
+        {
+          "id": "value-unit",
+          "aliases": ["偏差（mm）"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["探头丙偏差：未测"]
+        }
+      ],
+      "relations": [],
+      "tables": [
+        {
+          "id": "calibration",
+          "page": 1,
+          "rowCount": 5,
+          "columnCount": 3,
+          "headerRows": [1, 2],
+          "cells": [
+            [1, 1, "校准复核", 1, 3],
+            [2, 1, "设备"],
+            [2, 2, "状态"],
+            [2, 3, "偏差（mm）"],
+            [3, 1, "探头甲"],
+            [3, 2, "待复核"],
+            [3, 3, "-3.40"],
+            [4, 1, "探头乙"],
+            [4, 2, "合格"],
+            [4, 3, "0.00"],
+            [5, 1, "探头丙"],
+            [5, 2, "未测"],
+            [5, 3, ""]
+          ]
+        }
+      ],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["探头丙偏差：0"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["-3.40"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["0.00"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "cross-page-table-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["里程碑付款台账"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["续表"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["48.75"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["未批准"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["收款账号：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [
+        {
+          "id": "payment-p1",
+          "page": 1,
+          "rowCount": 3,
+          "columnCount": 3,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "条件"],
+            [1, 2, "阶段"],
+            [1, 3, "金额（万元）"],
+            [2, 1, "合同生效"],
+            [2, 2, "预付"],
+            [2, 3, "48.75"],
+            [3, 1, "未批准"],
+            [3, 2, "留置"],
+            [3, 3, "0.00"]
+          ]
+        },
+        {
+          "id": "payment-p2",
+          "page": 2,
+          "rowCount": 3,
+          "columnCount": 3,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "条件"],
+            [1, 2, "阶段"],
+            [1, 3, "金额（万元）"],
+            [2, 1, "验收通过"],
+            [2, 2, "终验"],
+            [2, 3, "48.75"],
+            [3, 1, "待复核"],
+            [3, 2, "留置"],
+            [3, 3, "0.00"]
+          ]
+        }
+      ],
+      "readingOrder": [],
+      "contradictions": [],
+      "sources": [
+        {
+          "id": "page-1",
+          "aliases": ["预付"],
+          "page": 1
+        },
+        {
+          "id": "page-2",
+          "aliases": ["终验"],
+          "page": 2
+        }
+      ]
+    },
+    {
+      "id": "multicolumn-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["左栏：审批结论"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["东区暂缓验收。"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["西区仅批准空载测试。"]
+        },
+        {
+          "id": "text-4",
+          "aliases": ["不得启动带载测试。"]
+        },
+        {
+          "id": "text-5",
+          "aliases": ["右栏：后续措施"]
+        },
+        {
+          "id": "text-6",
+          "aliases": ["先核对压力传感器。"]
+        },
+        {
+          "id": "text-7",
+          "aliases": ["再申请带载评审。"]
+        },
+        {
+          "id": "text-8",
+          "aliases": ["签字日期：未提供。"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["东区暂缓验收"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["西区仅批准空载测试"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["签字日期：未提供"]
+        }
+      ],
+      "relations": [],
+      "tables": [],
+      "readingOrder": [
+        [
+          "左栏：审批结论",
+          "东区暂缓验收。",
+          "西区仅批准空载测试。",
+          "不得启动带载测试。",
+          "右栏：后续措施",
+          "先核对压力传感器。",
+          "再申请带载评审。",
+          "签字日期：未提供。"
+        ]
+      ],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["西区已经批准带载测试"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["东区暂缓验收"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["西区仅批准空载测试"],
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "formula-image-holdout",
+      "visible": [
+        {
+          "id": "text-1",
+          "aliases": ["补偿公式：ΔL = α × L × ΔT"]
+        },
+        {
+          "id": "text-2",
+          "aliases": ["固定端 C"]
+        },
+        {
+          "id": "text-3",
+          "aliases": ["测量端 D"]
+        }
+      ],
+      "critical": [
+        {
+          "id": "value-1",
+          "aliases": ["系数：0.12 mm/(m·°C)"]
+        },
+        {
+          "id": "value-2",
+          "aliases": ["温差：-5.0°C"]
+        },
+        {
+          "id": "value-3",
+          "aliases": ["补偿量：-0.60 mm"]
+        }
+      ],
+      "unknown": [
+        {
+          "id": "unknown-1",
+          "aliases": ["误差区间：未提供"]
+        }
+      ],
+      "relations": [
+        {
+          "id": "diagram-1",
+          "from": "固定端 C",
+          "to": "测量端 D",
+          "relation": "连接"
+        }
+      ],
+      "tables": [],
+      "readingOrder": [],
+      "contradictions": [
+        {
+          "id": "contradiction-1",
+          "aliases": ["补偿量：0.60 mm"]
+        }
+      ],
+      "sources": [
+        {
+          "id": "source-1",
+          "aliases": ["系数：0.12 mm/(m·°C)"],
+          "page": 1
+        },
+        {
+          "id": "source-2",
+          "aliases": ["温差：-5.0°C"],
+          "page": 1
+        },
+        {
+          "id": "source-3",
+          "aliases": ["补偿量：-0.60 mm"],
+          "page": 1
+        }
+      ]
+    }
+  ]
+}

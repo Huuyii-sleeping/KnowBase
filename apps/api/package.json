@@ -24,7 +24,9 @@
     "generate:business-corpus": "node test/ingestion/quality/generate.cjs",
     "benchmark:business-documents": "pnpm build && node test/ingestion/quality/evaluate-documents.cjs",
     "benchmark:table-context": "pnpm build && node test/ingestion/quality/evaluate-table-context.cjs",
-    "benchmark:chunk-evidence": "pnpm build && node test/ingestion/quality/evaluate-chunks.cjs"
+    "benchmark:chunk-evidence": "pnpm build && node test/ingestion/quality/evaluate-chunks.cjs",
+    "test:complex-quality": "pnpm build && node --test test/ingestion/complex-quality/*.test.cjs",
+    "benchmark:complex-quality": "pnpm build && node test/ingestion/complex-quality/evaluate.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",
