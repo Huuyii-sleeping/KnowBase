@@ -157,4 +157,46 @@ describe('IndexBuildService', () => {
     expect(store.activate).toHaveBeenCalledOnce();
     expect(discard).not.toHaveBeenCalled();
   });
+  it('forwards a durable caller generation and ledger into the activation transaction', async () => {
+    const heads = { activate: vi.fn().mockResolvedValue(true) };
+    const onActivated = vi.fn();
+    await new IndexBuildService(heads as any).build(
+      {} as any,
+      'rag',
+      async (generation) => {
+        expect(generation).toBe('requested-generation');
+      },
+      vi.fn(),
+      { generation: 'requested-generation', contentId: 'body', onActivated },
+    );
+    expect(heads.activate).toHaveBeenCalledWith(
+      {},
+      'rag',
+      'requested-generation',
+      onActivated,
+    );
+  });
+  it('signals uncertain activation to the durable caller while preserving staged data', async () => {
+    const heads = {
+      activate: vi.fn().mockRejectedValue(new Error('lost acknowledgement')),
+    };
+    const unknown = vi.fn(),
+      discard = vi.fn();
+    await expect(
+      new IndexBuildService(heads as any).build(
+        {} as any,
+        'rag',
+        vi.fn(),
+        discard,
+        {
+          generation: 'attempt',
+          contentId: 'body',
+          onActivated: vi.fn(),
+          onActivationUnknown: unknown,
+        },
+      ),
+    ).rejects.toThrow('acknowledgement');
+    expect(unknown).toHaveBeenCalledOnce();
+    expect(discard).not.toHaveBeenCalled();
+  });
 });

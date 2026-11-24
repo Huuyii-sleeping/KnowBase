@@ -28,10 +28,12 @@ export function AppShell() {
 
   const crumb = location.pathname.startsWith('/documents/')
     ? '文档详情'
-    : location.pathname.startsWith('/review')
-      ? '审核队列'
-      : (NAV_ITEMS.find((item) => location.pathname.startsWith(item.to))
-          ?.label ?? '文档库');
+    : location.pathname.startsWith('/index-upgrades')
+      ? '存量索引升级'
+      : location.pathname.startsWith('/review')
+        ? '审核队列'
+        : (NAV_ITEMS.find((item) => location.pathname.startsWith(item.to))
+            ?.label ?? '文档库');
   const [searchInput, setSearchInput] = useState(
     () => new URLSearchParams(location.search).get('q') ?? '',
   );
@@ -188,6 +190,15 @@ export function AppShell() {
             >
               <Icon name="check" width={18} height={18} />
               审核队列
+            </NavLink>
+            <NavLink
+              to="/index-upgrades"
+              className={({ isActive }) =>
+                cn('nav-link', isActive && 'nav-link-active')
+              }
+            >
+              <Icon name="files" width={18} height={18} />
+              存量索引升级
             </NavLink>
           </>
         )}

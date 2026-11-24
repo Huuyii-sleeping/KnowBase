@@ -1,3 +1,4 @@
+import { IndexUpgradesPage } from '@/pages/index-upgrades-page';
 import {
   createBrowserRouter,
   Navigate,
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
       { path: '/ask', element: <AskPage /> },
       { path: '/search', element: <SearchPage /> },
       { path: '/graph', element: <GraphPage /> },
+      {
+        path: '/index-upgrades',
+        element: (
+          <RequireRole role="ADMIN">
+            <IndexUpgradesPage />
+          </RequireRole>
+        ),
+      },
       {
         path: '/review',
         element: (

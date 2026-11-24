@@ -77,7 +77,7 @@ ES 按条数及 NDJSON 字节数分批；所有请求成功后执行一次 refre
 
 ## 升级与回滚
 
-先执行 [索引构建进度迁移 009](index-build-recovery.md#升级与回滚)。停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射。
+批量索引升级需要额外的 [迁移 010 与管理操作](index-upgrades.md)。单次构建先执行 [索引构建进度迁移 009](index-build-recovery.md#升级与回滚)。停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射。
 
 已有已发布文档可通过原有管理员 `rebuild-indexes` 接口使用新分块规则构建。该接口只读取已保存 Markdown，不会重新解析原文件；PDF/DOCX 解析修复对存量文件生效，可启用异步功能后从原文件重新解析，或重新上传、人工修订正文。分块改变会改变 Chunk 序号和 ID，不能将旧 Chunk 序号作为跨重建永久定位。
 

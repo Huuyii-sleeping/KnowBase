@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChatOllama } from '@langchain/ollama';
@@ -24,8 +25,24 @@ Markdown 文本：
 @Injectable()
 export class OllamaGraphExtractorService implements GraphExtractionProvider {
   private readonly model: ChatOllama;
+  readonly fingerprint?: string;
 
   constructor(config: ConfigService) {
+    const revision = config.get<string>('OLLAMA_KG_MODEL_REVISION', '').trim();
+    if (revision)
+      this.fingerprint = createHash('sha256')
+        .update(
+          JSON.stringify([
+            config.get('OLLAMA_BASE_URL', 'http://localhost:11434'),
+            config.get('OLLAMA_KG_MODEL', 'qwen2.5:0.5b'),
+            revision,
+            Number(config.get('OLLAMA_KG_TEMPERATURE', '0')),
+            Number(config.get('OLLAMA_KG_SEED', '42')),
+            EXTRACTION_PROMPT,
+            'graph-normalization-v1',
+          ]),
+        )
+        .digest('hex');
     this.model = new ChatOllama({
       baseUrl: config.get<string>('OLLAMA_BASE_URL', 'http://localhost:11434'),
       model: config.get<string>('OLLAMA_KG_MODEL', 'qwen2.5:0.5b'),
@@ -35,14 +52,18 @@ export class OllamaGraphExtractorService implements GraphExtractionProvider {
   }
 
   async extract(markdownChunk: string): Promise<RawGraphExtraction> {
-    const response = await this.model.invoke(`${EXTRACTION_PROMPT}${markdownChunk}`);
+    const response = await this.model.invoke(
+      `${EXTRACTION_PROMPT}${markdownChunk}`,
+    );
     return this.parseResponse(this.toText(response.content));
   }
 
   private parseResponse(text: string): RawGraphExtraction {
     const json = this.extractJson(text);
     if (!json) {
-      throw new GraphExtractionParseError('graph extraction response did not contain a JSON object');
+      throw new GraphExtractionParseError(
+        'graph extraction response did not contain a JSON object',
+      );
     }
 
     try {
@@ -56,14 +77,19 @@ export class OllamaGraphExtractorService implements GraphExtractionProvider {
       };
     } catch (error) {
       if (error instanceof GraphExtractionParseError) throw error;
-      throw new GraphExtractionParseError('graph extraction response contained malformed JSON');
+      throw new GraphExtractionParseError(
+        'graph extraction response contained malformed JSON',
+      );
     }
   }
 
   private parseEntities(value: unknown) {
     if (!Array.isArray(value)) return [];
     return value
-      .filter((entity): entity is Record<string, unknown> => Boolean(entity) && typeof entity === 'object')
+      .filter(
+        (entity): entity is Record<string, unknown> =>
+          Boolean(entity) && typeof entity === 'object',
+      )
       .map((entity) => ({
         name: this.clean(entity.name),
         type: this.clean(entity.type) || '未知',
@@ -74,13 +100,21 @@ export class OllamaGraphExtractorService implements GraphExtractionProvider {
   private parseRelations(value: unknown) {
     if (!Array.isArray(value)) return [];
     return value
-      .filter((relation): relation is Record<string, unknown> => Boolean(relation) && typeof relation === 'object')
+      .filter(
+        (relation): relation is Record<string, unknown> =>
+          Boolean(relation) && typeof relation === 'object',
+      )
       .map((relation) => ({
         source: this.clean(relation.source),
         target: this.clean(relation.target),
         type: this.clean(relation.type) || '相关',
       }))
-      .filter((relation) => relation.source && relation.target && relation.source !== relation.target);
+      .filter(
+        (relation) =>
+          relation.source &&
+          relation.target &&
+          relation.source !== relation.target,
+      );
   }
 
   private extractJson(text: string): string | null {

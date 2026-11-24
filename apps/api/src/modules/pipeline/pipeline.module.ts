@@ -1,3 +1,15 @@
+import { UpgradeScanStore } from './upgrades/upgrade-scan.store';
+import { UpgradeDispatchStore } from './upgrades/upgrade-dispatch.store';
+import { UpgradePlanStore } from './upgrades/upgrade-plan.store';
+import { UpgradePolicyService } from './upgrades/upgrade-policy.service';
+import { UpgradePreviewService } from './upgrades/upgrade-preview.service';
+import { UpgradeCommandService } from './upgrades/upgrade-command.service';
+import { UpgradeSchedulerService } from './upgrades/upgrade-scheduler.service';
+import { UpgradeExecutionStore } from './upgrades/upgrade-execution.store';
+import { UpgradeRunnerService } from './upgrades/upgrade-runner.service';
+import { UpgradeManagementService } from './upgrades/upgrade-management.service';
+import { UpgradeController } from './upgrades/upgrade.controller';
+import { DeliveryModule } from '../delivery/delivery.module';
 import { IngestionArtifactsModule } from '../ingestion/artifacts/ingestion-artifacts.module';
 import { DocumentChunksService } from './chunk/document-chunks.service';
 import { DocumentEmbeddingService } from './embedding/document-embedding.service';
@@ -22,12 +34,24 @@ import { GenerationCleanupService } from './generation-cleanup.service';
 
 @Module({
   imports: [
+    DeliveryModule,
     DocumentsModule,
     MessageQueueModule,
     IndexingModule,
     IngestionArtifactsModule,
   ],
+  controllers: [UpgradeController],
   providers: [
+    UpgradePlanStore,
+    UpgradeScanStore,
+    UpgradePolicyService,
+    UpgradePreviewService,
+    UpgradeCommandService,
+    UpgradeSchedulerService,
+    UpgradeDispatchStore,
+    UpgradeExecutionStore,
+    UpgradeRunnerService,
+    UpgradeManagementService,
     MarkdownChunkerService,
     DocumentChunksService,
     DocumentEmbeddingService,

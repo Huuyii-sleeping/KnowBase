@@ -34,7 +34,14 @@ export interface DocumentAssetsDeleteMessage {
   keys: string[];
 }
 
+export interface DocumentIndexUpgradeMessage {
+  type: 'DOCUMENT_INDEX_UPGRADE';
+  taskId: string;
+  dispatchId: string;
+}
+
 export type PipelineMessage =
+  | DocumentIndexUpgradeMessage
   | { type: 'DOCUMENT_PARSE'; taskId: string }
   | DocumentIndexMessage
   | DocumentPipelineCommand

@@ -1,3 +1,4 @@
+import { IndexBuildOptions } from '../../indexing/index-build-options';
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
 import { DocumentEmbeddingService } from '../embedding/document-embedding.service';
@@ -24,12 +25,14 @@ export class RagPipelineService {
   async rebuildDocument(
     documentId: string,
     expectedVersion: number,
+    options?: IndexBuildOptions,
   ): Promise<{ chunks: number; skipped?: boolean }> {
     const document = await this.generations.capture(
       documentId,
       expectedVersion,
     );
-    if (!document) return { chunks: 0, skipped: true };
+    if (!document || (options && document.contentId !== options.contentId))
+      return { chunks: 0, skipped: true };
 
     let count = 0;
     const activated = await this.builds.build(
@@ -95,6 +98,7 @@ export class RagPipelineService {
         await report('index_write', vectorChunks.length, vectorChunks.length);
       },
       (generation) => this.vectorIndex.discardGeneration('rag', generation),
+      options,
     );
     return activated ? { chunks: count } : { chunks: 0, skipped: true };
   }

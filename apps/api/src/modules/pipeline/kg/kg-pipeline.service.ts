@@ -1,3 +1,4 @@
+import { IndexBuildOptions } from '../../indexing/index-build-options';
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
 import { DocumentChunksService } from '../chunk/document-chunks.service';
@@ -21,6 +22,7 @@ export class KgPipelineService {
   async rebuildDocument(
     documentId: string,
     expectedVersion: number,
+    options?: IndexBuildOptions,
   ): Promise<{
     chunks: number;
     entities: number;
@@ -31,7 +33,7 @@ export class KgPipelineService {
       documentId,
       expectedVersion,
     );
-    if (!document) {
+    if (!document || (options && document.contentId !== options.contentId)) {
       return { chunks: 0, entities: 0, relations: 0, skipped: true };
     }
 
@@ -87,6 +89,7 @@ export class KgPipelineService {
       },
       (generation) =>
         this.graphIndex.discardGeneration(document.id, generation),
+      options,
     );
     return activated
       ? counts

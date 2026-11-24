@@ -1,3 +1,4 @@
+import { DocumentIndexStatus } from '@/components/document-index-status';
 import { DocumentParseReview } from '@/components/document-parse-review';
 import { DocumentEvidencePanel } from '@/components/document-evidence-panel';
 import { RequestFailure } from '@/components/request-failure';
@@ -191,6 +192,9 @@ export function DocumentDetailPage() {
         {doc.ingestion && (
           <div className="col-span-full">
             <DocumentParseProgress document={doc} onRefresh={load} />
+            {doc.ingestion?.canManage && (
+              <DocumentIndexStatus documentId={doc.id} version={doc.version} />
+            )}
             <DocumentParseReview
               key={doc.ingestion?.task?.id}
               document={doc}

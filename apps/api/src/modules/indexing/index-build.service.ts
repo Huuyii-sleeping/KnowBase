@@ -1,3 +1,4 @@
+import { IndexBuildOptions } from './index-build-options';
 import { Injectable, Logger, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Document } from '../documents/entities/document.entity';
@@ -31,8 +32,9 @@ export class IndexBuildService {
     pipeline: IndexPipeline,
     stage: (generation: string, report: BuildReporter) => Promise<void>,
     discard: (generation: string) => Promise<void>,
+    options?: IndexBuildOptions,
   ): Promise<boolean> {
-    const generation = randomUUID();
+    const generation = options?.generation ?? randomUUID();
     if (this.progress)
       await this.observe(() =>
         this.progress!.start(document, pipeline, generation),
@@ -80,9 +82,18 @@ export class IndexBuildService {
           pipeline,
           generation,
         },
-        () => this.generations.activate(document, pipeline, generation),
+        () =>
+          options
+            ? this.generations.activate(
+                document,
+                pipeline,
+                generation,
+                options.onActivated,
+              )
+            : this.generations.activate(document, pipeline, generation),
       );
     } catch (error) {
+      options?.onActivationUnknown?.();
       await finish('activation_unknown');
       throw error;
     }

@@ -37,6 +37,11 @@ export function createApiError(code: ApiErrorCode, options: ErrorOptions = {}) {
 // Translate only recognized business messages. Unknown server text (including
 // upstream errors, stack traces and HTML) must never become user-facing copy.
 const BUSINESS_MESSAGES: Record<string, string> = {
+  UPGRADE_MODEL_REVISION_REQUIRED:
+    '请先配置 Embedding 和图谱模型的固定修订，再生成升级预览。',
+  UPGRADE_CONFIG_MISMATCH:
+    '当前配置与计划不一致。请恢复原配置，或重新生成预览。',
+  UPGRADE_INVALID_TRANSITION: '批次状态已变化，请刷新后重试。',
   'file is required': ERROR_CATALOG.FILE_REQUIRED.message,
   'supported file types: pdf, xlsx, docx, pptx, txt, md':
     ERROR_CATALOG.FILE_UNSUPPORTED.message,
@@ -114,6 +119,7 @@ export function httpError(
       break;
     case 409:
       code = 'CONFLICT';
+      message = knownBusinessMessage(body);
       break;
     case 413:
       code = 'PAYLOAD_TOO_LARGE';

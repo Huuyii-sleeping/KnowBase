@@ -36,6 +36,7 @@ export class IndexGenerationStore {
     document: Document,
     pipeline: IndexPipeline,
     generation: string,
+    onActivated?: (manager: EntityManager) => Promise<void>,
   ): Promise<boolean> {
     return this.source.transaction(async (manager) => {
       // All document revisions, deletion and activation serialize on this row.
@@ -66,6 +67,7 @@ export class IndexGenerationStore {
           pipeline,
           generation,
         );
+      if (rows.length === 1) await onActivated?.(manager);
       return rows.length === 1;
     });
   }

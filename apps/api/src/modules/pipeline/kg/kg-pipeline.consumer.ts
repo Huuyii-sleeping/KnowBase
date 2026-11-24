@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { UpgradeRunnerService } from '../upgrades/upgrade-runner.service';
+import { DocumentIndexUpgradeMessage } from '../../message-queue/message-queue.types';
+import { Injectable, Optional } from '@nestjs/common';
 import {
   MESSAGE_QUEUE_NAMES,
   MESSAGE_ROUTING_KEYS,
@@ -22,10 +24,12 @@ export class KgPipelineConsumer {
     private readonly pipeline: KgPipelineService,
     private readonly cleanup: DocumentSourceCleanupService,
     private readonly assets: DocumentAssetsCleanupService,
+    @Optional() private readonly upgrades?: UpgradeRunnerService,
   ) {}
 
   consume(): Promise<void> {
     return this.messageQueue.consume<
+      | DocumentIndexUpgradeMessage
       | DocumentPipelineCommand
       | DocumentGraphDeleteMessage
       | DocumentIndexDeleteMessage
@@ -40,6 +44,10 @@ export class KgPipelineConsumer {
         MESSAGE_ROUTING_KEYS.ASSETS_DELETE,
       ],
       (message) => {
+        if (message.type === 'DOCUMENT_INDEX_UPGRADE') {
+          if (!this.upgrades) throw new Error('UPGRADE_WORKER_UNAVAILABLE');
+          return this.upgrades.run(message, 'kg');
+        }
         if (message.type === 'DOCUMENT_ASSETS_DELETE')
           return this.assets.cleanup(message.documentId, message.keys);
         if (message.type === 'DOCUMENT_SOURCE_DELETE') {

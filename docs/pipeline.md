@@ -309,3 +309,5 @@ pnpm --filter @knowbase/api start:dev
 ```
 
 RabbitMQ AMQP 端口为 `15672`，管理界面为 `15673`；Elasticsearch 为 `19200`；Neo4j Bolt 为 `17687`，浏览器界面为 `17474`。
+
+存量 Markdown 的预览、限速批次、失败重试及管理界面见 [受控索引升级](index-upgrades.md)。它复用本章的 Outbox、receipt 和 generation 协议，成功账本与激活同事务提交。
