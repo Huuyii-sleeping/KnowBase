@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { ParseQuality } from '../parsing/file-parser.types';
+import { EvidenceManifest } from '../evidence/evidence.types';
 import { TableEvidence } from '../../ingestion/tables/table.types';
 import {
   DocumentBlock,
@@ -22,6 +23,15 @@ export class DocumentAsset {
 
   @Prop()
   alt?: string;
+
+  @Prop()
+  contentType?: string;
+
+  @Prop()
+  sha256?: string;
+
+  @Prop()
+  bytes?: number;
 }
 
 export const DocumentAssetSchema = SchemaFactory.createForClass(DocumentAsset);
@@ -60,6 +70,12 @@ export class DocumentContent {
 
   @Prop({ type: [Object], default: undefined })
   tables?: TableEvidence[];
+
+  @Prop({ type: Object })
+  evidenceManifest?: EvidenceManifest;
+
+  @Prop()
+  ready?: boolean;
 
   @Prop()
   parseStrategy?: string;

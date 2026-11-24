@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { ConfigService } from '@nestjs/config';
 import { FileParserService } from './file-parser.service';
+import { SupplementaryParsers } from './supplementary-parsers';
 
 function parserResult(parser: string) {
   return {
@@ -13,6 +14,49 @@ function parserResult(parser: string) {
 }
 
 describe('FileParserService', () => {
+  it('rejects all retired audio/video formats before parsing or uploading, even with legacy runtime settings', async () => {
+    const parser = { parse: vi.fn() };
+    const uploader = { upload: vi.fn(), discard: vi.fn() };
+    const config = new ConfigService({
+      DOCUMENT_PARSER: 'mineru',
+      MEDIA_PYTHON: '/legacy/python',
+      ASR_MODEL_PATH: '/legacy/model',
+      ASR_MODEL_REVISION: 'fixed',
+      ASR_LANGUAGE: 'invalid-retired-setting',
+    });
+    const service = new FileParserService(
+      parser as any,
+      parser as any,
+      parser as any,
+      parser as any,
+      parser as any,
+      parser as any,
+      parser as any,
+      uploader as any,
+      parser as any,
+      config,
+      new SupplementaryParsers(parser as any, config),
+    );
+    for (const ext of [
+      'wav',
+      'mp3',
+      'm4a',
+      'flac',
+      'ogg',
+      'mp4',
+      'mov',
+      'webm',
+      'mkv',
+    ]) {
+      const name = `recording.${ext.toUpperCase()}`;
+      expect(service.supports(name)).toBe(false);
+      await expect(
+        service.parse(Buffer.from('media'), name, 'doc'),
+      ).rejects.toThrow('Unsupported file type');
+    }
+    expect(parser.parse).not.toHaveBeenCalled();
+    expect(uploader.upload).not.toHaveBeenCalled();
+  });
   it('cleans uploaded assets when a remote result contains an unsupported table', async () => {
     const asset = {
       type: 'attachment',
@@ -29,7 +73,7 @@ describe('FileParserService', () => {
         });
         return {
           ...parserResult('mineru'),
-          markdown: '<table><tr><td rowspan="0">unsupported</td></tr></table>',
+          markdown: '<table><tr><td colspan="0">unsupported</td></tr></table>',
         };
       }),
     };

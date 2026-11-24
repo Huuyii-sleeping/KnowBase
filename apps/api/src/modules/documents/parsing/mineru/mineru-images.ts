@@ -15,6 +15,7 @@ export async function mineruImages(
 ) {
   const assets: ParsedAsset[] = [];
   const replacements = new Map<string, string>();
+  const packaged = new Map<string, ParsedAsset>();
   const missing = new Set<string>();
   const issues: ParseQuality['issues'] = [];
   for (const [name, bytes] of files) {
@@ -31,6 +32,7 @@ export async function mineruImages(
     });
     assets.push(asset);
     replacements.set(name, asset.url);
+    packaged.set(name, asset);
   }
   const render = (source: string, alt = '') => {
     if (typeof source !== 'string' || !source.trim())
@@ -61,5 +63,11 @@ export async function mineruImages(
       .replace(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi, (_match, source) =>
         render(source),
       );
-  return { assets, issues, render, rewrite };
+  return {
+    assets,
+    issues,
+    render,
+    rewrite,
+    asset: (name: string) => packaged.get(name),
+  };
 }

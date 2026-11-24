@@ -93,6 +93,42 @@ export interface DocumentContent {
   };
   provenance?: Record<string, string>;
   tables?: DocumentTableEvidence[];
+  evidenceManifest?: { count: number; digest: string };
+}
+
+export interface DocumentEvidence {
+  id: string;
+  kind: string;
+  source: {
+    page?: number;
+    slide?: number;
+    sheet?: string;
+    rowStart?: number;
+    rowEnd?: number;
+    cellRange?: string;
+    startMs?: number;
+    endMs?: number;
+    bbox?: number[];
+  };
+  objectKeys: string[];
+  text: string;
+  producer: string;
+  data: Record<string, unknown>;
+}
+export interface EvidencePage {
+  contentId: string;
+  total: number;
+  offset: number;
+  limit: number;
+  items: DocumentEvidence[];
+}
+export interface ParseDraft {
+  contentId: string;
+  markdown: string;
+  warnings: string[];
+  quality?: DocumentContent['quality'];
+  evidenceManifest?: { count: number; digest: string };
+  ready?: boolean;
 }
 
 export interface DocumentTableEvidence {
@@ -131,6 +167,8 @@ export interface DocumentDetail extends DocumentMeta {
   ingestion?: {
     canManage: boolean;
     task: {
+      id?: string;
+      hasDraft?: boolean;
       state: string;
       stage: string;
       attempts: number;
@@ -378,6 +416,42 @@ function activeDocumentsApi() {
 }
 
 export const documentsApi = {
+  async importWeb(url: string): Promise<{ id: string }> {
+    const result = await request<{ id: string }>('/documents/import-web', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    if (!result || typeof result.id !== 'string' || !result.id.trim())
+      throw createApiError('INVALID_RESPONSE', { kind: 'response' });
+    return result;
+  },
+  evidence(id: string, offset = 0, taskId?: string): Promise<EvidencePage> {
+    const query = new URLSearchParams({ offset: String(offset), limit: '20' });
+    if (taskId) query.set('draftTaskId', taskId);
+    return request(`/documents/${id}/evidence?${query}`);
+  },
+  draft(id: string, taskId: string): Promise<ParseDraft> {
+    return request(`/documents/${id}/parse-drafts/${taskId}`);
+  },
+  reviewParse(
+    id: string,
+    taskId: string,
+    accept: boolean,
+    acknowledgeIssues: boolean,
+    note: string,
+  ): Promise<{ accepted: boolean }> {
+    return request(`/documents/${id}/parse-review`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ taskId, accept, acknowledgeIssues, note }),
+    });
+  },
+  resourceAccess(
+    key: string,
+  ): Promise<{ url: string; expiresInSeconds: number }> {
+    return request(`/storage/access?key=${encodeURIComponent(key)}`);
+  },
   reparse(id: string): Promise<{ queued: boolean; taskId: string }> {
     return request(`/documents/${id}/reparse`, { method: 'POST' });
   },

@@ -137,6 +137,8 @@ export class DocumentCommandService {
         parseStrategy: parsed.parseStrategy,
         quality: parsed.quality,
         provenance: parsed.provenance,
+        evidence: parsed.evidence,
+        ready: parsed.ready,
       });
 
       document.parseStatus = parsed.ready

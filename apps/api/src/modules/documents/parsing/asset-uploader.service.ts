@@ -3,6 +3,7 @@ import { StorageService } from '../../storage/storage.service';
 import { AssetUploadInput, ParsedAsset } from './file-parser.types';
 import { OutboxStore } from '../../delivery/outbox.store';
 import { MESSAGE_ROUTING_KEYS } from '../../message-queue/message-queue.constants';
+import { createHash } from 'node:crypto';
 
 @Injectable()
 export class AssetUploaderService {
@@ -37,6 +38,8 @@ export class AssetUploaderService {
       objectKey: uploaded.objectKey,
       url: uploaded.url,
       alt: input.alt,
+      sha256: createHash('sha256').update(input.data).digest('hex'),
+      bytes: input.data.length,
       contentType: input.contentType,
     };
   }

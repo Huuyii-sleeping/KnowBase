@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
+import { OrphanAssetCleanupService } from './orphan-asset-cleanup.service';
 import { ParseTaskCleanupStore } from './parse-task-cleanup.store';
 import { ParseTaskStore } from './parse-task.store';
 import { DocumentContentStore } from '../document-content.store';
@@ -13,6 +14,7 @@ export class ParseMaintenanceService {
     private readonly assets: DocumentAssetsCleanupService,
     private readonly mineru: MineruParser,
     private readonly cleanup: ParseTaskCleanupStore,
+    @Optional() private readonly orphanAssets?: OrphanAssetCleanupService,
   ) {}
 
   async run(): Promise<void> {
@@ -36,5 +38,6 @@ export class ParseMaintenanceService {
       }
       await this.cleanup.forgetContent(orphan.document_id, orphan.content_id);
     }
+    await this.orphanAssets?.run();
   }
 }

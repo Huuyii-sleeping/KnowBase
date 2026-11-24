@@ -47,16 +47,8 @@ export class ParseSubmissionService {
       this.access.assertCanEdit(document, user);
       if (!this.enabled)
         throw new BadRequestException('Asynchronous ingestion is disabled');
-      document.version++;
-      document.status = DocumentStatus.DRAFT;
-      document.parseStatus = DocumentParseStatus.PENDING;
-      document.parseError = null;
-      document.rejectionReason = null;
-      document.submittedAt = null;
-      document.reviewedAt = null;
-      document.reviewedBy = null;
-      await manager.save(Document, document);
-      const taskId = await this.tasks.create(manager, document);
+      // Keep the adopted revision and visible generation while a candidate is built.
+      const taskId = await this.tasks.create(manager, document, true);
       return { queued: true, taskId };
     });
   }

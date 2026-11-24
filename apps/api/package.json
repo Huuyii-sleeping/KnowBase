@@ -18,7 +18,12 @@
     "benchmark:before-after": "pnpm build && node test/ingestion/compare-native.cjs",
     "benchmark:ingestion-performance": "pnpm build && node test/ingestion/compare-performance.cjs",
     "test:mineru-extended": "pnpm build && node test/ingestion/verify-extended-mineru.cjs",
-    "benchmark:tables": "pnpm build && node test/ingestion/compare-tables.cjs"
+    "benchmark:tables": "pnpm build && node test/ingestion/compare-tables.cjs",
+    "test:evidence-quality": "pnpm build && node test/ingestion/verify-evidence.cjs",
+    "test:business-quality-unit": "pnpm build && node --test test/ingestion/quality/*.test.cjs",
+    "generate:business-corpus": "node test/ingestion/quality/generate.cjs",
+    "benchmark:business-documents": "pnpm build && node test/ingestion/quality/evaluate-documents.cjs",
+    "benchmark:table-context": "pnpm build && node test/ingestion/quality/evaluate-table-context.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",

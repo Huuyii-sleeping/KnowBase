@@ -13,7 +13,7 @@ export class ParseTaskCleanupStore {
       .query(`SELECT t.document_id, candidate AS content_id FROM kh_document_parse_task t,
       LATERAL unnest(t.content_ids) AS candidate
       WHERE NOT EXISTS (SELECT 1 FROM kh_document d WHERE d.content_id=candidate)
-        AND (t.state NOT IN ('queued','running') OR candidate<>t.content_id)
+        AND (t.state NOT IN ('queued','running','needs_review') OR candidate<>t.content_id)
         AND t.updated_at < clock_timestamp()-INTERVAL '1 day'
       LIMIT 100`);
   }

@@ -39,14 +39,19 @@ describe('document upload policy', () => {
   );
 
   it.each([
-    'movie.mp4',
-    'sound.mp3',
-    'sound.wav',
-    'sound.m4a',
     'archive.zip',
     'README',
     '.pdf',
     'report.pdf.exe',
+    'recording.WAV',
+    'recording.MP3',
+    'recording.M4A',
+    'recording.FLAC',
+    'recording.OGG',
+    'recording.MP4',
+    'recording.MOV',
+    'recording.WEBM',
+    'recording.MKV',
   ])('rejects unsupported input: %s', (name) => {
     expect(validateUploadFile({ name, size: 10 })?.code).toBe(
       'FILE_UNSUPPORTED',

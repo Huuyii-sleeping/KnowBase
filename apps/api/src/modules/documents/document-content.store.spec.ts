@@ -17,7 +17,10 @@ describe('DocumentContentStore', () => {
         saved.push(this);
       }
     }
-    const service = new DocumentContentStore(Model as any);
+    const service = new DocumentContentStore(
+      Model as any,
+      { save: vi.fn(), verify: vi.fn() } as any,
+    );
     const markdown =
       '<table><tr><th colspan="2">预算</th></tr><tr><td>A</td><td>0</td></tr></table>';
     const input = {
@@ -108,7 +111,10 @@ describe('DocumentContentStore', () => {
         return save();
       }
     }
-    const service = new DocumentContentStore(Model as any);
+    const service = new DocumentContentStore(
+      Model as any,
+      { save: vi.fn(), verify: vi.fn() } as any,
+    );
     const input = {
       contentId: 'body',
       documentId: 'doc',

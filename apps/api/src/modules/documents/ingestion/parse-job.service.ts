@@ -6,6 +6,7 @@ import { integerOption } from '../../ingestion/numeric-option';
 import { Document } from '../entities/document.entity';
 import { FileParserService } from '../parsing/file-parser.service';
 import { ParseTaskStore } from './parse-task.store';
+import { InvalidExtractionCheckpoint } from './parse-task.types';
 import { ParseResultService } from './parse-result.service';
 import { ParseCapacity } from './parse-capacity';
 
@@ -70,6 +71,13 @@ export class ParseJobService {
         document.contentId !== task.expected_content_id
       )
         throw new Error('Superseded parse task');
+      if (task.checkpoint_content_id) {
+        await this.tasks.progress(task, 'restoring');
+        const restored = await this.results.resume(task);
+        abort.signal.throwIfAborted();
+        await this.results.apply(task, restored);
+        return;
+      }
       const stream = await this.storage.getObject(task.storage_key);
       const buffers: Buffer[] = [];
       let bytes = 0;
@@ -104,6 +112,8 @@ export class ParseJobService {
       if (result.quality?.status === 'failed')
         throw new Error('Parser execution failed');
       abort.signal.throwIfAborted();
+      await this.tasks.progress(task, 'checkpointing');
+      await this.results.checkpoint(task, result);
       await this.tasks.progress(task, 'saving');
       await this.results.apply(task, result);
     } catch (error) {
@@ -114,6 +124,7 @@ export class ParseJobService {
           /MinerU (task failed|task canceled|HTTP 404|HTTP 410)/.test(
             error.message,
           ),
+        error instanceof InvalidExtractionCheckpoint,
       );
       await this.results
         .discardIfUnreferenced(task)

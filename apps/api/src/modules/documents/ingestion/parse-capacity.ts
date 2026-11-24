@@ -10,7 +10,23 @@ export class ParseCapacity {
   ): Promise<T> {
     signal?.throwIfAborted();
     if (this.running < this.limit) this.running++;
-    else await new Promise<void>((resolve) => this.waiting.push(resolve));
+    else
+      await new Promise<void>((resolve, reject) => {
+        const resume = () => {
+          signal?.removeEventListener('abort', cancel);
+          resolve();
+        };
+        const cancel = () => {
+          const index = this.waiting.indexOf(resume);
+          if (index < 0) return;
+          this.waiting.splice(index, 1);
+          signal?.removeEventListener('abort', cancel);
+          reject(signal?.reason ?? new Error('Parsing canceled while waiting'));
+        };
+        this.waiting.push(resume);
+        signal?.addEventListener('abort', cancel, { once: true });
+        if (signal?.aborted) cancel();
+      });
     try {
       signal?.throwIfAborted();
       return await work();

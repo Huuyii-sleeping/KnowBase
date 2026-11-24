@@ -50,7 +50,7 @@ const MARKDOWN_SAMPLE = `# 产品需求文档 v3
 
 主解析器失败时使用 \`officeparser\` 的 AST 转 Markdown 作为兜底，并把解析器名称、警告和失败原因写入文档结果。
 
-> 当前边界：本阶段实现文件和正文的存储、文档业务状态及 CRUD。音视频的真实解析由后续 ingestion worker 接入。
+> 当前边界：支持文档、图片、静态网页和原生表格解析，保存正文与证据，并支持核对采用。
 `;
 
 const MARKDOWN_BY_TITLE: Record<string, string> = {
@@ -239,7 +239,7 @@ const docDeployGuide = makeDoc({
 const store: DocumentMeta[] = [
   docPrd,
   makeDoc({ title: 'Q3 数据复盘.xlsx', status: 'PENDING_REVIEW', parseStatus: 'READY', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileSize: 812 * 1024, category: '运营', team: '增长组', tags: ['复盘'], uploaderId: 'lily', updatedAt: minutesAgo(120), submittedAt: minutesAgo(130) }),
-  makeDoc({ title: '客户访谈录音.mp4', status: 'DRAFT', parseStatus: 'PENDING', mimeType: 'video/mp4', fileSize: 128 * 1024 * 1024, category: '用研', team: '平台组', tags: ['访谈'], updatedAt: minutesAgo(60 * 20) }),
+  makeDoc({ title: '客户访谈纪要.docx', status: 'DRAFT', parseStatus: 'PENDING', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', fileSize: 128 * 1024, category: '用研', team: '平台组', tags: ['访谈'], updatedAt: minutesAgo(60 * 20) }),
   makeDoc({ title: '旧版报价方案.docx', status: 'REJECTED', parseStatus: 'FAILED', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', fileSize: 356 * 1024, version: 2, category: '销售', uploaderId: 'tom', updatedAt: minutesAgo(60 * 72), submittedAt: minutesAgo(60 * 96), reviewedBy: 'admin', reviewedAt: minutesAgo(60 * 80), rejectionReason: '报价口径与最新折扣策略不一致，请更新后重新提交。', parseError: 'officeparser 兜底解析失败：文档包含损坏的嵌入对象。' }),
   docArchitectureReview,
   makeDoc({ title: '新员工入职指南.pdf', status: 'PUBLISHED', parseStatus: 'READY', fileSize: 1.1 * 1024 * 1024, category: '人事', tags: ['入职'], uploaderId: 'hr-anna', updatedAt: minutesAgo(60 * 50), reviewedBy: 'admin', reviewedAt: minutesAgo(60 * 49), submittedAt: minutesAgo(60 * 52) }),

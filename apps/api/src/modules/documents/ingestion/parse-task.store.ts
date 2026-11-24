@@ -27,6 +27,14 @@ export class ParseTaskStore {
     this.fingerprint = createHash('sha256')
       .update(
         JSON.stringify([
+          'evidence-pipeline-v6:xlsx-native-v1:html-native-v1:pdf-tables-v1:documents-only',
+          ...[
+            'XLS_EVIDENCE_PYTHON',
+            'IMAGE_ANALYSIS_MODE',
+            'VISION_BASE_URL',
+            'VISION_MODEL',
+            'VISION_MODEL_REVISION',
+          ].map((key) => config.get(key, '')),
           config.get('DOCUMENT_PARSER', DEFAULT_DOCUMENT_PARSER),
           config.get('MINERU_BASE_URL', DEFAULT_MINERU_BASE_URL),
           config.get('MINERU_TIER', DEFAULT_MINERU_TIER),
@@ -39,13 +47,17 @@ export class ParseTaskStore {
     this.maxAttempts = integerOption(config, 'INGESTION_TASK_MAX_ATTEMPTS', 3);
   }
 
-  async create(manager: EntityManager, document: Document): Promise<string> {
+  async create(
+    manager: EntityManager,
+    document: Document,
+    requiresReview = false,
+  ): Promise<string> {
     await this.invalidate(manager, document.id);
     const id = randomUUID();
     await manager.query(
       `INSERT INTO kh_document_parse_task
-      (id, document_id, expected_version, expected_content_id, content_id, file_name, storage_key, parser_config)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+      (id, document_id, expected_version, expected_content_id, content_id, file_name, storage_key, parser_config, requires_review)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         id,
         document.id,
@@ -55,6 +67,7 @@ export class ParseTaskStore {
         document.fileName,
         document.storageKey,
         this.fingerprint,
+        requiresReview,
       ],
     );
     await this.dispatch(manager, id);
@@ -82,7 +95,7 @@ export class ParseTaskStore {
     const rows: ParseTask[] = await manager.query(
       `WITH changed AS (UPDATE kh_document_parse_task SET state=$2, stage=$2,
       finished_at=clock_timestamp(), updated_at=clock_timestamp(), lease_until=NULL
-      WHERE document_id=$1 AND state IN ('queued','running') RETURNING *) SELECT * FROM changed`,
+      WHERE document_id=$1 AND state IN ('queued','running','needs_review') RETURNING *) SELECT * FROM changed`,
       [documentId, state],
     );
     for (const task of rows) await this.discard(manager, task);
@@ -91,8 +104,8 @@ export class ParseTaskStore {
   async claim(id: string): Promise<ParseTask | undefined> {
     const run = randomUUID();
     const rows = await this.source.query(
-      `WITH changed AS (UPDATE kh_document_parse_task SET state='running', stage='reading', content_id=$4,
-      content_ids=array_append(content_ids,$4::uuid),
+      `WITH changed AS (UPDATE kh_document_parse_task SET state='running', stage=CASE WHEN checkpoint_content_id IS NULL THEN 'reading' ELSE 'restoring' END, content_id=COALESCE(checkpoint_content_id,$4),
+      content_ids=CASE WHEN checkpoint_content_id IS NULL THEN array_append(content_ids,$4::uuid) ELSE content_ids END,
       attempts=attempts+1, run_id=$2, updated_at=clock_timestamp(), lease_until=clock_timestamp()+$3*INTERVAL '1 millisecond'
       WHERE id=$1 AND state='queued' RETURNING *) SELECT * FROM changed`,
       [id, run, this.leaseMs, randomUUID()],
@@ -107,6 +120,16 @@ export class ParseTaskStore {
       [task.id, task.run_id, this.leaseMs],
     );
     if (!rows.length) throw new ParseTaskSuperseded();
+  }
+
+  async checkpoint(task: ParseTask): Promise<void> {
+    const rows = await this.source.query(
+      `UPDATE kh_document_parse_task SET checkpoint_content_id=$3, stage='extracted', updated_at=clock_timestamp()
+       WHERE id=$1 AND run_id=$2 AND state='running' AND content_id=$3 RETURNING id`,
+      [task.id, task.run_id, task.content_id],
+    );
+    if (!rows.length) throw new ParseTaskSuperseded();
+    task.checkpoint_content_id = task.content_id;
   }
 
   async progress(task: ParseTask, stage: string): Promise<void> {
@@ -164,7 +187,11 @@ export class ParseTaskStore {
   }
 
   /** Lock document before task, matching revisions/deletion/finalization. */
-  async retry(task: ParseTask, resetRemote = false): Promise<void> {
+  async retry(
+    task: ParseTask,
+    resetRemote = false,
+    resetCheckpoint = false,
+  ): Promise<void> {
     await this.source.transaction(async (manager) => {
       const document = await manager.findOne(Document, {
         where: { id: task.document_id },
@@ -182,7 +209,6 @@ export class ParseTaskStore {
         return;
       const published = document?.contentId === current.content_id;
       if (published) return;
-      await this.discard(manager, current);
       const stale =
         !document ||
         document.version !== task.expected_version ||
@@ -192,11 +218,17 @@ export class ParseTaskStore {
         : current.attempts >= this.maxAttempts
           ? 'failed'
           : 'queued';
+      const keepCheckpoint =
+        state === 'queued' &&
+        !resetCheckpoint &&
+        Boolean(current.checkpoint_content_id);
+      if (!keepCheckpoint) await this.discard(manager, current);
       await manager.query(
-        `UPDATE kh_document_parse_task SET state=$2, stage=$2, assets='[]'::jsonb,
+        `UPDATE kh_document_parse_task SET state=$2, stage=$2, assets=CASE WHEN $4 THEN assets ELSE '[]'::jsonb END,
+        checkpoint_content_id=CASE WHEN $4 THEN checkpoint_content_id ELSE NULL END,
         lease_until=NULL, run_id=NULL, error_code='PARSE_ATTEMPT_FAILED', remote_task_id=CASE WHEN $3 THEN NULL ELSE remote_task_id END,
         updated_at=clock_timestamp(), finished_at=CASE WHEN $2='queued' THEN NULL ELSE clock_timestamp() END WHERE id=$1`,
-        [task.id, state, resetRemote],
+        [task.id, state, resetRemote, keepCheckpoint],
       );
       if (state === 'queued')
         await this.dispatch(
@@ -204,7 +236,7 @@ export class ParseTaskStore {
           task.id,
           Math.min(30000, 1000 * current.attempts),
         );
-      if (state === 'failed' && document) {
+      if (state === 'failed' && document && !current.requires_review) {
         document.parseStatus = DocumentParseStatus.FAILED;
         document.parseError =
           'Parsing failed after retries. Retry parsing or edit the content.';

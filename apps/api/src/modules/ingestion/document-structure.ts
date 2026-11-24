@@ -1,6 +1,8 @@
 import type { TableData } from './tables/table.types';
 
 export interface SourceLocation {
+  startMs?: number;
+  endMs?: number;
   page?: number;
   slide?: number;
   sheet?: string;
@@ -13,6 +15,8 @@ export interface SourceLocation {
   tableId?: string;
   tableRowStart?: number;
   tableRowEnd?: number;
+  // When an explicit PDF continuation borrows a header, keep its actual source page.
+  tableHeaderPage?: number;
 }
 
 // Offsets are UTF-16 positions in the stored Markdown, never binary file offsets.

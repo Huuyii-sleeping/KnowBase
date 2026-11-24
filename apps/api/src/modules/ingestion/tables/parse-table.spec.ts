@@ -81,7 +81,6 @@ describe('canonical table extraction', () => {
 
   it.each([
     '<table></table>',
-    '<table><tr><td rowspan="0">A</td></tr></table>',
     '<table><tr><td colspan="257">A</td></tr></table>',
     '<table><tr><td rowspan="2">A</td></tr></table>',
     '<table><thead><tr><th rowspan="2">A</th></tr></thead><tbody><tr></tr></tbody></table>',
@@ -109,5 +108,35 @@ describe('canonical table extraction', () => {
       '</table>';
     expect(() => parseTable(sparse)).toThrow('grid budget');
     expect(() => parseTable('x'.repeat(4194305))).toThrow('budget');
+  });
+
+  it('resolves zero row spans only within their own group and retains canonical anchors', () => {
+    const table = parseTable(
+      '<table><tbody><tr><td rowspan="0">杭州</td><td>A</td></tr><tr><td>B</td></tr></tbody><tbody><tr><td rowspan="0">苏州</td><td>C</td></tr><tr><td>D</td></tr></tbody></table>',
+    );
+    expect(table.cells.filter((cell) => cell.column === 1)).toEqual([
+      expect.objectContaining({ row: 1, text: '杭州', rowSpan: 2 }),
+      expect.objectContaining({ row: 3, text: '苏州', rowSpan: 2 }),
+    ]);
+    expect(tableSearchView(table).rows.map((row) => row.text)).toEqual([
+      '| 杭州 | A |',
+      '| 杭州 | B |',
+      '| 苏州 | C |',
+      '| 苏州 | D |',
+    ]);
+    expect(
+      parseTable('<table><tr><td rowspan="0">A</td></tr></table>').cells[0]
+        .rowSpan,
+    ).toBe(1);
+    expect(() =>
+      parseTable(
+        '<table><tr><td rowspan="0" colspan="256">x</td></tr>' +
+          '<tr></tr>'.repeat(999) +
+          '</table>',
+      ),
+    ).toThrow('budget');
+    expect(() =>
+      parseTable('<table><tr><td colspan="0">x</td></tr></table>'),
+    ).toThrow('span');
   });
 });

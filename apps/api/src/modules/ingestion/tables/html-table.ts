@@ -25,7 +25,6 @@ function text(node: HtmlNode): string {
 
 function span(value: string | undefined, maximum: number): number {
   if (value === undefined) return 1;
-  // rowspan=0 means "to end of row group"; reject until that semantic is supported.
   if (!/^[1-9]\d*$/.test(value) || Number(value) > maximum)
     throw new Error('Unsupported or oversized HTML table span');
   return Number(value);
@@ -105,7 +104,11 @@ export function htmlTable(textSource: string) {
     let column = 0;
     for (const node of children) {
       while (occupied.has(index * TABLE_LIMITS.maxColumns + column)) column++;
-      const rowSpan = span(node.attribs.rowspan, TABLE_LIMITS.maxRows);
+      // HTML zero rowspan stops at the current row group, never the next tbody.
+      const rowSpan =
+        node.attribs.rowspan === '0'
+          ? groupEnds[index] - index
+          : span(node.attribs.rowspan, TABLE_LIMITS.maxRows);
       const columnSpan = span(node.attribs.colspan, TABLE_LIMITS.maxColumns);
       if (
         index + rowSpan > rows.length ||

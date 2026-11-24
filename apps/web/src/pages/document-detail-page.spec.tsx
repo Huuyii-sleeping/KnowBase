@@ -101,3 +101,25 @@ describe('document detail parsing state', () => {
     expect(screen.queryByRole('button', { name: '重新尝试' })).toBeNull();
   });
 });
+
+it('shows the review state for a saved initial candidate instead of a parser failure', async () => {
+  const candidate = savedDocument('FAILED');
+  candidate.content = undefined;
+  candidate.ingestion = {
+    canManage: true,
+    task: {
+      id: 'task',
+      state: 'needs_review',
+      stage: 'needs_review',
+      attempts: 1,
+      updatedAt: '2026-11-23T00:00:00Z',
+      hasDraft: true,
+    },
+  };
+  vi.mocked(documentsApi.detail).mockResolvedValue(candidate);
+  openDocument();
+  await screen.findByText(
+    '解析结果已保存为独立草稿，完成核对并采用后即可提交审核。',
+  );
+  expect(screen.getByRole('button', { name: '核对解析草稿' })).toBeDefined();
+});

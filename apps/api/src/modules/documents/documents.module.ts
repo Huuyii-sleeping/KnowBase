@@ -1,3 +1,19 @@
+import { SupplementaryParsers } from './parsing/supplementary-parsers';
+import { ParsedDocumentEnricher } from './parsing/parsed-document.enricher';
+import { DocumentArtifactVerifier } from './evidence/document-artifact-verifier';
+import { ImageSemanticEnricher } from './parsing/vision/image-semantic-enricher';
+import { VisionDescriptionAdapter } from './parsing/vision/vision-description.adapter';
+import { XlsEvidenceExtractor } from './parsing/xlsx/xls-evidence.extractor';
+import { WebImportService } from './web-import.service';
+import { WebSnapshotFetcher } from './parsing/web/web-snapshot.fetcher';
+import { WebSnapshotParser } from './parsing/web/web-snapshot.parser';
+import { OrphanAssetCleanupService } from './ingestion/orphan-asset-cleanup.service';
+import { DocumentEvidenceController } from './evidence/document-evidence.controller';
+import { DocumentEvidenceQueryService } from './evidence/document-evidence-query.service';
+import { ParseDraftService } from './ingestion/parse-draft.service';
+import { EVIDENCE_MODEL, EvidenceSchema } from './evidence/evidence.schema';
+import { DocumentEvidenceStore } from './evidence/document-evidence.store';
+import { XlsxEvidenceExtractor } from './parsing/xlsx/xlsx-evidence.extractor';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -47,6 +63,7 @@ import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
     TypeOrmModule.forFeature([Document]),
     MongooseModule.forFeature([
       { name: DocumentContent.name, schema: DocumentContentSchema },
+      { name: EVIDENCE_MODEL, schema: EvidenceSchema },
     ]),
     StorageModule,
     MessageQueueModule,
@@ -55,10 +72,17 @@ import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
     AuthorizationModule,
     IngestionArtifactsModule,
   ],
-  controllers: [DocumentsController],
+  controllers: [
+    DocumentsController,
+    DocumentEvidenceController,
+  ],
   providers: [
     DocumentsService,
     DocumentContentStore,
+    DocumentEvidenceStore,
+    DocumentArtifactVerifier,
+    DocumentEvidenceQueryService,
+    ParseDraftService,
     DocumentQueryService,
     DocumentCommandService,
     DocumentRevisionService,
@@ -69,6 +93,8 @@ import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
     DocumentPipelinePublisher,
     DocumentPublishService,
     FileParserService,
+    SupplementaryParsers,
+    ParsedDocumentEnricher,
     MineruParser,
     ParseTaskStore,
     ParseResultService,
@@ -76,18 +102,27 @@ import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
     ParseSubmissionService,
     ParseWorkerService,
     ParseMaintenanceService,
+    OrphanAssetCleanupService,
     ParseTaskCleanupStore,
     AssetUploaderService,
     TextParser,
     MarkdownParser,
     PdfParser,
     XlsxParser,
+    XlsxEvidenceExtractor,
+    XlsEvidenceExtractor,
+    WebImportService,
+    WebSnapshotFetcher,
+    WebSnapshotParser,
+    ImageSemanticEnricher,
+    VisionDescriptionAdapter,
     DocxParser,
     PptxParser,
     OfficeParserFallback,
   ],
   exports: [
     DocumentContentStore,
+    DocumentEvidenceStore,
     DocumentQueryService,
     DocumentSourceCleanupService,
     DocumentAssetsCleanupService,

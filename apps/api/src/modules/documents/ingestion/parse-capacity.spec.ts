@@ -2,6 +2,38 @@ import { describe, expect, it } from 'vitest';
 import { ParseCapacity } from './parse-capacity';
 
 describe('Parser capacity', () => {
+  it('rejects canceled queued callers immediately while the active long parse keeps its slot', async () => {
+    const limiter = new ParseCapacity(1);
+    let release!: () => void;
+    const active = limiter.run(
+      undefined,
+      () =>
+        new Promise<void>((resolve) => {
+          release = resolve;
+        }),
+    );
+    const controller = new AbortController();
+    const queued = limiter.run(controller.signal, async () => {
+      throw new Error('canceled caller ran');
+    });
+    const rejection = expect(queued).rejects.toThrow('queued canceled');
+    controller.abort(new Error('queued canceled'));
+    await rejection;
+    const order: number[] = [];
+    const next = limiter.run(undefined, async () => {
+      order.push(1);
+    });
+    const last = limiter.run(undefined, async () => {
+      order.push(2);
+    });
+    expect(order).toEqual([]);
+    release();
+    await Promise.all([active, next, last]);
+    expect(order).toEqual([1, 2]);
+    await expect(limiter.run(undefined, async () => 'released')).resolves.toBe(
+      'released',
+    );
+  });
   it('bounds overlapping documents and releases capacity after failure or cancellation', async () => {
     const limiter = new ParseCapacity(1);
     let release!: () => void;

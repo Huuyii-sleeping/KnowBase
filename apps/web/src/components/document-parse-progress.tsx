@@ -11,6 +11,9 @@ const stages: Record<string, string> = {
   'waiting-parser': '等待解析资源',
   parsing: '识别文档',
   normalizing: '整理正文与图片',
+  checkpointing: '校验并保存提取检查点',
+  restoring: '从已保存的提取结果恢复',
+  extracted: '提取结果已保存',
   saving: '保存解析结果',
   completed: '解析完成',
   needs_review: '正文需要人工确认',
@@ -79,7 +82,7 @@ export function DocumentParseProgress({
       )}
       {!active && document.ingestion.canManage && (
         <p className="mt-2 text-muted-foreground">
-          重新解析会替换当前正文，并需要重新审核发布。
+          重新解析将生成独立草稿，核对采用后再替换正文并重新审核发布。
         </p>
       )}
       {error && (

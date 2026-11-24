@@ -24,6 +24,8 @@ export interface ParseTask {
   run_id: string | null;
   lease_until: Date | null;
   remote_task_id: string | null;
+  checkpoint_content_id?: string | null;
+  requires_review?: boolean;
   assets: ParsedAsset[];
   error_code: string | null;
   created_at: Date;
@@ -36,3 +38,5 @@ export class ParseTaskSuperseded extends Error {
     super('Parse task no longer owns the document');
   }
 }
+
+export class InvalidExtractionCheckpoint extends Error {}

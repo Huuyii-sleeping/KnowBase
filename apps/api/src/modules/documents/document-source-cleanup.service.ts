@@ -21,10 +21,10 @@ export class DocumentSourceCleanupService {
     if (!(await this.generations.isDeleted(documentId, 'kg'))) return;
     // Keep content references until all asset removals succeed, so retries can
     // still discover the same keys after a storage failure.
-    await this.assets.cleanup(
-      documentId,
-      await this.content.assetKeys(documentId),
-    );
+    await this.assets.cleanup(documentId, [
+      ...(await this.content.assetKeys(documentId)),
+      ...(await this.storage.assetKeys(documentId)),
+    ]);
     await this.chunks.deleteDocument(documentId);
     await this.embeddings.deleteDocument(documentId);
     await this.content.deleteByDocumentId(documentId);

@@ -40,7 +40,17 @@ const composeArgs = [
 ];
 const compose = (...args) =>
   run('docker', [...composeArgs, ...args], { timeout: 120000 });
-let connection, artifacts, cache, chunkModel, cacheModel, content;
+let mongoUri,
+  connection,
+  artifacts,
+  cache,
+  chunkModel,
+  cacheModel,
+  content,
+  evidence,
+  evidenceModel,
+  storage,
+  assetModel;
 before(
   async () => {
     await compose(
@@ -53,11 +63,8 @@ before(
       process.env.DELIVERY_TEST_PULL_POLICY || 'missing',
     );
     const { stdout } = await compose('port', 'mongo', '27017');
-    connection = await mongoose
-      .createConnection(
-        `mongodb://127.0.0.1:${stdout.trim().split(':').pop()}/ingestion`,
-      )
-      .asPromise();
+    mongoUri = `mongodb://127.0.0.1:${stdout.trim().split(':').pop()}/ingestion`;
+    connection = await mongoose.createConnection(mongoUri).asPromise();
     chunkModel = connection.model(
       schemas.CHUNK_ARTIFACT_MODEL,
       schemas.ChunkArtifactSchema,
@@ -78,7 +85,37 @@ before(
     const config = new ConfigService();
     artifacts = new ChunkArtifactStore(chunkModel, config);
     cache = new EmbeddingCacheStore(cacheModel, config);
-    content = new DocumentContentStore(contentModel);
+    const { EVIDENCE_MODEL, EvidenceSchema } = load(
+      'documents/evidence/evidence.schema.js',
+    );
+    const { DocumentEvidenceStore } = load(
+      'documents/evidence/document-evidence.store.js',
+    );
+    evidenceModel = connection.model(EVIDENCE_MODEL, EvidenceSchema);
+    await evidenceModel.init();
+    evidence = new DocumentEvidenceStore(evidenceModel);
+    content = new DocumentContentStore(contentModel, evidence);
+    const { AssetRegistrySchema, ASSET_REGISTRY_MODEL } = load(
+      'storage/asset-registry.schema.js',
+    );
+    const { StorageService } = load('storage/storage.service.js');
+    assetModel = connection.model(ASSET_REGISTRY_MODEL, AssetRegistrySchema);
+    await assetModel.init();
+    const { stdout: storagePort } = await compose(
+      'port',
+      'object-storage',
+      '9000',
+    );
+    storage = new StorageService(
+      new ConfigService({
+        RUSTFS_ENDPOINT: '127.0.0.1',
+        RUSTFS_PORT: Number(storagePort.trim().split(':').pop()),
+        RUSTFS_ACCESS_KEY: 'ingestion-test',
+        RUSTFS_SECRET_KEY: 'ingestion-test-password',
+        RUSTFS_BUCKET: 'evidence-test',
+      }),
+      assetModel,
+    );
   },
   { timeout: 120000 },
 );
@@ -264,6 +301,7 @@ test('document deletion keeps asset references until storage removal succeeds', 
   let fail = true;
   const removed = [];
   const storage = {
+    assetKeys: async () => [],
     removeObject: async (key) => {
       if (fail) throw new Error('storage offline');
       removed.push(key);
@@ -308,4 +346,222 @@ test('manual Mongo index migration is repeatable and matches TTL requirements', 
     assert.ok(indexes.some((index) => index.expireAfterSeconds === 0));
     assert.ok(indexes.some((index) => index.unique));
   }
+});
+
+test('native XLSX evidence preserves formulas, zero and merge references through Mongo and detects missing or changed records', async () => {
+  const ExcelJS = require('exceljs');
+  const { XlsxEvidenceExtractor } = load(
+    'documents/parsing/xlsx/xlsx-evidence.extractor.js',
+  );
+  const workbook = new ExcelJS.Workbook();
+  workbook.properties.date1904 = true;
+  const sheet = workbook.addWorksheet('预算');
+  sheet.addRows([
+    ['分类', '值'],
+    ['研发', 0],
+    ['', { formula: 'B2+12', result: 12 }],
+    ['日期', new Date('2026-11-23T00:00:00Z')],
+  ]);
+  sheet.mergeCells('A2:A3');
+  const bytes = Buffer.from(await workbook.xlsx.writeBuffer());
+  const native = await new XlsxEvidenceExtractor().extract(bytes);
+  const input = {
+    contentId: 'xlsx-evidence',
+    documentId: 'xlsx-doc',
+    version: 1,
+    markdown: '预算',
+    parser: 'mineru',
+    warnings: [],
+    assets: [],
+    evidence: native.evidence,
+    ready: true,
+  };
+  await content.create(input);
+  await content.verifyEvidence(input.contentId);
+  await evidence.save(input.documentId, input.contentId, native.evidence);
+  await content.verifyEvidence(input.contentId);
+  const page = await evidence.page(input.documentId, input.contentId, 1, 2);
+  assert.equal(page.length, 2);
+  assert.equal(page[0].source.cellRange, 'A2:B2');
+  assert.equal(page[0].data.cells[1].value, 0);
+  assert.equal(page[1].data.cells[0].coveredBy, 'A2');
+  assert.equal(page[1].data.cells[1].cachedResult, 12);
+  assert.equal(page[1].data.date1904, true);
+  const original = native.evidence[0];
+  await evidenceModel.updateOne(
+    { contentId: input.contentId, id: original.id },
+    { $set: { text: '篡改' } },
+  );
+  await assert.rejects(content.verifyEvidence(input.contentId), /integrity/);
+  await evidenceModel.updateOne(
+    { contentId: input.contentId, id: original.id },
+    { $set: { text: original.text } },
+  );
+  await evidenceModel.deleteOne({
+    contentId: input.contentId,
+    id: original.id,
+  });
+  await assert.rejects(content.verifyEvidence(input.contentId), /incomplete/);
+  await content.deleteByContentId(input.contentId);
+  assert.equal(
+    await evidenceModel.countDocuments({ contentId: input.contentId }),
+    0,
+  );
+});
+
+test('real object storage preserves hashes and MIME, supports byte seeks, and keeps ownership after a failed write', async () => {
+  const { createHash } = require('node:crypto');
+  const { AssetUploaderService } = load(
+    'documents/parsing/asset-uploader.service.js',
+  );
+  const { DocumentAssetsCleanupService } = load(
+    'documents/document-assets-cleanup.service.js',
+  );
+  const uploader = new AssetUploaderService(
+    storage,
+    new DocumentAssetsCleanupService(storage),
+  );
+  const bytes = Buffer.from('audio/video source 0123456789');
+  const asset = await uploader.upload('resource-doc', {
+    fileName: 'clip.wav',
+    contentType: 'audio/wav',
+    data: bytes,
+  });
+  assert.equal(asset.sha256, createHash('sha256').update(bytes).digest('hex'));
+  assert.equal(asset.bytes, bytes.length);
+  assert.equal(
+    (await storage.statObject(asset.objectKey)).metaData['content-type'],
+    'audio/wav',
+  );
+  const read = async (stream) => {
+    const parts = [];
+    for await (const part of stream) parts.push(part);
+    return Buffer.concat(parts);
+  };
+  assert.deepEqual(await read(await storage.getObject(asset.objectKey)), bytes);
+  assert.deepEqual(
+    await read(await storage.getPartialObject(asset.objectKey, 3, 7)),
+    bytes.subarray(3, 10),
+  );
+  await content.create({
+    contentId: 'resource-body',
+    documentId: 'resource-doc',
+    version: 1,
+    markdown: 'audio',
+    parser: 'test',
+    warnings: [],
+    assets: [asset],
+    evidence: [
+      {
+        schema: 'evidence-v1',
+        id: 'segment-1',
+        kind: 'audio_segment',
+        source: { startMs: 100, endMs: 500 },
+        objectKeys: [asset.objectKey],
+        text: 'hello',
+        producer: 'fixture',
+        data: {},
+      },
+    ],
+    ready: true,
+  });
+  const saved = await content.findByContentId('resource-body');
+  assert.equal(saved.assets[0].sha256, asset.sha256);
+  assert.equal(saved.assets[0].bytes, bytes.length);
+  assert.equal(saved.assets[0].contentType, 'audio/wav');
+  await content.verifyEvidence('resource-body');
+  assert.deepEqual(await storage.assetKeys('resource-doc'), [asset.objectKey]);
+  await storage.removeObject(asset.objectKey);
+  assert.deepEqual(await storage.assetKeys('resource-doc'), []);
+  await assert.rejects(storage.statObject(asset.objectKey));
+  const write = storage.putObject.bind(storage);
+  storage.putObject = async () => {
+    throw new Error('write failed');
+  };
+  try {
+    await assert.rejects(
+      storage.putAsset({
+        documentId: 'failed-resource',
+        fileName: 'image.png',
+        contentType: 'image/png',
+        data: bytes,
+      }),
+      /write failed/,
+    );
+  } finally {
+    storage.putObject = write;
+  }
+  const [reserved] = await storage.assetKeys('failed-resource');
+  assert.ok(reserved);
+  await storage.removeObject(reserved);
+  assert.deepEqual(await storage.assetKeys('failed-resource'), []);
+  await content.deleteByDocumentId('resource-doc');
+});
+
+test('an interrupted body write leaves independently cleanable evidence and never exposes an adopted body', async () => {
+  const bodyModel = connection.model('DocumentContent');
+  const brokenModel = class {
+    async save() {
+      throw new Error('body write failed');
+    }
+  };
+  const broken = new DocumentContentStore(brokenModel, evidence);
+  await assert.rejects(
+    broken.create({
+      contentId: 'broken-body',
+      documentId: 'broken-doc',
+      version: 1,
+      markdown: 'body',
+      parser: 'fixture',
+      warnings: [],
+      assets: [],
+      evidence: [
+        {
+          schema: 'evidence-v1',
+          id: 'image-1',
+          kind: 'image',
+          source: { page: 2 },
+          objectKeys: [],
+          text: 'test',
+          producer: 'fixture',
+          data: {},
+        },
+      ],
+    }),
+    /body write failed/,
+  );
+  assert.equal(await bodyModel.findOne({ contentId: 'broken-body' }), null);
+  assert.equal(
+    await evidenceModel.countDocuments({ contentId: 'broken-body' }),
+    1,
+  );
+  await content.deleteByContentId('broken-body');
+  assert.equal(
+    await evidenceModel.countDocuments({ contentId: 'broken-body' }),
+    0,
+  );
+});
+
+test('evidence and ownership index migrations are repeatable', async () => {
+  for (let i = 0; i < 2; i++)
+    await compose(
+      'exec',
+      '-T',
+      'mongo',
+      'mongosh',
+      '--quiet',
+      '/schema/migrations/004_document_evidence.js',
+    );
+  const target = connection.useDb('knowbase');
+  assert.equal(
+    (await target.collection('document_evidence').indexes()).filter(
+      (index) => index.unique,
+    ).length,
+    2,
+  );
+  assert.ok(
+    (await target.collection('document_assets').indexes()).some(
+      (index) => index.unique,
+    ),
+  );
 });

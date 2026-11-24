@@ -2,6 +2,7 @@ import {
   DocumentBlock,
   SourceSection,
 } from '../../ingestion/document-structure';
+import { EvidenceUnit } from '../evidence/evidence.types';
 
 export interface ParsedAsset {
   type: 'image' | 'attachment';
@@ -9,6 +10,8 @@ export interface ParsedAsset {
   url: string;
   alt?: string;
   contentType?: string;
+  sha256?: string;
+  bytes?: number;
 }
 
 export interface ParsedDocument {
@@ -23,11 +26,17 @@ export interface ParsedDocument {
   parseStrategy?: string;
   quality?: ParseQuality;
   provenance?: Record<string, string>;
+  evidence?: EvidenceUnit[];
 }
 
 export interface ParseQuality {
   status: 'accepted' | 'needs_review' | 'failed';
-  issues: Array<{ code: string; message: string; page?: number }>;
+  issues: Array<{
+    code: string;
+    message: string;
+    page?: number;
+    evidenceId?: string;
+  }>;
 }
 
 export interface ParseExecution {

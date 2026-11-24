@@ -1,7 +1,13 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import type { DocumentContentDocument } from '../documents/schemas/document-content.schema';
+import { ForbiddenException, Injectable, Optional } from '@nestjs/common';
 import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Document, DocumentStatus } from '../documents/entities/document.entity';
+import {
+  Document,
+  DocumentStatus,
+} from '../documents/entities/document.entity';
 import { AuthUser } from '../auth/auth.types';
 
 export enum DocumentVisibility {
@@ -21,6 +27,9 @@ export class DocumentAccessService {
   constructor(
     @InjectRepository(Document)
     private readonly documentRepository: Repository<Document>,
+    @Optional()
+    @InjectModel('DocumentContent')
+    private readonly content?: Model<DocumentContentDocument>,
   ) {}
 
   canView(document: Document, user: AuthUser): boolean {
@@ -33,30 +42,42 @@ export class DocumentAccessService {
     if (document.uploaderId === user.id) return true;
     if (policy.userIds.includes(user.id)) return true;
     if (policy.visibility === 'PUBLIC') return true;
-    return policy.visibility === 'TEAM'
-      && Boolean(user.team)
-      && (policy.teams.length === 0 || policy.teams.includes(user.team!))
-      && document.team === user.team;
+    return (
+      policy.visibility === 'TEAM' &&
+      Boolean(user.team) &&
+      (policy.teams.length === 0 || policy.teams.includes(user.team!)) &&
+      document.team === user.team
+    );
   }
 
   assertCanView(document: Document, user: AuthUser): void {
     if (!this.canView(document, user)) {
-      throw new ForbiddenException('document is not accessible to current user');
+      throw new ForbiddenException(
+        'document is not accessible to current user',
+      );
     }
   }
 
   assertCanEdit(document: Document, user: AuthUser): void {
     if (user.role !== 'ADMIN' && document.uploaderId !== user.id) {
-      throw new ForbiddenException('only the uploader or an admin can edit this document');
+      throw new ForbiddenException(
+        'only the uploader or an admin can edit this document',
+      );
     }
   }
 
   assertCanReview(user: AuthUser): void {
-    if (user.role !== 'ADMIN') throw new ForbiddenException('admin role required');
+    if (user.role !== 'ADMIN')
+      throw new ForbiddenException('admin role required');
   }
 
-  async assertCanViewStorageKey(storageKey: string, user: AuthUser): Promise<void> {
-    const document = await this.documentRepository.findOne({ where: { storageKey } });
+  async assertCanViewStorageKey(
+    storageKey: string,
+    user: AuthUser,
+  ): Promise<void> {
+    const document = await this.documentRepository.findOne({
+      where: { storageKey },
+    });
     if (document) {
       this.assertCanView(document, user);
       return;
@@ -67,6 +88,17 @@ export class DocumentAccessService {
       : null;
     if (!byId) throw new ForbiddenException('object is not accessible');
     this.assertCanView(byId, user);
+    if (user.role !== 'ADMIN' && byId.uploaderId !== user.id) {
+      const adopted = await this.content?.exists({
+        documentId: byId.id,
+        contentId: byId.contentId,
+        'assets.objectKey': storageKey,
+      });
+      if (!adopted)
+        throw new ForbiddenException(
+          'draft or historical object is not accessible',
+        );
+    }
   }
 
   applyVisibilityFilter(
@@ -76,39 +108,75 @@ export class DocumentAccessService {
   ): void {
     if (user.role === 'ADMIN') return;
 
-    builder.andWhere(new Brackets((where) => {
-      where.where(`${alias}.uploader_id = :accessUserId`, { accessUserId: user.id })
-        .orWhere(new Brackets((published) => {
-          published.where(`${alias}.status = :publishedStatus`, {
-            publishedStatus: DocumentStatus.PUBLISHED,
-          }).andWhere(new Brackets((policy) => {
-            policy.where(`${alias}.permissions->>'visibility' = 'PUBLIC'`)
-              .orWhere(`${alias}.permissions->'userIds' ? :accessUserId`, {
-                accessUserId: user.id,
-              })
-              .orWhere(new Brackets((team) => {
-                team.where(`${alias}.permissions->>'visibility' = 'TEAM'`)
-                  .andWhere(`${alias}.team = :accessTeam`, { accessTeam: user.team })
-                  .andWhere(':accessTeam IS NOT NULL')
-                  .andWhere(new Brackets((teams) => {
-                    teams.where(`COALESCE(jsonb_array_length(${alias}.permissions->'teams'), 0) = 0`)
-                      .orWhere(`${alias}.permissions->'teams' ? :accessTeam`, {
-                        accessTeam: user.team ?? '',
-                      });
-                  }));
-              }));
-          }));
-        }));
-    }));
+    builder.andWhere(
+      new Brackets((where) => {
+        where
+          .where(`${alias}.uploader_id = :accessUserId`, {
+            accessUserId: user.id,
+          })
+          .orWhere(
+            new Brackets((published) => {
+              published
+                .where(`${alias}.status = :publishedStatus`, {
+                  publishedStatus: DocumentStatus.PUBLISHED,
+                })
+                .andWhere(
+                  new Brackets((policy) => {
+                    policy
+                      .where(`${alias}.permissions->>'visibility' = 'PUBLIC'`)
+                      .orWhere(
+                        `${alias}.permissions->'userIds' ? :accessUserId`,
+                        {
+                          accessUserId: user.id,
+                        },
+                      )
+                      .orWhere(
+                        new Brackets((team) => {
+                          team
+                            .where(
+                              `${alias}.permissions->>'visibility' = 'TEAM'`,
+                            )
+                            .andWhere(`${alias}.team = :accessTeam`, {
+                              accessTeam: user.team,
+                            })
+                            .andWhere(':accessTeam IS NOT NULL')
+                            .andWhere(
+                              new Brackets((teams) => {
+                                teams
+                                  .where(
+                                    `COALESCE(jsonb_array_length(${alias}.permissions->'teams'), 0) = 0`,
+                                  )
+                                  .orWhere(
+                                    `${alias}.permissions->'teams' ? :accessTeam`,
+                                    {
+                                      accessTeam: user.team ?? '',
+                                    },
+                                  );
+                              }),
+                            );
+                        }),
+                      );
+                  }),
+                );
+            }),
+          );
+      }),
+    );
   }
 
-  policy(document: Document): { visibility: DocumentVisibility; userIds: string[]; teams: string[] } {
-    const raw = document.permissions as DocumentPermissionShape | null | undefined;
-    const visibility: DocumentVisibility = raw?.visibility === DocumentVisibility.PUBLIC
-      ? DocumentVisibility.PUBLIC
-      : raw?.visibility === DocumentVisibility.TEAM
-        ? DocumentVisibility.TEAM
-        : DocumentVisibility.PRIVATE;
+  policy(document: Document): {
+    visibility: DocumentVisibility;
+    userIds: string[];
+    teams: string[];
+  } {
+    const raw = document.permissions as
+      DocumentPermissionShape | null | undefined;
+    const visibility: DocumentVisibility =
+      raw?.visibility === DocumentVisibility.PUBLIC
+        ? DocumentVisibility.PUBLIC
+        : raw?.visibility === DocumentVisibility.TEAM
+          ? DocumentVisibility.TEAM
+          : DocumentVisibility.PRIVATE;
     return {
       visibility,
       userIds: this.stringArray(raw?.userIds),
@@ -117,7 +185,9 @@ export class DocumentAccessService {
   }
 
   objectDocumentId(storageKey: string): string | null {
-    const match = storageKey.match(/^(?:original|assets)\/([0-9a-f-]{36})(?:\/|$)/i);
+    const match = storageKey.match(
+      /^(?:original|assets)\/([0-9a-f-]{36})(?:\/|$)/i,
+    );
     return match?.[1] ?? null;
   }
 

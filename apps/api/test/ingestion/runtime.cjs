@@ -1,7 +1,7 @@
 const path = require('node:path');
 const load = (name) =>
   require(path.resolve(__dirname, '../../dist/src/modules', name));
-function parserRuntime(options = {}) {
+function parserRuntime(options = {}, assetUploader) {
   const { FileParserService } = load(
     'documents/parsing/file-parser.service.js',
   );
@@ -21,10 +21,14 @@ function parserRuntime(options = {}) {
   const { ConfigService } = require('@nestjs/config');
   const { MineruParser } = load('documents/parsing/mineru/mineru.parser.js');
   const config = new ConfigService({ DOCUMENT_PARSER: 'native', ...options });
+  const mineru = new MineruParser(config);
+  const vision = new (load(
+    'documents/parsing/vision/vision-description.adapter.js',
+  ).VisionDescriptionAdapter)(config);
   const parser = new FileParserService(
     ...parsers,
     new OfficeParserFallback(),
-    {
+    assetUploader || {
       upload: async (documentId, input) => {
         const asset = {
           type: input.type || 'attachment',
@@ -39,8 +43,29 @@ function parserRuntime(options = {}) {
         discarded.push(...assets);
       },
     },
-    new MineruParser(config),
+    mineru,
     config,
+    new (load(
+      'documents/parsing/supplementary-parsers.js',
+    ).SupplementaryParsers)(
+      new (load(
+        'documents/parsing/web/web-snapshot.parser.js',
+      ).WebSnapshotParser)(mineru),
+      config,
+    ),
+    new (load(
+      'documents/parsing/parsed-document.enricher.js',
+    ).ParsedDocumentEnricher)(
+      new (load(
+        'documents/parsing/xlsx/xlsx-evidence.extractor.js',
+      ).XlsxEvidenceExtractor)(),
+      new (load(
+        'documents/parsing/xlsx/xls-evidence.extractor.js',
+      ).XlsEvidenceExtractor)(config),
+      new (load(
+        'documents/parsing/vision/image-semantic-enricher.js',
+      ).ImageSemanticEnricher)(vision),
+    ),
   );
   return { parser, uploads, discarded };
 }

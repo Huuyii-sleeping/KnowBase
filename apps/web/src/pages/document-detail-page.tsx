@@ -1,3 +1,5 @@
+import { DocumentParseReview } from '@/components/document-parse-review';
+import { DocumentEvidencePanel } from '@/components/document-evidence-panel';
 import { RequestFailure } from '@/components/request-failure';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -65,7 +67,12 @@ export function DocumentDetailPage() {
   }, [load]);
 
   useEffect(() => {
-    if (!id || doc?.parseStatus !== 'PENDING' || !doc.ingestion) return;
+    if (
+      !id ||
+      !doc?.ingestion ||
+      !['queued', 'running'].includes(doc.ingestion.task?.state ?? '')
+    )
+      return;
     let stopped = false;
     let inFlight = false;
     const timer = setInterval(async () => {
@@ -84,7 +91,7 @@ export function DocumentDetailPage() {
       stopped = true;
       clearInterval(timer);
     };
-  }, [id, doc?.parseStatus, Boolean(doc?.ingestion)]);
+  }, [id, doc?.ingestion?.task?.state]);
 
   const act = async (fn: () => Promise<unknown>, success: string) => {
     setActing(true);
@@ -150,7 +157,11 @@ export function DocumentDetailPage() {
           <StatusBadge status={doc.status} />
           <ParseBadge
             status={doc.parseStatus}
-            needsReview={doc.content?.quality?.status === 'needs_review'}
+            needsReview={
+              doc.parseStatus !== 'READY' &&
+              (doc.content?.quality?.status === 'needs_review' ||
+                doc.ingestion?.task?.state === 'needs_review')
+            }
           />
         </h1>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -180,6 +191,14 @@ export function DocumentDetailPage() {
         {doc.ingestion && (
           <div className="col-span-full">
             <DocumentParseProgress document={doc} onRefresh={load} />
+            <DocumentParseReview
+              key={doc.ingestion?.task?.id}
+              document={doc}
+              onRefresh={load}
+            />
+            {doc.content?.evidenceManifest && (
+              <DocumentEvidencePanel document={doc} />
+            )}
           </div>
         )}
         <div className="rounded-lg border border-border bg-background">
@@ -194,6 +213,10 @@ export function DocumentDetailPage() {
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {doc.content.markdown}
               </ReactMarkdown>
+            </div>
+          ) : doc.ingestion?.task?.state === 'needs_review' ? (
+            <div className="mx-7 my-5 rounded-md bg-amber-50 px-4 py-3.5 text-[13px] text-amber-900">
+              解析结果已保存为独立草稿，完成核对并采用后即可提交审核。
             </div>
           ) : doc.parseStatus === 'FAILED' ? (
             <div className="mx-7 my-5 rounded-md bg-red-50 px-4 py-3.5 text-[13px] text-red-700">

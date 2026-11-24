@@ -64,6 +64,56 @@ function context() {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('MinerU v4 adapter', () => {
+  it('uses an immediately preceding numbered table title for continuation without relabeling the source page', async () => {
+    const result = await mineruResult(
+      payload({
+        pages: [
+          {
+            page_idx: 0,
+            blocks: [
+              {
+                type: 'paragraph_title',
+                content: 'Table 7. Revised settlement',
+              },
+              {
+                type: 'table',
+                content:
+                  '| Stage | Amount | Status |\n| --- | --- | --- |\n| Advance | 175000 | Cleared |',
+              },
+            ],
+          },
+          {
+            page_idx: 1,
+            blocks: [
+              {
+                type: 'paragraph_title',
+                content: 'Table 7. Revised settlement (continued)',
+              },
+              {
+                type: 'table',
+                content:
+                  '| Handover | 250000 | Not cleared |\n| --- | --- | --- |\n| Adjustment | -3500 | Recorded |',
+              },
+            ],
+          },
+        ],
+      }),
+      'continued.pdf',
+      context(),
+      10,
+    );
+    expect(result.blocks?.filter((block) => block.table).at(-1)).toMatchObject({
+      source: { page: 2, tableHeaderPage: 1 },
+      table: { rowCount: 3 },
+    });
+    expect(result.markdown).toContain('| Handover | 250000 | Not cleared |');
+    expect(result.ready).toBe(false);
+    expect(
+      result.quality?.issues.some(
+        (issue) => issue.code === 'PDF_TABLE_HEADER_CARRIED',
+      ),
+    ).toBe(true);
+  });
   it.each(['old.doc', 'old.xls', 'old.ppt', 'page.html', 'page.htm'])(
     'uses Flash for %s even when PDF tier is advanced',
     async (fileName) => {
@@ -176,6 +226,17 @@ describe('MinerU v4 adapter', () => {
       ready: true,
       provenance: { version: '4.2.3', mode: 'ocr' },
     });
+    expect(result.evidence).toEqual([
+      expect.objectContaining({
+        kind: 'image',
+        source: expect.objectContaining({ page: 1, blockIndex: 3 }),
+        objectKeys: ['assets/doc/images-page_0_image_1.png'],
+        data: expect.objectContaining({
+          semanticAnalysis: 'not_requested',
+          imageAvailable: true,
+        }),
+      }),
+    ]);
     expect(result.markdown).toContain('| 索引 | 100 |');
     expect(result.markdown).toContain('/asset/images-page_0_image_1.png');
     expect(

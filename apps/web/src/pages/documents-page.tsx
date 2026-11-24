@@ -1,3 +1,4 @@
+import { WebImportDialog } from '@/components/web-import-dialog';
 import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
 import { RequestFailure } from '@/components/request-failure';
 import { useCallback, useEffect, useState } from 'react';
@@ -47,6 +48,7 @@ export function DocumentsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<RequestFailureInfo | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [webOpen, setWebOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -82,10 +84,15 @@ export function DocumentsPage() {
         title="文档库"
         description="让团队的每一份经验，都成为可复用的知识。"
         actions={
-          <Button onClick={() => setUploadOpen(true)}>
-            <Icon name="upload" width={16} height={16} />
-            上传文档
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setWebOpen(true)}>
+              导入网页
+            </Button>
+            <Button onClick={() => setUploadOpen(true)}>
+              <Icon name="upload" width={16} height={16} />
+              上传文档
+            </Button>
+          </div>
         }
       />
 
@@ -291,6 +298,11 @@ export function DocumentsPage() {
         </div>
       </section>
 
+      <WebImportDialog
+        open={webOpen}
+        onOpenChange={setWebOpen}
+        onCreated={load}
+      />
       <UploadDialog
         open={uploadOpen}
         onOpenChange={setUploadOpen}

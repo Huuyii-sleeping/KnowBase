@@ -72,15 +72,16 @@ describe('upload dialog', () => {
   it('uses the same format rules for the picker and drag/drop, allowing corrected input', async () => {
     setup();
     const input = screen.getByLabelText('选择文档文件');
-    expect(input.getAttribute('accept')).not.toMatch(/mp3|mp4|wav|m4a/);
-    pick('recording.mp4');
+    expect(input.getAttribute('accept')).not.toMatch(/mp3/);
+    expect(input.getAttribute('accept')).not.toMatch(/mp4/);
+    pick('recording.mp3');
     expect(screen.getByRole('alert').textContent).toContain(
       '暂不支持这种文件格式',
     );
     expect(vi.mocked(documentsApi.create)).not.toHaveBeenCalled();
     const drop = screen.getByRole('button', { name: /拖放文件/ });
     fireEvent.drop(drop, {
-      dataTransfer: { files: [new File(['audio'], 'recording.mp3')] },
+      dataTransfer: { files: [new File(['audio'], 'recording.mp4')] },
     });
     expect(screen.getByRole('alert').textContent).toContain(
       '暂不支持这种文件格式',

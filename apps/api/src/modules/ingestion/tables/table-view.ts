@@ -35,6 +35,7 @@ export function tableSearchView(table: TableData) {
     text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
   const line = (values: string[]) => `| ${values.map(escape).join(' | ')} |`;
   return {
+    headers,
     header: `${table.caption ? escape(table.caption) + '\n\n' : ''}${line(headers)}\n${line(headers.map(() => '---'))}`,
     rows: grid.flatMap((cells, index) =>
       headerSet.has(index + 1)

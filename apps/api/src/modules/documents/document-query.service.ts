@@ -82,6 +82,7 @@ export class DocumentQueryService {
             quality: content.quality,
             provenance: content.provenance,
             tables: content.tables,
+            evidenceManifest: content.evidenceManifest,
           }
         : undefined,
     };
@@ -96,15 +97,18 @@ export class DocumentQueryService {
     const enabled = [true, 'true'].includes(
       this.config?.get('INGESTION_ASYNC_ENABLED', false) ?? false,
     );
+    const canManage = user.role === 'ADMIN' || document.uploaderId === user.id;
     const task = enabled ? await this.parseTasks?.latest(id) : undefined;
 
     return {
       ...this.toMetadata(document),
       ingestion: enabled
         ? {
-            canManage: user.role === 'ADMIN' || document.uploaderId === user.id,
+            canManage,
             task: task
               ? {
+                  id: task.id,
+                  hasDraft: canManage && task.state === 'needs_review',
                   state: task.state,
                   stage: task.stage,
                   attempts: task.attempts,
@@ -125,6 +129,7 @@ export class DocumentQueryService {
             quality: content.quality,
             provenance: content.provenance,
             tables: content.tables,
+            evidenceManifest: content.evidenceManifest,
           }
         : undefined,
     };

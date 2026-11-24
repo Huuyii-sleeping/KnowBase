@@ -7,6 +7,8 @@ import {
   ParseQuality,
 } from '../file-parser.types';
 import { mineruImages } from './mineru-images';
+import { EvidenceUnit } from '../../evidence/evidence.types';
+import { PdfTableNormalizer } from '../pdf/pdf-table-normalizer';
 
 /** Convert the v4 Structured Content contract, keeping raw output as a traceable asset. */
 export async function mineruResult(
@@ -42,6 +44,8 @@ export async function mineruResult(
   const { assets, rewrite } = images;
   let markdown = '';
   const sections: SourceSection[] = [];
+  const evidence: EvidenceUnit[] = [];
+  const pdfTables = new PdfTableNormalizer();
   const seen = new Set<number>();
   const known = new Set([
     'text',
@@ -115,6 +119,37 @@ export async function mineruResult(
       };
       const captions = annotations(block.captions);
       const footnotes = annotations(block.footnotes);
+      const preceding = page.blocks[blockIndex - 1];
+      const tableCaptions = captions.length
+        ? captions
+        : preceding &&
+            ['paragraph_title', 'text'].includes(preceding.type) &&
+            typeof preceding.content === 'string' &&
+            /^(?:Table\s+\d+[.:]?\s+|表\s*\d+[.:、]?)/iu.test(
+              preceding.content.trim(),
+            )
+          ? [rewrite(preceding.content)]
+          : [];
+      const normalizedTable =
+        extension === '.pdf' && block.type === 'table'
+          ? pdfTables.normalize(
+              text,
+              tableCaptions,
+              pageNumber,
+              page.blocks.filter(
+                (item: { type?: string }) => item?.type === 'table',
+              ).length,
+            )
+          : undefined;
+      if (normalizedTable) {
+        text = normalizedTable.content;
+        issues.push(
+          ...normalizedTable.issues.map((issue) => ({
+            ...issue,
+            page: pageNumber,
+          })),
+        );
+      }
       pageText += [text, ...captions, ...footnotes].join('\n');
       if (block.image_source)
         text += `\n\n${images.render(block.image_source, block.type)}`;
@@ -138,6 +173,9 @@ export async function mineruResult(
           ...source,
           partition: pageNumber,
           blockIndex,
+          ...(normalizedTable?.headerPage
+            ? { tableHeaderPage: normalizedTable.headerPage }
+            : {}),
           ...(Array.isArray(block.bbox) &&
           block.bbox.length === 4 &&
           block.bbox.every(Number.isFinite)
@@ -145,6 +183,30 @@ export async function mineruResult(
             : {}),
         },
       });
+      if (block.image_source) {
+        const asset = images.asset(block.image_source);
+        evidence.push({
+          schema: 'evidence-v1',
+          id: `image-${page.page_idx}-${blockIndex}`,
+          kind: 'image',
+          source: { ...sections.at(-1)!.source },
+          objectKeys: asset ? [asset.objectKey] : [],
+          text: [rewrite(block.content ?? ''), ...captions]
+            .filter(Boolean)
+            .join('\n'),
+          producer: 'mineru-v4',
+          data: {
+            blockType: block.type,
+            captions,
+            footnotes,
+            markdownStart: start,
+            markdownEnd: markdown.length,
+            imageAvailable: Boolean(asset),
+            semanticAnalysis: 'not_requested',
+            coordinateSpace: 'mineru_original_unspecified',
+          },
+        });
+      }
     }
     if (!pageText.trim())
       issues.push({
@@ -183,6 +245,7 @@ export async function mineruResult(
     sections,
     blocks: markdownBlocks(markdown, sections),
     assets,
+    evidence,
     parser: 'mineru',
     ready: !issues.length,
     warnings: issues.map((issue) => issue.message),
@@ -196,6 +259,6 @@ export async function mineruResult(
       tier: String(metadata?.tier ?? 'unknown'),
       mode: String(metadata?.parse_mode ?? 'unknown'),
     },
-    parseStrategy: `mineru-v4-adapter-v2:${producer?.version ?? 'unknown'}:${metadata?.tier ?? 'unknown'}`,
+    parseStrategy: `mineru-v4-adapter-v2:${producer?.version ?? 'unknown'}:${metadata?.tier ?? 'unknown'}${extension === '.pdf' ? ':pdf-tables-v1' : ''}`,
   };
 }

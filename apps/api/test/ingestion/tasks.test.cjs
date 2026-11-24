@@ -51,6 +51,8 @@ beforeEach(async () => {
   submission = new ParseSubmissionService(env.source, tasks, access, config);
   bodies = new Map();
   content = {
+    verifyEvidence: async () => undefined,
+    findByContentId: async (id) => bodies.get(id),
     create: async (value) => {
       bodies.set(value.contentId, value);
     },
@@ -217,8 +219,10 @@ test('cancellation, authorization, reparse and deletion never revive old work', 
   const current = await env.source
     .getRepository(Document)
     .findOneBy({ id: doc.id });
-  assert.equal(current.version, 2);
-  assert.equal(current.parseStatus, 'PENDING');
+  assert.equal(current.version, 1);
+  assert.equal(current.parseStatus, 'FAILED');
+  assert.equal(current.contentId, doc.contentId);
+  assert.equal((await tasks.find(reparse.taskId)).requires_review, true);
   await new DocumentDeletionService(
     env.source,
     access,
@@ -283,4 +287,210 @@ test('attempt cleanup excludes adopted history and current work, and cancels onl
   );
   await cleanup.remoteCanceled(second.id);
   assert.deepEqual(await cleanup.remoteCancellations(tasks.fingerprint), []);
+});
+
+test('durable extraction resumes after publication failure without reading or parsing the source again', async () => {
+  const { ParseJobService } = load('documents/ingestion/parse-job.service.js');
+  const { Readable } = require('node:stream');
+  const doc = await document();
+  const results = new ParseResultService(env.source, content, tasks);
+  let fail = true,
+    reads = 0,
+    parses = 0;
+  const originalApply = results.apply.bind(results);
+  results.apply = async (...args) => {
+    if (fail) {
+      fail = false;
+      throw new Error('publication offline');
+    }
+    return originalApply(...args);
+  };
+  const job = new ParseJobService(
+    env.source,
+    tasks,
+    {
+      parse: async (_buffer, _name, _id, execution) => {
+        parses++;
+        await execution.onAsset({
+          type: 'image',
+          objectKey: `assets/${doc.id}/checkpoint.png`,
+          url: '/checkpoint',
+        });
+        return {
+          ...parsed,
+          assets: [
+            {
+              type: 'image',
+              objectKey: `assets/${doc.id}/checkpoint.png`,
+              url: '/checkpoint',
+            },
+          ],
+        };
+      },
+    },
+    {
+      getObject: async () => {
+        reads++;
+        return Readable.from([Buffer.from('original')]);
+      },
+    },
+    results,
+    new ConfigService(),
+  );
+  const id = (await tasks.latest(doc.id)).id;
+  await job.run(id);
+  const checkpoint = await tasks.find(id);
+  assert.equal(checkpoint.state, 'queued');
+  assert.equal(checkpoint.checkpoint_content_id, checkpoint.content_id);
+  assert.equal(checkpoint.assets.length, 1);
+  assert.ok(bodies.has(checkpoint.content_id));
+  await job.run(id);
+  assert.equal((await tasks.find(id)).state, 'completed');
+  assert.equal(reads, 1);
+  assert.equal(parses, 1);
+  assert.equal(
+    (await env.source.getRepository(Document).findOneBy({ id: doc.id }))
+      .contentId,
+    checkpoint.content_id,
+  );
+});
+
+test('missing checkpoints are invalidated so recovery can extract a new artifact', async () => {
+  const { ParseJobService } = load('documents/ingestion/parse-job.service.js');
+  const doc = await document();
+  const task = await tasks.claim((await tasks.latest(doc.id)).id);
+  await new ParseResultService(env.source, content, tasks).checkpoint(
+    task,
+    parsed,
+  );
+  bodies.delete(task.content_id);
+  await tasks.retry(task);
+  await new ParseJobService(
+    env.source,
+    tasks,
+    {},
+    {},
+    new ParseResultService(env.source, content, tasks),
+    new ConfigService(),
+  ).run(task.id);
+  assert.equal((await tasks.find(task.id)).checkpoint_content_id, null);
+  const next = await tasks.claim(task.id);
+  assert.notEqual(next.content_id, task.content_id);
+});
+
+test('published reparse retains the current revision until a verified draft is explicitly adopted', async () => {
+  const { ParseDraftService } = load(
+    'documents/ingestion/parse-draft.service.js',
+  );
+  const doc = await document();
+  const initial = await tasks.claim((await tasks.latest(doc.id)).id);
+  const results = new ParseResultService(env.source, content, tasks);
+  await results.apply(initial, parsed);
+  await env.source
+    .getRepository(Document)
+    .update(doc.id, { status: 'PUBLISHED' });
+  const { taskId } = await submission.reparse(doc.id, user);
+  const candidate = await tasks.claim(taskId);
+  await results.apply(candidate, {
+    ...parsed,
+    markdown: '待确认内容',
+    ready: false,
+    quality: {
+      status: 'needs_review',
+      issues: [{ code: 'TEST', message: '核对数字' }],
+    },
+  });
+  const before = await env.source
+    .getRepository(Document)
+    .findOneBy({ id: doc.id });
+  assert.equal(before.status, 'PUBLISHED');
+  assert.equal(before.parseStatus, 'READY');
+  assert.equal(before.contentId, initial.content_id);
+  const drafts = new ParseDraftService(env.source, content, tasks, access);
+  await assert.rejects(
+    drafts.read(doc.id, taskId, { id: 'stranger', role: 'MEMBER' }),
+    /forbidden/,
+  );
+  await assert.rejects(
+    drafts.review(doc.id, { taskId, accept: true, note: '核对完成' }, user),
+    /Acknowledge/,
+  );
+  assert.equal((await tasks.find(taskId)).state, 'needs_review');
+  await drafts.review(
+    doc.id,
+    {
+      taskId,
+      accept: true,
+      note: '已对照原件核对数字',
+      acknowledgeIssues: true,
+    },
+    user,
+  );
+  const adopted = await env.source
+    .getRepository(Document)
+    .findOneBy({ id: doc.id });
+  assert.equal(adopted.contentId, candidate.content_id);
+  assert.equal(adopted.version, before.version + 1);
+  assert.equal(bodies.get(adopted.contentId).version, adopted.version);
+  assert.equal(adopted.status, 'DRAFT');
+  assert.equal((await tasks.find(taskId)).reviewed_by, user.id);
+  await assert.rejects(
+    drafts.review(doc.id, { taskId, accept: false, note: '重复操作' }, user),
+    /no longer current/,
+  );
+});
+
+test('rejecting or superseding a draft never replaces the adopted body and schedules asset cleanup', async () => {
+  const { ParseDraftService } = load(
+    'documents/ingestion/parse-draft.service.js',
+  );
+  const doc = await document();
+  const initial = await tasks.claim((await tasks.latest(doc.id)).id);
+  const results = new ParseResultService(env.source, content, tasks);
+  await results.apply(initial, parsed);
+  const { taskId } = await submission.reparse(doc.id, user);
+  const candidate = await tasks.claim(taskId);
+  await tasks.asset(candidate, {
+    type: 'image',
+    objectKey: `assets/${doc.id}/rejected.png`,
+    url: '/rejected',
+  });
+  await results.apply(candidate, parsed);
+  const drafts = new ParseDraftService(env.source, content, tasks, access);
+  await assert.rejects(
+    drafts.review(doc.id, { taskId, accept: false, note: '' }, user),
+    /note/,
+  );
+  await drafts.review(
+    doc.id,
+    { taskId, accept: false, note: '图片内容缺失' },
+    user,
+  );
+  assert.equal((await tasks.find(taskId)).state, 'canceled');
+  assert.equal(
+    (await env.source.getRepository(Document).findOneBy({ id: doc.id }))
+      .contentId,
+    initial.content_id,
+  );
+  const events = await env.source.query(
+    "SELECT body FROM kh_pipeline_outbox WHERE routing_key='document.assets.delete'",
+  );
+  assert.ok(
+    events.some((event) =>
+      JSON.parse(event.body).keys.includes(`assets/${doc.id}/rejected.png`),
+    ),
+  );
+  const next = await submission.reparse(doc.id, user);
+  const nextTask = await tasks.claim(next.taskId);
+  await results.apply(nextTask, parsed);
+  await new DocumentRevisionService(
+    env.source,
+    content,
+    access,
+    tasks,
+  ).updateContent(doc.id, { markdown: '人工更新' }, user);
+  await assert.rejects(
+    drafts.read(doc.id, next.taskId, user),
+    /no longer current/,
+  );
 });

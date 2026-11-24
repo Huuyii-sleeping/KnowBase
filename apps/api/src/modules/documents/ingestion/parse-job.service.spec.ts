@@ -31,6 +31,8 @@ function fixture() {
     progress: vi.fn(),
     asset: vi.fn(),
     remote: vi.fn(),
+    checkpoint: vi.fn(),
+    find: vi.fn(),
   };
   const parser = {
     parse: vi.fn(async () => ({
@@ -46,6 +48,8 @@ function fixture() {
   };
   const results = {
     apply: vi.fn(),
+    checkpoint: vi.fn(),
+    resume: vi.fn(),
     discardIfUnreferenced: vi.fn(async () => undefined),
   };
   return {
@@ -85,7 +89,7 @@ describe('Parse job workflow', () => {
     expect(f.storage.getObject).not.toHaveBeenCalled();
     f.parser.parse.mockRejectedValueOnce(new Error('MinerU task failed'));
     await f.service.run(f.task.id);
-    expect(f.tasks.retry).toHaveBeenCalledWith(f.task, true);
+    expect(f.tasks.retry).toHaveBeenCalledWith(f.task, true, false);
     expect(f.results.discardIfUnreferenced).toHaveBeenCalledWith(f.task);
   });
   it('rejects oversized originals and invalid command IDs', async () => {
@@ -119,7 +123,11 @@ describe('Parse result publication', () => {
         findOneBy: async () => ({ contentId: 'edited' }),
       }),
     };
-    const content = { create: vi.fn(), deleteByContentId: vi.fn() };
+    const content = {
+      create: vi.fn(),
+      verifyEvidence: vi.fn(),
+      deleteByContentId: vi.fn(),
+    };
     const service = new ParseResultService(
       source as any,
       content as any,

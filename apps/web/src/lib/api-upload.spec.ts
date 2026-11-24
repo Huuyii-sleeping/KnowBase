@@ -8,14 +8,28 @@ afterEach(() => {
 });
 
 describe('document upload API boundary', () => {
-  it('prevents unsupported files even when called without the upload dialog', async () => {
-    const fetch = vi.fn();
-    vi.stubGlobal('fetch', fetch);
-    await expect(
-      documentsApi.create(new File(['movie'], 'movie.mp4'), {}),
-    ).rejects.toMatchObject({ code: 'FILE_UNSUPPORTED' });
-    expect(fetch).not.toHaveBeenCalled();
-  });
+  it.each([
+    'movie.exe',
+    'speech.mp3',
+    'speech.wav',
+    'speech.m4a',
+    'speech.flac',
+    'speech.ogg',
+    'recording.mp4',
+    'recording.mov',
+    'recording.webm',
+    'recording.mkv',
+  ])(
+    'prevents unsupported %s files even when called without the upload dialog',
+    async (name) => {
+      const fetch = vi.fn();
+      vi.stubGlobal('fetch', fetch);
+      await expect(
+        documentsApi.create(new File(['movie'], name), {}),
+      ).rejects.toMatchObject({ code: 'FILE_UNSUPPORTED' });
+      expect(fetch).not.toHaveBeenCalled();
+    },
+  );
 
   it.each([
     'report.pdf',

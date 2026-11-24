@@ -18,7 +18,7 @@ describe('DocumentSourceCleanupService', () => {
     };
     const chunks = { deleteDocument: vi.fn() };
     const embeddings = { deleteDocument: vi.fn() };
-    const storage = { removeObject: vi.fn() };
+    const storage = { removeObject: vi.fn(), assetKeys: vi.fn(async () => []) };
     const service = new DocumentSourceCleanupService(
       content as any,
       storage as any,
@@ -44,7 +44,7 @@ describe('DocumentSourceCleanupService', () => {
       deleteByDocumentId: vi.fn(),
       assetKeys: vi.fn().mockResolvedValue([]),
     };
-    const storage = { removeObject: vi.fn() };
+    const storage = { removeObject: vi.fn(), assetKeys: vi.fn(async () => []) };
     const generations = {
       isDeleted: vi.fn().mockResolvedValueOnce(false).mockResolvedValue(true),
     };

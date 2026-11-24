@@ -1,3 +1,5 @@
+import { SupplementaryParsers } from './supplementary-parsers';
+import { ParsedDocumentEnricher } from './parsed-document.enricher';
 import {
   BadRequestException,
   Injectable,
@@ -56,6 +58,8 @@ export class FileParserService {
     private readonly assetUploader: AssetUploaderService,
     @Optional() private readonly mineru?: MineruParser,
     @Optional() private readonly config: ConfigService = new ConfigService(),
+    @Optional() private readonly additional?: SupplementaryParsers,
+    @Optional() private readonly enricher?: ParsedDocumentEnricher,
   ) {
     const provider = config.get<string>(
       'DOCUMENT_PARSER',
@@ -77,6 +81,7 @@ export class FileParserService {
   supports(fileName: string): boolean {
     const ext = extname(fileName).toLowerCase();
     return (
+      Boolean(this.additional?.get(ext)) ||
       SUPPORTED_EXTENSIONS.has(ext) ||
       (this.useMineru(ext) && mineruSupports(ext))
     );
@@ -120,8 +125,10 @@ export class FileParserService {
     if (!this.supports(fileName))
       throw new BadRequestException('Unsupported file type');
     const extension = extname(fileName).toLowerCase();
-    const remote = this.useMineru(extension);
-    const parser = remote ? this.mineru : this.parsers.get(extension);
+    const additionalParser = this.additional?.get(extension);
+    const remote = Boolean(additionalParser) || this.useMineru(extension);
+    const parser =
+      additionalParser ?? (remote ? this.mineru : this.parsers.get(extension));
     this.assertFileBudget(buffer);
     if (!parser) {
       throw new BadRequestException(
@@ -131,6 +138,7 @@ export class FileParserService {
 
     let uploaded: ParsedAsset[] = [];
     let assetBytes = 0;
+    const imageInputs = new Map<string, { bytes: Buffer; mime: string }>();
     const context: FileParserContext = {
       documentId,
       execution,
@@ -144,6 +152,11 @@ export class FileParserService {
           throw new Error('Extracted assets exceed byte budget');
         const asset = await this.assetUploader.upload(documentId, input);
         uploaded.push(asset);
+        if (input.contentType.startsWith('image/'))
+          imageInputs.set(asset.objectKey, {
+            bytes: input.data,
+            mime: input.contentType,
+          });
         await execution?.onAsset?.(asset);
         return asset;
       },
@@ -154,6 +167,13 @@ export class FileParserService {
         'parse',
         { documentId, bytes: buffer.length, format: extension },
         () => parser.parse(buffer, fileName, context),
+      );
+      await this.enricher?.enrich(
+        result,
+        buffer,
+        extension,
+        context,
+        imageInputs,
       );
       return this.complete({
         ...result,

@@ -7,6 +7,7 @@ import { MineruHttp } from './mineru-http';
 import { mineruArchive } from './mineru-archive';
 import { mineruResult } from './mineru-result';
 import { MINERU_FLASH_EXTENSIONS } from './mineru-formats';
+import { restoreHtmlTables } from '../html/html-table-restorer';
 
 @Injectable()
 export class MineruParser implements FormatParser {
@@ -102,11 +103,14 @@ export class MineruParser implements FormatParser {
       context.execution?.onStage,
     );
     await context.execution?.onStage?.('normalizing');
-    return mineruResult(
+    const result = await mineruResult(
       await mineruArchive(archive, this.options.maxBytes),
       fileName,
       context,
       this.options.maxPages,
     );
+    if (['.html', '.htm'].includes(extname(fileName).toLowerCase()))
+      restoreHtmlTables(result, buffer);
+    return result;
   }
 }
