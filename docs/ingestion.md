@@ -1,6 +1,6 @@
 # 文档入库：结构、分块与构建
 
-本文记录 `codex/ingestion-optimization` 的实现与运行约束。后续路线见 [ingestion-optimization-roadmap.md](ingestion-optimization-roadmap.md)，版本可见性与投递协议仍以 [pipeline.md](pipeline.md) 为准。
+本文记录 `codex/ingestion-optimization` 的实现与运行约束。固定基线、验证清单及 main 衔接问题见 [ingestion-baseline.md](ingestion-baseline.md)。后续路线见 [ingestion-optimization-roadmap.md](ingestion-optimization-roadmap.md)，版本可见性与投递协议仍以 [pipeline.md](pipeline.md) 为准。
 
 默认使用 MinerU；其质量诊断、异步解析任务及旧 generation 回收见 [mineru-ingestion.md](mineru-ingestion.md)。本文的原生解析规则适用于显式配置 `DOCUMENT_PARSER=native`。
 
@@ -31,13 +31,13 @@
 
 ## 分块规则
 
-`RAG_CHUNK_SIZE` 是最终 Chunk 的 UTF-16 字符预算，包含注入的标题、重复表头和代码围栏；它不是 token 数。模型上下文硬限制仍由实际模型检查。默认 1000 字符，overlap 默认 150。
+`RAG_CHUNK_SIZE` 是最终 Chunk 的 UTF-16 字符预算，包含注入的标题、重复表头和代码围栏；它不是 token 数。标准 OpenAI Embedding 使用实际 tokenizer 检查 token 上限；Ollama 禁止静默截断，其硬限制由实际模型检查。默认 1000 字符，overlap 默认 150。
 
 正文按标题路径和来源区段分组，不混入另一章节、页面或工作表。标题上下文最多占字符预算的一半；完整标题路径保留在元数据中。长段落先按中英文句界切分，完整句子保留末尾标点；只有单句仍然过长时才退回换行、空格和字符切分。overlap 只在同一长正文块内部使用，优先保留完整句子；表格和代码不机械增加 overlap。
 
-HTML/Markdown 表格先提取单元格结构，再按完整行分组，每组重复完整表头路径和分隔行，合并单元格的原始值与派生检索视图分别保存（详见 [表格证据](table-ingestion.md)）；代码按行拆分，每块补齐原围栏。若“表头 + 一整行”本身超过预算，构建明确失败，用户需增大预算或整理原表格；不静默丢弃单元格。超长代码单行允许按字符拆分，片段用于阅读，不保证各段可以独立执行。
+HTML/Markdown 表格先提取单元格结构，再按完整行分组，每组重复完整表头路径和分隔行，合并单元格的原始值与派生检索视图分别保存（详见 [表格证据](table-ingestion.md)）；代码按行拆分，每块补齐原围栏。若“表头 + 一整行”本身超过预算，该表降为带列标题、逻辑行列及单元格文字偏移的片段；长单元格优先按句界拆开。单个列标题/caption 无法放入预算时仍明确失败，详见 [证据片段评测](chunk-evidence-quality.md)。超长代码单行允许按字符拆分，片段用于阅读，不保证各段可以独立执行。
 
-Chunk 包含 `content`、`embeddingText`、标题路径、来源块范围、内容 SHA-256 及 `structure-v3:<size>:<overlap>` 策略。当前 `embeddingText` 与 `content` 相同。来源范围描述原始正文块，并非拆分后的字符精确引用；新增标题、重复表头及围栏没有原文件字节位置。现有检索响应字段含义保持兼容，ES 的 `ingestion` 元数据保存在 `_source`，不参与搜索映射。
+Chunk 包含 `content`、`embeddingText`、标题路径、来源块范围、内容 SHA-256 及 `structure-v4:<size>:<overlap>` 策略。当前 `embeddingText` 与 `content` 相同。来源范围描述原始正文块，并非拆分后的字符精确引用；新增标题、重复表头及围栏没有原文件字节位置。现有检索响应字段含义保持兼容，ES 的 `ingestion` 元数据保存在 `_source`，不参与搜索映射。
 
 RAG 和 KG 通过同一服务复用 MongoDB `ingestion_chunks` 中的有序产物。键包括 documentId、contentId、正文摘要、来源区段、解析策略和分块策略。每个 Chunk 独立一条记录，最后写清单、数量及摘要；缺清单、缺项或摘要错误都按未命中重算，避免把半成品作为完整产物使用。策略变化必须变更版本常量；同一版本下不能改变规则后继续复用旧缓存。
 
@@ -55,9 +55,9 @@ RAG 和 KG 通过同一服务复用 MongoDB `ingestion_chunks` 中的有序产�
 | `INGESTION_CACHE_TTL_DAYS`       | 30      | 分块产物和向量缓存保留天数               |
 | `EMBEDDING_MODEL_REVISION`       | 空      | 不可变模型修订标识，空值禁用持久向量缓存 |
 
-数值配置要求正整数；overlap 可以为 0，必须小于 size。分块预算至少为 16。字符预算和条数预算一起生效，不能替代模型的 token 限制。提供方适配器不额外自动重试，把业务重试交给已有 Outbox/receipt，避免乘法重试。Ollama 的请求通过 AbortSignal 限时；OpenAI 使用 SDK 请求超时。生产并发仍需按 Worker 数、模型容量和数据库连接池评测。
+数值配置要求正整数；overlap 可以为 0，必须小于 size。分块预算至少为 16。字符预算和条数预算一起生效，不能替代模型的 token 限制。标准 OpenAI Embedding 额外支持 `RAG_EMBEDDING_MAX_TOKENS` 下调 token 上限，精确支持范围见 [证据片段评测](chunk-evidence-quality.md)。提供方适配器不额外自动重试，把业务重试交给已有 Outbox/receipt，避免乘法重试。Ollama 的请求通过 AbortSignal 限时；OpenAI 使用 SDK 请求超时。生产并发仍需按 Worker 数、模型容量和数据库连接池评测。
 
-一次调用中的相同输入先去重并保持输出顺序；向量数量、维度、有限数值和非零模长全部校验后才进入缓存或索引。
+一次调用中的相同输入先去重并保持输出顺序；每个批次校验向量数量、维度、有限数值和非零模长后立即保存缓存，后续批次失败或进程重启时可复用已保存结果。实现、故障恢复对比和边界见 [索引构建恢复](index-build-recovery.md)。
 
 跨重建复用的缓存键包含 documentId、实际模型输入文本和模型指纹。模型指纹由提供方、端点、模型名、显式模型修订、维度及输入预处理版本计算。只填模型别名不启用持久缓存；配置修订应使用实际部署模型的 digest/版本，模型权重变化后必须更新。缓存不跨文档共用，权限变更仍通过当前修订与 generation 激活控制可见性。
 
@@ -73,11 +73,11 @@ ES 按条数及 NDJSON 字节数分批；所有请求成功后执行一次 refre
 
 `IngestionStage` 记录 parse、chunk、embedding、graph.extract、index.write 和 index.activate 的阶段耗时及成功/失败；缓存另记输入与未命中数量。日志不包含正文、向量、凭证或提供方错误响应。解析阶段成功表示解析调用完成，不代表质量检查为 READY；激活调用完成也可能因过期版本返回 false，最终可见性仍以 generation 指针为准。
 
-这些是运行日志，不是持久化任务状态接口。异步解析、任务租约、解析阶段界面和可选 generation 回收现已接入，配置及边界见 [mineru-ingestion.md](mineru-ingestion.md)。索引构建的持久进度仍需后续扩展。
+这些阶段日志另有持久状态：异步解析、任务租约、解析阶段界面和可选 generation 回收见 [mineru-ingestion.md](mineru-ingestion.md)；索引构建阶段、失败状态和维护查询接口见 [index-build-recovery.md](index-build-recovery.md)。
 
 ## 升级与回滚
 
-停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射。
+先执行 [索引构建进度迁移 009](index-build-recovery.md#升级与回滚)。停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射。
 
 已有已发布文档可通过原有管理员 `rebuild-indexes` 接口使用新分块规则构建。该接口只读取已保存 Markdown，不会重新解析原文件；PDF/DOCX 解析修复对存量文件生效，可启用异步功能后从原文件重新解析，或重新上传、人工修订正文。分块改变会改变 Chunk 序号和 ID，不能将旧 Chunk 序号作为跨重建永久定位。
 
@@ -98,7 +98,7 @@ pnpm --filter @knowbase/api test:delivery
 
 `test:ingestion-quality` 在真实格式解析器上运行合成的六格式、空白与损坏样本，不调用外部服务。`benchmark:ingestion` 输出忽略的 `reports/ingestion/baseline.json`，记录解析/分块耗时、输入大小、峰值进程内存、关键事实覆盖和表格/代码结构指标；同时在相同解析结果上运行旧分块规则以比较结构。这里的结构指标针对合成指南中的特定表格与代码，不能外推到所有文档。
 
-`test:ingestion` 使用进程专属的临时 MongoDB，验证来源序列化、分块清单、TTL 查询、向量复用、失效与清理；结束后移除本次容器。索引一致性测试强制每批仅一个 Chunk，验证后续批次失败时旧 generation 仍可见。建议串行运行 Docker 集成套件，避免同时启动多组模型/数据库基础设施导致资源争用。镜像已缓存时可以设置 `DELIVERY_TEST_PULL_POLICY=never`。
+`test:ingestion` 使用进程专属的临时 MongoDB 与 MinIO，验证来源/证据序列化、分块清单、TTL、向量复用、对象摘要/范围读取、失败补偿与清理；结束后移除本次容器。解析证据、候选采用及扩展解析配置以 [多模态入库](multimodal-ingestion.md) 为准。索引一致性测试强制每批仅一个 Chunk，验证后续批次失败时旧 generation 仍可见。建议串行运行 Docker 集成套件，避免同时启动多组模型/数据库基础设施导致资源争用。镜像已缓存时可以设置 `DELIVERY_TEST_PULL_POLICY=never`。
 
 合成基线证明格式与分块规则是否满足可检验的约束，不证明生产吞吐、真实模型效果或检索 Recall/MRR 已经提升。检索质量复测应固定另一分支的召回、重排与 Prompt 版本，在真实标注语料上独立执行。
 
@@ -109,3 +109,5 @@ pnpm --filter @knowbase/api test:delivery
 报告含样本 SHA-256、Git revision、工作区是否存在未提交修改、配置及运行环境，生成目录不入库。上述合成格式基线不包含模型耗时；真实模型与数据库的其他构建评测见 [ingestion-performance.md](ingestion-performance.md)。生产语料及检索质量尚未评测。
 
 原生解析优化前后和真实 MinerU 的量化比较、方法与限制见 [ingestion-comparison.md](ingestion-comparison.md)。
+
+当前不支持音频、视频上传与解析；前后端均拒绝这些格式，旧媒体配置不会开启入口。未完成事项暂停，见 [音视频 TODO](media-ingestion-todo.md)。

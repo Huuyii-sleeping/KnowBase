@@ -4,9 +4,9 @@ This document contains the current project-specific decisions. Read it together 
 
 ## Product Scope
 
-KnowBase is an enterprise knowledge base. The first milestone is the document module:
+KnowBase is an enterprise knowledge base. The document ingestion module preserves the following workflow:
 
-- accept `PDF`, `XLSX`, `DOCX`, `PPTX`, `TXT`, and `MD` uploads;
+- accept documents, images and static web inputs through the routes and limits in [multimodal-ingestion.md](multimodal-ingestion.md#输入能力);
 - preserve the original binary file;
 - normalize the source into Markdown;
 - keep structured metadata separate from long Markdown content;
@@ -53,13 +53,15 @@ The document module is organized around these responsibilities:
 - `document-query.service.ts`: PostgreSQL list/detail queries and response projection.
 - `document-workflow.service.ts`: draft, review, publish, and reject transitions.
 - `document-publish.service.ts`: row-locked publication and durable pipeline task creation in one PostgreSQL transaction; approvals delegate here.
-- `document-content.store.ts`: MongoDB Markdown persistence.
+- `document-content.store.ts`: MongoDB body persistence and delegation to the independent evidence store.
+- `documents/evidence/`: evidence integrity, authorized queries and draft-review transport.
+- `documents/ingestion/`: parse task state, checkpoints, candidate adoption and cleanup.
 - `parsing/file-parser.service.ts`: parser dispatch and fallback only.
 - `parsing/parsers/*.parser.ts`: one parser per file format.
 - `parsing/markdown-table.util.ts`: Markdown table rendering only.
 - `parsing/parser.utils.ts`: parser-independent text, XML, MIME, and naming helpers.
 - `parsing/asset-uploader.service.ts`: extracted asset persistence only.
-- `storage/storage.service.ts`: RustFS object operations only.
+- `storage/storage.service.ts`: object operations and extracted-asset ownership registration.
 
 Do not add format-specific parsing logic back into `FileParserService` or document workflow logic into `DocumentsService`.
 
@@ -200,11 +202,10 @@ git diff --check
 
 ## Deferred Work
 
-Do not add the following to the document module unless the relevant milestone is explicitly started:
+Current ingestion capabilities and deferred work are tracked in [the execution roadmap](ingestion-optimization-roadmap.md); the fixed implementation baseline and main integration issues are in [ingestion-baseline.md](ingestion-baseline.md). OCR, structured chunking and generation indexes are already implemented on this branch. Audio/video inputs remain unsupported.
 
-- OCR for scanned PDFs;
-- audio and video transcription;
-- Chunking and retrieval indexes;
+Further work outside this ingestion scope includes:
+
 - advanced graph reasoning, entity resolution, and graph-based answer generation beyond the current extraction/query MVP;
 - fine-grained organization-level roles, groups, and audit trails beyond the current JWT/RBAC MVP;
 - Mem0 long-term memory;

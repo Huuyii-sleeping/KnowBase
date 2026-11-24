@@ -88,7 +88,7 @@ const uploadFailure = requestFailure(reason, 'upload');
 
 ### 上传与正文解析
 
-文件选择器的 `accept`、格式说明、选择/拖放校验、`documentsApi.create` 入口校验均使用 `lib/document-upload.ts`。支持格式与当前服务端解析器对齐：PDF、DOCX、PPTX、XLSX、TXT、MD，扩展名不区分大小写；单文件上限为 `100 * 1024 * 1024` 字节，拒绝空文件。浏览器的 MIME 推断不作为格式依据。后端仍执行独立校验；前端不承诺支持音视频或旧版 Office 格式。
+文件选择器的 `accept`、格式说明、选择/拖放校验、`documentsApi.create` 入口校验均使用 `lib/document-upload.ts`。支持格式与当前服务端解析器对齐：PDF、DOCX/DOC、PPTX/PPT、XLSX/XLS、HTML/HTM、PNG/JPG/JPEG/WebP、TXT、MD，扩展名不区分大小写；单文件上限为 `100 * 1024 * 1024` 字节，拒绝空文件。浏览器的 MIME 推断不作为格式依据。后端仍执行独立校验；前端拒绝音视频格式；网页 URL 使用独立导入入口。
 
 HTTP 成功仅表示文件与草稿已经创建，上传弹窗保留结果并提供“查看文档”，按照返回的 `parseStatus` 独立展示：
 

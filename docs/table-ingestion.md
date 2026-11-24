@@ -14,14 +14,14 @@ flowchart LR
     B --> C[table-v1 原始单元格]
     C --> D[MongoDB content.tables]
     C --> E[完整表头路径 + 行视图]
-    E --> F[structure-v3 Chunk]
+    E --> F[structure-v4 Chunk]
     D --> G[显式单元格精确求和工具]
     F --> H[现有文本索引]
 ```
 
 `table-v1` 的每个单元格保存表内一基行列、行列跨度、原始可见文本、表头标记及可用的 scope。单元格来自 HTML 解码后可见文字或 Markdown 解转义后的文字；不自动把 `001.20 万元` 解释为数值，也不把空白改成 0。原始文件、完整 Markdown 与 MinerU 原始 JSON 继续保留。每个 HTML anchor 单元格只存一次，合并覆盖的位置不新增数值单元格。
 
-检索视图将同一列的各级表头用 `/` 串联，并在每个 Chunk 重复表头。合并的数据标签可在覆盖行中重复，保持逐行语境；这些重复项是派生文本，不能作为汇总计算输入。表内 caption 进入检索上下文，代码围栏内的表格文字保持原样。完整行无法装入预算时明确报错，不截断单元格。
+检索视图将同一列的各级表头用 `/` 串联，并在每个 Chunk 重复表头。合并的数据标签可在覆盖行中重复，保持逐行语境；这些重复项是派生文本，不能作为汇总计算输入。表内 caption 进入检索上下文，代码围栏内的表格文字保持原样。完整行无法装入预算时使用带列标题和单元格偏移的文本片段，不改原始单元格；规则和对照见 [证据片段评测](chunk-evidence-quality.md)。
 
 表 ID 是原始表格文本及所在 Markdown 起点的摘要；身份由 `documentId + contentId + tableId` 共同确定，不能把 tableId 当全局权限标识。表格产物包含 Markdown 的 start/end 和已有的页/幻灯片/partition/bbox 来源。Chunk 新增 `tableId`、`tableRowStart`、`tableRowEnd`，行号是表内逻辑行，不是 Excel 行号；HTML/Office 的 partition 也不能冒充原文件页号或 sheet 名。
 
@@ -32,10 +32,10 @@ MongoDB 中 `tables` 保存唯一的结构对象，`blocks` 仅保存 `tableId` 
 ## 失败、预算与存量数据
 
 - 格式解析器只做静态解析，不执行脚本、加载 URL 或计算公式。HTML 标签边界由 tokenizer 识别，注释、属性、脚本里的 `</table>` 不会误截断表格。
-- 嵌套表、跨度重叠/越界/跨行组、`rowspan=0` 等当前不支持的结构明确失败，保留原文件供重新处理；不猜测或默默丢弃。Markdown 列数不一致也明确失败。合法但尚未支持的表格可能因此需要人工整理或后续适配。
+- 嵌套表、跨度重叠/越界/跨行组等当前不支持的结构明确失败，保留原文件供重新处理；不猜测或默默丢弃。`rowspan=0` 现已按当前行组结束位置解析，不跨到下一组。Markdown 列数不一致也明确失败。合法但尚未支持的表格可能因此需要人工整理或后续适配。
 - 每张表最多 4,194,304 个 UTF-16 字符、10,000 行、256 列、100,000 个占用格及展开网格格位。MongoDB 完整 BSON 记录另限 15 MiB，为其 16 MiB 硬限制留余量；不因结构化膨胀向数据库提交超限记录。
 - 不支持的表格导致解析不 READY；解析中已上传的资源走既有补偿清理。持久化失败继续由既有正文提交/任务协议处理，不激活不完整版本。
-- 分块策略升级到 `structure-v3`，旧 Chunk 缓存自动失效；旧正文仍可从 Markdown 重建 Chunk。存量正文不会因此自动多出持久化 `tables`，需要重解析或保存新修订。手工修改后重算表格，来源不继承旧文件的精确位置。
+- 当前分块策略为 `structure-v4`，旧 Chunk 缓存自动失效；旧正文仍可从 Markdown 重建 Chunk。存量正文不会因此自动多出持久化 `tables`，需要重解析或保存新修订。手工修改后重算表格，来源不继承旧文件的精确位置。
 
 ## 真实 MinerU 对比
 
@@ -64,3 +64,5 @@ pnpm --filter @knowbase/api test:ingestion
 ```
 
 逐轮摘要、版本、耗时、完整上下文行数、定位和求和值写入忽略的 `reports/ingestion-tables/comparison.json`。解析请求约 1 秒，受轮询间隔影响；本次不以毫秒级分块耗时宣称性能收益。若 Docker Registry 不可用但本机已有测试镜像，可给集成测试设置 `DELIVERY_TEST_PULL_POLICY=never`。
+
+PDF 后续补充了矩形 OCR 表格结构恢复与显式续表表头借用，保留每页独立表格及表头来源页；适用条件、对照数据和限制见 [业务解析评测](ingestion-quality.md#pdf-表格对照)。不据此声称支持所有扫描表格或跨页合并格。
