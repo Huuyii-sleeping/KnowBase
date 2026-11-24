@@ -17,14 +17,23 @@ export class DocumentEmbeddingService {
     return this.provider.fingerprint;
   }
 
-  async embed(documentId: string, texts: string[]): Promise<number[][]> {
+  async embed(
+    documentId: string,
+    texts: string[],
+    onProgress?: (completed: number, total: number) => Promise<void>,
+  ): Promise<number[][]> {
+    // Reused vectors must obey the active input budget too.
+    this.provider.validateInputs?.(texts);
     const fingerprint = this.provider.fingerprint;
-    if (!fingerprint)
-      return ingestionStage(
+    if (!fingerprint) {
+      const result = await ingestionStage(
         'embedding',
         { documentId, inputs: texts.length, cache: 'disabled' },
         () => this.provider.embedDocuments(texts),
       );
+      await onProgress?.(texts.length, texts.length);
+      return result;
+    }
     // The document ID is part of the key: reuse never crosses an authorization scope.
     const keys = texts.map((text) =>
       createHash('sha256')
@@ -45,6 +54,38 @@ export class DocumentEmbeddingService {
         missing.set(key, texts[i]);
     });
     const entries = [...missing.entries()];
+    const keyByText = new Map(entries.map(([key, text]) => [text, key]));
+    const persisted = new Set<string>();
+    const occurrences = new Map<string, number>();
+    keys.forEach((key) =>
+      occurrences.set(key, (occurrences.get(key) ?? 0) + 1),
+    );
+    const completedKeys = new Set(
+      keys.filter((key) =>
+        validVector(found.get(key), this.provider.dimensions),
+      ),
+    );
+    let completed = keys.filter((key) => completedKeys.has(key)).length;
+    const report = async () => onProgress?.(completed, texts.length);
+    const save = async (saved: Array<{ key: string; vector: number[] }>) => {
+      for (const entry of saved) {
+        found.set(entry.key, entry.vector);
+        if (!completedKeys.has(entry.key)) {
+          completedKeys.add(entry.key);
+          completed += occurrences.get(entry.key) ?? 0;
+        }
+      }
+      try {
+        if (saved.length) await this.cache.save(documentId, saved);
+        saved.forEach((entry) => persisted.add(entry.key));
+      } catch {
+        this.logger.warn(
+          `Embedding cache write unavailable for ${documentId}; completed batches may require recomputation.`,
+        );
+      }
+      await report();
+    };
+    await report();
     const fresh = entries.length
       ? await ingestionStage(
           'embedding',
@@ -54,7 +95,31 @@ export class DocumentEmbeddingService {
             misses: entries.length,
             fingerprint,
           },
-          () => this.provider.embedDocuments(entries.map(([, text]) => text)),
+          () =>
+            this.provider.embedDocuments(
+              entries.map(([, text]) => text),
+              async (batch, vectors) => {
+                if (
+                  !Array.isArray(batch) ||
+                  !Array.isArray(vectors) ||
+                  batch.length !== vectors.length ||
+                  new Set(batch).size !== batch.length ||
+                  Array.from(batch).some((text) => !keyByText.has(text)) ||
+                  !Array.from(vectors).every((vector) =>
+                    validVector(vector, this.provider.dimensions),
+                  )
+                )
+                  throw new Error(
+                    'Invalid completed embedding batch; cache was not updated.',
+                  );
+                await save(
+                  batch.map((text, index) => ({
+                    key: keyByText.get(text)!,
+                    vector: vectors[index],
+                  })),
+                );
+              },
+            ),
         )
       : [];
     if (
@@ -64,16 +129,14 @@ export class DocumentEmbeddingService {
         validVector(vector, this.provider.dimensions),
       )
     )
-      throw new Error('Invalid embedding response; cache was not updated.');
-    const saved = entries.map(([key], i) => ({ key, vector: fresh[i] }));
-    for (const entry of saved) found.set(entry.key, entry.vector);
-    try {
-      if (saved.length) await this.cache.save(documentId, saved);
-    } catch {
-      this.logger.warn(
-        `Embedding cache write unavailable for ${documentId}; continuing with computed vectors.`,
+      throw new Error(
+        'Invalid embedding response; incomplete vectors were not cached.',
       );
-    }
+    // Compatibility with providers without incremental callbacks; retry cache writes that failed transiently.
+    const remaining = entries.flatMap(([key], i) =>
+      persisted.has(key) ? [] : [{ key, vector: fresh[i] }],
+    );
+    if (remaining.length) await save(remaining);
     this.logger.log(
       JSON.stringify({
         documentId,

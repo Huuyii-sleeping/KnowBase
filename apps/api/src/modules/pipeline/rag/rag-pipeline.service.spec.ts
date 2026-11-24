@@ -34,15 +34,21 @@ function fixture() {
     discardGeneration: vi.fn(),
     deleteDocument: vi.fn(),
   };
+  const progress = {
+    start: vi.fn(),
+    report: vi.fn(),
+    finish: vi.fn(),
+    prune: vi.fn(),
+  };
   const service = new RagPipelineService(
     content as any,
     chunker as any,
     embedding as any,
     index as any,
     generations as any,
-    new IndexBuildService(generations as any),
+    new IndexBuildService(generations as any, progress as any),
   );
-  return { service, generations, content, chunker, embedding, index };
+  return { service, generations, content, chunker, embedding, index, progress };
 }
 describe('RagPipelineService generations', () => {
   it('activates an empty batch without calling the embedding provider', async () => {
@@ -109,5 +115,31 @@ describe('RagPipelineService generations', () => {
       skipped: true,
     });
     expect(index.discardGeneration).toHaveBeenCalled();
+  });
+  it('records cached/new vector progress and records failures before any index write', async () => {
+    const { service, embedding, content, progress, index } = fixture();
+    embedding.embed.mockImplementationOnce(async (_id, _texts, report) => {
+      await report(1, 2);
+      await report(2, 2);
+      return [[0.1], [0.2]];
+    });
+    await service.rebuildDocument('doc', 3);
+    expect(progress.report.mock.calls.map(([, ...event]) => event)).toEqual([
+      ['content', 0, 0],
+      ['chunk', 0, 0],
+      ['embedding', 0, 2],
+      ['embedding', 1, 2],
+      ['embedding', 2, 2],
+      ['index_write', 0, 2],
+      ['index_write', 2, 2],
+      ['activating', 0, 0],
+    ]);
+    content.findByContentId.mockResolvedValueOnce(null);
+    index.stageChunks.mockClear();
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'content not found',
+    );
+    expect(progress.finish.mock.calls.at(-1)?.[1]).toBe('failed');
+    expect(index.stageChunks).not.toHaveBeenCalled();
   });
 });

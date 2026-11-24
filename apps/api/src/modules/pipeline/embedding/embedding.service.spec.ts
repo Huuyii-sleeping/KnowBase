@@ -2,9 +2,13 @@ import { describe, expect, it, vi } from 'vitest';
 
 const ollamaEmbedDocuments = vi.fn().mockResolvedValue([[0.1, 0.2]]);
 const openAiEmbedDocuments = vi.fn().mockResolvedValue([[0.3, 0.4]]);
+const ollamaOptions = vi.fn();
 
 vi.mock('@langchain/ollama', () => ({
   OllamaEmbeddings: class OllamaEmbeddings {
+    constructor(options: unknown) {
+      ollamaOptions(options);
+    }
     embedDocuments = ollamaEmbedDocuments;
   },
 }));
@@ -65,6 +69,22 @@ describe('EmbeddingService', () => {
       [0.1, 0.2],
     ]);
     expect(ollamaEmbedDocuments).toHaveBeenCalledWith(['hello']);
+    expect(ollamaOptions).toHaveBeenLastCalledWith(
+      expect.objectContaining({ truncate: false }),
+    );
+  });
+
+  it('rejects actual token overflow before calling the OpenAI embedding provider', () => {
+    const service = new EmbeddingService(
+      makeConfig({
+        EMBEDDING_PROVIDER: 'openai',
+        OPENAI_API_KEY: 'fixture',
+        RAG_EMBEDDING_MAX_TOKENS: '5',
+      }) as any,
+    );
+    openAiEmbedDocuments.mockClear();
+    expect(() => service.embedDocuments([' word'.repeat(6)])).toThrow('tokens');
+    expect(openAiEmbedDocuments).not.toHaveBeenCalled();
   });
 
   it('supports switching back to OpenAI through configuration', async () => {

@@ -21,8 +21,9 @@ export class SearchPipelineService {
     await this.builds.build(
       document,
       'search',
-      (generation) =>
-        this.vectorIndex.indexDocument({
+      async (generation, report) => {
+        await report('index_write', 0, 1);
+        await this.vectorIndex.indexDocument({
           id: message.documentId,
           generation,
           document: {
@@ -31,7 +32,9 @@ export class SearchPipelineService {
             document_version: message.version,
             content: message.markdown,
           },
-        }),
+        });
+        await report('index_write', 1, 1);
+      },
       (generation) => this.vectorIndex.discardGeneration('search', generation),
     );
   }

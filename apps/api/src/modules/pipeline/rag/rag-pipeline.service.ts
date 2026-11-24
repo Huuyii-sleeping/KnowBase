@@ -31,48 +31,57 @@ export class RagPipelineService {
     );
     if (!document) return { chunks: 0, skipped: true };
 
-    const content = await this.contentStore.findByContentId(document.contentId);
-    if (!content) {
-      throw new Error(`document content not found: ${document.contentId}`);
-    }
-
-    const chunks = await this.chunker.forContent(
-      document.id,
-      document.contentId,
-      content,
-    );
-    const embeddings = chunks.length
-      ? await this.embedding.embed(
-          document.id,
-          chunks.map((chunk) => chunk.embeddingText),
-        )
-      : [];
-    if (embeddings.length !== chunks.length) {
-      throw new Error('embedding count does not match chunk count');
-    }
-
-    const vectorChunks: VectorChunkInput[] = chunks.map((chunk, index) => ({
-      id: `${document.id}:v${document.version}:c${index}`,
-      documentId: document.id,
-      version: document.version,
-      chunkIndex: index,
-      content: chunk.content,
-      metadata: {
-        strategy: chunk.strategy,
-        contentHash: chunk.contentHash,
-        headingPath: chunk.headingPath,
-        ranges: chunk.ranges,
-        parseStrategy: content.parseStrategy,
-        embeddingFingerprint: this.embedding.fingerprint,
-      },
-      embedding: embeddings[index],
-    }));
-
+    let count = 0;
     const activated = await this.builds.build(
       document,
       'rag',
-      (generation) =>
-        ingestionStage(
+      async (generation, report) => {
+        await report('content');
+        const content = await this.contentStore.findByContentId(
+          document.contentId,
+        );
+        if (!content) {
+          throw new Error(`document content not found: ${document.contentId}`);
+        }
+
+        await report('chunk');
+        const chunks = await this.chunker.forContent(
+          document.id,
+          document.contentId,
+          content,
+        );
+        count = chunks.length;
+        await report('embedding', 0, chunks.length);
+        const embeddings = chunks.length
+          ? await this.embedding.embed(
+              document.id,
+              chunks.map((chunk) => chunk.embeddingText),
+              (completed, total) => report('embedding', completed, total),
+            )
+          : [];
+        if (embeddings.length !== chunks.length) {
+          throw new Error('embedding count does not match chunk count');
+        }
+
+        const vectorChunks: VectorChunkInput[] = chunks.map((chunk, index) => ({
+          id: `${document.id}:v${document.version}:c${index}`,
+          documentId: document.id,
+          version: document.version,
+          chunkIndex: index,
+          content: chunk.content,
+          metadata: {
+            strategy: chunk.strategy,
+            contentHash: chunk.contentHash,
+            headingPath: chunk.headingPath,
+            ranges: chunk.ranges,
+            parseStrategy: content.parseStrategy,
+            embeddingFingerprint: this.embedding.fingerprint,
+          },
+          embedding: embeddings[index],
+        }));
+
+        await report('index_write', 0, vectorChunks.length);
+        await ingestionStage(
           'index.write',
           {
             documentId,
@@ -82,12 +91,12 @@ export class RagPipelineService {
           },
           () =>
             this.vectorIndex.stageChunks(document.id, generation, vectorChunks),
-        ),
+        );
+        await report('index_write', vectorChunks.length, vectorChunks.length);
+      },
       (generation) => this.vectorIndex.discardGeneration('rag', generation),
     );
-    return activated
-      ? { chunks: vectorChunks.length }
-      : { chunks: 0, skipped: true };
+    return activated ? { chunks: count } : { chunks: 0, skipped: true };
   }
 
   async deleteDocument(id: string): Promise<void> {

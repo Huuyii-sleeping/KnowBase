@@ -35,21 +35,26 @@ export class KgPipelineService {
       return { chunks: 0, entities: 0, relations: 0, skipped: true };
     }
 
-    const content = await this.contentStore.findByContentId(document.contentId);
-    if (!content) {
-      throw new Error(`document content not found: ${document.contentId}`);
-    }
-
-    const chunks = await this.chunker.forContent(
-      document.id,
-      document.contentId,
-      content,
-    );
     let counts = { chunks: 0, entities: 0, relations: 0 };
     const activated = await this.builds.build(
       document,
       'kg',
-      async (generation) => {
+      async (generation, report) => {
+        await report('content');
+        const content = await this.contentStore.findByContentId(
+          document.contentId,
+        );
+        if (!content) {
+          throw new Error(`document content not found: ${document.contentId}`);
+        }
+
+        await report('chunk');
+        const chunks = await this.chunker.forContent(
+          document.id,
+          document.contentId,
+          content,
+        );
+
         const graphChunks = chunks.map((chunk, index) => ({
           id: `${document.id}:v${document.version}:c${index}:${generation}`,
           documentId: document.id,
@@ -57,11 +62,13 @@ export class KgPipelineService {
           chunkIndex: index,
           content: chunk.content,
         }));
+        await report('graph_extract', 0, graphChunks.length);
         const extraction = await ingestionStage(
           'graph.extract',
           { documentId, chunks: graphChunks.length },
           () => this.extractor.extract(graphChunks),
         );
+        await report('index_write', 0, graphChunks.length);
         await this.graphIndex.stageDocument(
           document.id,
           document.version,
@@ -71,6 +78,7 @@ export class KgPipelineService {
           extraction.mentions,
           extraction.relations,
         );
+        await report('index_write', graphChunks.length, graphChunks.length);
         counts = {
           chunks: graphChunks.length,
           entities: extraction.entities.length,

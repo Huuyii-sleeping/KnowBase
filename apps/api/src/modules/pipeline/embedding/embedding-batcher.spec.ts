@@ -80,4 +80,47 @@ describe('bounded embedding work', () => {
     await expect(service.embedDocuments(['a'])).rejects.toThrow('offline');
     expect(await service.embedDocuments(['a'])).toEqual([[1, 2]]);
   });
+  it('checkpoints only validated batches and awaits in-flight checkpoints before rejecting', async () => {
+    let release!: () => void;
+    const inFlight = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let began!: () => void;
+    const started = new Promise<void>((resolve) => {
+      began = resolve;
+    });
+    const checkpoint = vi.fn();
+    const service = new EmbeddingBatcher(
+      {
+        embedDocuments: async (texts) => {
+          if (texts[0] === 'a') {
+            began();
+            await inFlight;
+            return [[1, 2]];
+          }
+          await started;
+          release();
+          return [[NaN, 1]];
+        },
+      },
+      { ...options, batchSize: 1 },
+    );
+    await expect(
+      service.embedDocuments(['a', 'b', 'c'], checkpoint),
+    ).rejects.toThrow('invalid');
+    expect(checkpoint).toHaveBeenCalledExactlyOnceWith(['a'], [[1, 2]]);
+  });
+
+  it('releases permits when a checkpoint fails', async () => {
+    const service = new EmbeddingBatcher(
+      { embedDocuments: async () => [[1, 2]] },
+      { ...options, concurrency: 1 },
+    );
+    await expect(
+      service.embedDocuments(['a'], async () => {
+        throw new Error('checkpoint failed');
+      }),
+    ).rejects.toThrow('checkpoint failed');
+    expect(await service.embedDocuments(['b'])).toEqual([[1, 2]]);
+  });
 });

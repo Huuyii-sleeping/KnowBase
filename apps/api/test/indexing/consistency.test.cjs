@@ -9,6 +9,9 @@ const { GenerationRetentionStore } = load(
   'indexing/generation-retention.store.js',
 );
 const { IndexBuildService } = load('indexing/index-build.service.js');
+const { IndexBuildProgressStore } = load(
+  'indexing/index-build-progress.store.js',
+);
 const { VectorIndexService } = load(
   'pipeline/vector-index/vector-index.service.js',
 );
@@ -35,7 +38,7 @@ const { Document } = load('documents/entities/document.entity.js');
 
 const env = new DeliveryTestEnvironment();
 env.composeFiles.push('docker-compose.index-test.yml');
-let heads, builds, vector, graph, revisions, deletion, workflow;
+let heads, builds, progress, vector, graph, revisions, deletion, workflow;
 const admin = { id: 'admin', role: 'ADMIN' };
 
 before(
@@ -63,7 +66,8 @@ before(
       env.source,
       new GenerationRetentionStore(env.source),
     );
-    builds = new IndexBuildService(heads);
+    progress = new IndexBuildProgressStore(env.source);
+    builds = new IndexBuildService(heads, progress);
     vector = new VectorIndexService(config, heads);
     graph = new GraphIndexService(config, heads);
     const access = new DocumentAccessService(
@@ -107,7 +111,7 @@ after(
 beforeEach(async () => {
   // Keep the infrastructure runtime alive; reset only this isolated database's state.
   await env.source.query(
-    'TRUNCATE kh_index_generation_retention, kh_document_parse_task, kh_index_head, kh_document, kh_pipeline_outbox, kh_pipeline_receipt',
+    'TRUNCATE kh_index_build_progress, kh_index_generation_retention, kh_document_parse_task, kh_index_head, kh_document, kh_pipeline_outbox, kh_pipeline_receipt',
   );
 });
 
@@ -502,4 +506,129 @@ test('retired generations receive a grace period and collection preserves curren
     touched = true;
   });
   assert.equal(touched, false);
+});
+
+test('build progress is monotonic, isolated per attempt and immutable after completion', async () => {
+  const current = await document();
+  const first = randomUUID(),
+    second = randomUUID();
+  await progress.start(current, 'rag', first);
+  await progress.start(current, 'rag', second);
+  await Promise.all([
+    progress.report(first, 'embedding', 4, 6),
+    progress.report(first, 'embedding', 2, 6),
+  ]);
+  await progress.report(first, 'chunk');
+  const rows = () =>
+    env.source.query(
+      'SELECT * FROM kh_index_build_progress WHERE generation=$1',
+      [first],
+    );
+  let [row] = await rows();
+  assert.equal(row.stage, 'embedding');
+  assert.equal(row.completed, 4);
+  assert.equal(row.total, 6);
+  assert.equal((await progress.latest(current.id))[0].generation, second);
+  await progress.report(first, 'index_write', 0, 6);
+  await progress.finish(first, 'failed');
+  await progress.report(first, 'complete', 6, 6);
+  await progress.finish(first, 'succeeded');
+  [row] = await rows();
+  assert.equal(row.state, 'failed');
+  assert.equal(row.stage, 'index_write');
+  assert.equal(row.completed, 0);
+  assert.ok(row.finished_at);
+  assert.equal((await progress.latest(current.id))[0].state, 'running');
+  await progress.finish(second, 'succeeded');
+  assert.equal((await progress.latest(current.id))[0].stage, 'complete');
+});
+
+test('obsolete snapshots cannot create attempts and deleting a document removes all progress', async () => {
+  const current = await document();
+  const generation = randomUUID();
+  await progress.start({ ...current, version: 99 }, 'rag', randomUUID());
+  assert.deepEqual(await progress.latest(current.id), []);
+  await progress.start(
+    { ...current, contentId: randomUUID() },
+    'rag',
+    randomUUID(),
+  );
+  assert.deepEqual(await progress.latest(current.id), []);
+  await progress.start(current, 'rag', generation);
+  await env.source.query('DELETE FROM kh_document WHERE id=$1', [current.id]);
+  await progress.report(generation, 'embedding', 1, 2);
+  await progress.finish(generation, 'failed');
+  await progress.start(current, 'rag', randomUUID());
+  assert.deepEqual(await progress.latest(current.id), []);
+});
+
+test('pruning removes only old obsolete status history and preserves latest attempts and index heads', async () => {
+  const current = await document();
+  await build('rag', current, 'Original');
+  const headsBefore = await heads.active('rag', [current.id]);
+  const old = (await progress.latest(current.id))[0].generation;
+  const latest = randomUUID(),
+    otherPipeline = randomUUID();
+  await progress.start(current, 'rag', latest);
+  await progress.start(current, 'kg', otherPipeline);
+  await env.source.query(
+    "UPDATE kh_index_build_progress SET updated_at=clock_timestamp()-INTERVAL '31 days'",
+  );
+  await progress.prune();
+  const rows = await env.source.query(
+    'SELECT generation FROM kh_index_build_progress WHERE document_id=$1',
+    [current.id],
+  );
+  assert.deepEqual(
+    rows.map((r) => r.generation).sort(),
+    [latest, otherPipeline].sort(),
+  );
+  assert.ok(!rows.some((r) => r.generation === old));
+  assert.deepEqual(await heads.active('rag', [current.id]), headsBefore);
+  assert.ok(
+    (await visible('rag', current.id)).every((text) => text === 'Original'),
+  );
+});
+
+test('real build attempts record pre-write failure and uncertain activation without discarding possible active data', async () => {
+  const current = await document();
+  await assert.rejects(
+    builds.build(
+      current,
+      'rag',
+      async (_generation, report) => {
+        await report('embedding', 2, 6);
+        throw new Error('model unavailable');
+      },
+      async () => {},
+    ),
+    /model unavailable/,
+  );
+  assert.equal((await progress.latest(current.id))[0].state, 'failed');
+  assert.equal((await progress.latest(current.id))[0].completed, 2);
+  const uncertain = new IndexBuildService(
+    {
+      activate: async () => {
+        throw new Error('COMMIT outcome unknown');
+      },
+    },
+    progress,
+  );
+  let discarded = false;
+  await assert.rejects(
+    uncertain.build(
+      current,
+      'rag',
+      async () => {},
+      async () => {
+        discarded = true;
+      },
+    ),
+    /COMMIT outcome/,
+  );
+  assert.equal(discarded, false);
+  assert.equal(
+    (await progress.latest(current.id))[0].state,
+    'activation_unknown',
+  );
 });

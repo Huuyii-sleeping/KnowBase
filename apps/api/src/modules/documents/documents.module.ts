@@ -1,3 +1,5 @@
+import { DocumentIndexStatusController } from './indexing/document-index-status.controller';
+import { DocumentIndexStatusService } from './indexing/document-index-status.service';
 import { SupplementaryParsers } from './parsing/supplementary-parsers';
 import { ParsedDocumentEnricher } from './parsing/parsed-document.enricher';
 import { DocumentArtifactVerifier } from './evidence/document-artifact-verifier';
@@ -75,9 +77,11 @@ import { ParseMaintenanceService } from './ingestion/parse-maintenance.service';
   controllers: [
     DocumentsController,
     DocumentEvidenceController,
+    DocumentIndexStatusController,
   ],
   providers: [
     DocumentsService,
+    DocumentIndexStatusService,
     DocumentContentStore,
     DocumentEvidenceStore,
     DocumentArtifactVerifier,

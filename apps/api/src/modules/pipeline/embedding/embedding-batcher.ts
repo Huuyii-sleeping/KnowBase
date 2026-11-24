@@ -1,6 +1,13 @@
 export interface EmbeddingProvider {
-  embedDocuments(texts: string[]): Promise<number[][]>;
+  embedDocuments(
+    texts: string[],
+    onBatch?: EmbeddingBatchCallback,
+  ): Promise<number[][]>;
 }
+export type EmbeddingBatchCallback = (
+  texts: string[],
+  vectors: number[][],
+) => Promise<void>;
 
 export function validVector(
   vector: unknown,
@@ -32,7 +39,10 @@ export class EmbeddingBatcher implements EmbeddingProvider {
     },
   ) {}
 
-  async embedDocuments(texts: string[]): Promise<number[][]> {
+  async embedDocuments(
+    texts: string[],
+    onBatch?: EmbeddingBatchCallback,
+  ): Promise<number[][]> {
     const unique = [...new Set(texts)];
     const batches: string[][] = [];
     let batch: string[] = [];
@@ -78,6 +88,7 @@ export class EmbeddingBatcher implements EmbeddingProvider {
             );
           }
           input.forEach((text, index) => vectors.set(text, result[index]));
+          await onBatch?.(input, result);
         } catch (error) {
           failed = true;
           failure = error;

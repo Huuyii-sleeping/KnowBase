@@ -12,10 +12,16 @@ describe('SearchPipelineService', () => {
       capture: vi.fn().mockResolvedValue({ id: 'doc', version: 2 }),
       activate: vi.fn().mockResolvedValue(true),
     };
+    const progress = {
+      start: vi.fn(),
+      report: vi.fn(),
+      finish: vi.fn(),
+      prune: vi.fn(),
+    };
     const service = new SearchPipelineService(
       index as any,
       generations as any,
-      new IndexBuildService(generations as any),
+      new IndexBuildService(generations as any, progress as any),
     );
     const message = {
       type: 'DOCUMENT_INDEX',
@@ -32,6 +38,11 @@ describe('SearchPipelineService', () => {
         document: expect.objectContaining({ id: 'doc', document_version: 2 }),
       }),
     );
+    expect(progress.report.mock.calls.map(([, ...event]) => event)).toEqual([
+      ['index_write', 0, 1],
+      ['index_write', 1, 1],
+      ['activating', 0, 0],
+    ]);
     generations.capture.mockResolvedValueOnce(null);
     await service.indexDocument(message);
     expect(index.indexDocument).toHaveBeenCalledOnce();

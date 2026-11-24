@@ -35,15 +35,21 @@ function fixture() {
     discardGeneration: vi.fn(),
     deleteDocument: vi.fn(),
   };
+  const progress = {
+    start: vi.fn(),
+    report: vi.fn(),
+    finish: vi.fn(),
+    prune: vi.fn(),
+  };
   const service = new KgPipelineService(
     content as any,
     chunker as any,
     extractor as any,
     index as any,
     generations as any,
-    new IndexBuildService(generations as any),
+    new IndexBuildService(generations as any, progress as any),
   );
-  return { service, generations, extractor, index };
+  return { service, generations, extractor, index, content, progress };
 }
 describe('KgPipelineService generations', () => {
   it('uses generation-specific chunk IDs and activates only after the Neo4j transaction', async () => {
@@ -95,5 +101,24 @@ describe('KgPipelineService generations', () => {
     const { service, index } = fixture();
     await service.deleteDocument('doc');
     expect(index.deleteDocument).toHaveBeenCalledWith('doc');
+  });
+  it('reports graph phases and records missing content before extraction', async () => {
+    const { service, content, extractor, progress } = fixture();
+    await service.rebuildDocument('doc', 3);
+    expect(progress.report.mock.calls.map(([, ...event]) => event)).toEqual([
+      ['content', 0, 0],
+      ['chunk', 0, 0],
+      ['graph_extract', 0, 1],
+      ['index_write', 0, 1],
+      ['index_write', 1, 1],
+      ['activating', 0, 0],
+    ]);
+    content.findByContentId.mockResolvedValueOnce(null);
+    extractor.extract.mockClear();
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'content not found',
+    );
+    expect(progress.finish.mock.calls.at(-1)?.[1]).toBe('failed');
+    expect(extractor.extract).not.toHaveBeenCalled();
   });
 });

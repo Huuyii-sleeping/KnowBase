@@ -4,12 +4,18 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { OllamaEmbeddings } from '@langchain/ollama';
 import { createHash } from 'node:crypto';
 import { integerOption } from '../../ingestion/numeric-option';
-import { EmbeddingBatcher, EmbeddingProvider } from './embedding-batcher';
+import {
+  EmbeddingBatcher,
+  EmbeddingProvider,
+  EmbeddingBatchCallback,
+} from './embedding-batcher';
+import { EmbeddingInputBudget } from './embedding-input-budget';
 export type { EmbeddingProvider } from './embedding-batcher';
 
 @Injectable()
 export class EmbeddingService implements EmbeddingProvider {
   private readonly embeddings: EmbeddingProvider;
+  private readonly inputBudget: EmbeddingInputBudget;
   readonly fingerprint?: string;
   readonly dimensions: number;
 
@@ -53,6 +59,7 @@ export class EmbeddingService implements EmbeddingProvider {
       adapter = new OllamaEmbeddings({
         baseUrl: endpoint,
         model,
+        truncate: false,
         maxRetries: 0,
         maxConcurrency: concurrency,
         fetch: (input, init) =>
@@ -69,6 +76,12 @@ export class EmbeddingService implements EmbeddingProvider {
           }),
       });
     } else throw new Error(`unsupported embedding provider: ${provider}`);
+    const maxTokens = config.get<string>('RAG_EMBEDDING_MAX_TOKENS')?.trim();
+    this.inputBudget = new EmbeddingInputBudget(
+      provider,
+      model,
+      maxTokens ? Number(maxTokens) : undefined,
+    );
     const revision = config.get<string>('EMBEDDING_MODEL_REVISION', '').trim();
     // A mutable model alias is insufficient for safe persistent vector reuse.
     if (revision)
@@ -96,7 +109,15 @@ export class EmbeddingService implements EmbeddingProvider {
     });
   }
 
-  embedDocuments(texts: string[]): Promise<number[][]> {
-    return this.embeddings.embedDocuments(texts);
+  embedDocuments(
+    texts: string[],
+    onBatch?: EmbeddingBatchCallback,
+  ): Promise<number[][]> {
+    this.validateInputs(texts);
+    return this.embeddings.embedDocuments(texts, onBatch);
+  }
+
+  validateInputs(texts: string[]): void {
+    this.inputBudget.validate(texts);
   }
 }

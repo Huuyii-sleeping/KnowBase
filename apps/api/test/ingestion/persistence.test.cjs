@@ -1,7 +1,9 @@
 const assert = require('node:assert/strict');
 const { test, before, after } = require('node:test');
 const { promisify } = require('node:util');
-const { execFile } = require('node:child_process');
+const { execFile, fork } = require('node:child_process');
+const { once } = require('node:events');
+const fs = require('node:fs/promises');
 const path = require('node:path');
 const mongoose = require('mongoose');
 const { ConfigService } = require('@nestjs/config');
@@ -15,6 +17,7 @@ const { ChunkArtifactStore } = load(
 const { EmbeddingCacheStore } = load(
   'ingestion/artifacts/embedding-cache.store.js',
 );
+const { EmbeddingBatcher } = load('pipeline/embedding/embedding-batcher.js');
 const { DocumentEmbeddingService } = load(
   'pipeline/embedding/document-embedding.service.js',
 );
@@ -641,3 +644,175 @@ test('evidence and ownership index migrations are repeatable', async () => {
     ),
   );
 });
+
+test('real Mongo compares aggregate checkpoints with per-batch recovery on identical deterministic inputs', async () => {
+  const texts = [
+    '北区审批规则',
+    '南区审批规则',
+    '东区额度限制',
+    '西区额度限制',
+    '总部例外规则',
+    '门店退款流程',
+  ];
+  const vector = (text) => [
+    Array.from(text).reduce(
+      (sum, character) => sum + character.codePointAt(0),
+      0,
+    ),
+    1,
+  ];
+  async function scenario(incremental) {
+    const documentId = `recovery-${incremental}`;
+    const inputs = [];
+    let fail = true;
+    const batcher = new EmbeddingBatcher(
+      {
+        embedDocuments: async (batch) => {
+          inputs.push(...batch);
+          if (fail && batch.includes(texts[4]))
+            throw new Error('injected final batch failure');
+          return batch.map(vector);
+        },
+      },
+      { dimensions: 2, batchSize: 2, maxCharacters: 100, concurrency: 1 },
+    );
+    // Baseline reproduces the earlier aggregate checkpoint policy by withholding the batch hook.
+    const provider = {
+      fingerprint: 'recovery-revision',
+      dimensions: 2,
+      embedDocuments: (batch, callback) =>
+        batcher.embedDocuments(batch, incremental ? callback : undefined),
+    };
+    const service = () =>
+      new DocumentEmbeddingService(
+        provider,
+        new EmbeddingCacheStore(cacheModel, new ConfigService()),
+      );
+    await assert.rejects(
+      service().embed(documentId, texts),
+      /injected final batch/,
+    );
+    const persistedAfterFailure = await cacheModel.countDocuments({
+      documentId,
+    });
+    const failedAttemptInputs = inputs.length;
+    fail = false;
+    const recovered = await service().embed(documentId, texts);
+    assert.deepEqual(recovered, texts.map(vector));
+    const retryInputs = inputs.length - failedAttemptInputs;
+    const beforeRepeat = inputs.length;
+    await service().embed(documentId, texts);
+    const repeatInputs = inputs.length - beforeRepeat;
+    const changed = [...texts.slice(0, -1), '门店退款流程（修订版）'];
+    const beforeEdit = inputs.length;
+    assert.deepEqual(
+      await service().embed(documentId, changed),
+      changed.map(vector),
+    );
+    return {
+      persistedAfterFailure,
+      failedAttemptInputs,
+      retryInputs,
+      repeatInputs,
+      editedInputs: inputs.length - beforeEdit,
+      vectorsCorrect: true,
+    };
+  }
+  const before = await scenario(false),
+    after = await scenario(true);
+  assert.deepEqual(before, {
+    persistedAfterFailure: 0,
+    failedAttemptInputs: 6,
+    retryInputs: 6,
+    repeatInputs: 0,
+    editedInputs: 1,
+    vectorsCorrect: true,
+  });
+  assert.deepEqual(after, {
+    persistedAfterFailure: 4,
+    failedAttemptInputs: 6,
+    retryInputs: 2,
+    repeatInputs: 0,
+    editedInputs: 1,
+    vectorsCorrect: true,
+  });
+  const report = {
+    fixture:
+      '6 synthetic business chunks; batchSize=2; concurrency=1; fail final batch',
+    storage: 'real isolated MongoDB',
+    model:
+      'deterministic fake; counts measure model inputs, not model latency or accuracy',
+    before,
+    after,
+    retryInputReduction:
+      (before.retryInputs - after.retryInputs) / before.retryInputs,
+  };
+  const output = path.resolve(
+    __dirname,
+    '../../../../reports/ingestion-index-recovery',
+  );
+  await fs.mkdir(output, { recursive: true });
+  await fs.writeFile(
+    path.join(output, 'comparison.json'),
+    JSON.stringify(report, null, 2),
+  );
+});
+
+test(
+  'SIGKILL after a persisted checkpoint still permits a fresh service to compute only the missing vectors',
+  { timeout: 20000 },
+  async () => {
+    const child = fork(path.join(__dirname, 'embedding-crash-worker.cjs'), [], {
+      env: { ...process.env, INGESTION_TEST_MONGO_URI: mongoUri },
+      stdio: ['ignore', 'ignore', 'pipe', 'ipc'],
+    });
+    const exited = once(child, 'exit');
+    const deadline = setTimeout(() => child.kill('SIGKILL'), 15000);
+    try {
+      const checkpoint = await Promise.race([
+        once(child, 'message').then(([message]) => message),
+        exited.then(() => {
+          throw new Error('child exited before checkpoint');
+        }),
+      ]);
+      assert.equal(checkpoint.checkpoint, 4);
+      child.kill('SIGKILL');
+      const [, signal] = await exited;
+      assert.equal(signal, 'SIGKILL');
+      assert.equal(
+        await cacheModel.countDocuments({ documentId: 'crash-test' }),
+        4,
+      );
+      const inputs = [];
+      const batcher = new EmbeddingBatcher(
+        {
+          embedDocuments: async (texts) => {
+            inputs.push(...texts);
+            return texts.map((text) => [text.length, 1]);
+          },
+        },
+        { dimensions: 2, batchSize: 2, maxCharacters: 100, concurrency: 1 },
+      );
+      const provider = {
+        fingerprint: 'crash-revision',
+        dimensions: 2,
+        embedDocuments: (texts, callback) =>
+          batcher.embedDocuments(texts, callback),
+      };
+      const texts = ['one', 'two', 'three', 'four', 'five', 'six'];
+      const result = await new DocumentEmbeddingService(provider, cache).embed(
+        'crash-test',
+        texts,
+      );
+      assert.deepEqual(inputs, ['five', 'six']);
+      assert.deepEqual(
+        result,
+        texts.map((text) => [text.length, 1]),
+      );
+    } finally {
+      clearTimeout(deadline);
+      child.kill('SIGKILL');
+      await exited;
+    }
+  },
+);

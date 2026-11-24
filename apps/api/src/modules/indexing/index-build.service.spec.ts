@@ -82,4 +82,79 @@ describe('IndexBuildService', () => {
     ).rejects.toThrow('COMMIT');
     expect(discard).not.toHaveBeenCalled();
   });
+  it.each(['succeeded', 'superseded', 'failed', 'activation_unknown'])(
+    'persists terminal state %s with attempt-scoped counters',
+    async (state) => {
+      const store = {
+        activate: vi.fn(async () => {
+          if (state === 'activation_unknown')
+            throw new Error('COMMIT uncertain');
+          return state !== 'superseded';
+        }),
+      };
+      const progress = {
+        start: vi.fn(),
+        report: vi.fn(),
+        finish: vi.fn(),
+        prune: vi.fn(),
+      };
+      const discard = vi.fn();
+      const document = { id: 'doc', version: 3 } as any;
+      const stage = vi.fn(async (_generation, report) => {
+        await report('embedding', 2, 4);
+        if (state === 'failed') throw new Error('model unavailable');
+      });
+      const work = new IndexBuildService(store as any, progress as any).build(
+        document,
+        'rag',
+        stage,
+        discard,
+      );
+      if (state === 'failed' || state === 'activation_unknown')
+        await expect(work).rejects.toThrow();
+      else expect(await work).toBe(state === 'succeeded');
+      const generation = progress.start.mock.calls[0][2];
+      expect(progress.start).toHaveBeenCalledWith(document, 'rag', generation);
+      expect(progress.report).toHaveBeenCalledWith(
+        generation,
+        'embedding',
+        2,
+        4,
+      );
+      expect(progress.finish).toHaveBeenCalledExactlyOnceWith(
+        generation,
+        state,
+      );
+      expect(progress.prune).toHaveBeenCalledOnce();
+      expect(discard).toHaveBeenCalledTimes(
+        state === 'failed' || state === 'superseded' ? 1 : 0,
+      );
+      if (state === 'failed') expect(store.activate).not.toHaveBeenCalled();
+    },
+  );
+
+  it('does not make progress persistence a visibility dependency', async () => {
+    const store = { activate: vi.fn().mockResolvedValue(true) };
+    const offline = () =>
+      vi.fn().mockRejectedValue(new Error('progress DB unavailable'));
+    const progress = {
+      start: offline(),
+      report: offline(),
+      finish: offline(),
+      prune: offline(),
+    };
+    const discard = vi.fn();
+    expect(
+      await new IndexBuildService(store as any, progress as any).build(
+        {} as any,
+        'rag',
+        async (_generation, report) => {
+          await report('chunk');
+        },
+        discard,
+      ),
+    ).toBe(true);
+    expect(store.activate).toHaveBeenCalledOnce();
+    expect(discard).not.toHaveBeenCalled();
+  });
 });
