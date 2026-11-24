@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {
+  withAnswerTelemetry,
+  observeAsyncStage,
+  observeSyncStage,
+} from '../observability/answer-telemetry';
+import {
   AnswerCitation,
   AnswerCitationService,
 } from './answer-citation.service';
@@ -52,115 +57,126 @@ export class AnswerService {
   async answer(
     query: AnswerQuestionDto,
     user?: AuthUser,
+    requestId?: string,
   ): Promise<AnswerResult> {
     const question = query.question.trim();
-    const trace = this.observability.startAnswerTrace(question, query.topK);
+    const trace = this.observability.startAnswerTrace(
+      question,
+      query.topK,
+      requestId,
+    );
     let execution: AnswerExecution | undefined;
-    try {
-      return await runWithAnswerDeadline(async (activeExecution) => {
-        execution = activeExecution;
-        const retrievalStartedAt = Date.now();
-        const retrieval = await this.retrieval.retrieve(
-          question,
-          query.topK,
-          user,
-        );
-        checkAnswerDeadline();
-        const items = retrieval.items.filter((item) => item.content?.trim());
-        this.observability.recordRetrieval(
-          trace,
-          { query: question, topK: query.topK },
-          {
-            itemCount: items.length,
-            items: this.toTraceItems(items),
-            graphUsed: retrieval.graphUsed,
-          },
-          Date.now() - retrievalStartedAt,
-        );
+    return withAnswerTelemetry(trace.telemetry, async () => {
+      try {
+        return await runWithAnswerDeadline(async (activeExecution) => {
+          execution = activeExecution;
+          const retrievalStartedAt = Date.now();
+          const retrieval = await observeAsyncStage('retrieval.total', () =>
+            this.retrieval.retrieve(question, query.topK, user),
+          );
+          checkAnswerDeadline();
+          const items = retrieval.items.filter((item) => item.content?.trim());
+          this.observability.recordRetrieval(
+            trace,
+            { query: question, topK: query.topK },
+            {
+              itemCount: items.length,
+              items: this.toTraceItems(items),
+              graphUsed: retrieval.graphUsed,
+            },
+            Date.now() - retrievalStartedAt,
+          );
 
-        activeExecution.stage = 'context';
-        const groundingStartedAt = Date.now();
-        const context = this.context.build(question, items);
-        const groundedItems = context.items;
-        this.observability.recordGrounding(
-          trace,
-          { question, candidateCount: items.length },
-          {
-            selectedCount: groundedItems.length,
-            promptBytes: context.promptBytes,
-            selectionPolicy: context.selectionPolicy,
-            omittedCount: context.omittedCount,
-            selectedChunkIds: groundedItems.map(
-              (item) => item.chunkId ?? item.documentId,
-            ),
-          },
-          Date.now() - groundingStartedAt,
-        );
+          activeExecution.stage = 'context';
+          const groundingStartedAt = Date.now();
+          const context = observeSyncStage('context.build', () =>
+            this.context.build(question, items),
+          );
+          const groundedItems = context.items;
+          this.observability.recordGrounding(
+            trace,
+            { question, candidateCount: items.length },
+            {
+              selectedCount: groundedItems.length,
+              promptBytes: context.promptBytes,
+              selectionPolicy: context.selectionPolicy,
+              omittedCount: context.omittedCount,
+              selectedChunkIds: groundedItems.map(
+                (item) => item.chunkId ?? item.documentId,
+              ),
+            },
+            Date.now() - groundingStartedAt,
+          );
 
-        checkAnswerDeadline();
-        activeExecution.stage = 'generation';
-        const generated = groundedItems.length
-          ? await this.generation.generate(context.prompt, groundedItems)
-          : {
-              modelName: 'none',
-              status: 'insufficient' as const,
-              answer: ANSWER_REFUSAL,
-              sourceIds: [],
-              claims: [],
-              attempts: [],
-              outcome: 'no-context',
-            };
-        checkAnswerDeadline();
-        for (const attempt of generated.attempts) {
-          this.observability.recordGeneration(
+          checkAnswerDeadline();
+          activeExecution.stage = 'generation';
+          const generated = groundedItems.length
+            ? await observeAsyncStage('generation.total', () =>
+                this.generation.generate(context.prompt, groundedItems),
+              )
+            : {
+                modelName: 'none',
+                status: 'insufficient' as const,
+                answer: ANSWER_REFUSAL,
+                sourceIds: [],
+                claims: [],
+                attempts: [],
+                outcome: 'no-context',
+              };
+          checkAnswerDeadline();
+          for (const attempt of generated.attempts) {
+            this.observability.recordGeneration(
+              trace,
+              {
+                prompt: attempt.prompt,
+                model: generated.modelName,
+              },
+              attempt.output,
+              attempt.latencyMs,
+            );
+          }
+          activeExecution.stage = 'citation';
+          const answer = generated.answer;
+          const answerable = generated.status === 'answered';
+          const result = {
+            question,
+            status: generated.status,
+            answer: answer,
+            citations: answerable
+              ? observeSyncStage('citation.build', () =>
+                  this.citations.build(answer, groundedItems, generated.claims),
+                )
+              : [],
+            contexts: answerable ? this.toContexts(groundedItems) : [],
+          };
+          checkAnswerDeadline();
+          this.observability.completeAnswer(
             trace,
             {
-              prompt: attempt.prompt,
-              model: generated.modelName,
+              answer: result.answer,
+              citations: result.citations,
+              contextCount: result.contexts.length,
             },
-            attempt.output,
-            attempt.latencyMs,
+            {
+              status: answerable ? 'success' : 'refusal',
+              outcome: generated.outcome,
+              generationAttempts: generated.attempts.length,
+              modelCalls: activeExecution.modelCalls,
+              transportRetries: activeExecution.transportRetries,
+              recoveredFailureCode: activeExecution.lastFailureCode,
+            },
           );
-        }
-        activeExecution.stage = 'citation';
-        const answer = generated.answer;
-        const answerable = generated.status === 'answered';
-        const result = {
-          question,
-          status: generated.status,
-          answer: answer,
-          citations: answerable
-            ? this.citations.build(answer, groundedItems, generated.claims)
-            : [],
-          contexts: answerable ? this.toContexts(groundedItems) : [],
-        };
-        checkAnswerDeadline();
-        this.observability.completeAnswer(
-          trace,
-          {
-            answer: result.answer,
-            citations: result.citations,
-            contextCount: result.contexts.length,
-          },
-          {
-            status: answerable ? 'success' : 'refusal',
-            outcome: generated.outcome,
-            generationAttempts: generated.attempts.length,
-            modelCalls: activeExecution.modelCalls,
-            transportRetries: activeExecution.transportRetries,
-            recoveredFailureCode: activeExecution.lastFailureCode,
-          },
-        );
-        return result;
-      });
-    } catch (error) {
-      this.observability.failAnswer(trace, error, {
-        stage: execution?.stage,
-        modelCalls: execution?.modelCalls ?? 0,
-        transportRetries: execution?.transportRetries ?? 0,
-      });
-      throw error;
-    }
+          return result;
+        });
+      } catch (error) {
+        this.observability.failAnswer(trace, error, {
+          stage: execution?.stage,
+          modelCalls: execution?.modelCalls ?? 0,
+          transportRetries: execution?.transportRetries ?? 0,
+        });
+        throw error;
+      }
+    });
   }
 
   private toContexts(items: AnswerContextItem[]) {

@@ -1,17 +1,27 @@
 import { AnswerFailure } from './answer-failure';
 import { invokeWithModelRecovery } from './model-transport';
+import { captureModelResponse } from '../observability/model-call-telemetry';
 
 interface ModelResponse {
   content: unknown;
   response_metadata?: Record<string, unknown>;
+  usage_metadata?: unknown;
 }
 
 // Both transports share an independent deadline: adapter cancellation alone
 // may return an unfinished prefix or never settle a stalled invocation.
 export async function invokeAnswerModel(
   invoke: (signal: AbortSignal) => Promise<ModelResponse>,
+  model = 'unknown',
 ): Promise<string> {
-  const response = await invokeWithModelRecovery(invoke);
+  return invokeWithModelRecovery(async (signal) => {
+    const response = await invoke(signal);
+    captureModelResponse(response);
+    return validateResponse(response);
+  }, model);
+}
+
+function validateResponse(response: ModelResponse): string {
   const reason =
     response.response_metadata?.done_reason ??
     response.response_metadata?.finish_reason;

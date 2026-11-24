@@ -1,65 +1,47 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AnswerFailure } from '../answer/answer-failure';
-import { Langfuse } from 'langfuse';
-
-type LangfuseTrace = ReturnType<Langfuse['trace']>;
-type LangfuseSpan = ReturnType<Langfuse['span']>;
-type LangfuseGeneration = ReturnType<Langfuse['generation']>;
+import { AnswerTelemetry, safeErrorCode } from './answer-telemetry';
+import { AnswerTrace, AnswerTraceExporter } from './answer-trace-exporter';
 
 export interface AnswerTraceContext {
   readonly startedAt: number;
-  readonly trace?: LangfuseTrace;
+  readonly requestId: string;
+  readonly telemetry?: AnswerTelemetry;
+  readonly trace?: AnswerTrace;
 }
 
 @Injectable()
 export class ObservabilityService implements OnModuleDestroy {
   private readonly logger = new Logger(ObservabilityService.name);
-  private readonly client: Langfuse | null;
+  private readonly exporter: AnswerTraceExporter;
 
   constructor(config: ConfigService) {
-    const enabled = config.get<string>('LANGFUSE_ENABLED', 'false') === 'true';
-    const publicKey = config.get<string>('LANGFUSE_PUBLIC_KEY');
-    const secretKey = config.get<string>('LANGFUSE_SECRET_KEY');
-
-    if (!enabled || !publicKey || !secretKey) {
-      this.client = null;
-      return;
-    }
-
-    this.client = new Langfuse({
-      publicKey,
-      secretKey,
-      baseUrl: config.get<string>(
-        'LANGFUSE_BASE_URL',
-        'http://localhost:13000',
-      ),
-      environment: config.get<string>('LANGFUSE_ENVIRONMENT', 'local'),
-      release: config.get<string>('LANGFUSE_RELEASE', 'knowbase-local'),
-      flushAt: 1,
-      flushInterval: 1000,
-      requestTimeout: 3000,
-      enabled: true,
-    });
-    this.logger.log('Langfuse observability enabled');
+    this.exporter = new AnswerTraceExporter(config, this.logger);
   }
 
-  startAnswerTrace(question: string, topK: number): AnswerTraceContext {
-    if (!this.client) {
-      return { startedAt: Date.now() };
-    }
-
-    try {
-      const trace = this.client.trace({
-        name: 'rag.answer',
-        input: { question, topK },
-        metadata: { component: 'answer' },
-      });
-      return { startedAt: Date.now(), trace };
-    } catch (error) {
-      this.logFailure('start answer trace', error);
-      return { startedAt: Date.now() };
-    }
+  startAnswerTrace(
+    question: string,
+    topK: number,
+    requestId?: string,
+  ): AnswerTraceContext {
+    let trace: AnswerTrace | undefined;
+    const telemetry = new AnswerTelemetry((event) => {
+      try {
+        const json = JSON.stringify(event);
+        if (event.event === 'rag.answer.failed') this.logger.warn(json);
+        else this.logger.log(json);
+      } catch {
+        /* Keep exporter delivery independent of a broken log sink. */
+      }
+      this.exporter.observe(trace, event);
+    }, requestId);
+    trace = this.exporter.start(telemetry.requestId, question, topK);
+    return {
+      startedAt: Date.now(),
+      requestId: telemetry.requestId,
+      telemetry,
+      trace,
+    };
   }
 
   recordRetrieval(
@@ -68,15 +50,12 @@ export class ObservabilityService implements OnModuleDestroy {
     output: { itemCount: number; items: unknown[]; graphUsed?: boolean },
     latencyMs: number,
   ): void {
-    this.endSpan(
-      context.trace?.span({
-        name: 'retrieval.hybrid-search',
-        input,
-      }),
-      {
-        output,
-        metadata: { latencyMs },
-      },
+    this.exporter.span(
+      context.trace,
+      'retrieval.hybrid-search',
+      input,
+      output,
+      latencyMs,
     );
   }
 
@@ -92,15 +71,12 @@ export class ObservabilityService implements OnModuleDestroy {
     },
     latencyMs: number,
   ): void {
-    this.endSpan(
-      context.trace?.span({
-        name: 'retrieval.grounding',
-        input,
-      }),
-      {
-        output,
-        metadata: { latencyMs },
-      },
+    this.exporter.span(
+      context.trace,
+      'retrieval.grounding',
+      input,
+      output,
+      latencyMs,
     );
   }
 
@@ -110,20 +86,7 @@ export class ObservabilityService implements OnModuleDestroy {
     output: string,
     latencyMs: number,
   ): void {
-    let generation: LangfuseGeneration | undefined;
-    try {
-      generation = context.trace?.generation({
-        name: 'generation.answer',
-        model: input.model,
-        input: input.prompt,
-      });
-      generation?.end({
-        output,
-        metadata: { latencyMs },
-      });
-    } catch (error) {
-      this.logFailure('record generation', error);
-    }
+    this.exporter.generation(context.trace, input, output, latencyMs);
   }
 
   completeAnswer(
@@ -131,20 +94,16 @@ export class ObservabilityService implements OnModuleDestroy {
     output: unknown,
     metadata: Record<string, unknown> = {},
   ): void {
-    try {
-      context.trace?.update({
-        output,
-        metadata: {
-          ...metadata,
-          latencyMs: Date.now() - context.startedAt,
-        },
-      });
-      void this.client?.flushAsync().catch((error: unknown) => {
-        this.logFailure('flush trace', error);
-      });
-    } catch (error) {
-      this.logFailure('complete answer trace', error);
-    }
+    context.telemetry?.finish({
+      status: metadata.status === 'refusal' ? 'refusal' : 'success',
+      outcome:
+        typeof metadata.outcome === 'string' ? metadata.outcome : undefined,
+    });
+    this.exporter.finish(context.trace, output, {
+      ...metadata,
+      requestId: context.requestId,
+      latencyMs: Date.now() - context.startedAt,
+    });
   }
 
   failAnswer(
@@ -152,56 +111,26 @@ export class ObservabilityService implements OnModuleDestroy {
     error: unknown,
     metadata: Record<string, unknown> = {},
   ): void {
-    const errorCode =
-      error instanceof AnswerFailure ? error.code : 'INTERNAL_ERROR';
-    this.logger.warn({
-      event: 'rag.answer.failed',
+    const errorCode = safeErrorCode(error);
+    context.telemetry?.finish({
+      status: 'error',
       errorCode,
-      stage: metadata.stage,
-      modelCalls: metadata.modelCalls,
-      transportRetries: metadata.transportRetries,
-      latencyMs: Date.now() - context.startedAt,
+      stage: typeof metadata.stage === 'string' ? metadata.stage : undefined,
     });
-    try {
-      context.trace?.update({
-        output: { error: this.errorMessage(error) },
-        metadata: {
-          ...metadata,
-          errorCode,
-          status: 'error',
-          latencyMs: Date.now() - context.startedAt,
-        },
-      });
-      void this.client?.flushAsync().catch((flushError: unknown) => {
-        this.logFailure('flush failed trace', flushError);
-      });
-    } catch (traceError) {
-      this.logFailure('record answer failure', traceError);
-    }
-  }
-
-  async onModuleDestroy(): Promise<void> {
-    await this.client?.shutdownAsync();
-  }
-
-  private endSpan(
-    span: LangfuseSpan | undefined,
-    body: { output: unknown; metadata: Record<string, unknown> },
-  ): void {
-    try {
-      span?.end(body);
-    } catch (error) {
-      this.logFailure('record span', error);
-    }
-  }
-
-  private errorMessage(error: unknown): string {
-    return error instanceof Error ? error.message : String(error);
-  }
-
-  private logFailure(operation: string, error: unknown): void {
-    this.logger.warn(
-      `Langfuse failed to ${operation}: ${this.errorMessage(error)}`,
+    this.exporter.finish(
+      context.trace,
+      { errorCode },
+      {
+        ...metadata,
+        requestId: context.requestId,
+        errorCode,
+        status: 'error',
+        latencyMs: Date.now() - context.startedAt,
+      },
     );
+  }
+
+  onModuleDestroy(): Promise<void> {
+    return this.exporter.shutdown();
   }
 }

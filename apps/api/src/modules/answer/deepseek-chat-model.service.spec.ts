@@ -6,6 +6,11 @@ import { ChatModelService } from './chat-model.service';
 import { AnswerGenerationService } from './answer-generation.service';
 import { AnswerPromptService } from './answer-prompt.service';
 import { source, answerOutput } from './answer.fixture';
+import {
+  AnswerTelemetry,
+  withAnswerTelemetry,
+} from '../observability/answer-telemetry';
+import { TelemetryEvent } from '../observability/answer-telemetry.types';
 
 const servers: Server[] = [];
 const requests: Array<{ path: string; auth: string | undefined; body: any }> =
@@ -70,6 +75,32 @@ afterEach(async () => {
 });
 
 describe('DeepSeek answer provider over the actual OpenAI-compatible transport', () => {
+  it.each(['stop', 'length'])(
+    'records normalized usage through the actual SDK for %s output',
+    async (reason) => {
+      const baseURL = await startApi([{ body: completion('prefix', reason) }]);
+      const events: TelemetryEvent[] = [];
+      const session = new AnswerTelemetry((event) => events.push(event));
+      const request = withAnswerTelemetry(session, () =>
+        new ChatModelService(config(baseURL)).generate('prompt'),
+      );
+      if (reason === 'length')
+        await expect(request).rejects.toMatchObject({
+          code: 'MODEL_OUTPUT_LIMIT',
+        });
+      else expect(await request).toBe('prefix');
+      session.finish({ status: reason === 'length' ? 'error' : 'success' });
+      expect(events.find((e) => e.event === 'rag.answer.model')).toMatchObject({
+        usage: { inputTokens: 12, outputTokens: 8, totalTokens: 20 },
+        finishReason: reason,
+        outcome: reason === 'length' ? 'error' : 'completed',
+      });
+      expect(events.at(-1)).toMatchObject({
+        modelCalls: 1,
+        usage: { reportedTotalTokens: 20, unknownCalls: 0 },
+      });
+    },
+  );
   it('uses the configured Base URL and key, selects DeepSeek by default, and sends only answer parameters', async () => {
     const baseURL = await startApi([{ body: completion('需审批 [S1]') }]);
     const service = new ChatModelService(config(baseURL));

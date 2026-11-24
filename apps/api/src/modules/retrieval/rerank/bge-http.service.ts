@@ -1,3 +1,4 @@
+import { BgeFailure } from './bge-failure';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'node:crypto';
@@ -18,6 +19,23 @@ export class BgeHttpService {
     query: string,
     candidates: RerankableCandidate[],
   ): Promise<Map<string, number>> {
+    try {
+      return await this.requestScores(query, candidates);
+    } catch (error) {
+      if (error instanceof BgeFailure) throw error;
+      const name = error instanceof Error ? error.name : '';
+      throw new BgeFailure(
+        ['TimeoutError', 'AbortError'].includes(name)
+          ? 'timeout'
+          : 'unavailable',
+      );
+    }
+  }
+
+  private async requestScores(
+    query: string,
+    candidates: RerankableCandidate[],
+  ): Promise<Map<string, number>> {
     const requestId = randomUUID();
     const body = JSON.stringify({
       requestId,
@@ -29,7 +47,7 @@ export class BgeHttpService {
       })),
     });
     if (Buffer.byteLength(body) > 2 * 1024 * 1024)
-      throw new Error('BGE request too large');
+      throw new BgeFailure('request_too_large');
     const response = await fetch(`${this.settings.endpoint}/rerank`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -37,26 +55,39 @@ export class BgeHttpService {
       signal: AbortSignal.timeout(this.settings.timeoutMs),
       redirect: 'error',
     });
-    if (!response.ok) throw new Error('BGE endpoint unavailable');
     const bytes: Uint8Array[] = [];
     let length = 0;
-    if (!response.body) throw new Error('Empty BGE response');
+    if (!response.body) throw new BgeFailure('invalid_response');
     // Bound the response as well as the request; the same deadline covers body reads.
     for await (const part of response.body) {
       length += part.length;
       if (length > 65536) {
-        throw new Error('BGE response too large');
+        throw new BgeFailure('invalid_response');
       }
       bytes.push(part);
     }
-    const result = JSON.parse(Buffer.concat(bytes).toString('utf8'));
+    let result: any;
+    try {
+      result = JSON.parse(Buffer.concat(bytes).toString('utf8'));
+    } catch {
+      throw new BgeFailure(response.ok ? 'invalid_response' : 'unavailable');
+    }
+    // This runtime uses 503 for both busy and failed inference. Status alone
+    // cannot distinguish them; recognize only its fixed busy code.
+    if (!response.ok)
+      throw new BgeFailure(
+        response.status === 503 && result?.error === 'model busy'
+          ? 'runtime_busy'
+          : 'unavailable',
+      );
     if (
+      !result ||
       result.requestId !== requestId ||
       result.model !== BGE_MODEL ||
       !Array.isArray(result.scores) ||
       result.scores.length !== candidates.length
     ) {
-      throw new Error('Invalid BGE response identity');
+      throw new BgeFailure('invalid_response');
     }
     const expected = new Set(candidates.map((item) => item.chunkId));
     const scores = new Map<string, number>();
@@ -68,7 +99,7 @@ export class BgeHttpService {
         typeof item.score !== 'number' ||
         !Number.isFinite(item.score)
       ) {
-        throw new Error('Invalid BGE candidate score');
+        throw new BgeFailure('invalid_response');
       }
       scores.set(item.id, item.score);
     }

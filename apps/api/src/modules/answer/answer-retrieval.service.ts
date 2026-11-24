@@ -1,3 +1,4 @@
+import { observeAsyncStage } from '../observability/answer-telemetry';
 import { Injectable, Logger } from '@nestjs/common';
 import { AuthUser } from '../auth/auth.types';
 import { KnowledgeGraphQueryService } from '../graph/knowledge-graph-query.service';
@@ -38,15 +39,17 @@ export class AnswerRetrievalService {
 
     try {
       const terms = this.graphIntent.extractTerms(question);
-      const graphResults = await Promise.all(
-        terms.map((term) =>
-          this.graphQuery.search(
-            {
-              query: term,
-              maxHops: 3,
-              limit: Math.min(topK, 10),
-            } satisfies SearchGraphDto,
-            user,
+      const graphResults = await observeAsyncStage('graph.retrieval', () =>
+        Promise.all(
+          terms.map((term) =>
+            this.graphQuery.search(
+              {
+                query: term,
+                maxHops: 3,
+                limit: Math.min(topK, 10),
+              } satisfies SearchGraphDto,
+              user,
+            ),
           ),
         ),
       );
@@ -61,9 +64,9 @@ export class AnswerRetrievalService {
         items: [...hybrid.items, ...graphItems],
         graphUsed: graphItems.length > 0,
       };
-    } catch (error) {
+    } catch {
       this.logger.warn(
-        `Knowledge graph retrieval failed; using hybrid results: ${this.errorMessage(error)}`,
+        'Knowledge graph retrieval failed; using hybrid results',
       );
       return { items: hybrid.items, graphUsed: false };
     }
@@ -116,9 +119,5 @@ export class AnswerRetrievalService {
       sources: ['graph'],
       rerankScore: 1,
     };
-  }
-
-  private errorMessage(error: unknown): string {
-    return error instanceof Error ? error.message : String(error);
   }
 }

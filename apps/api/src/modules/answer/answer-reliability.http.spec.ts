@@ -124,6 +124,7 @@ async function ask(f: Awaited<ReturnType<typeof fixture>>) {
     status: response.status,
     body: await response.json(),
     retryAfter: response.headers.get('retry-after'),
+    requestId: response.headers.get('x-request-id'),
   };
 }
 
@@ -148,6 +149,7 @@ describe('answer fault injection over actual Nest HTTP and model SDK', () => {
     ]);
     const result = await ask(f);
     expect(result.status).toBe(201);
+    expect(result.requestId).toMatch(/^[0-9a-f-]{36}$/);
     expect(result.body).toMatchObject({
       status: 'answered',
       answer: '需主管审批。 [S1]',
@@ -177,6 +179,7 @@ describe('answer fault injection over actual Nest HTTP and model SDK', () => {
       const f = await fixture([{ status: upstream }, { status: upstream }]);
       const result = await ask(f);
       expect(result.status).toBe(status);
+      expect(result.requestId).toMatch(/^[0-9a-f-]{36}$/);
       expect(result.body).toMatchObject({
         statusCode: status,
         code,

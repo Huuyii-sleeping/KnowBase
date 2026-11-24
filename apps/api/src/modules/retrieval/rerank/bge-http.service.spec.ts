@@ -114,8 +114,39 @@ describe('BGE HTTP adapter', () => {
       response.write('{');
     }, 40);
     const started = performance.now();
-    await expect(model.score('证据', [candidate('a')])).rejects.toThrow();
+    await expect(model.score('证据', [candidate('a')])).rejects.toMatchObject({
+      reason: 'timeout',
+    });
     expect(performance.now() - started).toBeLessThan(1000);
+  });
+
+  it.each([
+    [503, 'model busy', 'runtime_busy'],
+    [503, 'model failed', 'unavailable'],
+    [502, 'private upstream body', 'unavailable'],
+  ])(
+    'classifies HTTP %s / %s without exposing provider text',
+    async (status, error, reason) => {
+      const model = await endpoint((_, response) => {
+        response.statusCode = status;
+        response.end(JSON.stringify({ error }));
+      });
+      await expect(model.score('证据', [candidate('a')])).rejects.toMatchObject(
+        { reason },
+      );
+    },
+  );
+
+  it('classifies malformed success and oversized requests before inference', async () => {
+    const model = await endpoint((_, response) => response.end('null'));
+    await expect(model.score('证据', [candidate('a')])).rejects.toMatchObject({
+      reason: 'invalid_response',
+    });
+    await expect(
+      model.score('证据', [
+        { ...candidate('a'), content: 'a'.repeat(2 * 1024 * 1024) },
+      ]),
+    ).rejects.toMatchObject({ reason: 'request_too_large' });
   });
 
   it('validates config before startup rather than silently using a different mode', () => {

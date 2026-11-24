@@ -6,10 +6,13 @@ import {
 } from './answer-execution';
 import { AnswerFailure } from './answer-failure';
 import { classifyModelFailure } from './model-failure-classifier';
+import { emitAnswerTelemetry } from '../observability/answer-telemetry';
+import { observeModelCall } from '../observability/model-call-telemetry';
 
 // Only transport recovery lives here; content/citation repair is a separate step.
 export async function invokeWithModelRecovery<T>(
   invoke: (signal: AbortSignal) => Promise<T>,
+  model = 'unknown',
 ): Promise<T> {
   const execution = currentAnswerExecution();
   let localRetryUsed = false;
@@ -17,7 +20,14 @@ export async function invokeWithModelRecovery<T>(
     checkAnswerDeadline();
     try {
       if (execution) execution.modelCalls++;
-      return await invokeOnce(invoke, execution?.signal);
+      return await observeModelCall(model, async () => {
+        try {
+          return await invokeOnce(invoke, execution?.signal);
+        } catch (error) {
+          checkAnswerDeadline();
+          throw classifyModelFailure(error);
+        }
+      });
     } catch (error) {
       checkAnswerDeadline();
       const failure = classifyModelFailure(error);
@@ -43,6 +53,11 @@ export async function invokeWithModelRecovery<T>(
         execution.transportRetryUsed = true;
         execution.transportRetries++;
       }
+      emitAnswerTelemetry({
+        event: 'rag.answer.retry',
+        waitMs,
+        errorCode: failure.code,
+      });
       try {
         await delay(waitMs, undefined, { signal: execution?.signal });
       } catch {

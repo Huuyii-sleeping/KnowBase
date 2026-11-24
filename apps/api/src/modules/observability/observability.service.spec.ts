@@ -3,7 +3,7 @@ import { AnswerFailure } from '../answer/answer-failure';
 import { ObservabilityService } from './observability.service';
 
 describe('ObservabilityService', () => {
-  it('is a no-op when Langfuse is disabled', async () => {
+  it('keeps local summaries when Langfuse is disabled', async () => {
     const service = new ObservabilityService({
       get: vi.fn().mockReturnValue(undefined),
     } as any);
@@ -40,15 +40,15 @@ describe('ObservabilityService', () => {
         transportRetries: 1,
       },
     );
-    expect(warning).toHaveBeenCalledWith(
-      expect.objectContaining({
-        event: 'rag.answer.failed',
-        errorCode: 'MODEL_RATE_LIMITED',
-        stage: 'generation',
-        modelCalls: 2,
-        transportRetries: 1,
-      }),
-    );
+    expect(
+      JSON.parse(warning.mock.calls[0][0] as unknown as string),
+    ).toMatchObject({
+      event: 'rag.answer.failed',
+      errorCode: 'MODEL_RATE_LIMITED',
+      stage: 'generation',
+      modelCalls: 0,
+      transportRetries: 0,
+    });
     expect(JSON.stringify(warning.mock.calls)).not.toContain('private');
   });
 });

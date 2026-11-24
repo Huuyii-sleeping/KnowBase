@@ -6,6 +6,12 @@ import { RerankService } from './rerank.service';
 import { candidate } from './bge.fixture';
 import { AnswerContextService } from '../../answer/answer-context.service';
 import { AnswerPromptService } from '../../answer/answer-prompt.service';
+import { BgeFailure } from './bge-failure';
+import {
+  AnswerTelemetry,
+  withAnswerTelemetry,
+} from '../../observability/answer-telemetry';
+import { TelemetryEvent } from '../../observability/answer-telemetry.types';
 
 describe('HybridRerankService', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -109,4 +115,73 @@ describe('HybridRerankService', () => {
     }
     expect(next.score).not.toHaveBeenCalled();
   });
+
+  it('records successful BGE and every bypass separately while retaining exact rule results', async () => {
+    const events: TelemetryEvent[] = [];
+    const session = new AnswerTelemetry((e) => events.push(e));
+    const f = make();
+    const pool = [candidate('a')];
+    await withAnswerTelemetry(session, async () => {
+      await make('rule').service.rerank('证据', pool, { topK: 1 });
+      await f.service.rerank('证据', [], { topK: 1 });
+      await f.service.rerank('证据', [candidate('a'), candidate('a')], {
+        topK: 1,
+      });
+      let release!: (value: Map<string, number>) => void;
+      f.score.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            release = resolve;
+          }),
+      );
+      const first = f.service.rerank('证据', pool, { topK: 1 });
+      expect(await f.service.rerank('证据', pool, { topK: 1 })).toEqual(
+        f.rule.rerank('证据', pool, { topK: 1 }),
+      );
+      release(new Map([['a', 1]]));
+      await first;
+      f.score.mockRejectedValueOnce(new BgeFailure('runtime_busy'));
+      await f.service.rerank('证据', pool, { topK: 1 });
+      await f.service.rerank('证据', pool, { topK: 1 });
+      session.finish({ status: 'success' });
+    });
+    expect(
+      events
+        .filter((e) => e.event === 'rag.answer.rerank')
+        .map((e) => e.reason),
+    ).toEqual([
+      'configured_rule',
+      'empty_pool',
+      'unsupported_input',
+      'api_busy',
+      'model_selected',
+      'runtime_busy',
+      'cooldown',
+    ]);
+    expect(f.score).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    'timeout',
+    'unavailable',
+    'invalid_response',
+    'request_too_large',
+  ] as const)(
+    'records %s failures without altering baseline selection',
+    async (reason) => {
+      const events: TelemetryEvent[] = [];
+      const session = new AnswerTelemetry((e) => events.push(e));
+      const f = make();
+      const pool = [candidate('a')];
+      f.score.mockRejectedValue(new BgeFailure(reason));
+      expect(
+        await withAnswerTelemetry(session, () =>
+          f.service.rerank('证据', pool, { topK: 1 }),
+        ),
+      ).toEqual(f.rule.rerank('证据', pool, { topK: 1 }));
+      expect(events.find((e) => e.event === 'rag.answer.rerank')).toMatchObject(
+        { path: 'rule', reason },
+      );
+    },
+  );
 });

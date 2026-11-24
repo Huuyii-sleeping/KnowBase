@@ -1,3 +1,7 @@
+import {
+  observeAsyncStage,
+  observeSyncStage,
+} from '../observability/answer-telemetry';
 import { Injectable } from '@nestjs/common';
 import { RagQueryService } from '../rag/rag-query.service';
 import { HybridRerankService } from '../retrieval/rerank/hybrid-rerank.service';
@@ -49,16 +53,19 @@ export class HybridSearchService {
       topK: hybridCandidateCount(query.topK),
     };
     const [keywordResult, semanticResult] = await Promise.all([
-      this.ragQuery.searchKeywordChunks(input, user),
-      this.ragQuery.search(input, user),
+      observeAsyncStage('recall.keyword', () =>
+        this.ragQuery.searchKeywordChunks(input, user),
+      ),
+      observeAsyncStage('recall.semantic', () =>
+        this.ragQuery.search(input, user),
+      ),
     ]);
-    const candidates = mergeChunkCandidates(
-      keywordResult.items,
-      semanticResult.items,
+    const candidates = observeSyncStage('recall.merge', () =>
+      mergeChunkCandidates(keywordResult.items, semanticResult.items),
     );
-    const reranked = await this.rerank.rerank(normalizedQuery, candidates, {
-      topK: query.topK,
-    });
+    const reranked = await observeAsyncStage('rerank.total', () =>
+      this.rerank.rerank(normalizedQuery, candidates, { topK: query.topK }),
+    );
 
     return {
       query: normalizedQuery,

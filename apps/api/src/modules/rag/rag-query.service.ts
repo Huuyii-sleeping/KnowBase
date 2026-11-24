@@ -1,3 +1,4 @@
+import { observeAsyncStage } from '../observability/answer-telemetry';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DocumentQueryService } from '../documents/document-query.service';
 import { EmbeddingService } from '../pipeline/embedding/embedding.service';
@@ -96,7 +97,9 @@ export class RagQueryService {
       throw new BadRequestException('unsupported recall route');
     const visibilityStarted = performance.now();
     const allowedDocumentIds = user
-      ? await this.documentQuery.findVisiblePublishedIds(user)
+      ? await observeAsyncStage(`recall.${route}.visibility`, () =>
+          this.documentQuery.findVisiblePublishedIds(user),
+        )
       : undefined;
     const timings = {
       visibilityMs: performance.now() - visibilityStarted,
@@ -122,30 +125,34 @@ export class RagQueryService {
     let candidates: VectorChunkSearchItem[];
     if (route === 'keyword') {
       const indexStarted = performance.now();
-      candidates = await this.vectorIndex.searchKeywordChunks({
-        ...input,
-        query: normalizedQuery,
-      });
+      candidates = await observeAsyncStage('recall.keyword.index', () =>
+        this.vectorIndex.searchKeywordChunks({
+          ...input,
+          query: normalizedQuery,
+        }),
+      );
       timings.indexMs = performance.now() - indexStarted;
     } else if (route === 'semantic') {
       const embeddingStarted = performance.now();
-      const queryVector = await this.embedding.embedQuery(normalizedQuery);
+      const queryVector = await observeAsyncStage(
+        'recall.semantic.embedding',
+        () => this.embedding.embedQuery(normalizedQuery),
+      );
       timings.embeddingMs = performance.now() - embeddingStarted;
       if (!queryVector?.length)
         throw new Error('embedding provider returned no query vector');
       const indexStarted = performance.now();
-      candidates = await this.vectorIndex.searchChunks({
-        ...input,
-        queryVector,
-      });
+      candidates = await observeAsyncStage('recall.semantic.index', () =>
+        this.vectorIndex.searchChunks({ ...input, queryVector }),
+      );
       timings.indexMs = performance.now() - indexStarted;
     } else {
       throw new BadRequestException('unsupported recall route');
     }
     const metadataStarted = performance.now();
-    const eligibleCandidates = await this.keepPublishedCandidates(
-      candidates,
-      user,
+    const eligibleCandidates = await observeAsyncStage(
+      `recall.${route}.metadata`,
+      () => this.keepPublishedCandidates(candidates, user),
     );
     timings.metadataMs = performance.now() - metadataStarted;
     return {

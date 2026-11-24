@@ -25,6 +25,9 @@ export class OllamaChatModelService implements ChatModelProvider {
   }
 
   generate(prompt: string): Promise<string> {
-    return invokeAnswerModel((signal) => this.model.invoke(prompt, { signal }));
+    return invokeAnswerModel(
+      (signal) => this.model.invoke(prompt, { signal }),
+      this.modelName,
+    );
   }
 }
