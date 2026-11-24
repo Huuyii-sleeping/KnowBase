@@ -3,8 +3,9 @@ import { DocumentBlock } from '../../ingestion/document-structure';
 import { blockFragments } from './block-fragments';
 import { ChunkOptions, StructuredChunk } from './chunk.types';
 import { structuredTableFragments } from './table-fragments';
+import { TableFragment } from './table-cell-fragments';
 
-export const CHUNK_STRATEGY = 'structure-v3';
+export const CHUNK_STRATEGY = 'structure-v4';
 
 export async function structuredChunks(
   blocks: DocumentBlock[],
@@ -58,13 +59,16 @@ export async function structuredChunks(
     let prefix = titles.join('\n');
     if (prefix) prefix += '\n\n';
     const budget = options.size - prefix.length;
-    const fragments = block.table
-      ? structuredTableFragments(block.table, budget)
-      : (await blockFragments(block, budget, options.overlap)).map((text) => ({
-          text,
-          rowStart: undefined,
-          rowEnd: undefined,
-        }));
+    const fragments: Array<Partial<TableFragment> & { text: string }> =
+      block.table
+        ? structuredTableFragments(block.table, budget)
+        : (await blockFragments(block, budget, options.overlap)).map(
+            (text) => ({
+              text,
+              rowStart: undefined,
+              rowEnd: undefined,
+            }),
+          );
     for (const fragment of fragments) {
       const body = fragment.text;
       const range = {
@@ -78,6 +82,13 @@ export async function structuredChunks(
                 tableId: block.table.id,
                 tableRowStart: fragment.rowStart,
                 tableRowEnd: fragment.rowEnd,
+                ...(fragment.column === undefined
+                  ? {}
+                  : {
+                      tableColumn: fragment.column,
+                      tableCellStart: fragment.cellStart,
+                      tableCellEnd: fragment.cellEnd,
+                    }),
               },
             }
           : {}),

@@ -23,7 +23,8 @@
     "test:business-quality-unit": "pnpm build && node --test test/ingestion/quality/*.test.cjs",
     "generate:business-corpus": "node test/ingestion/quality/generate.cjs",
     "benchmark:business-documents": "pnpm build && node test/ingestion/quality/evaluate-documents.cjs",
-    "benchmark:table-context": "pnpm build && node test/ingestion/quality/evaluate-table-context.cjs"
+    "benchmark:table-context": "pnpm build && node test/ingestion/quality/evaluate-table-context.cjs",
+    "benchmark:chunk-evidence": "pnpm build && node test/ingestion/quality/evaluate-chunks.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",

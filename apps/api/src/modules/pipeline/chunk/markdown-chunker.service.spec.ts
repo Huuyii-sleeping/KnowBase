@@ -37,7 +37,7 @@ describe('MarkdownChunkerService', () => {
     });
     expect(chunks.at(-1)?.ranges[0].source?.tableRowEnd).toBe(14);
     expect(
-      chunks.every((chunk) => chunk.strategy.startsWith('structure-v3:')),
+      chunks.every((chunk) => chunk.strategy.startsWith('structure-v4:')),
     ).toBe(true);
   });
   it('preserves the nearest heading when the document title is very long', async () => {
@@ -142,12 +142,24 @@ describe('MarkdownChunkerService', () => {
     expect(await service.split('  ')).toEqual([]);
   });
 
-  it('refuses an indivisible table row instead of silently truncating it', async () => {
+  it('keeps long cell fragments bounded and identifies their logical source', async () => {
+    const chunks = await create(60, 0).splitStructured(
+      '| Key | Value |\n| --- | --- |\n| A | ' + 'x'.repeat(80) + ' |',
+    );
+    expect(chunks.every((chunk) => chunk.content.length <= 60)).toBe(true);
+    const values = chunks.filter(
+      (chunk) => chunk.ranges[0].source?.tableColumn === 2,
+    );
+    expect(values.length).toBeGreaterThan(1);
+    expect(values[0].ranges[0].source).toMatchObject({
+      tableRowStart: 2,
+      tableRowEnd: 2,
+      tableCellStart: 0,
+    });
+    expect(values.at(-1)?.ranges[0].source?.tableCellEnd).toBe(80);
     await expect(
-      create(60, 0).split(
-        '| Key | Value |\n| --- | --- |\n| A | ' + 'x'.repeat(80) + ' |',
-      ),
-    ).rejects.toThrow('Table header and row');
+      create(32, 0).split('| ' + 'Long'.repeat(30) + ' |\n| --- |\n| A |'),
+    ).rejects.toThrow('context');
   });
 
   it.each([

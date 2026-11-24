@@ -34,13 +34,20 @@ describe('structured table chunk fragments', () => {
       expect(chunks[i].rowStart).toBe(chunks[i - 1].rowEnd + 1);
   });
 
-  it('refuses an oversized atomic row and still represents a header-only table', () => {
-    expect(() =>
-      structuredTableFragments(
-        parseTable('| A |\n| --- |\n| ' + 'x'.repeat(200) + ' |'),
-        100,
-      ),
-    ).toThrow('header and row');
+  it('splits oversized cells with exact offsets and still represents a header-only table', () => {
+    const chunks = structuredTableFragments(
+      parseTable('| A |\n| --- |\n| ' + 'x'.repeat(200) + ' |'),
+      100,
+    );
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(
+      chunks.every((chunk) => chunk.text.length <= 100 && chunk.column === 1),
+    ).toBe(true);
+    expect(
+      chunks
+        .map((chunk) => chunk.text.slice(chunk.text.indexOf('A：\n') + 3))
+        .join(''),
+    ).toBe('x'.repeat(200));
     expect(() =>
       structuredTableFragments(parseTable('| Long header |\n| --- |'), 3),
     ).toThrow('header');

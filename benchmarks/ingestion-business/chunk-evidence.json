@@ -1,0 +1,198 @@
+{
+  "schema": "chunk-evidence-v1",
+  "provenance": "authored-synthetic-business-v1",
+  "budgets": [180, 256, 512, 1000],
+  "overlap": 0,
+  "cases": [
+    {
+      "id": "approved-budget",
+      "split": "development",
+      "file": "documents/change-approved.md",
+      "units": [
+        {
+          "id": "budget",
+          "heading": "生效基线",
+          "quotes": ["原预算180万元", "调整后预算198万元"]
+        },
+        {
+          "id": "proposal",
+          "heading": "验收和约束",
+          "quotes": ["额外12万元", "尚待审批"]
+        }
+      ]
+    },
+    {
+      "id": "response-recovery",
+      "split": "holdout",
+      "file": "documents/runbook.md",
+      "units": [
+        {
+          "id": "p1",
+          "heading": "故障分级",
+          "quotes": ["响应目标15分钟", "恢复目标120分钟"]
+        },
+        {
+          "id": "release",
+          "heading": "恢复步骤",
+          "quotes": ["由质量部决定批次放行", "运维只签署技术恢复"]
+        },
+        {
+          "id": "retention",
+          "heading": "恢复步骤",
+          "quotes": ["至少保留三年", "有效期五分钟"]
+        }
+      ]
+    },
+    {
+      "id": "incident-release",
+      "split": "holdout",
+      "file": "documents/incident.md",
+      "units": [
+        {
+          "id": "release",
+          "heading": "时间记录",
+          "quotes": ["技术恢复不等于产品放行", "2026-09-16 10:00批准放行"]
+        },
+        {
+          "id": "cost",
+          "heading": "处置约束",
+          "quotes": ["损耗计提为12500元", "复检费为1800元"]
+        }
+      ]
+    },
+    {
+      "id": "wide-payment",
+      "split": "development",
+      "file": "chunk-fixtures/wide-payment.md",
+      "units": [
+        {
+          "id": "condition",
+          "heading": "分期付款",
+          "table": 0,
+          "row": 2,
+          "column": 4,
+          "quotes": ["缺陷全部关闭", "不得使用技术恢复记录替代质量验收"]
+        },
+        {
+          "id": "exception",
+          "heading": "分期付款",
+          "table": 0,
+          "row": 2,
+          "column": 8,
+          "quotes": ["暂停付款", "不能覆盖审批流程"]
+        },
+        {
+          "id": "refund",
+          "heading": "分期付款",
+          "table": 0,
+          "row": 3,
+          "column": 3,
+          "quotes": ["-2.25"]
+        }
+      ]
+    },
+    {
+      "id": "long-condition",
+      "split": "development",
+      "file": "chunk-fixtures/long-condition.md",
+      "units": [
+        {
+          "id": "final-release",
+          "heading": "支付条件",
+          "table": 0,
+          "row": 2,
+          "column": 2,
+          "quotes": ["技术恢复不等于质量放行", "最终验收须由质量部签署"]
+        },
+        {
+          "id": "negative",
+          "heading": "支付条件",
+          "table": 0,
+          "row": 2,
+          "column": 2,
+          "quotes": ["退款为负2.25万元", "不得改为正数"]
+        }
+      ]
+    },
+    {
+      "id": "merged-controls",
+      "split": "development",
+      "file": "chunk-fixtures/merged-controls.md",
+      "units": [
+        {
+          "id": "quality",
+          "heading": "复核矩阵",
+          "table": 0,
+          "row": 3,
+          "column": 2,
+          "quotes": ["温控异常必须复检通过", "不得由补传成功替代放行"]
+        },
+        {
+          "id": "merged-refund",
+          "heading": "复核矩阵",
+          "table": 0,
+          "row": 4,
+          "column": 4,
+          "quotes": ["-2.25"]
+        }
+      ]
+    },
+    {
+      "id": "holdout-service",
+      "split": "holdout",
+      "file": "chunk-fixtures/holdout-service.md",
+      "units": [
+        {
+          "id": "boundary",
+          "heading": "条款审查",
+          "table": 0,
+          "row": 2,
+          "column": 6,
+          "quotes": [
+            "运维仅确认网络恢复",
+            "禁止把网络恢复记录解释为临床试剂可出库"
+          ]
+        },
+        {
+          "id": "approval",
+          "heading": "条款审查",
+          "table": 0,
+          "row": 2,
+          "column": 7,
+          "quotes": ["宋岚复检批准后放行", "未审批不得付款"]
+        },
+        {
+          "id": "amount",
+          "heading": "条款审查",
+          "table": 0,
+          "row": 2,
+          "column": 5,
+          "quotes": ["-7350.50"]
+        }
+      ]
+    },
+    {
+      "id": "holdout-transfer",
+      "split": "holdout",
+      "file": "chunk-fixtures/holdout-transfer.md",
+      "units": [
+        {
+          "id": "expiry",
+          "heading": "移交要求",
+          "table": 0,
+          "row": 2,
+          "column": 2,
+          "quotes": ["归档保留七年", "仅十分钟有效"]
+        },
+        {
+          "id": "unknown",
+          "heading": "移交要求",
+          "table": 0,
+          "row": 2,
+          "column": 2,
+          "quotes": ["未知费用保持空白", "已确认无需支出的金额才记为0"]
+        }
+      ]
+    }
+  ]
+}

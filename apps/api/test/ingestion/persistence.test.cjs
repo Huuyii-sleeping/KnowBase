@@ -274,6 +274,82 @@ test('canonical table serialization, chunk provenance and deletion survive a rea
   assert.equal(await chunkModel.countDocuments({ documentId: 'table-doc' }), 0);
 });
 
+test('long-cell chunks preserve exact cell provenance through Mongo, reject tampered artifacts and clean failed builds', async () => {
+  const documentId = 'long-cell-doc',
+    contentId = 'long-cell-body';
+  const value = '复检通过后才允许付款；'.repeat(35) + '退款为-2.25万元。';
+  const markdown =
+    '# 质量采购\n\n| 编号 | 条件 |\n| --- | --- |\n| B72 | ' + value + ' |';
+  await content.create({
+    markdown,
+    sections: [{ start: 0, end: markdown.length, source: { page: 7 } }],
+    documentId,
+    contentId,
+    version: 1,
+    parser: 'fixture',
+    warnings: [],
+    assets: [],
+  });
+  const stored = await content.findByContentId(contentId);
+  const before = JSON.stringify(stored.tables);
+  const chunker = new MarkdownChunkerService(
+    new ConfigService({ RAG_CHUNK_SIZE: 180, RAG_CHUNK_OVERLAP: 0 }),
+  );
+  const service = new DocumentChunksService(chunker, artifacts);
+  const chunks = await service.forContent(documentId, contentId, stored);
+  const values = chunks.filter(
+    (chunk) => chunk.ranges[0].source.tableColumn === 2,
+  );
+  assert.ok(values.length > 1);
+  assert.equal(
+    values
+      .map((chunk) => {
+        const source = chunk.ranges[0].source;
+        assert.equal(source.page, 7);
+        assert.equal(source.tableRowStart, 2);
+        const text = value.slice(source.tableCellStart, source.tableCellEnd);
+        assert.ok(chunk.content.endsWith(text));
+        return text;
+      })
+      .join(''),
+    value,
+  );
+  assert.equal(JSON.stringify(stored.tables), before);
+  assert.deepEqual(
+    await new DocumentChunksService(chunker, artifacts).forContent(
+      documentId,
+      contentId,
+      stored,
+    ),
+    chunks,
+  );
+  const manifest = await chunkModel.findOne({ documentId, index: -1 }).lean();
+  await chunkModel.updateOne(
+    { key: manifest.key, index: 0 },
+    { $set: { 'chunk.ranges.0.source.tableCellStart': 999 } },
+  );
+  assert.equal(await artifacts.find(manifest.key), undefined);
+  assert.deepEqual(
+    await service.forContent(documentId, contentId, stored),
+    chunks,
+  );
+  const broken = {
+    markdown: '| ' + '超长标题'.repeat(100) + ' |\n| --- |\n| 0 |',
+  };
+  await assert.rejects(
+    service.forContent('broken-cell-doc', 'broken-body', broken),
+    /context/,
+  );
+  assert.equal(
+    await chunkModel.countDocuments({ documentId: 'broken-cell-doc' }),
+    0,
+  );
+  await content.deleteByDocumentId(documentId);
+  await artifacts.deleteDocument(documentId);
+  assert.equal(await chunkModel.countDocuments({ documentId }), 0);
+  assert.equal(await content.findByContentId(contentId), null);
+});
+
 test('document deletion keeps asset references until storage removal succeeds', async () => {
   const { DocumentSourceCleanupService } = load(
     'documents/document-source-cleanup.service.js',

@@ -15,6 +15,10 @@ export interface SourceLocation {
   tableId?: string;
   tableRowStart?: number;
   tableRowEnd?: number;
+  // Cell fallback uses a one-based logical column and UTF-16 offsets in visible cell text.
+  tableColumn?: number;
+  tableCellStart?: number;
+  tableCellEnd?: number;
   // When an explicit PDF continuation borrows a header, keep its actual source page.
   tableHeaderPage?: number;
 }
