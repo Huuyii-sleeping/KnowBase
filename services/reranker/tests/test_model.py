@@ -77,12 +77,12 @@ class ModelTests(unittest.TestCase):
     def test_scores_all_windows_then_returns_one_maximum_per_original_candidate(self):
         provider = self.provider()
         values = provider.model.return_value.logits.reshape.return_value
-        values.detach.return_value.cpu.return_value.tolist.side_effect = [[1, 7], [3]]
+        values.detach.return_value.cpu.return_value.tolist.side_effect = [[7, 3], [1]]
         with patch(
             "knowbase_reranker.model.pair_windows",
             side_effect=[
-                ([{}, {}], {"windows": 2}),
-                ([{}], {"windows": 1}),
+                ([{"input_ids": [1] * 10}, {"input_ids": [2] * 2}], {"windows": 2}),
+                ([{"input_ids": [3] * 5}], {"windows": 1}),
             ],
         ):
             result = provider.score(
@@ -90,6 +90,30 @@ class ModelTests(unittest.TestCase):
             )
         self.assertEqual(result["scores"], [7, 3])
         self.assertEqual(provider.model.call_count, 2)
+        batches = [call.args[0] for call in provider.tokenizer.pad.call_args_list]
+        self.assertEqual(
+            [[w["input_ids"][0] for w in batch] for batch in batches], [[2, 3], [1]]
+        )
+
+    def test_bad_batch_scores_fail_completely_and_next_request_recovers(self):
+        for bad_scores in [[], [1, 2], [float("nan")], [float("inf")]]:
+            with self.subTest(scores=bad_scores):
+                provider = self.provider()
+                values = provider.model.return_value.logits.reshape.return_value
+                values.detach.return_value.cpu.return_value.tolist.side_effect = [
+                    [7, 3], bad_scores, [7, 3], [1]
+                ]
+                with patch(
+                    "knowbase_reranker.model.pair_windows",
+                    return_value=(
+                        [{"input_ids": [1] * n} for n in [10, 2, 5]],
+                        {"windows": 3},
+                    ),
+                ):
+                    with self.assertRaises(ValueError):
+                        provider.score("q", [{"title": "t", "content": "body"}])
+                    result = provider.score("q", [{"title": "t", "content": "body"}])
+                self.assertEqual(result["scores"], [7])
 
     def test_request_window_cap_and_model_failures_never_return_partial_scores(self):
         provider = self.provider()
@@ -102,7 +126,8 @@ class ModelTests(unittest.TestCase):
         provider.model.assert_not_called()
         provider.model.side_effect = RuntimeError("inference failed")
         with patch(
-            "knowbase_reranker.model.pair_windows", return_value=([{}], {"windows": 1})
+            "knowbase_reranker.model.pair_windows",
+            return_value=([{"input_ids": [1]}], {"windows": 1}),
         ):
             with self.assertRaisesRegex(RuntimeError, "inference failed"):
                 provider.score("q", [{"title": "t"}])

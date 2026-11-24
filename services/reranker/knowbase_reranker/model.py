@@ -4,6 +4,7 @@ import time
 import hashlib
 from pathlib import Path
 
+from .batching import length_batches
 from .windows import aggregate_scores, pair_windows
 
 
@@ -64,16 +65,21 @@ class CrossEncoder:
                 raise ValueError("request exceeds model window budget")
             windows.extend(features)
             diagnostics.append(stats)
-        scores = []
+        scores = [None] * len(windows)
         with self.torch.inference_mode():
-            for i in range(0, len(windows), self.config["batch_size"]):
+            for indices in length_batches(windows, self.config["batch_size"]):
                 inputs = self.tokenizer.pad(
-                    windows[i : i + self.config["batch_size"]],
+                    [windows[i] for i in indices],
                     padding=True,
                     return_tensors="pt",
                 ).to(self.device)
                 logits = self.model(**inputs).logits.reshape(-1)
-                scores.extend(logits.detach().cpu().tolist())
+                values = logits.detach().cpu().tolist()
+                if len(values) != len(indices):
+                    raise ValueError("incomplete model batch scores")
+                # Group only for computation; aggregation still follows original windows.
+                for index, value in zip(indices, values):
+                    scores[index] = value
         self.synchronize()
         return {
             "scores": aggregate_scores(scores, [d["windows"] for d in diagnostics]),
