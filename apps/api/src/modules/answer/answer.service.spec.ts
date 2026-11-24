@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AnswerService } from './answer.service';
 import { AnswerContextService } from './answer-context.service';
 import { AnswerPromptService } from './answer-prompt.service';
@@ -34,6 +34,8 @@ function setup(
   );
   return { service, model, retrieval, observability };
 }
+
+afterEach(() => vi.useRealTimers());
 
 describe('AnswerService evidence consumption', () => {
   it('consumes admitted context through the real assembly, generation and citation services', async () => {
@@ -243,5 +245,51 @@ describe('AnswerService evidence consumption', () => {
     ).rejects.toThrow('retrieval failed');
     expect(model.generate).not.toHaveBeenCalled();
     expect(observability.failAnswer).toHaveBeenCalled();
+  });
+
+  it('ends stalled retrieval at the total deadline and never generates on a late result', async () => {
+    vi.useFakeTimers();
+    const { service, model, retrieval, observability } = setup();
+    let release!: (result: unknown) => void;
+    retrieval.retrieve.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    );
+    const checked = expect(
+      service.answer({ question: '申请条件', topK: 5 }),
+    ).rejects.toMatchObject({ code: 'ANSWER_TIMEOUT' });
+    await vi.advanceTimersByTimeAsync(45000);
+    await checked;
+    expect(model.generate).not.toHaveBeenCalled();
+    release({ items: [source('a', '申请需要审批。')], graphUsed: false });
+    await vi.advanceTimersByTimeAsync(1);
+    expect(model.generate).not.toHaveBeenCalled();
+    expect(observability.completeAnswer).not.toHaveBeenCalled();
+    expect(observability.failAnswer).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('never publishes a late model result as success after the total deadline', async () => {
+    vi.useFakeTimers();
+    const { service, model, observability } = setup();
+    let release!: (output: string) => void;
+    model.generate.mockReset().mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    );
+    const checked = expect(
+      service.answer({ question: '是否允许远程办公？', topK: 5 }),
+    ).rejects.toMatchObject({ code: 'ANSWER_TIMEOUT' });
+    await vi.advanceTimersByTimeAsync(45000);
+    await checked;
+    release(answerOutput('可以远程办公。', '允许远程办公。'));
+    await vi.advanceTimersByTimeAsync(1);
+    expect(observability.completeAnswer).not.toHaveBeenCalled();
+    expect(observability.failAnswer).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
   });
 });

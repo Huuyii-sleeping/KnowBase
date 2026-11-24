@@ -1,5 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AnswerFailure } from '../answer/answer-failure';
 import { Langfuse } from 'langfuse';
 
 type LangfuseTrace = ReturnType<Langfuse['trace']>;
@@ -112,7 +113,7 @@ export class ObservabilityService implements OnModuleDestroy {
     let generation: LangfuseGeneration | undefined;
     try {
       generation = context.trace?.generation({
-        name: 'generation.ollama',
+        name: 'generation.answer',
         model: input.model,
         input: input.prompt,
       });
@@ -146,11 +147,27 @@ export class ObservabilityService implements OnModuleDestroy {
     }
   }
 
-  failAnswer(context: AnswerTraceContext, error: unknown): void {
+  failAnswer(
+    context: AnswerTraceContext,
+    error: unknown,
+    metadata: Record<string, unknown> = {},
+  ): void {
+    const errorCode =
+      error instanceof AnswerFailure ? error.code : 'INTERNAL_ERROR';
+    this.logger.warn({
+      event: 'rag.answer.failed',
+      errorCode,
+      stage: metadata.stage,
+      modelCalls: metadata.modelCalls,
+      transportRetries: metadata.transportRetries,
+      latencyMs: Date.now() - context.startedAt,
+    });
     try {
       context.trace?.update({
         output: { error: this.errorMessage(error) },
         metadata: {
+          ...metadata,
+          errorCode,
           status: 'error',
           latencyMs: Date.now() - context.startedAt,
         },

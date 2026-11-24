@@ -1,4 +1,5 @@
-import { ANSWER_MODEL_TIMEOUT_MS } from './answer-budget';
+import { AnswerFailure } from './answer-failure';
+import { invokeWithModelRecovery } from './model-transport';
 
 interface ModelResponse {
   content: unknown;
@@ -10,30 +11,27 @@ interface ModelResponse {
 export async function invokeAnswerModel(
   invoke: (signal: AbortSignal) => Promise<ModelResponse>,
 ): Promise<string> {
-  const controller = new AbortController();
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const deadline = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => {
-      controller.abort();
-      reject(new Error('Chat model timed out'));
-    }, ANSWER_MODEL_TIMEOUT_MS);
-  });
-  try {
-    const response = await Promise.race([invoke(controller.signal), deadline]);
-    controller.signal.throwIfAborted();
-    const reason =
-      response.response_metadata?.done_reason ??
-      response.response_metadata?.finish_reason;
-    if (reason === 'length')
-      throw new Error('Chat model output exceeded its budget');
-    if (reason && reason !== 'stop')
-      throw new Error('Chat model did not complete a text answer');
-    const text = toText(response.content);
-    if (!text) throw new Error('Chat model returned an empty answer');
-    return text;
-  } finally {
-    clearTimeout(timer);
-  }
+  const response = await invokeWithModelRecovery(invoke);
+  const reason =
+    response.response_metadata?.done_reason ??
+    response.response_metadata?.finish_reason;
+  if (reason === 'length')
+    throw new AnswerFailure(
+      'MODEL_OUTPUT_LIMIT',
+      'Chat model output exceeded its budget',
+    );
+  if (reason && reason !== 'stop')
+    throw new AnswerFailure(
+      'MODEL_INVALID_RESPONSE',
+      'Chat model did not complete a text answer',
+    );
+  const text = toText(response.content);
+  if (!text)
+    throw new AnswerFailure(
+      'MODEL_INVALID_RESPONSE',
+      'Chat model returned an empty answer',
+    );
+  return text;
 }
 
 function toText(content: unknown): string {

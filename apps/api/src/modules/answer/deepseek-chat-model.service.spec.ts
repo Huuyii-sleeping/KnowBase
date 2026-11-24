@@ -121,7 +121,7 @@ describe('DeepSeek answer provider over the actual OpenAI-compatible transport',
     );
   });
 
-  it.each([401, 429, 500])(
+  it.each([401, 500])(
     'surfaces HTTP %s once without automatic transport retries or a local fallback',
     async (status) => {
       const baseURL = await startApi([

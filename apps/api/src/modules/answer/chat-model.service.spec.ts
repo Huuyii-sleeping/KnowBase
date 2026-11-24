@@ -47,7 +47,9 @@ describe('ChatModelService Ollama compatibility', () => {
     expect(mocks.constructor).toHaveBeenCalledWith(
       expect.objectContaining({ model: 'configured-model' }),
     );
-    await expect(service.generate('prompt')).rejects.toThrow('offline');
+    await expect(service.generate('prompt')).rejects.toThrow(
+      'Chat model unavailable',
+    );
   });
   it('rejects a token-limit truncation rather than returning an answer prefix', async () => {
     const service = new ChatModelService(

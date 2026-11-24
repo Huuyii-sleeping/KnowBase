@@ -43,7 +43,7 @@ describe('shared answer model invocation', () => {
       invokeAnswerModel(async () => {
         throw new Error('offline');
       }),
-    ).rejects.toThrow('offline');
+    ).rejects.toThrow('Chat model unavailable');
     expect(vi.getTimerCount()).toBe(0);
   });
   it('rejects even valid-looking JSON when the provider reports truncation', async () => {

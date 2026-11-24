@@ -7,3 +7,6 @@ export const ANSWER_MODEL_CONTEXT_TOKENS = 32768;
 export const ANSWER_MODEL_MAX_OUTPUT_TOKENS = 4096;
 
 export const ANSWER_MODEL_TIMEOUT_MS = 30000;
+
+// Shared across retrieval, generation, citation repair and transport recovery.
+export const ANSWER_TOTAL_TIMEOUT_MS = 45000;
