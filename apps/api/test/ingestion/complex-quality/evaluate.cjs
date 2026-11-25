@@ -7,6 +7,7 @@ const { root, fingerprint, gitState } = require('./trace.cjs');
 const { budgets, profile, probe } = require('./profile.cjs');
 const { saveArtifacts } = require('./artifacts.cjs');
 const { infer } = require('./runtime.cjs');
+const { tokenUsage, enhancementStatus } = require('./transport-trace.cjs');
 async function evaluate(
   directory,
   destination,
@@ -114,10 +115,15 @@ async function evaluate(
             provenance: observation.result.provenance,
             elapsedMs: observation.elapsedMs,
             requests: observation.requests,
-            tokens: null,
+            visionCalls: observation.visionCalls || [],
+            enhancement: enhancementStatus(
+              observation.result,
+              configuration.identity.imageMode === 'describe',
+            ),
+            tokens: tokenUsage(observation.visionCalls || []),
             cost: null,
             usageNote:
-              'Adapter does not expose provider usage; no inferred cost.',
+              'Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.',
             artifacts,
             score: score(observation.result, corpus.gold.get(item.id)),
           });

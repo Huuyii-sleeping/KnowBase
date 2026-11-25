@@ -1,0 +1,5113 @@
+{
+  "schema": "complex-real-model-baseline-v1",
+  "date": "2026-11-25",
+  "scope": "14 synthetic inputs; real models and isolated staging delivery, not production acceptance.",
+  "decision": "Keep OCR default; local VLM fails unit-preservation gate. Stage 5.3 pending.",
+  "mineruRuntime": {
+    "schema": "mineru-runtime-snapshot-v1",
+    "python": "3.12.14",
+    "platform": "Darwin",
+    "arch": "arm64",
+    "packages": [
+      {
+        "name": "accelerate",
+        "version": "1.16.0"
+      },
+      {
+        "name": "aiofiles",
+        "version": "25.1.0"
+      },
+      {
+        "name": "aiosqlite",
+        "version": "0.22.1"
+      },
+      {
+        "name": "annotated-doc",
+        "version": "0.0.7"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.16.0"
+      },
+      {
+        "name": "beautifulsoup4",
+        "version": "4.15.0"
+      },
+      {
+        "name": "brotli",
+        "version": "1.2.1"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.11.20"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.2"
+      },
+      {
+        "name": "click",
+        "version": "8.5.1"
+      },
+      {
+        "name": "cobble",
+        "version": "0.1.4"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.2"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0"
+      },
+      {
+        "name": "docvortex",
+        "version": "0.6.26"
+      },
+      {
+        "name": "et_xmlfile",
+        "version": "2.0.0"
+      },
+      {
+        "name": "fastapi",
+        "version": "0.165.0"
+      },
+      {
+        "name": "fastapi_offline",
+        "version": "1.7.7"
+      },
+      {
+        "name": "filelock",
+        "version": "4.3.0"
+      },
+      {
+        "name": "flatbuffers",
+        "version": "25.12.19"
+      },
+      {
+        "name": "fonttools",
+        "version": "4.68.0"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.9.0"
+      },
+      {
+        "name": "ftfy",
+        "version": "6.3.1"
+      },
+      {
+        "name": "gradio",
+        "version": "6.32.0"
+      },
+      {
+        "name": "gradio_client",
+        "version": "2.7.2"
+      },
+      {
+        "name": "groovy",
+        "version": "0.1.2"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "hf-gradio",
+        "version": "0.4.1"
+      },
+      {
+        "name": "hf-xet",
+        "version": "1.8.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpcore2",
+        "version": "2.16.2"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "httpx-retries",
+        "version": "0.6.0"
+      },
+      {
+        "name": "httpx2",
+        "version": "2.16.2"
+      },
+      {
+        "name": "huggingface_hub",
+        "version": "2.4.0"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "jieba",
+        "version": "0.42.1"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "jiter",
+        "version": "0.19.0"
+      },
+      {
+        "name": "json_repair",
+        "version": "0.64.9"
+      },
+      {
+        "name": "latex2mathml",
+        "version": "3.81.1"
+      },
+      {
+        "name": "loguru",
+        "version": "0.8.0"
+      },
+      {
+        "name": "lxml",
+        "version": "6.1.3"
+      },
+      {
+        "name": "mammoth",
+        "version": "1.13.0"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.3.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "name": "mathml2omml",
+        "version": "0.0.2"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2"
+      },
+      {
+        "name": "metafile-render",
+        "version": "0.4.2"
+      },
+      {
+        "name": "mineru",
+        "version": "4.2.3"
+      },
+      {
+        "name": "mineru-llama-cpp",
+        "version": "0.2.3"
+      },
+      {
+        "name": "mineru-magika",
+        "version": "1.0.3"
+      },
+      {
+        "name": "mineru_vl_utils",
+        "version": "2.0.9"
+      },
+      {
+        "name": "ml_dtypes",
+        "version": "0.7.0"
+      },
+      {
+        "name": "modelscope",
+        "version": "1.40.3"
+      },
+      {
+        "name": "modelscope-hub",
+        "version": "0.7.1"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0"
+      },
+      {
+        "name": "networkx",
+        "version": "3.7"
+      },
+      {
+        "name": "nh3",
+        "version": "0.3.8"
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.5"
+      },
+      {
+        "name": "olefile",
+        "version": "0.47"
+      },
+      {
+        "name": "onnx",
+        "version": "1.23.2"
+      },
+      {
+        "name": "onnxruntime",
+        "version": "1.32.0"
+      },
+      {
+        "name": "openai",
+        "version": "2.54.0"
+      },
+      {
+        "name": "openpyxl",
+        "version": "3.1.5"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.2"
+      },
+      {
+        "name": "orjson",
+        "version": "3.13.0"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "pandas",
+        "version": "3.1.1"
+      },
+      {
+        "name": "pillow",
+        "version": "13.0.0"
+      },
+      {
+        "name": "pip",
+        "version": "25.0.1"
+      },
+      {
+        "name": "protobuf",
+        "version": "7.36.2"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
+      },
+      {
+        "name": "pyclipper",
+        "version": "1.4.0"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.12"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.4"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.5"
+      },
+      {
+        "name": "pydub",
+        "version": "0.25.1"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "pylatexenc",
+        "version": "2.11"
+      },
+      {
+        "name": "pypdf",
+        "version": "7.1.1"
+      },
+      {
+        "name": "pypdfium2",
+        "version": "5.15.2"
+      },
+      {
+        "name": "pypptx-with-oxml",
+        "version": "1.0.3"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "4.0.0"
+      },
+      {
+        "name": "python-docx",
+        "version": "1.2.0"
+      },
+      {
+        "name": "python-multipart",
+        "version": "0.0.34"
+      },
+      {
+        "name": "pytz",
+        "version": "2026.6"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.4"
+      },
+      {
+        "name": "regex",
+        "version": "2026.11.19"
+      },
+      {
+        "name": "reportlab",
+        "version": "5.1.0"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "name": "resvg_py",
+        "version": "0.5.0"
+      },
+      {
+        "name": "rich",
+        "version": "15.0.0"
+      },
+      {
+        "name": "rl_accel",
+        "version": "0.9.3"
+      },
+      {
+        "name": "safehttpx",
+        "version": "0.1.7"
+      },
+      {
+        "name": "safetensors",
+        "version": "0.8.0"
+      },
+      {
+        "name": "semantic-version",
+        "version": "2.10.0"
+      },
+      {
+        "name": "setuptools",
+        "version": "84.2.1"
+      },
+      {
+        "name": "shapely",
+        "version": "2.2.0"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1"
+      },
+      {
+        "name": "soupsieve",
+        "version": "4.1.3"
+      },
+      {
+        "name": "starlette",
+        "version": "1.10.0"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0"
+      },
+      {
+        "name": "tinycss2",
+        "version": "1.5.1"
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.23.3"
+      },
+      {
+        "name": "tomlkit",
+        "version": "0.14.0"
+      },
+      {
+        "name": "torch",
+        "version": "2.15.0"
+      },
+      {
+        "name": "torchvision",
+        "version": "0.29.2"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1"
+      },
+      {
+        "name": "transformers",
+        "version": "5.24.0"
+      },
+      {
+        "name": "truststore",
+        "version": "0.10.5"
+      },
+      {
+        "name": "typer",
+        "version": "0.29.2"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.5"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "tzdata",
+        "version": "2026.6"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.8.0"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0"
+      },
+      {
+        "name": "watchfiles",
+        "version": "1.3.0"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.9.5"
+      },
+      {
+        "name": "webencodings",
+        "version": "0.6.1"
+      },
+      {
+        "name": "xlsxwriter",
+        "version": "3.3.4"
+      },
+      {
+        "name": "ziafont",
+        "version": "0.11"
+      },
+      {
+        "name": "ziamath",
+        "version": "0.13"
+      }
+    ],
+    "models": [
+      {
+        "file": "Layout/PP-DocLayoutV2/config.json",
+        "bytes": 3787,
+        "sha256": "18a696b54c64c4fa582afcd3a41407c4b65a99dc7ab187ad2fed8af8e4128ad8"
+      },
+      {
+        "file": "Layout/PP-DocLayoutV2/model.safetensors",
+        "bytes": 214798436,
+        "sha256": "e60f3725aeedc88fd319416ef166bda79171a41516a301c27cab9132dc2739d2"
+      },
+      {
+        "file": "Layout/PP-DocLayoutV2/preprocessor_config.json",
+        "bytes": 575,
+        "sha256": "56281a70c931a291dcaf653605fb4df713fd823f65e939aecd6005c26346a103"
+      },
+      {
+        "file": "OCR/paddleocr/ch_PP-OCRv6_small_rec_infer.safetensors",
+        "bytes": 21204736,
+        "sha256": "f65a332afe5aa663f0b9d5706f4ae8457b5b4058a842d5c1eb22df505c27d642"
+      },
+      {
+        "file": "OCR/paddleocr/ch_PP-OCRv6_tiny_det_infer.safetensors",
+        "bytes": 1786412,
+        "sha256": "cae3c88d2a9902fd0293e6b17990428f54bfa7ec98f800a4368e95423a754d16"
+      }
+    ],
+    "sha256": "5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b"
+  },
+  "visionRuntime": {
+    "schema": "local-vision-runtime-v1",
+    "model": "Qwen/Qwen3-VL-2B-Instruct-GGUF",
+    "upstreamRevision": "52d6c8ffea26cc873ac5ad116f8631268d7eb503",
+    "files": [
+      {
+        "file": "Qwen3VL-2B-Instruct-Q4_K_M.gguf",
+        "bytes": 1107409952,
+        "sha256": "089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae"
+      },
+      {
+        "file": "mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf",
+        "bytes": 445053216,
+        "sha256": "f9a68fabba69c3b81e153367b2c7521030b0fa8bb0de400c9599c8e6725f9c82"
+      }
+    ],
+    "binarySha256": "caf176a7f4b5f557f9d543663be88e83de482f19ac348efbc839d028eb33c8db",
+    "binaryVersion": "version: 1.0.0-dev (build 1, commit 4577932)\nbuilt with AppleClang 21.0.0.21000101 for Darwin arm64",
+    "configuration": {
+      "ctxSize": 8192,
+      "parallel": 1,
+      "threads": 4,
+      "imageMaxTokens": 1024,
+      "alias": "qwen3vl-2b-q4"
+    }
+  },
+  "runs": [
+    {
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-25T14:40:06.159Z",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "mineruRevision": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "completed",
+      "holdoutExposure": [],
+      "run": "mineru-real-development-final",
+      "runSha256": "a76f6b27dc88722ed067a6512e5e9682673fbec81e223cb2b09d8e3f644c19d0",
+      "sourceSha256": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+      "compiledSha256": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+      "toolSha256": "b59143efe6392fb74bed2cfefdc32bca3b669481a497491756890a6e93cfac7f",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "category": "flowchart",
+          "split": "development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 2055.2556670000004,
+          "requests": {
+            "mineru": 6,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 4,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3", "text-4"]
+            },
+            "critical": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["value-1"]
+            },
+            "sources": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["edge-1", "edge-2", "edge-3"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-4"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-2"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-3"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "cb4de4a812f5d11be8b89b997e0de7ab0ed3361ef905fdda88dff1157722815c",
+            "asset-1.bin": "0fb2d7d0f8905372d7f87abfd4e304f13633b1f0c9cef8f1e79b5a140c56d774",
+            "asset-2.bin": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+            "assets.json": "3b86ac08cdd815a980408bf6b6ecd333b5aa17f2c17822da3ddc2cf4251cf662",
+            "ocr.md": "9a16825dc95d310ca7c7975a6b7a1ba9dbf49d8d7c377f3911fda196987c8bff",
+            "parsed.json": "4cff7faac56a6ee42516d88c9fd9a35b8600e2f1e3e20a7ace6db56a1d64681b",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "chart-development",
+          "category": "chart",
+          "split": "development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1021.8293749999998,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["source-1", "source-2", "source-3"]
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["bar-0", "bar-1", "bar-2"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-3"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-0"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-2"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "0bb72a850d7fcabb3490731f8b071d7b967f82b2456a98e8f42cdf9d628834b5",
+            "asset-1.bin": "31e10c828b68f78cb075e5ef4b444d69172510e299129b6efba9280b7d4b6187",
+            "asset-2.bin": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+            "assets.json": "8c82823550e2d65bb956f3334e0d4b1923bd98d04aacd781724d7caafbddd0db",
+            "ocr.md": "a942e46d1be1e60208cebf7027fcf6c1cccc2f1e21c9a8897ad4428f321f2d6b",
+            "parsed.json": "07a10007748993b9efd7bccb3f28542fd60f7cec7d7c1582231f6325dd12a983",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "screenshot-development",
+          "category": "screenshot",
+          "split": "development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1020.9884999999995,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "8f83c01c05e6d48a91ae2a1effe8f1c93f07e5da4fc1f21390be8e5572e11d6f",
+            "asset-1.bin": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+            "assets.json": "3b188e117b9adb047b5c38840cb33a47a7da803103c7984f9e2f0ef715dcbd53",
+            "ocr.md": "72a6c16759c3d8d8d96ed4a687bdd1c60813cce84af7665e29504bf6a556a8d7",
+            "parsed.json": "4750f7da175b1a17200c9074c82c2536784fef52ad15e11f42633cbea4fd4e32",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "scanned-table-development",
+          "category": "scanned-table",
+          "split": "development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1016.8371669999997,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "6b6c96f8c7d7593ee44bfffc7bfa2e8cf506e0e2e783a6997f9f95f819c3a4a7",
+            "asset-1.bin": "143f3c809837cb0e082783331a8bcf04b5a2e309b1b8d8dda4c407f6505bb6cf",
+            "assets.json": "3aa95ce39b861b19defdba5519b64ca33c5d7b13acda63a96da15078712b2e52",
+            "ocr.md": "9f8aa17fc194b4ad75dd4133718318b42cbbc2a701d07b09caf6042dd0466c39",
+            "parsed.json": "3c3e4f736c254cb15a1411dec145501e39175bfd977217da230a7e401e7e99fa",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "cross-page-table-development",
+          "category": "cross-page-table",
+          "split": "development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1017.4468749999996,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 2,
+              "expectedCells": 18,
+              "matchedCells": 18,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "4aff5aae73ea5a9b433cc9188be8503873ae16b5e9ba28c6a9b0bb13fff0eadc",
+            "asset-1.bin": "fc76698a50fb8930dbe420641694fb42e6f617c8e79e055133b8970846b30c8c",
+            "asset-2.bin": "d053286bd038fd3f56e0f1e7bc56f792d342c2124006a5ed51c33db11c3bf279",
+            "assets.json": "2228f86f9fe458a81908fa603ff2bec8cd388ad5595ea0be63afcb8866f8deba",
+            "ocr.md": "b551d7735e8deda5d4176bd2dd6ad0a2ba1a6f5b2a9a8fa7d3e2f23cda044849",
+            "parsed.json": "60077e22580bba3b05daa1a98214788da681b53ad9dd337c7fd084454c098855",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "multicolumn-development",
+          "category": "multicolumn",
+          "split": "development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1029.6312500000004,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 0,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 1,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "43622238bfdfba95ef4ee8a120a8ecef1e157522401b937b0517ce67af23072d",
+            "assets.json": "956a1904ec0a6457980c569a84f06115c29ec897c9492528f807ceefb4b2c2cc",
+            "ocr.md": "9d2d7917ff9473211b37ca1b2f2e381696fb553b911107075a06a4b5f0aad0d6",
+            "parsed.json": "0eae1140bdd8ae0bc1ad598dd639743298a1273b7fcb59ed77c0607e1a10f469",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "formula-image-development",
+          "category": "formula-image",
+          "split": "development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1031.4645,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "a8dc3d1940223777b7041a7adc876d5d7293da0294ea0d1740ae6232e7e0e3a6",
+            "asset-1.bin": "30fe733edd89f3a3c4c287bd3b5b4d602264b3b8f8a08f682f9a6676c6821c8f",
+            "assets.json": "2bfe691e323daf134ff9dae50081e98ddf9538cbb07402cde1fb73bd80c07d9f",
+            "ocr.md": "23fd41cac05f072af28ca2168e4edc39617662565f963d28bcef9bfe11e376b3",
+            "parsed.json": "e9a3fc343d206bf06e28abcd4b2d1db69a2ce47a14311094b8c981a60cd8c64f",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-25T14:40:25.960Z",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "mineruRevision": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "visionModel": null,
+        "visionRevision": null
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "completed",
+      "holdoutExposure": [
+        {
+          "id": "flowchart-holdout",
+          "at": "2026-11-25T14:40:25.996Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "chart-holdout",
+          "at": "2026-11-25T14:40:27.338Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "screenshot-holdout",
+          "at": "2026-11-25T14:40:28.367Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "scanned-table-holdout",
+          "at": "2026-11-25T14:40:29.391Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "at": "2026-11-25T14:40:31.507Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "multicolumn-holdout",
+          "at": "2026-11-25T14:40:32.547Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "formula-image-holdout",
+          "at": "2026-11-25T14:40:33.576Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        }
+      ],
+      "run": "mineru-real-holdout-final",
+      "runSha256": "65fc406871825738592ce9bb87f4c78119e2c630ff82baf42be66b187e57c8c6",
+      "sourceSha256": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+      "compiledSha256": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+      "toolSha256": "1947e592602c8e50f367b7ff54a287ab18fd37dfa05729f75e4f28aedae002be",
+      "cases": [
+        {
+          "id": "flowchart-holdout",
+          "category": "flowchart",
+          "split": "holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1029.311125,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 4,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3", "text-4"]
+            },
+            "critical": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["value-1"]
+            },
+            "sources": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["edge-1", "edge-2", "edge-3"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-4"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-2"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-3"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "17b68145e3c8fb59a66f5cad007310bf000984ceb5643f7ab5d102fd40c7130b",
+            "asset-1.bin": "46e778f41aae0cb49c1d7f1488b8a3dc96ee50b794b57aeba1d337f1b90ab838",
+            "asset-2.bin": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+            "assets.json": "89efbe9d1d87f7767ad79da0fe5c03d3714383710dd5a60e1fdb4f3306e55ff7",
+            "ocr.md": "ae1c12e949cf1335665205ae1e289141cc65506e5770b614e3fa46def39f8f1f",
+            "parsed.json": "cabe25d384123614ad68c971e1e530f2f2d12f88a508e2e6f15d9da5e8363546",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "chart-holdout",
+          "category": "chart",
+          "split": "holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1021.4748749999999,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["source-1", "source-2", "source-3"]
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["bar-0", "bar-1", "bar-2"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-3"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-0"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-2"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "0f7ecfe788c5796566335c5496a8c037a59fd8824c54e7966fbd48de8a4a2038",
+            "asset-1.bin": "1b9a986fb21d24afa83aaa426a1c027dcd085646c277edd37798fca6bc7dea7c",
+            "asset-2.bin": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+            "assets.json": "092095b7027915ed8c5495488a0f6067528a116e18cc7df554fd03898799d75c",
+            "ocr.md": "c1829fe4912573b086ca59f498bf4b2e3c089c96162905375d77e0a00fdf0ae0",
+            "parsed.json": "e99f64d1f41505d40d08c3877f754aed681c5989bad8832d873369551f6656fd",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "screenshot-holdout",
+          "category": "screenshot",
+          "split": "holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 1019.1599589999996,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "ba77a9fc4a1ac28950e7f95054272f2931cf4bc4ca0f4dd332d0910a270ff54d",
+            "asset-1.bin": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+            "assets.json": "bed6309f73f106af54060acb2826cc11ee46e9e35ac6612ba90e3ffbea647f8c",
+            "ocr.md": "d37cd080649175e484dd9632f20e4db28587613d9c5e753ebc0def19c09a9716",
+            "parsed.json": "e84d8111f72435083d929f9de6b8bea337168a46c081a407d17a9fb083028479",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "scanned-table-holdout",
+          "category": "scanned-table",
+          "split": "holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 2108.188458,
+          "requests": {
+            "mineru": 6,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-unit"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "813cdfd6de9e4845f2a36ad517feeb400fccbaf0f6e05b63f2010c69f69ab820",
+            "asset-1.bin": "119aa95645c42effba68ab7339d6b05e4c25631ff96c98dfd457e7fbe3cf029a",
+            "assets.json": "f0f0ba6bf3c831e83334d4812c45d6ecb4cdd8533b9ec5fa0be84ebfcfeeec73",
+            "ocr.md": "c7326804e892af27bf8f242104e921d2b1b88ce9b1af615b6e158c3b1e960cd4",
+            "parsed.json": "9a878aeac620a83903f85d5a9af2af3b0b61143ee52af531b78847e56ad6147a",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "category": "cross-page-table",
+          "split": "holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1036.4859999999999,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 2,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 2,
+              "expectedCells": 18,
+              "matchedCells": 18,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "77399ef231cad5d7b5db409c9967998b3d10267c8a41371ca8e8d7eb57a2d5cd",
+            "asset-1.bin": "fed1db241eec1e407fcf99c54bc6505645a0836bec472a1f1504083c1b670fcf",
+            "asset-2.bin": "8ccdc983f9dd1773df0d82a478398a66612a268d1fb254619cade1a24f9d8b6d",
+            "assets.json": "7562e2bb8383f0ade8242627fbf41fa5acc5449c73d7ec5764f62e9c87896ae5",
+            "ocr.md": "5dc91a3df737b6288d06d36502920b82179944f270e6f701055c24c042954c4f",
+            "parsed.json": "be363bd0ec37feaaf7e1acdcfa3d5ce84bee28a7f81bb77cb936dd4a9798f9a4",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "multicolumn-holdout",
+          "category": "multicolumn",
+          "split": "holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1024.4790410000005,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 0,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 1,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "34bee446e858d7bea1bcd9d111ec3d1c61cf8ae641f4e04c011a96a9df27c9f6",
+            "assets.json": "7706a4310527022d58436c2e86c0a6aec569f584659797efd0a89c726f9664aa",
+            "ocr.md": "a3beef45eef4943e8c3456c8fa70ccbca6782e5b5de0dc35624f5fdd27078315",
+            "parsed.json": "b4ba39dfe6e65d89253a63c584c64e0f2d9e1d5a425ebe6c2b12525ab9b2af5a",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "formula-image-holdout",
+          "category": "formula-image",
+          "split": "holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1034.9175829999995,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": false,
+            "inputs": 1,
+            "descriptions": 0,
+            "failures": [],
+            "status": "not_requested"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "a7f8f4160a7587174773b6676de4c7f84a9ccf81ca3af92ae67ecd31c2c5d17b",
+            "asset-1.bin": "26c596bb5ef62275ea21c66c8d0466a552d1c2f4c84a86540ef54cd43547fd8d",
+            "assets.json": "be8f45d82a3ac1ed57f1c955211a9447adbe6af7d12bd0f6caa942ee42beed47",
+            "ocr.md": "cd0777f1d160661ef15b47c46994d6bc7b7cc1b7ff696f0e26de0321188344bd",
+            "parsed.json": "9fbcf501854bbb56753a622c51d9a306f6f36262d2468cd176653018e4574ef7",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-25T13:37:12.348Z",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "describe",
+        "mineruRevision": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "visionModel": "qwen3vl-2b-q4",
+        "visionRevision": "qwen3vl-2b:089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae:projector-f9a68fabba69c3b81e153367b2c7521030b0fa8bb0de400c9599c8e6725f9c82"
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "completed",
+      "holdoutExposure": [],
+      "run": "vision-real-development-retry",
+      "runSha256": "0488274d985f2b24f6ce376e9ef8786ede364499758281e4ffbfccd20fbfbe38",
+      "sourceSha256": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+      "compiledSha256": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+      "toolSha256": "674380cd0ea8f9ac823cf73b9319db7b9ed95e1aa4038be79698d56b8b3eef40",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "category": "flowchart",
+          "split": "development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 32477.54125,
+          "requests": {
+            "mineru": 7,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "78fecda1aba9044b30def88d8818c3a08152b45a6cf173a82ffffa8f7c28a2fd",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "f0c7f3b48a95c41e574e5a7a860c614490b070aa4516b9a444ada902e0c104ba",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 735,
+                "completion": 390,
+                "total": 1125
+              },
+              "elapsedMs": 15173.687375
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "c700f9ed2e56fc016278c6df1c62561795404acf4a6e10a5a1def7107be86f4a",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "0b3bf9d6213c90be5b274d8a51923b2a48a26c1469045b0e428019fd9ca545c4",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1064,
+                "completion": 265,
+                "total": 1329
+              },
+              "elapsedMs": 13602.362915999998
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 2,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 2,
+            "unmeasuredCalls": 0,
+            "prompt": 1799,
+            "completion": 655,
+            "total": 2454
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 4,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3", "text-4"]
+            },
+            "critical": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["value-1"]
+            },
+            "sources": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 2,
+              "missing": ["edge-1"],
+              "actual": 6
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-4"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "cb4de4a812f5d11be8b89b997e0de7ab0ed3361ef905fdda88dff1157722815c",
+            "asset-1.bin": "0fb2d7d0f8905372d7f87abfd4e304f13633b1f0c9cef8f1e79b5a140c56d774",
+            "asset-2.bin": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+            "assets.json": "d59154fa98709b671afa2a2080caa2fc6d8b5a56666d0a88ceca9624c20e4ebe",
+            "ocr.md": "9846b94886fde44645fee604ad527aa672528941cf0da3647d4a4f7f3062c40f",
+            "parsed.json": "63a84ee5a91aeb466d2d3b82f5518a63391e14ddd06919cca91b7a95bfe53707",
+            "visual.json": "cd6ded2b4bfc66a2ff5f4baec41a9ee00682bc937898188fea46636813b82d9b"
+          }
+        },
+        {
+          "id": "chart-development",
+          "category": "chart",
+          "split": "development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 65471.64883300001,
+          "requests": {
+            "mineru": 7,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "1d4080546c3b60cda7d43feed65304c76da6b547f63c4e5dbf090ea978425f97",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "9ec682d3e11d6efadfdc61a2b8cfaa9c55c3680cd18fa54ca97afa3caf7a582e",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 924,
+                "completion": 284,
+                "total": 1208
+              },
+              "elapsedMs": 8772.957999999999
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "8a08a0c9a7323a29128b2ea513ec555c025f56cfaaceffdb2ee446a9806497fd",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "bcc70241cf77a766610029a103c86537dbcab34e9050366a7d70c409c0f2a634",
+              "finishReason": "length",
+              "usage": {
+                "prompt": 1064,
+                "completion": 1600,
+                "total": 2664
+              },
+              "elapsedMs": 53650.833375
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 1,
+            "failures": [
+              {
+                "code": "IMAGE_DESCRIPTION_FAILED",
+                "evidenceId": "original-image"
+              }
+            ],
+            "status": "incomplete"
+          },
+          "tokens": {
+            "observedCalls": 2,
+            "unmeasuredCalls": 0,
+            "prompt": 1988,
+            "completion": 1884,
+            "total": 3872
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["source-1", "source-2", "source-3"]
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["bar-0", "bar-1", "bar-2"],
+              "actual": 3
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-3"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-0"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-2"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "0bb72a850d7fcabb3490731f8b071d7b967f82b2456a98e8f42cdf9d628834b5",
+            "asset-1.bin": "31e10c828b68f78cb075e5ef4b444d69172510e299129b6efba9280b7d4b6187",
+            "asset-2.bin": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+            "assets.json": "47ffac4e24d39d5e37ef8a84c3b5b0f4693999aed3a7c9dd7241bdf07aa51dbc",
+            "ocr.md": "ab55c0891188767cc55c3b867ad2e22238a731bd48b20a3820cd3c958976082d",
+            "parsed.json": "1fd368506c0c2136a34fa5260a116435b51d6a1008809a96f909bb2331b95a31",
+            "visual.json": "b6081a576fdff71cbbcfd7110f0ce085b595be4f24d14fc4aa61187d66de6712"
+          }
+        },
+        {
+          "id": "screenshot-development",
+          "category": "screenshot",
+          "split": "development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 16561.953374999997,
+          "requests": {
+            "mineru": 9,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "8781cc35ee5a4d8a3a2cbf5019739f2ffcbad706ea4d8f633c362fc6733f3209",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "d4dd41fb2021b14949a24a6487d641db288b6e0d0f49efea477c871494da2aa5",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1064,
+                "completion": 334,
+                "total": 1398
+              },
+              "elapsedMs": 10824.815917
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 1064,
+            "completion": 334,
+            "total": 1398
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 5
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "8f83c01c05e6d48a91ae2a1effe8f1c93f07e5da4fc1f21390be8e5572e11d6f",
+            "asset-1.bin": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+            "assets.json": "54c98b748216a0ef0f92a57401cf9a3eddddc40567383319f59be6870ab59064",
+            "ocr.md": "76952da1f9d561e964f222343c201690e0f65b09291f2b2d82e1bfd446080d1c",
+            "parsed.json": "e46ef0acc0f07dd1f3b1b88848d676de8941b305fc55183dc7045e0ba4e65056",
+            "visual.json": "330c469a84ae42c01fef6b827493a6a5d6963ef045f77d36d8eacc4f0731cd93"
+          }
+        },
+        {
+          "id": "scanned-table-development",
+          "category": "scanned-table",
+          "split": "development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 16128.647291000001,
+          "requests": {
+            "mineru": 8,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "6a586c77b687470501f67a326e668997e52b95d5af0f6a9585df2b99278a959f",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "d63fa772a99f4bb726a1fd5de2aeaeb94a9ea23651828b6e13bfae98316c2a72",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1068,
+                "completion": 335,
+                "total": 1403
+              },
+              "elapsedMs": 11928.792417000004
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 1068,
+            "completion": 335,
+            "total": 1403
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 3
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "6b6c96f8c7d7593ee44bfffc7bfa2e8cf506e0e2e783a6997f9f95f819c3a4a7",
+            "asset-1.bin": "143f3c809837cb0e082783331a8bcf04b5a2e309b1b8d8dda4c407f6505bb6cf",
+            "assets.json": "8e490f2c9449c5e145e67d14b3ca76467f8b94cf30e69c934dce2da044d76dc5",
+            "ocr.md": "7c62d71a51bddac2513c45cd8959a28aacfcf247d134fa0026a5e0183127e556",
+            "parsed.json": "3eccb0dbddf1955ef59f20170bcb92e6d911dfed712809e841514a0104df3ce6",
+            "visual.json": "bab333c1b7985e44ae2ad290b556d6579c07d67220a1d4b97c339e68f80da603"
+          }
+        },
+        {
+          "id": "cross-page-table-development",
+          "category": "cross-page-table",
+          "split": "development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 25876.418166999996,
+          "requests": {
+            "mineru": 5,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "985d15978a1c8808ad4cc475d845d050c28092cb038afeb15e39c277491fa669",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "1811ac9fea62fa4e59cb4f7098a2634dfd1169ff18e6bcad2459257e8509123b",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1071,
+                "completion": 297,
+                "total": 1368
+              },
+              "elapsedMs": 11155.731417000003
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "329d7fabb88b448a34b33b4b735ed2c77075ccc3a554a32e00939a71d78f4d1f",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "0da260a4387099906c747372cce3d20b23d86d9bb4987e0e3b2e58747431f1ff",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1071,
+                "completion": 441,
+                "total": 1512
+              },
+              "elapsedMs": 13589.86366600002
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 2,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 2,
+            "unmeasuredCalls": 0,
+            "prompt": 2142,
+            "completion": 738,
+            "total": 2880
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 10
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 2,
+              "expectedCells": 18,
+              "matchedCells": 18,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "4aff5aae73ea5a9b433cc9188be8503873ae16b5e9ba28c6a9b0bb13fff0eadc",
+            "asset-1.bin": "fc76698a50fb8930dbe420641694fb42e6f617c8e79e055133b8970846b30c8c",
+            "asset-2.bin": "d053286bd038fd3f56e0f1e7bc56f792d342c2124006a5ed51c33db11c3bf279",
+            "assets.json": "9b5fa5701bc8f68508130499ac8ba43389d2008f46190107d58e4d13d6d28dac",
+            "ocr.md": "47d82fbfe7e17bdd6f1ccb076eac6800f853676edbebc5033b7b8595e0e31e52",
+            "parsed.json": "4657a92c7a2863401117bf3e766c76725e995186662d519295df019d50ae8925",
+            "visual.json": "2872cf54177ff6c10b63bca26b4fd7863e1ac539ab84f5bb8a7a0e0e783ceb81"
+          }
+        },
+        {
+          "id": "multicolumn-development",
+          "category": "multicolumn",
+          "split": "development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1071.5625839999993,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": true,
+            "inputs": 0,
+            "descriptions": 0,
+            "failures": [],
+            "status": "no_image_evidence"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 1,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "43622238bfdfba95ef4ee8a120a8ecef1e157522401b937b0517ce67af23072d",
+            "assets.json": "045c223d758792945263c9a6a39101c1137838d6a2e9a28fee30fdbc5f96d8e7",
+            "ocr.md": "9d2d7917ff9473211b37ca1b2f2e381696fb553b911107075a06a4b5f0aad0d6",
+            "parsed.json": "7303a9d659cd845195c644648cb3cb4462e69f79c0fbcf2b5bedd9709c02a38e",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "formula-image-development",
+          "category": "formula-image",
+          "split": "development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 6864.3913750000065,
+          "requests": {
+            "mineru": 5,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "7faebac8d4c87bdb9e2bb331fd907ca1399da85f19132476b1802cb93d98452c",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "9818cbafa1fb44f768a983b503a8eeedaff63690be4d0b22950cb2fc11fed127",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 786,
+                "completion": 198,
+                "total": 984
+              },
+              "elapsedMs": 5841.907166000019
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 786,
+            "completion": 198,
+            "total": 984
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 1
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "a8dc3d1940223777b7041a7adc876d5d7293da0294ea0d1740ae6232e7e0e3a6",
+            "asset-1.bin": "30fe733edd89f3a3c4c287bd3b5b4d602264b3b8f8a08f682f9a6676c6821c8f",
+            "assets.json": "f1bf5098c95df7b77bcbc47fad9bf1fd4362564788ce39d48666d590b8e664ef",
+            "ocr.md": "b6ed853cc5e63e535f2e46c1962fd45046f9e154d604dfcd2ce5694fc4e728f7",
+            "parsed.json": "bc02a75b203f982ae0b1383ff542c827ba7734b259713672f3d95b738395a6ee",
+            "visual.json": "4eeca70abc8344e9e313c5dc3687dfbd82e0af734044d93601fea52b92c6bbda"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "complex-quality-run-v1",
+      "createdAt": "2026-11-25T14:42:38.792Z",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "goldSha256": "2f825b805a0c796246754dccbe4364e692856387ef950d41db0216bfc8a295da",
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "profile": {
+        "parser": "mineru",
+        "imageMode": "describe",
+        "mineruRevision": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "visionModel": "qwen3vl-2b-q4",
+        "visionRevision": "qwen3vl-2b:089d75c52f4b7ffc56ba998ffc50aae89fcafc755f9e7208aacca281dca6c2ae:projector-f9a68fabba69c3b81e153367b2c7521030b0fa8bb0de400c9599c8e6725f9c82"
+      },
+      "budgets": {
+        "INGESTION_MAX_FILE_BYTES": 104857600,
+        "INGESTION_MAX_CONTENT_BYTES": 4194304,
+        "INGESTION_MAX_PAGES": 1000,
+        "INGESTION_PARSE_CONCURRENCY": 1,
+        "MINERU_RESULT_MAX_BYTES": 67108864,
+        "MINERU_TIMEOUT_MS": 300000,
+        "MINERU_POLL_MS": 1000,
+        "MINERU_TIER": "flash",
+        "visionMaxUniqueImages": 12,
+        "visionMaxInputBytes": 4194304,
+        "visionMaxOutputTokens": 1600,
+        "visionTemperature": 0,
+        "visionTimeoutMs": 60000
+      },
+      "runtime": {
+        "node": "v24.16.0",
+        "platform": "darwin",
+        "arch": "arm64"
+      },
+      "lockSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "status": "completed",
+      "holdoutExposure": [
+        {
+          "id": "flowchart-holdout",
+          "at": "2026-11-25T14:42:38.847Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "chart-holdout",
+          "at": "2026-11-25T14:43:52.246Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "screenshot-holdout",
+          "at": "2026-11-25T14:45:32.700Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "scanned-table-holdout",
+          "at": "2026-11-25T14:46:15.359Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "at": "2026-11-25T14:46:54.508Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "multicolumn-holdout",
+          "at": "2026-11-25T14:47:08.949Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        },
+        {
+          "id": "formula-image-holdout",
+          "at": "2026-11-25T14:47:09.967Z",
+          "reason": "Quality evaluation; diagnostic after this run, never unseen again."
+        }
+      ],
+      "run": "vision-real-holdout-final",
+      "runSha256": "db9fdc046579f763968aa78207080bcd834ce94df41967f214c166294ad61166",
+      "sourceSha256": "ee33dc6d4009de2fa7cd4b47a92abc942a12b06aa0f740c0972dde46c3c3f265",
+      "compiledSha256": "1ca222e74c91dd46e28a523e829f31b1b66c49bf044116b804eff0e1e6180cbe",
+      "toolSha256": "9e2edf1df1307ce7fc95a4fb41fdafb8e6a284627fc7362c3cb216c8504248fe",
+      "cases": [
+        {
+          "id": "flowchart-holdout",
+          "category": "flowchart",
+          "split": "holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 72777.730833,
+          "requests": {
+            "mineru": 6,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "669f79bf65c772d3339c64ea325416ecca22dc4c5c39e7a86620e01d2d75023b",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "130823be1bb1db106b378e1e6392f9b1381fce6b88480cca0c21cd43c2f71a3e",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 735,
+                "completion": 360,
+                "total": 1095
+              },
+              "elapsedMs": 38103.017374999996
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "8f2e3d0f5394108b8d91246c8663c3b1f0eeefd464d4afc89ba67f1127afdcb7",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "f5e2e000b42079653a2a9e1631bc46144b80b426702b5d03889a4a49ccdac585",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1064,
+                "completion": 248,
+                "total": 1312
+              },
+              "elapsedMs": 8178.571541999998
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 2,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 2,
+            "unmeasuredCalls": 0,
+            "prompt": 1799,
+            "completion": 608,
+            "total": 2407
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 4,
+              "matched": 0,
+              "missing": ["text-1", "text-2", "text-3", "text-4"]
+            },
+            "critical": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["value-1"]
+            },
+            "sources": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 2,
+              "missing": ["edge-1"],
+              "actual": 6
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-1"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-4"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "edge-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "17b68145e3c8fb59a66f5cad007310bf000984ceb5643f7ab5d102fd40c7130b",
+            "asset-1.bin": "46e778f41aae0cb49c1d7f1488b8a3dc96ee50b794b57aeba1d337f1b90ab838",
+            "asset-2.bin": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+            "assets.json": "2b39613715c270f19fe016df00ab8fb9de436e69e7f83b16f62341cbc27fa46a",
+            "ocr.md": "e2d2dbd1bfe6d5dc0d825afb3727f592837acaf033731a355d8c5f36d33f6236",
+            "parsed.json": "ee5c06e25d9a2b4ab83435fe1fcd6267bf52260ca4d7d15a50f1cb1ea4c14ff6",
+            "visual.json": "a75cea597bde177781bd6aeb2c19f1b7d76403b185e7ecc7ec1bb8e78cadf606"
+          }
+        },
+        {
+          "id": "chart-holdout",
+          "category": "chart",
+          "split": "holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 100383.113958,
+          "requests": {
+            "mineru": 7,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "9af09c7ef4cd991c6a416c9a5e3f0cd68d884512b091b445a203c95d85752229",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "8bb628a643d73ed296617d98059193cb751968b0b75306223e60dfc8d1d5f1a7",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 924,
+                "completion": 307,
+                "total": 1231
+              },
+              "elapsedMs": 10212.387082999994
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "031cba2978f7b1988793c727658605c5dfea30c5760dbc3a8802da8db233fe86",
+              "response": "request_failed",
+              "elapsedMs": 62586.049834000005
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 1,
+            "failures": [
+              {
+                "code": "IMAGE_DESCRIPTION_FAILED",
+                "evidenceId": "original-image"
+              }
+            ],
+            "status": "incomplete"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 1,
+            "prompt": 924,
+            "completion": 307,
+            "total": 1231
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["source-1", "source-2", "source-3"]
+            },
+            "relations": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["bar-0", "bar-1", "bar-2"],
+              "actual": 3
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-1"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-2"
+              },
+              {
+                "type": "CRITICAL_MISSING_OR_CHANGED",
+                "id": "value-3"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-1"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-2"
+              },
+              {
+                "type": "SOURCE_MISMATCH",
+                "id": "source-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-0"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-1"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "bar-2"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "0f7ecfe788c5796566335c5496a8c037a59fd8824c54e7966fbd48de8a4a2038",
+            "asset-1.bin": "1b9a986fb21d24afa83aaa426a1c027dcd085646c277edd37798fca6bc7dea7c",
+            "asset-2.bin": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+            "assets.json": "799479c87065746bda6508e349779e37a0c8dd2146208811d30f4d0bbfa71fb5",
+            "ocr.md": "bd025834d665853e360908940b78a1960f8053df14ba32bf9710e194288823f1",
+            "parsed.json": "4418e05bff8cdbbd705a846c74ea2eb814ac3acb15defeb2efe1f48d56710c73",
+            "visual.json": "4b50bbdaa1d46366d68047c5e122a5a9abeeb186a8fa14b9825a9936b3331fcb"
+          }
+        },
+        {
+          "id": "screenshot-holdout",
+          "category": "screenshot",
+          "split": "holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 42651.623583999986,
+          "requests": {
+            "mineru": 6,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "56eec65b64b3f2e63b4df28d863cb8538ecc345c57a8a114d26fe6c4f39c498c",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "f337a5a34add06d523fcd14d19f49edb4fae50d1ca7ce5be281c3012d0afd451",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1064,
+                "completion": 472,
+                "total": 1536
+              },
+              "elapsedMs": 40621.60308300002
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 1064,
+            "completion": 472,
+            "total": 1536
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 6
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "ba77a9fc4a1ac28950e7f95054272f2931cf4bc4ca0f4dd332d0910a270ff54d",
+            "asset-1.bin": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+            "assets.json": "850abb98b16f0ea0e607956e819179a4dbdf81f44c9a73f6db845a36ce0923f0",
+            "ocr.md": "bd3f09bc77d0349bff7404bf55e83cf89853b77f83bc9bef09e22c459396cb81",
+            "parsed.json": "56b65b32e45c637b8f53eb9a8f5381bb2a7e4d23c6fc832addb0f5cf1c98836e",
+            "visual.json": "d8977f5a7cf561aa7550c507daa1b5dd7f3a90e9422a69520d4fd067954d2cf0"
+          }
+        },
+        {
+          "id": "scanned-table-holdout",
+          "category": "scanned-table",
+          "split": "holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "elapsedMs": 39144.127125,
+          "requests": {
+            "mineru": 6,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "17e509a7196c68b3eb049c3d54b7de66d7b2e41a91de307fdab73c73f3cd1834",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "d5425e39751d20cb4842b361816b8aa07451e8dadca0b66bc8005ac2d7f10b5b",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1068,
+                "completion": 399,
+                "total": 1467
+              },
+              "elapsedMs": 37107.12762500002
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 1068,
+            "completion": 399,
+            "total": 1467
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 2,
+              "missing": ["value-unit"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 6
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 1,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 13,
+              "matchedCells": 0,
+              "details": [
+                {
+                  "id": "calibration",
+                  "expectedTables": 1,
+                  "actualTables": 0,
+                  "correctStructure": 0,
+                  "expectedCells": 13,
+                  "actualCells": 0,
+                  "matchedCells": 0,
+                  "recall": 0,
+                  "precision": 0
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TABLE_COUNT",
+                "id": "tables"
+              },
+              {
+                "type": "TABLE_CELL_OR_MERGE",
+                "id": "calibration"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "813cdfd6de9e4845f2a36ad517feeb400fccbaf0f6e05b63f2010c69f69ab820",
+            "asset-1.bin": "119aa95645c42effba68ab7339d6b05e4c25631ff96c98dfd457e7fbe3cf029a",
+            "assets.json": "a34d2601ecc5117c9ed76c2fff5fbb02472bd520ffcb62a92cd4593b9182560f",
+            "ocr.md": "9bd9f1c85eb83ba722118cd73c6579ab7184a86e1cb61112db6f97a36c567989",
+            "parsed.json": "c72a587c98d7f27963e0252573685c918ed9b6f20a4fec7f77560067b1acb87f",
+            "visual.json": "fc9a93524b2ec645e504627dd4f346dd7d6ec92723d9949b1211ab6f4167028f"
+          }
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "category": "cross-page-table",
+          "split": "holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 14436.050334,
+          "requests": {
+            "mineru": 5,
+            "vision": 2,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "667c1cca86fa9d6dc44726d60fa5759d5770e867c62794e3162e687ffb9e8fd5",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "924e1f2e8f8ea7760842dbc5bd76a4506a184f28d95e21a395b03e95e799c5cd",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1071,
+                "completion": 425,
+                "total": 1496
+              },
+              "elapsedMs": 7242.027208000014
+            },
+            {
+              "ordinal": 2,
+              "requestSha256": "a37889c06dd92cec254abb89e96104c5df15d909c4345098f75398c273c8fd29",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "8b0aa088b1a319de3c1123491926c87ff78938e5868f5852d9b690116117b21d",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 1071,
+                "completion": 406,
+                "total": 1477
+              },
+              "elapsedMs": 6168.158166999987
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 2,
+            "descriptions": 2,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 2,
+            "unmeasuredCalls": 0,
+            "prompt": 2142,
+            "completion": 831,
+            "total": 2973
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 3,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 8
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 2,
+              "actual": 2,
+              "matched": 2,
+              "expectedCells": 18,
+              "matchedCells": 18,
+              "details": [
+                {
+                  "id": "payment-p1",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                },
+                {
+                  "id": "payment-p2",
+                  "expectedTables": 1,
+                  "actualTables": 1,
+                  "correctStructure": 1,
+                  "expectedCells": 9,
+                  "actualCells": 9,
+                  "matchedCells": 9,
+                  "recall": 1,
+                  "precision": 1
+                }
+              ]
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "77399ef231cad5d7b5db409c9967998b3d10267c8a41371ca8e8d7eb57a2d5cd",
+            "asset-1.bin": "fed1db241eec1e407fcf99c54bc6505645a0836bec472a1f1504083c1b670fcf",
+            "asset-2.bin": "8ccdc983f9dd1773df0d82a478398a66612a268d1fb254619cade1a24f9d8b6d",
+            "assets.json": "938733ffb894ecdc0fd9422e0149089ce35ad78d68ce627e95b66df95650d88f",
+            "ocr.md": "b8b090de131eb879deba0accacbc01213b04ee02f9c29e4d68c67ed56e41a256",
+            "parsed.json": "ae01cc0683742e6ba41b60ac59279f2ac35375533ce4a31d44a52a4663ce1b8a",
+            "visual.json": "6eb6d255d3c9959d3b0754a76e4723d5f1863dee7aff9c1f2379bec05a5a0bf4"
+          }
+        },
+        {
+          "id": "multicolumn-holdout",
+          "category": "multicolumn",
+          "split": "holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": true,
+          "parserQuality": "accepted",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 1014.2564169999678,
+          "requests": {
+            "mineru": 5,
+            "vision": 0,
+            "other": 0
+          },
+          "visionCalls": [],
+          "enhancement": {
+            "requested": true,
+            "inputs": 0,
+            "descriptions": 0,
+            "failures": [],
+            "status": "no_image_evidence"
+          },
+          "tokens": null,
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 1,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 8,
+              "matched": 8,
+              "missing": []
+            },
+            "critical": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 2,
+              "matched": 0,
+              "missing": ["value-1", "value-2"]
+            },
+            "sources": {
+              "expected": 2,
+              "matched": 2,
+              "missing": []
+            },
+            "relations": {
+              "expected": 0,
+              "matched": 0,
+              "missing": [],
+              "actual": 0
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [],
+            "automaticChecksPassed": true
+          },
+          "observations": {
+            "asset-0.bin": "34bee446e858d7bea1bcd9d111ec3d1c61cf8ae641f4e04c011a96a9df27c9f6",
+            "assets.json": "dc17992de2cc24b1cb9fedc9023ab8facf0276c34cb628858c0557e27e739ece",
+            "ocr.md": "a3beef45eef4943e8c3456c8fa70ccbca6782e5b5de0dc35624f5fdd27078315",
+            "parsed.json": "f2cf47236f19cadf9ae1e70be390ce83fdb09afb47d1bf83de719673fa539784",
+            "visual.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          }
+        },
+        {
+          "id": "formula-image-holdout",
+          "category": "formula-image",
+          "split": "holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "completed",
+          "parser": "mineru",
+          "parserReady": false,
+          "parserQuality": "needs_review",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "elapsedMs": 3403.3215830000117,
+          "requests": {
+            "mineru": 5,
+            "vision": 1,
+            "other": 0
+          },
+          "visionCalls": [
+            {
+              "ordinal": 1,
+              "requestSha256": "0e084f2f9a3da3ecbb370ef6254376bada3e92629434759fd8e91a3eec29eb3d",
+              "httpStatus": 200,
+              "response": "json",
+              "responseSha256": "e23d67c7f92a836d7bd39f3c3ca94af01fd15c0200e02bba38c58d24a1bb9e13",
+              "finishReason": "stop",
+              "usage": {
+                "prompt": 786,
+                "completion": 160,
+                "total": 946
+              },
+              "elapsedMs": 2386.3464580000145
+            }
+          ],
+          "enhancement": {
+            "requested": true,
+            "inputs": 1,
+            "descriptions": 1,
+            "failures": [],
+            "status": "generated_requires_review"
+          },
+          "tokens": {
+            "observedCalls": 1,
+            "unmeasuredCalls": 0,
+            "prompt": 786,
+            "completion": 160,
+            "total": 946
+          },
+          "cost": null,
+          "usageNote": "Observed OpenAI-compatible usage only; missing usage remains unmeasured, monetary cost not inferred.",
+          "artifacts": {
+            "localReadback": true,
+            "assets": 2,
+            "productionPersistence": "not_tested"
+          },
+          "score": {
+            "visible": {
+              "expected": 3,
+              "matched": 1,
+              "missing": ["text-2", "text-3"]
+            },
+            "critical": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "visualCritical": {
+              "expected": 3,
+              "matched": 0,
+              "missing": ["value-1", "value-2", "value-3"]
+            },
+            "sources": {
+              "expected": 3,
+              "matched": 3,
+              "missing": []
+            },
+            "relations": {
+              "expected": 1,
+              "matched": 0,
+              "missing": ["diagram-1"],
+              "actual": 1
+            },
+            "unknown": {
+              "expected": 1,
+              "matched": 1,
+              "missing": []
+            },
+            "readingOrder": {
+              "expected": 0,
+              "matched": 0,
+              "missing": []
+            },
+            "tables": {
+              "expected": 0,
+              "actual": 0,
+              "matched": 0,
+              "expectedCells": 0,
+              "matchedCells": 0,
+              "details": []
+            },
+            "contradictions": [],
+            "reviewProtected": true,
+            "errors": [
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-2"
+              },
+              {
+                "type": "TEXT_MISSING",
+                "id": "text-3"
+              },
+              {
+                "type": "RELATION_NOT_STRUCTURED",
+                "id": "diagram-1"
+              }
+            ],
+            "automaticChecksPassed": false
+          },
+          "observations": {
+            "asset-0.bin": "a7f8f4160a7587174773b6676de4c7f84a9ccf81ca3af92ae67ecd31c2c5d17b",
+            "asset-1.bin": "26c596bb5ef62275ea21c66c8d0466a552d1c2f4c84a86540ef54cd43547fd8d",
+            "assets.json": "ffb3b6a7e61b690736b30de8b64fb1af0206a07284d10df7cca7ed2dea99c121",
+            "ocr.md": "b557e378ec55e6fce861fa14ef1bb88d89ad5337dfede83ca712f19b2c277e38",
+            "parsed.json": "35f3a5b90befd35db16e73dfa8d6cb3ce5d35278bce3cccaf9f09737abb3cf49",
+            "visual.json": "17fbef02bd7b7a54ca5e32aced9a198d66aa604b5912492213eacc2683e3a2ee"
+          }
+        }
+      ]
+    }
+  ],
+  "delivery": [
+    {
+      "schema": "complex-delivery-v1",
+      "generatedAt": "2026-11-25T14:40:15.264Z",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "runSha256": "a76f6b27dc88722ed067a6512e5e9682673fbec81e223cb2b09d8e3f644c19d0",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "scope": "Replay real parser observations through isolated Mongo/object storage, production chunker, real embedding and staged Elasticsearch writer. No publication, generation activation, HTTP permissions, retrieval or answer-quality claim.",
+      "embeddingRevision": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "passed",
+          "parsedSha256": "4cff7faac56a6ee42516d88c9fd9a35b8600e2f1e3e20a7ace6db56a1d64681b",
+          "inventorySha256": "3b86ac08cdd815a980408bf6b6ecd333b5aa17f2c17822da3ddc2cf4251cf662",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 2,
+          "chunksVerified": 1,
+          "vectorsVerified": 1,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "chart-development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "passed",
+          "parsedSha256": "07a10007748993b9efd7bccb3f28542fd60f7cec7d7c1582231f6325dd12a983",
+          "inventorySha256": "8c82823550e2d65bb956f3334e0d4b1923bd98d04aacd781724d7caafbddd0db",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 2,
+          "chunksVerified": 1,
+          "vectorsVerified": 1,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "screenshot-development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "passed",
+          "parsedSha256": "4750f7da175b1a17200c9074c82c2536784fef52ad15e11f42633cbea4fd4e32",
+          "inventorySha256": "3b188e117b9adb047b5c38840cb33a47a7da803103c7984f9e2f0ef715dcbd53",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "scanned-table-development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "passed",
+          "parsedSha256": "3c3e4f736c254cb15a1411dec145501e39175bfd977217da230a7e401e7e99fa",
+          "inventorySha256": "3aa95ce39b861b19defdba5519b64ca33c5d7b13acda63a96da15078712b2e52",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "cross-page-table-development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "passed",
+          "parsedSha256": "60077e22580bba3b05daa1a98214788da681b53ad9dd337c7fd084454c098855",
+          "inventorySha256": "2228f86f9fe458a81908fa603ff2bec8cd388ad5595ea0be63afcb8866f8deba",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 4,
+          "chunksVerified": 6,
+          "vectorsVerified": 6,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "multicolumn-development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "passed",
+          "parsedSha256": "0eae1140bdd8ae0bc1ad598dd639743298a1273b7fcb59ed77c0607e1a10f469",
+          "inventorySha256": "956a1904ec0a6457980c569a84f06115c29ec897c9492528f807ceefb4b2c2cc",
+          "qualityUnchanged": true,
+          "assetsVerified": 1,
+          "evidenceVerified": 0,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "formula-image-development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "passed",
+          "parsedSha256": "e9a3fc343d206bf06e28abcd4b2d1db69a2ce47a14311094b8c981a60cd8c64f",
+          "inventorySha256": "2bfe691e323daf134ff9dae50081e98ddf9538cbb07402cde1fb73bd80c07d9f",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        }
+      ],
+      "isolatedServicesRemoved": true,
+      "run": "delivery-ocr-development-pinned",
+      "reportSha256": "75897a2559ac9d45614193e6af6ee4171d913952cf9092555f7d09bf75098ec0",
+      "sourceSha256": "a3af436d5aebf66cf283d0e0e7afb8ea9f7817a9344fa3a0017979ab3e75f37e",
+      "toolSha256": "1947e592602c8e50f367b7ff54a287ab18fd37dfa05729f75e4f28aedae002be"
+    },
+    {
+      "schema": "complex-delivery-v1",
+      "generatedAt": "2026-11-25T14:40:34.887Z",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "runSha256": "65fc406871825738592ce9bb87f4c78119e2c630ff82baf42be66b187e57c8c6",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "scope": "Replay real parser observations through isolated Mongo/object storage, production chunker, real embedding and staged Elasticsearch writer. No publication, generation activation, HTTP permissions, retrieval or answer-quality claim.",
+      "embeddingRevision": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "flowchart-holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "passed",
+          "parsedSha256": "cabe25d384123614ad68c971e1e530f2f2d12f88a508e2e6f15d9da5e8363546",
+          "inventorySha256": "89efbe9d1d87f7767ad79da0fe5c03d3714383710dd5a60e1fdb4f3306e55ff7",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 2,
+          "chunksVerified": 1,
+          "vectorsVerified": 1,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "chart-holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "passed",
+          "parsedSha256": "e99f64d1f41505d40d08c3877f754aed681c5989bad8832d873369551f6656fd",
+          "inventorySha256": "092095b7027915ed8c5495488a0f6067528a116e18cc7df554fd03898799d75c",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 2,
+          "chunksVerified": 1,
+          "vectorsVerified": 1,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "screenshot-holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "passed",
+          "parsedSha256": "e84d8111f72435083d929f9de6b8bea337168a46c081a407d17a9fb083028479",
+          "inventorySha256": "bed6309f73f106af54060acb2826cc11ee46e9e35ac6612ba90e3ffbea647f8c",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "scanned-table-holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "passed",
+          "parsedSha256": "9a878aeac620a83903f85d5a9af2af3b0b61143ee52af531b78847e56ad6147a",
+          "inventorySha256": "f0f0ba6bf3c831e83334d4812c45d6ecb4cdd8533b9ec5fa0be84ebfcfeeec73",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "passed",
+          "parsedSha256": "be363bd0ec37feaaf7e1acdcfa3d5ce84bee28a7f81bb77cb936dd4a9798f9a4",
+          "inventorySha256": "7562e2bb8383f0ade8242627fbf41fa5acc5449c73d7ec5764f62e9c87896ae5",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 4,
+          "chunksVerified": 6,
+          "vectorsVerified": 6,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "multicolumn-holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "passed",
+          "parsedSha256": "b4ba39dfe6e65d89253a63c584c64e0f2d9e1d5a425ebe6c2b12525ab9b2af5a",
+          "inventorySha256": "7706a4310527022d58436c2e86c0a6aec569f584659797efd0a89c726f9664aa",
+          "qualityUnchanged": true,
+          "assetsVerified": 1,
+          "evidenceVerified": 0,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "formula-image-holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "passed",
+          "parsedSha256": "9fbcf501854bbb56753a622c51d9a306f6f36262d2468cd176653018e4574ef7",
+          "inventorySha256": "be8f45d82a3ac1ed57f1c955211a9447adbe6af7d12bd0f6caa942ee42beed47",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 1,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        }
+      ],
+      "isolatedServicesRemoved": true,
+      "run": "delivery-ocr-holdout-pinned",
+      "reportSha256": "271c0ce04129aec00d4c7cac5055fdea402c2985be3790120827098db8184eb0",
+      "sourceSha256": "a3af436d5aebf66cf283d0e0e7afb8ea9f7817a9344fa3a0017979ab3e75f37e",
+      "toolSha256": "1947e592602c8e50f367b7ff54a287ab18fd37dfa05729f75e4f28aedae002be"
+    },
+    {
+      "schema": "complex-delivery-v1",
+      "generatedAt": "2026-11-25T14:51:40.439Z",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "runSha256": "0488274d985f2b24f6ce376e9ef8786ede364499758281e4ffbfccd20fbfbe38",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "scope": "Replay real parser observations through isolated Mongo/object storage, production chunker, real embedding and staged Elasticsearch writer. No publication, generation activation, HTTP permissions, retrieval or answer-quality claim.",
+      "embeddingRevision": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "flowchart-development",
+          "inputSha256": "30e827782871972e36666271e15fa2cb3530f0d95c87fe81f8fe56973a4e2d7e",
+          "status": "passed",
+          "parsedSha256": "63a84ee5a91aeb466d2d3b82f5518a63391e14ddd06919cca91b7a95bfe53707",
+          "inventorySha256": "d59154fa98709b671afa2a2080caa2fc6d8b5a56666d0a88ceca9624c20e4ebe",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 4,
+          "chunksVerified": 4,
+          "vectorsVerified": 4,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 11,
+              "preservedParts": 11,
+              "sourceChunks": 2
+            },
+            {
+              "id": "description-original-image",
+              "expectedParts": 10,
+              "preservedParts": 10,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "chart-development",
+          "inputSha256": "f5acfdeda71c29b4be7daa75811b706dab54c90f233861e9c8f16749d613b226",
+          "status": "passed",
+          "parsedSha256": "1fd368506c0c2136a34fa5260a116435b51d6a1008809a96f909bb2331b95a31",
+          "inventorySha256": "47ffac4e24d39d5e37ef8a84c3b5b0f4693999aed3a7c9dd7241bdf07aa51dbc",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 3,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-4",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "screenshot-development",
+          "inputSha256": "8d9978372a936ba5ee95321a2cc7e189e65022bf387eacd7b3ba5d73bc45edff",
+          "status": "passed",
+          "parsedSha256": "e46ef0acc0f07dd1f3b1b88848d676de8941b305fc55183dc7045e0ba4e65056",
+          "inventorySha256": "54c98b748216a0ef0f92a57401cf9a3eddddc40567383319f59be6870ab59064",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-original-image",
+              "expectedParts": 12,
+              "preservedParts": 12,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "scanned-table-development",
+          "inputSha256": "cc05602ec623191f60f730b606d07bb47bf764a318336bc6578360988f21abc2",
+          "status": "passed",
+          "parsedSha256": "3eccb0dbddf1955ef59f20170bcb92e6d911dfed712809e841514a0104df3ce6",
+          "inventorySha256": "8e490f2c9449c5e145e67d14b3ca76467f8b94cf30e69c934dce2da044d76dc5",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 4,
+          "vectorsVerified": 4,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "cross-page-table-development",
+          "inputSha256": "1efc17440ef9a92a1699ce6275a865a42586dc17be9a2e20efcdf910049e899d",
+          "status": "passed",
+          "parsedSha256": "4657a92c7a2863401117bf3e766c76725e995186662d519295df019d50ae8925",
+          "inventorySha256": "9b5fa5701bc8f68508130499ac8ba43389d2008f46190107d58e4d13d6d28dac",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 6,
+          "chunksVerified": 8,
+          "vectorsVerified": 8,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 8,
+              "preservedParts": 8,
+              "sourceChunks": 1
+            },
+            {
+              "id": "description-image-1-3",
+              "expectedParts": 14,
+              "preservedParts": 14,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "multicolumn-development",
+          "inputSha256": "c7b8bb5a55a7a2fef1646fa1ffa17d91cf1ceed286e50c9486220602922da9be",
+          "status": "passed",
+          "parsedSha256": "7303a9d659cd845195c644648cb3cb4462e69f79c0fbcf2b5bedd9709c02a38e",
+          "inventorySha256": "045c223d758792945263c9a6a39101c1137838d6a2e9a28fee30fdbc5f96d8e7",
+          "qualityUnchanged": true,
+          "assetsVerified": 1,
+          "evidenceVerified": 0,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "formula-image-development",
+          "inputSha256": "e47a88f15aa8a7e0eb9a21a94c2e2509257624ee3ca005224aac9eb010dd6a19",
+          "status": "passed",
+          "parsedSha256": "bc02a75b203f982ae0b1383ff542c827ba7734b259713672f3d95b738395a6ee",
+          "inventorySha256": "f1bf5098c95df7b77bcbc47fad9bf1fd4362564788ce39d48666d590b8e664ef",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-7",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        }
+      ],
+      "isolatedServicesRemoved": true,
+      "run": "delivery-vision-development-final",
+      "reportSha256": "2862074d1c0550924235b8c4dea9afd03e600a8308def66c0a6141b76cec38fc",
+      "sourceSha256": "a3af436d5aebf66cf283d0e0e7afb8ea9f7817a9344fa3a0017979ab3e75f37e",
+      "toolSha256": "82363e3fc28cf4ef3560a64334ca56787672ae74162d8a88aa95e32dc402cb36"
+    },
+    {
+      "schema": "complex-delivery-v1",
+      "generatedAt": "2026-11-25T14:52:29.900Z",
+      "git": {
+        "commit": "6d43bc7df38794ea397701ef01e8c94a79fb117f",
+        "workingTreeDirty": true
+      },
+      "runSha256": "db9fdc046579f763968aa78207080bcd834ce94df41967f214c166294ad61166",
+      "manifestSha256": "8da743e978a53d584eda04debda2fd6b691d34dcd1122f91651b5574df0da09e",
+      "scope": "Replay real parser observations through isolated Mongo/object storage, production chunker, real embedding and staged Elasticsearch writer. No publication, generation activation, HTTP permissions, retrieval or answer-quality claim.",
+      "embeddingRevision": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "flowchart-holdout",
+          "inputSha256": "f43b96c6bffcdd29f3456b5c996d5f65a9b30fc50d95c2b5228411ab90687e98",
+          "status": "passed",
+          "parsedSha256": "ee5c06e25d9a2b4ab83435fe1fcd6267bf52260ca4d7d15a50f1cb1ea4c14ff6",
+          "inventorySha256": "2b39613715c270f19fe016df00ab8fb9de436e69e7f83b16f62341cbc27fa46a",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 4,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 10,
+              "preservedParts": 10,
+              "sourceChunks": 1
+            },
+            {
+              "id": "description-original-image",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "chart-holdout",
+          "inputSha256": "ed849745ae2d41efde3da023aa429a429d9fbe114f063067b750a057c54ea0f1",
+          "status": "passed",
+          "parsedSha256": "4418e05bff8cdbbd705a846c74ea2eb814ac3acb15defeb2efe1f48d56710c73",
+          "inventorySha256": "799479c87065746bda6508e349779e37a0c8dd2146208811d30f4d0bbfa71fb5",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 3,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "screenshot-holdout",
+          "inputSha256": "afd3d1d723391498bde93a63aa6694632c083d329d4081967bbf41d7a8869283",
+          "status": "passed",
+          "parsedSha256": "56b65b32e45c637b8f53eb9a8f5381bb2a7e4d23c6fc832addb0f5cf1c98836e",
+          "inventorySha256": "850abb98b16f0ea0e607956e819179a4dbdf81f44c9a73f6db845a36ce0923f0",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-original-image",
+              "expectedParts": 16,
+              "preservedParts": 16,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "scanned-table-holdout",
+          "inputSha256": "e8c690a74d07d66dbde5c6b0c428be72cd2d5a0775e5cb731e44e9d243443bf4",
+          "status": "passed",
+          "parsedSha256": "c72a587c98d7f27963e0252573685c918ed9b6f20a4fec7f77560067b1acb87f",
+          "inventorySha256": "a34d2601ecc5117c9ed76c2fff5fbb02472bd520ffcb62a92cd4593b9182560f",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 4,
+          "vectorsVerified": 4,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 16,
+              "preservedParts": 16,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        },
+        {
+          "id": "cross-page-table-holdout",
+          "inputSha256": "4d65721ea9045a43dd25bd55e018ea2a7d9c426061d7f7c83204b80dfc58d331",
+          "status": "passed",
+          "parsedSha256": "ae01cc0683742e6ba41b60ac59279f2ac35375533ce4a31d44a52a4663ce1b8a",
+          "inventorySha256": "938733ffb894ecdc0fd9422e0149089ce35ad78d68ce627e95b66df95650d88f",
+          "qualityUnchanged": true,
+          "assetsVerified": 3,
+          "evidenceVerified": 6,
+          "chunksVerified": 8,
+          "vectorsVerified": 8,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-3",
+              "expectedParts": 11,
+              "preservedParts": 11,
+              "sourceChunks": 1
+            },
+            {
+              "id": "description-image-1-3",
+              "expectedParts": 9,
+              "preservedParts": 9,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "multicolumn-holdout",
+          "inputSha256": "d505a435aed1fe31f2f12154949849287e0a4c647ea62aec8d734bfc57332031",
+          "status": "passed",
+          "parsedSha256": "f2cf47236f19cadf9ae1e70be390ce83fdb09afb47d1bf83de719673fa539784",
+          "inventorySha256": "dc17992de2cc24b1cb9fedc9023ab8facf0276c34cb628858c0557e27e739ece",
+          "qualityUnchanged": true,
+          "assetsVerified": 1,
+          "evidenceVerified": 0,
+          "chunksVerified": 2,
+          "vectorsVerified": 2,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [],
+          "qualityPassed": true,
+          "cleanupVerified": true
+        },
+        {
+          "id": "formula-image-holdout",
+          "inputSha256": "a630fa1b6d96310e8103bb720ae3afcc024652d01f560fcd8a492f11ce708a1c",
+          "status": "passed",
+          "parsedSha256": "35f3a5b90befd35db16e73dfa8d6cb3ce5d35278bce3cccaf9f09737abb3cf49",
+          "inventorySha256": "ffb3b6a7e61b690736b30de8b64fb1af0206a07284d10df7cca7ed2dea99c121",
+          "qualityUnchanged": true,
+          "assetsVerified": 2,
+          "evidenceVerified": 2,
+          "chunksVerified": 3,
+          "vectorsVerified": 3,
+          "strategy": "structure-v4:1000:150",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078",
+          "visual": [
+            {
+              "id": "description-image-0-7",
+              "expectedParts": 6,
+              "preservedParts": 6,
+              "sourceChunks": 1
+            }
+          ],
+          "qualityPassed": false,
+          "cleanupVerified": true
+        }
+      ],
+      "isolatedServicesRemoved": true,
+      "run": "delivery-vision-holdout-final-retry",
+      "reportSha256": "c29cf3d813574167bb408b937d074f86e1cf96ee9475f170af054ffe8e097941",
+      "sourceSha256": "a3af436d5aebf66cf283d0e0e7afb8ea9f7817a9344fa3a0017979ab3e75f37e",
+      "toolSha256": "82363e3fc28cf4ef3560a64334ca56787672ae74162d8a88aa95e32dc402cb36"
+    }
+  ],
+  "attemptHistory": [
+    {
+      "run": "mineru-real-development",
+      "sha256": "7c83d3e710da88011616e9c5e5c1bbe324f491f7fcd738ae66da87aca52d84a2",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": [],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "mineru-real-development-final",
+      "sha256": "a76f6b27dc88722ed067a6512e5e9682673fbec81e223cb2b09d8e3f644c19d0",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": [],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "mineru-real-holdout",
+      "sha256": "e361cfe2f29cc9c517fdeded8d983291d4d4b301494f921d0881eecb177949e1",
+      "status": "completed",
+      "parserFailures": ["flowchart-holdout"],
+      "enhancementIncomplete": [],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "mineru-real-holdout-final",
+      "sha256": "65fc406871825738592ce9bb87f4c78119e2c630ff82baf42be66b187e57c8c6",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": [],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "mineru-real-holdout-retry",
+      "sha256": "5f2e19c993932c0250953ed150168629c678a24954ba63fff39744050a12289e",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": [],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "vision-real-development",
+      "sha256": "eba4f7ce097b4f37f0e7f703c3309e5876f201a3d47554be2c9884284ca6cc44",
+      "status": "completed",
+      "parserFailures": ["flowchart-development"],
+      "enhancementIncomplete": ["chart-development"],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "vision-real-development-retry",
+      "sha256": "0488274d985f2b24f6ce376e9ef8786ede364499758281e4ffbfccd20fbfbe38",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": ["chart-development"],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    },
+    {
+      "run": "vision-real-holdout",
+      "sha256": "c2fa7c8592d8f520d4bbe0e4274adf73fc06c5dd64dc4b6246acf8eb6a7b76be",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": ["chart-holdout", "cross-page-table-holdout"],
+      "scorerSha256": "24ee7b602846ab0fa031f9a62df669c83089050ecd9c6a01688e83546e388fac"
+    },
+    {
+      "run": "vision-real-holdout-final",
+      "sha256": "db9fdc046579f763968aa78207080bcd834ce94df41967f214c166294ad61166",
+      "status": "completed",
+      "parserFailures": [],
+      "enhancementIncomplete": ["chart-holdout"],
+      "scorerSha256": "df43b1cece47b733fc5e10b2b6058794b400def2730552a5711dad192ff8dca8"
+    }
+  ],
+  "deliverySetupFailures": [
+    {
+      "run": "delivery-ocr-development",
+      "sha256": "5926b4e4db0a376a0a84fb4706b6c541ea4aed247fe407731c7421f58bd637ec",
+      "status": "failed",
+      "setupFailure": null,
+      "cases": 0
+    },
+    {
+      "run": "delivery-ocr-development-final",
+      "sha256": "c2560c2e69edb4ae12d625cb9d09dd3d1c860400eacbf6ec8bf513e38ab33d42",
+      "status": "failed",
+      "setupFailure": "isolated_services",
+      "cases": 0
+    },
+    {
+      "run": "delivery-vision-holdout-final",
+      "sha256": "2e3cfe49d3579729a835e3f1cefc0165c9c8963f189e7462651c26b74f5fec3a",
+      "status": "failed",
+      "setupFailure": "isolated_services",
+      "cases": 0
+    }
+  ],
+  "limitations": [
+    "Single inference per selected case, no throughput claims; timings vary and include local stalls.",
+    "Holdout exposed; future tuning requires new holdout samples.",
+    "Exact relation mismatch is not automatically incorrect semantics.",
+    "Known contradiction checks are incomplete; manual spot-checks found unit errors missed by zero contradiction count."
+  ]
+}
