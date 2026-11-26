@@ -13,6 +13,19 @@ const {
 } = require('./delivery-artifacts.cjs');
 const { digest } = require('./corpus.cjs');
 const { cleanupAll } = require('./delivery-environment.cjs');
+test('invalid image pull policy fails before Docker mutation', async () => {
+  const previous = process.env.DELIVERY_TEST_PULL_POLICY;
+  process.env.DELIVERY_TEST_PULL_POLICY = 'invalid';
+  try {
+    await assert.rejects(
+      require('./delivery-environment.cjs').isolatedEnvironment(),
+      /pull policy/,
+    );
+  } finally {
+    if (previous === undefined) delete process.env.DELIVERY_TEST_PULL_POLICY;
+    else process.env.DELIVERY_TEST_PULL_POLICY = previous;
+  }
+});
 test('delivery rejects duplicate, foreign or changed source identities before creating services', () => {
   const item = {
     id: 'one',

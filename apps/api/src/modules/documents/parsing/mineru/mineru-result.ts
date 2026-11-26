@@ -259,6 +259,6 @@ export async function mineruResult(
       tier: String(metadata?.tier ?? 'unknown'),
       mode: String(metadata?.parse_mode ?? 'unknown'),
     },
-    parseStrategy: `mineru-v4-adapter-v2:${producer?.version ?? 'unknown'}:${metadata?.tier ?? 'unknown'}${extension === '.pdf' ? ':pdf-tables-v1' : ''}`,
+    parseStrategy: `mineru-v4-adapter-v2:${producer?.version ?? 'unknown'}:${metadata?.tier ?? 'unknown'}${extension === '.pdf' ? ':pdf-tables-v2' : ''}`,
   };
 }

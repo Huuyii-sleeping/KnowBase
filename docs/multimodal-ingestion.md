@@ -89,7 +89,9 @@ python3.12 -m venv .venv-xls
 
 设置 `XLS_EVIDENCE_PYTHON` 指向该环境；部署保留 `apps/api/scripts/xls/extract_xls.py`，特殊打包可用 `XLS_EVIDENCE_SCRIPT` 指定绝对路径。不需要安装 ASR、音视频解码依赖或模型。
 
-视觉增强设置 `IMAGE_ANALYSIS_MODE=describe` 及 `VISION_BASE_URL`、`VISION_MODEL`、`VISION_MODEL_REVISION`，可选独立密钥。接口使用 OpenAI 兼容图像消息和结构化 JSON；不得填入纯文本模型。失败保留 OCR 和原图，并显示待核对；模型描述单独保存，不覆盖原始值。相同图像字节只在同一文档尝试内复用一次模型调用，来源证据与权限不合并。
+**当前产品路线只使用 OCR，不要求额外视觉模型。** 视觉理解按用户决定暂停，下面接口保留为默认关闭的实验兼容能力；不得将图像语义理解计入当前支持承诺。
+
+实验视觉增强设置 `IMAGE_ANALYSIS_MODE=describe` 及 `VISION_BASE_URL`、`VISION_MODEL`、`VISION_MODEL_REVISION`，可选独立密钥。接口使用 OpenAI 兼容图像消息和结构化 JSON；不得填入纯文本模型。失败保留 OCR 和原图，并显示待核对；模型描述单独保存，不覆盖原始值。相同图像字节只在同一文档尝试内复用一次模型调用，来源证据与权限不合并。
 
 ## 验证记录
 

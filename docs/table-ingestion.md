@@ -66,3 +66,5 @@ pnpm --filter @knowbase/api test:ingestion
 逐轮摘要、版本、耗时、完整上下文行数、定位和求和值写入忽略的 `reports/ingestion-tables/comparison.json`。解析请求约 1 秒，受轮询间隔影响；本次不以毫秒级分块耗时宣称性能收益。若 Docker Registry 不可用但本机已有测试镜像，可给集成测试设置 `DELIVERY_TEST_PULL_POLICY=never`。
 
 PDF 后续补充了矩形 OCR 表格结构恢复与显式续表表头借用，保留每页独立表格及表头来源页；适用条件、对照数据和限制见 [业务解析评测](ingestion-quality.md#pdf-表格对照)。不据此声称支持所有扫描表格或跨页合并格。
+
+扫描表格后续补充了 `pdf-tables-v2` 列锚点恢复：明确对齐的标题、表头与稀疏数据行可成为待核对的结构表，不猜测标题合并关系；真实旧样本及新样本数据、保存与索引验证见 [OCR 表格报告](ocr-table-quality-report.md)。

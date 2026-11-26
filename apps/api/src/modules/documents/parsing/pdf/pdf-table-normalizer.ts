@@ -1,3 +1,4 @@
+import { alignedOcrGrid } from './aligned-ocr-grid';
 import { parseTable } from '../../../ingestion/tables/parse-table';
 
 export interface NormalizedPdfTable {
@@ -8,6 +9,7 @@ export interface NormalizedPdfTable {
 interface Grid {
   rows: string[][];
   aligned: boolean;
+  caption?: string;
 }
 const canonical = (text: string) =>
   text.normalize('NFKC').replace(/\s+/gu, ' ').trim();
@@ -16,51 +18,31 @@ const captionKey = (captions: string[]) =>
   canonical(captions.join(' ')).replace(continued, '').trim();
 const rowText = (row: string[]) =>
   `| ${row.map((text) => text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ')).join(' | ')} |`;
-const render = (rows: string[][]) =>
+const renderMarkdown = (rows: string[][]) =>
   [
     rowText(rows[0]),
     rowText(rows[0].map(() => '---')),
     ...rows.slice(1).map(rowText),
   ].join('\n');
 
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function render(rows: string[][], caption?: string): string {
+  if (!caption) return renderMarkdown(rows);
+  return `<table><caption>${escapeHtml(caption)}</caption><thead><tr>${rows[0].map((cell) => `<th>${escapeHtml(cell)}</th>`).join('')}</tr></thead><tbody>${rows
+    .slice(1)
+    .map(
+      (row) =>
+        `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`,
+    )
+    .join('')}</tbody></table>`;
+}
+
 /** Only rectangular, unmerged grids can be normalized without inventing cell spans. */
 function grid(content: string): Grid | undefined {
   if (content.length > 4194304) return;
-  const fenced = content.match(/^```\s*\n([\s\S]*?)\n```$/u);
-  if (fenced) {
-    const lines = fenced[1].split('\n');
-    if (
-      lines.length < 2 ||
-      lines.length > 10000 ||
-      lines.some((line) => !line.trim() || /[\t|<>`\[\]]/u.test(line))
-    )
-      return;
-    const rows = lines.map((line) => line.trim().split(/ {2,}/u));
-    const columns = rows[0].length;
-    if (
-      columns < 2 ||
-      columns > 256 ||
-      rows.length * columns > 100000 ||
-      rows.some(
-        (row) => row.length !== columns || row.some((cell) => !cell.trim()),
-      )
-    )
-      return;
-    const starts = lines.map((line) =>
-      [...line.matchAll(/\S(?:.*?\S)?(?= {2,}|$)/gu)].map(
-        (match) => match.index!,
-      ),
-    );
-    if (
-      starts.some(
-        (row) =>
-          row.length !== columns ||
-          row.some((start, index) => Math.abs(start - starts[0][index]) > 1),
-      )
-    )
-      return;
-    return { rows, aligned: true };
-  }
+  const aligned = alignedOcrGrid(content);
+  if (aligned) return { ...aligned, aligned: true };
   try {
     const table = parseTable(content);
     if (
@@ -164,7 +146,8 @@ export class PdfTableNormalizer {
         message:
           'The proposed table header contains standalone numeric values and may be a data row; no missing header was guessed.',
       });
-    if (parsed.aligned || result.headerPage) result.content = render(rows);
+    if (parsed.aligned || result.headerPage)
+      result.content = render(rows, parsed.caption);
     // Do not propagate uncertain numeric headers or unresolved continuations to another page.
     if (
       tablesOnPage === 1 &&

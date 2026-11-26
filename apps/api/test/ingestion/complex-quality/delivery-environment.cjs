@@ -12,6 +12,9 @@ async function cleanupAll(actions) {
     throw new Error('Isolated cleanup incomplete');
 }
 async function isolatedEnvironment() {
+  const pullPolicy = process.env.DELIVERY_TEST_PULL_POLICY || 'missing';
+  if (!['missing', 'never', 'always'].includes(pullPolicy))
+    throw new Error('Invalid isolated image pull policy');
   const project = `knowbase-complex-${randomUUID().slice(0, 8)}`;
   const prefix = [
     'compose',
@@ -39,7 +42,7 @@ async function isolatedEnvironment() {
       '--wait-timeout',
       '120',
       '--pull',
-      'missing',
+      pullPolicy,
     );
     return {
       project,

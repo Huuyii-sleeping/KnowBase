@@ -4,6 +4,11 @@ const { readFile, mkdir, writeFile } = require('node:fs/promises');
 const { randomUUID } = require('node:crypto');
 const { loadCorpus, digest } = require('./corpus.cjs');
 const { score } = require('./score.cjs');
+const { tableBodyAudit } = require('./table-body-audit.cjs');
+const {
+  assertTablesPreserved,
+  tableChunkDelivery,
+} = require('./table-delivery.cjs');
 const {
   readCase,
   rewriteResult,
@@ -114,6 +119,7 @@ async function verifyDelivery(corpusDir, runDir, output) {
         );
         assert.equal(units.length, stored.evidenceManifest.count);
         assertContentPreserved(input, stored, units);
+        assertTablesPreserved(input, stored);
         stage = 'asset_readback';
         await stores.readAssets(stored.assets);
         const persisted = {
@@ -128,9 +134,22 @@ async function verifyDelivery(corpusDir, runDir, output) {
           after = score(persisted, corpus.gold.get(item.id));
         assert.deepEqual(before, row.score);
         assert.deepEqual(after, before);
+        const bodyAudit = tableBodyAudit(
+          input,
+          corpus.gold.get(item.id).tables,
+        );
+        assert.deepEqual(
+          tableBodyAudit(persisted, corpus.gold.get(item.id).tables),
+          bodyAudit,
+        );
         stage = 'chunk_embedding_index';
         const indexed = await index.stage(documentId, stored, generation);
         const visual = visualChunkDelivery(persisted, indexed.chunks);
+        const tableRows = tableChunkDelivery(stored, indexed.chunks);
+        assert.ok(
+          tableRows.every((row) => row.expectedRows === row.matchedRows),
+          'Table rows lost header, value or source',
+        );
         stage = 'visual_chunk_delivery';
         assert.ok(
           visual.every(
@@ -148,6 +167,8 @@ async function verifyDelivery(corpusDir, runDir, output) {
           strategy: indexed.strategy,
           embeddingFingerprint: indexed.embeddingFingerprint,
           visual,
+          tableBodyAudit: bodyAudit,
+          tableRows,
           qualityPassed: after.automaticChecksPassed,
         });
       } catch {

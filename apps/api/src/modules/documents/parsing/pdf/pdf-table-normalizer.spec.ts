@@ -8,6 +8,19 @@ const title = ['Table 2. Supplier schedule'];
 const next = ['Table 2. Supplier schedule (continued)'];
 
 describe('PDF table structure normalization', () => {
+  it('escapes OCR captions and cells while retaining blank values and mandatory review', () => {
+    const result = new PdfTableNormalizer().normalize(
+      '```\n       A&B\nName      Value\nA         -001.20元\nB         +0.00元\nC\n```',
+      [],
+      1,
+      1,
+    );
+    expect(result.content).toContain('<caption>A&amp;B</caption>');
+    expect(result.content).toContain('<td>-001.20元</td>');
+    expect(result.content).toContain('<td>+0.00元</td>');
+    expect(result.content).toContain('<td>C</td><td></td>');
+    expect(result.issues[0].code).toBe('PDF_TABLE_ALIGNED_TEXT_REVIEW');
+  });
   it('preserves native tables and keeps repeated-header pages independent', () => {
     const normalizer = new PdfTableNormalizer();
     expect(normalizer.normalize(header, title, 1, 1)).toEqual({

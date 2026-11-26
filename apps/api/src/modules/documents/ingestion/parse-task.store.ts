@@ -27,7 +27,7 @@ export class ParseTaskStore {
     this.fingerprint = createHash('sha256')
       .update(
         JSON.stringify([
-          'evidence-pipeline-v6:xlsx-native-v1:html-native-v1:pdf-tables-v1:documents-only',
+          'evidence-pipeline-v6:xlsx-native-v1:html-native-v1:pdf-tables-v2:documents-only',
           ...[
             'XLS_EVIDENCE_PYTHON',
             'IMAGE_ANALYSIS_MODE',

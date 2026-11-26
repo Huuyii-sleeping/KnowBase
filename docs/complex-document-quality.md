@@ -1,6 +1,6 @@
 # 复杂资料质量基线
 
-阶段 **5.1 已建立样本、评分器和错误报告**；阶段 **5.2 已完成真实 MinerU / 本地 VLM 对照和隔离存储交付验证**，结果见 [2026-11-25 模型报告](complex-document-model-quality-report.md)。视觉模型发现单位错误，尚不满足自动采用门槛；阶段 5.3 继续定向修复。本轮只增加评测，不修改生产解析规则，不调整召回、重排、Prompt，也不增加音视频支持。
+阶段 **5.1 已建立样本、评分器和错误报告**；阶段 **5.2 已完成真实 MinerU / 本地 VLM 对照和隔离存储交付验证**，结果见 [2026-11-25 模型报告](complex-document-model-quality-report.md)。视觉模型发现单位错误，尚不满足自动采用门槛；2026-11-26 用户决定暂停额外 VLM，后续改为 OCR 与表格优化，见 [OCR 表格报告](ocr-table-quality-report.md)。5.1 本身只增加评测；5.3.1 修改了 PDF OCR 表格后处理。不调整召回、重排、Prompt，也不增加音视频支持。
 
 ## 评测对象与可复现信息
 
@@ -69,4 +69,4 @@ node apps/api/test/ingestion/complex-quality/compare.cjs \
 
 ## 本轮结果与下一步
 
-固定结果见 [2026-11-24 报告](complex-document-quality-report.md) 和 [机器清单](baselines/complex-document-quality-2026-11-24.json)。真实模型结果、固定权重摘要、失败记录和隔离交付命令见 [2026-11-25 模型报告](complex-document-model-quality-report.md)；下一项是 **5.3：单位与否定事实保护、按需增强及失败回归**。金额、符号、否定不得新增错误，未知项不得自动采用。当前小模型未达到此门槛，默认仍使用 OCR，不自动启用视觉描述。
+固定结果见 [2026-11-24 报告](complex-document-quality-report.md) 和 [机器清单](baselines/complex-document-quality-2026-11-24.json)。真实模型结果、固定权重摘要、失败记录和隔离交付命令见 [2026-11-25 模型报告](complex-document-model-quality-report.md)；当前路线为 **5.3：OCR 表格结构、事实保真及保存交付**，不再优化额外 VLM。金额、符号、否定不得新增错误，未知项不得自动采用。当前小模型未达到此门槛，默认仍使用 OCR，不自动启用视觉描述。
