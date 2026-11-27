@@ -77,3 +77,7 @@ pnpm --filter @knowbase/api benchmark:ingestion-performance
 脚本自动读取本机模型 digest，采用独立容器项目，结束后销毁数据库，不连接应用数据库。支持 `OLLAMA_BASE_URL`、`OLLAMA_EMBEDDING_MODEL` 和第一个位置参数基线 Git ref。当前夹具预期模型维度 768，不会自动下载模型或改动共享模型配置。
 
 [原始报告](../reports/ingestion-performance/comparison.json) 包含版本、环境、逐轮时间、实际 HTTP 模型输入计数、请求峰值及一致性校验。报告目录被 Git 忽略，不含正文或向量。基准脚本按环境、分块、Embedding、ES 拆分职责；内置断言确保未命中数、顺序、维度、批次边界与可见数量满足预期。
+
+## 完整链路负载基线
+
+2026-11-27 新增 [固定负载容量基线](ingestion-capacity-report.md)：120 份真实 HTTP/Worker 文件入库通过，记录端到端、阶段分布、Node 内存、连接占用与队列积压。该基线采用模型替身隔离基础设施负载，不与上面的真实模型组件耗时直接混算，也不代替生产 OCR 容量验证。
