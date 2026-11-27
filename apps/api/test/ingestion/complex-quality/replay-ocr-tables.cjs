@@ -1,3 +1,4 @@
+const { baselineReference } = require('../baseline-reference.cjs');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const Module = require('node:module');
@@ -30,7 +31,7 @@ function baselineNormalizer(ref) {
     'rev-parse',
     '--verify',
     '--end-of-options',
-    `${ref}^{commit}`,
+    `${baselineReference(ref)}^{commit}`,
   ).trim();
   const source = git('show', `${revision}:${normalizerPath}`);
   const filename = path.join(

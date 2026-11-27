@@ -1,3 +1,4 @@
+const { baselineReference } = require('../baseline-reference.cjs');
 // Test process only: load the two splitter modules from an explicit Git revision.
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
@@ -6,7 +7,7 @@ const Module = require('node:module');
 const ts = require('typescript');
 const { digest } = require('./corpus.cjs');
 (async () => {
-  const reference = process.argv[2];
+  const reference = baselineReference(process.argv[2]);
   if (!/^[a-f0-9]{40}$/.test(reference || ''))
     throw new Error('An explicit full Git commit is required');
   const root = path.resolve(__dirname, '../../../../..');

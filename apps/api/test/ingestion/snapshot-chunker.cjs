@@ -1,3 +1,4 @@
+const { baselineReference } = require('./baseline-reference.cjs');
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
@@ -13,7 +14,11 @@ function snapshotChunker(ref, options) {
     execFileSync('git', ['-C', repository, ...args], {
       encoding: 'utf8',
     }).trim();
-  const revision = git('rev-parse', '--verify', `${ref}^{commit}`);
+  const revision = git(
+    'rev-parse',
+    '--verify',
+    `${baselineReference(ref)}^{commit}`,
+  );
   const root = fs.mkdtempSync(
     path.join(os.tmpdir(), 'knowbase-table-baseline-'),
   );
