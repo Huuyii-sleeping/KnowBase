@@ -56,8 +56,8 @@ export function DocumentResource({
     if (media.current && position.current !== undefined)
       media.current.currentTime = position.current;
   };
-  if (error) return <p role="alert">{error}</p>;
-  if (!url) return <p>正在读取{label}…</p>;
+  if (error) return <span role="alert">{error}</span>;
+  if (!url) return <span>正在读取{label}…</span>;
   const target =
     url +
     (mimeType === 'application/pdf'

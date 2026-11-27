@@ -4,8 +4,7 @@ import { DocumentEvidencePanel } from '@/components/document-evidence-panel';
 import { RequestFailure } from '@/components/request-failure';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { DocumentBody } from '@/components/document-body';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -214,9 +213,7 @@ export function DocumentDetailPage() {
           </div>
           {doc.parseStatus === 'READY' && doc.content ? (
             <div className="markdown-body overflow-x-auto px-5 pb-8 pt-4 sm:px-8">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {doc.content.markdown}
-              </ReactMarkdown>
+              <DocumentBody content={doc.content} />
             </div>
           ) : doc.ingestion?.task?.state === 'needs_review' ? (
             <div className="mx-7 my-5 rounded-md bg-amber-50 px-4 py-3.5 text-[13px] text-amber-900">

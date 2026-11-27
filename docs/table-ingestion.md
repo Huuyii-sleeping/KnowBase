@@ -68,3 +68,5 @@ pnpm --filter @knowbase/api test:ingestion
 PDF 后续补充了矩形 OCR 表格结构恢复与显式续表表头借用，保留每页独立表格及表头来源页；适用条件、对照数据和限制见 [业务解析评测](ingestion-quality.md#pdf-表格对照)。不据此声称支持所有扫描表格或跨页合并格。
 
 扫描表格后续补充了 `pdf-tables-v2` 列锚点恢复：明确对齐的标题、表头与稀疏数据行可成为待核对的结构表，不猜测标题合并关系；真实旧样本及新样本数据、保存与索引验证见 [OCR 表格报告](ocr-table-quality-report.md)。
+
+正文 HTML 表格现使用已保存的规范单元格渲染，保留标题、空白和跨度；关联图片使用对象票据。实际核对与发布交付见 [完整链路报告](ingestion-acceptance-report.md)。

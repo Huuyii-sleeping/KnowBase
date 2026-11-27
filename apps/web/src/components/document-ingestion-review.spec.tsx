@@ -84,6 +84,82 @@ describe('parse review and evidence', () => {
     );
     expect(screen.queryByRole('button', { name: '核对解析草稿' })).toBeNull();
   });
+  it('requires fresh review when the candidate task changes', async () => {
+    vi.mocked(documentsApi.draft).mockResolvedValue({
+      markdown: '旧候选正文',
+      ready: false,
+      quality: { issues: [{ code: 'REVIEW', message: '需核对' }] },
+    } as any);
+    const document = doc();
+    const { rerender } = render(
+      <DocumentParseReview document={document} onRefresh={vi.fn()} />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: '核对解析草稿' }));
+    await screen.findByText('旧候选正文');
+    fireEvent.change(screen.getByRole('textbox', { name: '核对说明' }), {
+      target: { value: '已核对旧候选' },
+    });
+    fireEvent.click(screen.getByRole('checkbox'));
+    rerender(
+      <DocumentParseReview
+        document={{
+          ...document,
+          ingestion: {
+            ...document.ingestion!,
+            task: { ...document.ingestion!.task!, id: 'new-task' },
+          },
+        }}
+        onRefresh={vi.fn()}
+      />,
+    );
+    expect(screen.queryByText('旧候选正文')).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: '采用草稿，待提交审核' }),
+    ).toBeNull();
+    vi.mocked(documentsApi.draft).mockResolvedValue({
+      markdown: '新候选正文',
+      ready: false,
+    } as any);
+    fireEvent.click(screen.getByRole('button', { name: '核对解析草稿' }));
+    await screen.findByText('新候选正文');
+    expect(
+      (screen.getByRole('textbox', { name: '核对说明' }) as HTMLTextAreaElement)
+        .value,
+    ).toBe('');
+    expect((screen.getByRole('checkbox') as HTMLInputElement).checked).toBe(
+      false,
+    );
+    expect(documentsApi.reviewParse).not.toHaveBeenCalled();
+  });
+  it('discards a late draft response after the candidate has changed', async () => {
+    let complete!: (value: any) => void;
+    vi.mocked(documentsApi.draft).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          complete = resolve;
+        }),
+    );
+    const document = doc();
+    const { rerender } = render(
+      <DocumentParseReview document={document} onRefresh={vi.fn()} />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: '核对解析草稿' }));
+    rerender(
+      <DocumentParseReview
+        document={{
+          ...document,
+          ingestion: {
+            ...document.ingestion!,
+            task: { ...document.ingestion!.task!, id: 'replacement' },
+          },
+        }}
+        onRefresh={vi.fn()}
+      />,
+    );
+    complete({ markdown: '过期的响应', ready: false });
+    await waitFor(() => expect(screen.queryByText('过期的响应')).toBeNull());
+    expect(screen.getByRole('button', { name: '核对解析草稿' })).toBeDefined();
+  });
   it('loads evidence on demand, pages it, and includes the selected draft', async () => {
     vi.mocked(documentsApi.resourceAccess).mockResolvedValue({
       url: '/source?ticket=bound',

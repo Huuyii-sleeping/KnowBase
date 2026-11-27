@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { documentsApi, type DocumentDetail, type ParseDraft } from '@/lib/api';
 import { requestFailure } from '@/lib/api-error';
 import { Button } from './ui/button';
+import { OcrReviewNotice } from './ocr-review-notice';
 import { DocumentEvidencePanel } from './document-evidence-panel';
 
 export function DocumentParseReview({
@@ -11,35 +12,65 @@ export function DocumentParseReview({
   document: DocumentDetail;
   onRefresh: () => Promise<void>;
 }) {
+  const task = document.ingestion?.task;
+  if (!document.ingestion?.canManage || !task?.hasDraft || !task.id)
+    return null;
+  return (
+    <ParseReviewSession
+      key={`${document.id}:${task.id}`}
+      document={document}
+      taskId={task.id}
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+/** Acknowledgment applies only to the candidate that was actually displayed. */
+function ParseReviewSession({
+  document,
+  taskId,
+  onRefresh,
+}: {
+  document: DocumentDetail;
+  taskId: string;
+  onRefresh: () => Promise<void>;
+}) {
   const [draft, setDraft] = useState<ParseDraft | null>(null),
     [note, setNote] = useState(''),
     [acknowledged, setAcknowledged] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState('');
-  const task = document.ingestion?.task;
-  if (!document.ingestion?.canManage || !task?.hasDraft || !task.id)
-    return null;
+  const active = useRef(true);
+  useEffect(() => {
+    active.current = true;
+    return () => {
+      active.current = false;
+    };
+  }, []);
   const run = async (accept?: boolean) => {
     setBusy(true);
     setError('');
     try {
-      if (accept === undefined)
-        setDraft(await documentsApi.draft(document.id, task.id!));
-      else {
+      if (accept === undefined) {
+        const loaded = await documentsApi.draft(document.id, taskId);
+        if (active.current) setDraft(loaded);
+      } else {
         await documentsApi.reviewParse(
           document.id,
-          task.id!,
+          taskId,
           accept,
           acknowledged,
           note,
         );
-        setDraft(null);
-        await onRefresh();
+        if (active.current) {
+          setDraft(null);
+          await onRefresh();
+        }
       }
     } catch (error) {
-      setError(requestFailure(error).message);
+      if (active.current) setError(requestFailure(error).message);
     } finally {
-      setBusy(false);
+      if (active.current) setBusy(false);
     }
   };
   return (
@@ -70,7 +101,8 @@ export function DocumentParseReview({
               </pre>
             </div>
           </div>
-          <DocumentEvidencePanel document={document} taskId={task.id} />
+          <OcrReviewNotice />
+          <DocumentEvidencePanel document={document} taskId={taskId} />
           {(draft.quality?.issues ?? []).map((issue, i) => (
             <p key={i}>
               {issue.code}
