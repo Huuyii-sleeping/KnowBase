@@ -74,6 +74,8 @@ Worker 定期续租；启动及每 15 秒回收已过期的 running 任务，轮
 
 回滚时先停止接单和新 Worker，排空/取消解析任务及资源清理命令；不要让旧 Worker 消费新消息。解析任务队列独立，但新字段不会自动被旧代码恢复。保留已保存正文与原文件，关闭相关新配置并回滚代码；保留新增表不会影响旧代码。
 
+发布/回退前的写入窗口、远端取消补偿等待和跨存储核对统一见 [发布操作单](ingestion-release-runbook.md)。固定版本回退已单独演练，不应省略停止 Worker 前的补偿检查。
+
 MinerU 4.2.3 要求 Python 3.11–3.14。服务端的模型、运行时、CPU/GPU及档位选择参照[官方档位说明](https://opendatalab.github.io/MinerU/zh/usage/tiers/)。本项目不在 NestJS 启动时安装 Python、下载模型或启动第三方服务。
 
 本地从仓库根目录单独启动服务（Python 3.12 已实测）：

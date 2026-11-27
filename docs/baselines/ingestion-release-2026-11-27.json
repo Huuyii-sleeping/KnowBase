@@ -1,0 +1,1190 @@
+{
+  "schema": "ingestion-release-v1",
+  "createdAt": "2026-11-27T14:51:01.246Z",
+  "git": {
+    "commit": "9259982075a32a8730c5616da9e2c2caf270b627",
+    "workingTreeDirty": true
+  },
+  "runtime": {
+    "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+    "mineruServerVersion": "1.0.0",
+    "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+    "imageAnalysisMode": "ocr"
+  },
+  "mineruSnapshot": {
+    "schema": "mineru-runtime-snapshot-v1",
+    "python": "3.12.14",
+    "platform": "Darwin",
+    "arch": "arm64",
+    "packages": [
+      {
+        "name": "accelerate",
+        "version": "1.16.0"
+      },
+      {
+        "name": "aiofiles",
+        "version": "25.1.0"
+      },
+      {
+        "name": "aiosqlite",
+        "version": "0.22.1"
+      },
+      {
+        "name": "annotated-doc",
+        "version": "0.0.7"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.16.0"
+      },
+      {
+        "name": "beautifulsoup4",
+        "version": "4.15.0"
+      },
+      {
+        "name": "brotli",
+        "version": "1.2.1"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.11.20"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.2"
+      },
+      {
+        "name": "click",
+        "version": "8.5.1"
+      },
+      {
+        "name": "cobble",
+        "version": "0.1.4"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.2"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0"
+      },
+      {
+        "name": "docvortex",
+        "version": "0.6.26"
+      },
+      {
+        "name": "et_xmlfile",
+        "version": "2.0.0"
+      },
+      {
+        "name": "fastapi",
+        "version": "0.165.0"
+      },
+      {
+        "name": "fastapi_offline",
+        "version": "1.7.7"
+      },
+      {
+        "name": "filelock",
+        "version": "4.3.0"
+      },
+      {
+        "name": "flatbuffers",
+        "version": "25.12.19"
+      },
+      {
+        "name": "fonttools",
+        "version": "4.68.0"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.9.0"
+      },
+      {
+        "name": "ftfy",
+        "version": "6.3.1"
+      },
+      {
+        "name": "gradio",
+        "version": "6.32.0"
+      },
+      {
+        "name": "gradio_client",
+        "version": "2.7.2"
+      },
+      {
+        "name": "groovy",
+        "version": "0.1.2"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "hf-gradio",
+        "version": "0.4.1"
+      },
+      {
+        "name": "hf-xet",
+        "version": "1.8.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpcore2",
+        "version": "2.16.2"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "httpx-retries",
+        "version": "0.6.0"
+      },
+      {
+        "name": "httpx2",
+        "version": "2.16.2"
+      },
+      {
+        "name": "huggingface_hub",
+        "version": "2.4.0"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "jieba",
+        "version": "0.42.1"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "jiter",
+        "version": "0.19.0"
+      },
+      {
+        "name": "json_repair",
+        "version": "0.64.9"
+      },
+      {
+        "name": "latex2mathml",
+        "version": "3.81.1"
+      },
+      {
+        "name": "loguru",
+        "version": "0.8.0"
+      },
+      {
+        "name": "lxml",
+        "version": "6.1.3"
+      },
+      {
+        "name": "mammoth",
+        "version": "1.13.0"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.3.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "name": "mathml2omml",
+        "version": "0.0.2"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2"
+      },
+      {
+        "name": "metafile-render",
+        "version": "0.4.2"
+      },
+      {
+        "name": "mineru",
+        "version": "4.2.3"
+      },
+      {
+        "name": "mineru-llama-cpp",
+        "version": "0.2.3"
+      },
+      {
+        "name": "mineru-magika",
+        "version": "1.0.3"
+      },
+      {
+        "name": "mineru_vl_utils",
+        "version": "2.0.9"
+      },
+      {
+        "name": "ml_dtypes",
+        "version": "0.7.0"
+      },
+      {
+        "name": "modelscope",
+        "version": "1.40.3"
+      },
+      {
+        "name": "modelscope-hub",
+        "version": "0.7.1"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0"
+      },
+      {
+        "name": "networkx",
+        "version": "3.7"
+      },
+      {
+        "name": "nh3",
+        "version": "0.3.8"
+      },
+      {
+        "name": "numpy",
+        "version": "2.5.5"
+      },
+      {
+        "name": "olefile",
+        "version": "0.47"
+      },
+      {
+        "name": "onnx",
+        "version": "1.23.2"
+      },
+      {
+        "name": "onnxruntime",
+        "version": "1.32.0"
+      },
+      {
+        "name": "openai",
+        "version": "2.54.0"
+      },
+      {
+        "name": "openpyxl",
+        "version": "3.1.5"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.2"
+      },
+      {
+        "name": "orjson",
+        "version": "3.13.0"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "pandas",
+        "version": "3.1.1"
+      },
+      {
+        "name": "pillow",
+        "version": "13.0.0"
+      },
+      {
+        "name": "pip",
+        "version": "25.0.1"
+      },
+      {
+        "name": "protobuf",
+        "version": "7.36.2"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
+      },
+      {
+        "name": "pyclipper",
+        "version": "1.4.0"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.12"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.4"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.5"
+      },
+      {
+        "name": "pydub",
+        "version": "0.25.1"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "pylatexenc",
+        "version": "2.11"
+      },
+      {
+        "name": "pypdf",
+        "version": "7.1.1"
+      },
+      {
+        "name": "pypdfium2",
+        "version": "5.15.2"
+      },
+      {
+        "name": "pypptx-with-oxml",
+        "version": "1.0.3"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "4.0.0"
+      },
+      {
+        "name": "python-docx",
+        "version": "1.2.0"
+      },
+      {
+        "name": "python-multipart",
+        "version": "0.0.34"
+      },
+      {
+        "name": "pytz",
+        "version": "2026.6"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.4"
+      },
+      {
+        "name": "regex",
+        "version": "2026.11.19"
+      },
+      {
+        "name": "reportlab",
+        "version": "5.1.0"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "name": "resvg_py",
+        "version": "0.5.0"
+      },
+      {
+        "name": "rich",
+        "version": "15.0.0"
+      },
+      {
+        "name": "rl_accel",
+        "version": "0.9.3"
+      },
+      {
+        "name": "safehttpx",
+        "version": "0.1.7"
+      },
+      {
+        "name": "safetensors",
+        "version": "0.8.0"
+      },
+      {
+        "name": "semantic-version",
+        "version": "2.10.0"
+      },
+      {
+        "name": "setuptools",
+        "version": "84.2.1"
+      },
+      {
+        "name": "shapely",
+        "version": "2.2.0"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1"
+      },
+      {
+        "name": "soupsieve",
+        "version": "4.1.3"
+      },
+      {
+        "name": "starlette",
+        "version": "1.10.0"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0"
+      },
+      {
+        "name": "tinycss2",
+        "version": "1.5.1"
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.23.3"
+      },
+      {
+        "name": "tomlkit",
+        "version": "0.14.0"
+      },
+      {
+        "name": "torch",
+        "version": "2.15.0"
+      },
+      {
+        "name": "torchvision",
+        "version": "0.29.2"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1"
+      },
+      {
+        "name": "transformers",
+        "version": "5.24.0"
+      },
+      {
+        "name": "truststore",
+        "version": "0.10.5"
+      },
+      {
+        "name": "typer",
+        "version": "0.29.2"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.5"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "tzdata",
+        "version": "2026.6"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.8.0"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0"
+      },
+      {
+        "name": "watchfiles",
+        "version": "1.3.0"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.9.5"
+      },
+      {
+        "name": "webencodings",
+        "version": "0.6.1"
+      },
+      {
+        "name": "xlsxwriter",
+        "version": "3.3.4"
+      },
+      {
+        "name": "ziafont",
+        "version": "0.11"
+      },
+      {
+        "name": "ziamath",
+        "version": "0.13"
+      }
+    ],
+    "models": [
+      {
+        "file": "Layout/PP-DocLayoutV2/config.json",
+        "bytes": 3787,
+        "sha256": "18a696b54c64c4fa582afcd3a41407c4b65a99dc7ab187ad2fed8af8e4128ad8"
+      },
+      {
+        "file": "Layout/PP-DocLayoutV2/model.safetensors",
+        "bytes": 214798436,
+        "sha256": "e60f3725aeedc88fd319416ef166bda79171a41516a301c27cab9132dc2739d2"
+      },
+      {
+        "file": "Layout/PP-DocLayoutV2/preprocessor_config.json",
+        "bytes": 575,
+        "sha256": "56281a70c931a291dcaf653605fb4df713fd823f65e939aecd6005c26346a103"
+      },
+      {
+        "file": "OCR/paddleocr/ch_PP-OCRv6_small_rec_infer.safetensors",
+        "bytes": 21204736,
+        "sha256": "f65a332afe5aa663f0b9d5706f4ae8457b5b4058a842d5c1eb22df505c27d642"
+      },
+      {
+        "file": "OCR/paddleocr/ch_PP-OCRv6_tiny_det_infer.safetensors",
+        "bytes": 1786412,
+        "sha256": "cae3c88d2a9902fd0293e6b17990428f54bfa7ec98f800a4368e95423a754d16"
+      }
+    ],
+    "sha256": "5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b"
+  },
+  "lockfileSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+  "source": {
+    "sha256": "c4559a3f3064a8d4c2355e774aad183b36e9fa891d0371734d715eb907ee2f6c",
+    "fileCount": 323
+  },
+  "compiled": {
+    "sha256": "c3969932a315a21b83f5e37b75fd2d42e81c7b3bf5f503465e66c35363544d8d",
+    "fileCount": 654
+  },
+  "tools": {
+    "sha256": "e39b101ed88414fc1d13da7c47e27daf8f1971b20b733ae93031c76de19ebace",
+    "fileCount": 10
+  },
+  "deploy": {
+    "sha256": "68ce017d1b5e650fad7fc1d2f1fe7f739c4f7b54ec010bfe6e50ab466bea5ca9",
+    "fileCount": 31
+  },
+  "scope": "Isolated fixed branch pair, real MinerU/Ollama and six storage/queue services; current lockfile for both binaries. Not latest main integration or production deployment.",
+  "cases": [
+    {
+      "name": "legacy PostgreSQL schema upgrade and repeat migration",
+      "status": "passed",
+      "evidence": {
+        "base": "001 + 004/005",
+        "applied": "002–010 twice",
+        "legacyRowUnchanged": true,
+        "noOutboxCreated": true,
+        "catalogSha256": "586d2e82c7d97f082bc091d3a1f8b4f7b490db738c8a33abab374574dd3c2399",
+        "tables": [
+          "kh_document",
+          "kh_document_parse_task",
+          "kh_index_build_progress",
+          "kh_index_generation_retention",
+          "kh_index_head",
+          "kh_index_upgrade_attempt",
+          "kh_index_upgrade_item",
+          "kh_index_upgrade_plan",
+          "kh_index_upgrade_task",
+          "kh_pipeline_outbox",
+          "kh_pipeline_receipt",
+          "kh_user"
+        ]
+      }
+    },
+    {
+      "name": "MongoDB index upgrade preserves data and uniqueness",
+      "status": "passed",
+      "evidence": {
+        "applied": "002/003/004 twice using unmodified mongosh scripts",
+        "legacyBodyUnchanged": true,
+        "uniquenessRejectedDuplicates": 5,
+        "ttlSeconds": 0,
+        "indexes": {
+          "document_content": [
+            {
+              "v": 2,
+              "key": {
+                "_id": 1
+              },
+              "name": "_id_"
+            },
+            {
+              "v": 2,
+              "key": {
+                "contentId": 1
+              },
+              "name": "contentId_1",
+              "unique": true
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1,
+                "version": 1
+              },
+              "name": "documentId_1_version_1"
+            }
+          ],
+          "document_evidence": [
+            {
+              "v": 2,
+              "key": {
+                "_id": 1
+              },
+              "name": "_id_"
+            },
+            {
+              "v": 2,
+              "key": {
+                "contentId": 1
+              },
+              "name": "contentId_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "contentId": 1,
+                "id": 1
+              },
+              "name": "contentId_1_id_1",
+              "unique": true
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1
+              },
+              "name": "documentId_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1,
+                "contentId": 1,
+                "ordinal": 1
+              },
+              "name": "documentId_1_contentId_1_ordinal_1",
+              "unique": true
+            }
+          ],
+          "document_assets": [
+            {
+              "v": 2,
+              "key": {
+                "_id": 1
+              },
+              "name": "_id_"
+            },
+            {
+              "v": 2,
+              "key": {
+                "createdAt": 1
+              },
+              "name": "createdAt_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1
+              },
+              "name": "documentId_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "objectKey": 1
+              },
+              "name": "objectKey_1",
+              "unique": true
+            }
+          ],
+          "ingestion_chunks": [
+            {
+              "v": 2,
+              "key": {
+                "_id": 1
+              },
+              "name": "_id_"
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1
+              },
+              "name": "documentId_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "expiresAt": 1
+              },
+              "name": "expiresAt_1",
+              "expireAfterSeconds": 0
+            },
+            {
+              "v": 2,
+              "key": {
+                "key": 1,
+                "index": 1
+              },
+              "name": "key_1_index_1",
+              "unique": true
+            }
+          ],
+          "ingestion_embeddings": [
+            {
+              "v": 2,
+              "key": {
+                "_id": 1
+              },
+              "name": "_id_"
+            },
+            {
+              "v": 2,
+              "key": {
+                "documentId": 1
+              },
+              "name": "documentId_1"
+            },
+            {
+              "v": 2,
+              "key": {
+                "expiresAt": 1
+              },
+              "name": "expiresAt_1",
+              "expireAfterSeconds": 0
+            },
+            {
+              "v": 2,
+              "key": {
+                "key": 1
+              },
+              "name": "key_1",
+              "unique": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "old binary creates published document and current generation",
+      "status": "passed",
+      "evidence": {
+        "documentId": "b1487873-8378-42bc-9ff3-40d927ac463f",
+        "bodySha256": "cfb4cb8de00b3192c2d02dd74c78e4dee34eee228589f7f8239cd1d930e56fcb",
+        "bodyUnchanged": true,
+        "sourceUnchanged": true,
+        "versionUnchanged": true,
+        "indexVisible": true
+      }
+    },
+    {
+      "name": "new binary reads old data and upgrades one canary",
+      "status": "passed",
+      "evidence": {
+        "planId": "15ef7c42-264d-42d8-88b9-3ad78d7d5b0f",
+        "documents": 1,
+        "activeDocuments": 1,
+        "tasks": [
+          {
+            "pipeline": "kg",
+            "state": "succeeded",
+            "count": 1
+          },
+          {
+            "pipeline": "rag",
+            "state": "succeeded",
+            "count": 1
+          },
+          {
+            "pipeline": "search",
+            "state": "succeeded",
+            "count": 1
+          }
+        ],
+        "target": {
+          "protocol": "index-upgrade-v1",
+          "chunkStrategy": "structure-v4:256:20",
+          "graphFingerprint": "3b3bfe95b2f6fbba583175a77d4e18f43cec081cc8da26000578a93a0c32cee3",
+          "indexFingerprint": "e9333039142cf5fa207871e6ca22d0687d2ac973e804a839d588b8f29be71495",
+          "budgetFingerprint": "8284bd34a5ccc9fb68dc266ec8b9a1eb269a79f7335226aba900d5035bd6cbd4",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078"
+        },
+        "targetHash": "419ed32af5f8c166fe5078af969b4f074b9d6dec5c765a56a5b19473ad177b78",
+        "bodyUnchanged": true
+      }
+    },
+    {
+      "name": "real MinerU OCR retains original, body, evidence and indexes",
+      "status": "passed",
+      "evidence": {
+        "documentId": "dd8b0044-ac58-421b-81a4-a1321ccc3d99",
+        "sourceSha256": "773ed7dd4142361e51f419d89a8c904c573432907163c11bfc46ad0c3501a5e6",
+        "bodySha256": "d54b02050fa254c0856baa3b367277fadff9dddc4d7359040743daa301e74e4c",
+        "assets": 2,
+        "parser": "mineru",
+        "provenance": {
+          "engine": "mineru",
+          "version": "4.2.3",
+          "tier": "flash",
+          "mode": "ocr"
+        }
+      }
+    },
+    {
+      "name": "expand canary to two documents without replacing body",
+      "status": "passed",
+      "evidence": {
+        "planId": "da2600a8-0188-4968-8da9-2e49d154aeab",
+        "documents": 2,
+        "activeDocuments": 2,
+        "tasks": [
+          {
+            "pipeline": "kg",
+            "state": "succeeded",
+            "count": 2
+          },
+          {
+            "pipeline": "rag",
+            "state": "succeeded",
+            "count": 2
+          },
+          {
+            "pipeline": "search",
+            "state": "succeeded",
+            "count": 2
+          }
+        ],
+        "target": {
+          "protocol": "index-upgrade-v1",
+          "chunkStrategy": "structure-v4:256:20",
+          "graphFingerprint": "3b3bfe95b2f6fbba583175a77d4e18f43cec081cc8da26000578a93a0c32cee3",
+          "indexFingerprint": "e9333039142cf5fa207871e6ca22d0687d2ac973e804a839d588b8f29be71495",
+          "budgetFingerprint": "8284bd34a5ccc9fb68dc266ec8b9a1eb269a79f7335226aba900d5035bd6cbd4",
+          "embeddingFingerprint": "c354c9cb03d3ee99f3b52bc5a9cfa66f001c090df3da3f0028eac60decc20078"
+        },
+        "targetHash": "419ed32af5f8c166fe5078af969b4f074b9d6dec5c765a56a5b19473ad177b78",
+        "bodyUnchanged": true
+      }
+    },
+    {
+      "name": "reparse candidate remains independent before rollback",
+      "status": "passed",
+      "evidence": {
+        "documentId": "dd8b0044-ac58-421b-81a4-a1321ccc3d99",
+        "taskId": "4e9c2c14-b99d-4ee5-8b0f-bf1e715780f5",
+        "bodySha256": "38a64fa386fee85e48d39030fcfea7a7483e32a0c02345e8bd9f4be04f50b226",
+        "assets": [
+          "assets/dd8b0044-ac58-421b-81a4-a1321ccc3d99/cb5d6774-9909-4115-87e8-3548cb9ea2e2-images-page_0_table_1.jpg",
+          "assets/dd8b0044-ac58-421b-81a4-a1321ccc3d99/376b1371-fcf3-4103-9099-a285a45747ca-mineru-structure.json"
+        ],
+        "currentPublishedBodyPreserved": true
+      }
+    },
+    {
+      "name": "changed strategy and same-dimension changed model both reject old preview",
+      "status": "passed",
+      "evidence": {
+        "strategyMismatchStatus": 409,
+        "modelMismatchStatus": 409,
+        "embeddingDimensions": 768,
+        "headsUnchanged": true
+      }
+    },
+    {
+      "name": "rollback gate rejects live consumers and dead-letter messages",
+      "status": "passed",
+      "evidence": {
+        "liveRejected": ["queueConsumers"],
+        "deadLetterRejected": ["queueReady"],
+        "clear": {
+          "parseActive": 0,
+          "remoteCleanupPending": 0,
+          "outboxPending": 0,
+          "receiptsIncomplete": 0,
+          "plansRunning": 0,
+          "upgradeUnfinished": 0,
+          "buildsUncertain": 0,
+          "queueReady": 0,
+          "queueConsumers": 0,
+          "queues": [
+            {
+              "queue": "knowbase.pipeline.search",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.search.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.rag",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.rag.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.kg",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.kg.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.document.parse",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.document.parse.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "old binary and old chunk strategy read newer data without dropping schema",
+      "status": "passed",
+      "evidence": {
+        "rollbackRevision": "d825b0f365291e48cc747f85bd51bd25f91f07c8",
+        "strategy": "structure-v4:1000:20",
+        "currentBodiesPreserved": true,
+        "candidatePreserved": true,
+        "oldBinaryRebuild": true,
+        "additiveTablesRetained": true
+      }
+    },
+    {
+      "name": "roll forward restores batch management and deletes all test artifacts",
+      "status": "passed",
+      "evidence": {
+        "currentVersionRecovered": true,
+        "cleanup": true,
+        "final": {
+          "parseActive": 0,
+          "remoteCleanupPending": 0,
+          "outboxPending": 0,
+          "receiptsIncomplete": 0,
+          "plansRunning": 0,
+          "upgradeUnfinished": 0,
+          "buildsUncertain": 0,
+          "queueReady": 0,
+          "queueConsumers": 0,
+          "queues": [
+            {
+              "queue": "knowbase.pipeline.search",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.search.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.rag",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.rag.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.kg",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.pipeline.kg.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.document.parse",
+              "messageCount": 0,
+              "consumerCount": 0
+            },
+            {
+              "queue": "knowbase.document.parse.dead",
+              "messageCount": 0,
+              "consumerCount": 0
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "status": "passed",
+  "rollbackArtifact": {
+    "revision": "d825b0f365291e48cc747f85bd51bd25f91f07c8",
+    "dependencies": "current locked node_modules (not historical lockfile reinstall)",
+    "source": {
+      "sha256": "0523bc14f294be4089eb2c43a8cdf43888326e31250079c67726acc898cdbcf7",
+      "fileCount": 300
+    },
+    "compiled": {
+      "sha256": "ac4c5631547fc89eb4cc693ed2c751523f8178dbd13fb31f057812ca53db42f1",
+      "fileCount": 610
+    }
+  },
+  "images": [
+    {
+      "ID": "sha256:e0ce8c35124d4a9f9785532d1f268f39e9728ffa1cb38f46fa482436424c4bd3",
+      "ContainerName": "knowbase-acceptance-3e175323-mongo-1",
+      "Repository": "mongo",
+      "Tag": "8",
+      "Platform": "linux/arm64/v8",
+      "Size": 321353034,
+      "Created": "2026-07-22T22:13:04.195785542Z",
+      "LastTagTime": "2026-08-08T07:07:08.715276797Z"
+    },
+    {
+      "ID": "sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139",
+      "ContainerName": "knowbase-acceptance-3e175323-postgres-1",
+      "Repository": "postgres",
+      "Tag": "16-alpine",
+      "Platform": "linux/arm64/v8",
+      "Size": 113906408,
+      "Created": "2026-11-05T19:06:11.05471323Z",
+      "LastTagTime": "2026-11-12T13:18:23.927937042Z"
+    },
+    {
+      "ID": "sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267",
+      "ContainerName": "knowbase-acceptance-3e175323-rabbitmq-1",
+      "Repository": "rabbitmq",
+      "Tag": "4-management-alpine",
+      "Platform": "linux/arm64/v8",
+      "Size": 93784804,
+      "Created": "2026-11-05T21:33:12.203226502Z",
+      "LastTagTime": "2026-11-12T13:18:24.809743626Z"
+    },
+    {
+      "ID": "sha256:01c1732062b4a846c5ca687b0094b89bad0bfed00c6d71626db32fb8f3131a78",
+      "ContainerName": "knowbase-acceptance-3e175323-elasticsearch-1",
+      "Repository": "docker.elastic.co/elasticsearch/elasticsearch",
+      "Tag": "8.15.3",
+      "Platform": "linux/arm64",
+      "Size": 510516881,
+      "Created": "2024-10-09T22:16:20.113714326Z",
+      "LastTagTime": "2026-08-08T07:06:59.436987001Z"
+    },
+    {
+      "ID": "sha256:42ef3ebfd671ebd01fdebb6dcbe80cf7b45eef2aa3d346ef4132f7ef31e67d2f",
+      "ContainerName": "knowbase-acceptance-3e175323-neo4j-1",
+      "Repository": "neo4j",
+      "Tag": "5-community",
+      "Platform": "linux/arm64/v8",
+      "Size": 349691154,
+      "Created": "2026-11-05T07:44:07.388925024Z",
+      "LastTagTime": "2026-11-09T13:26:16.718021344Z"
+    },
+    {
+      "ID": "sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21",
+      "ContainerName": "knowbase-acceptance-3e175323-object-storage-1",
+      "Repository": "rustfs/rustfs",
+      "Tag": "latest",
+      "Platform": "linux/arm64",
+      "Size": 81468250,
+      "Created": "2026-07-30T04:16:11.110846044Z",
+      "LastTagTime": "2026-08-08T06:58:57.586512292Z"
+    }
+  ],
+  "configuration": {
+    "parser": "mineru",
+    "imageMode": "ocr",
+    "async": true,
+    "productionEntrypoints": true,
+    "upgradedChunkSize": 256,
+    "rollbackChunkSize": 1000,
+    "overlap": 20,
+    "embeddingDimensions": 768,
+    "sameEmbeddingSpace": true,
+    "outboxPollMs": 100,
+    "outboxBatch": 10,
+    "generationGcEnabled": false,
+    "mutationIngress": "isolated harness is the only writer"
+  },
+  "isolatedServicesRemoved": true,
+  "mainIntegration": {
+    "checkedAt": "2026-11-27",
+    "branch": "9259982075a32a8730c5616da9e2c2caf270b627",
+    "main": "b15d9380e77668a027f68c9700baff7fae52aa3b",
+    "method": "git merge-tree --write-tree --name-only; no worktree/ref changes",
+    "exitCode": 1,
+    "conflicts": [
+      ".env.example",
+      "apps/api/package.json",
+      "apps/api/src/modules/documents/document-query.service.spec.ts",
+      "apps/api/src/modules/pipeline/embedding/embedding.service.spec.ts",
+      "apps/api/src/modules/pipeline/embedding/embedding.service.ts",
+      "apps/api/src/modules/pipeline/pipeline.module.ts",
+      "apps/api/src/modules/pipeline/rag/rag-pipeline.service.spec.ts",
+      "apps/api/src/modules/pipeline/rag/rag-pipeline.service.ts",
+      "apps/api/src/modules/pipeline/vector-index/elasticsearch-generation.writer.spec.ts",
+      "apps/api/src/modules/pipeline/vector-index/elasticsearch-schema.ts",
+      "apps/api/test/indexing/consistency.test.cjs",
+      "deploy/docker-compose.delivery-test.yml"
+    ],
+    "mainIntegrated": false
+  },
+  "artifacts": {
+    "report.json": "b14d50d0309afd27716352ab05de55929e3400324d6ab86cd76ad48b87eb25d2",
+    "api.log": "f5c32994867c893be5b46d50e92212c40feb481602ff07409c470e431ce04cf2"
+  },
+  "priorRuns": [
+    {
+      "name": "first",
+      "status": "failed",
+      "error": "ENOENT: no such file or directory, scandir '/Users/huayi/.codex/worktrees/ingestion-pipeline/knowbase/reports/ingestion-release/fixed-pair-first/rollback-code/apps/api/dist/src'",
+      "reportSha256": "416121858e82c2a6b266d1cc0ed0356c76d204e9211c354edb1a91d292e2fcab"
+    },
+    {
+      "name": "second",
+      "status": "failed",
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(found.items.some((d) => d.id === doc.id))\n",
+      "reportSha256": "cb161decb31894f7f182e0bf9f67d578426201f0f78208dc4d826a70e2514005"
+    },
+    {
+      "name": "third",
+      "status": "failed",
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(rollbackBlockers(blocked).includes('queueReady'))\n",
+      "reportSha256": "34478470ce22964aaae011ade37ca0480888e4aef003572110b403fa56236a5b"
+    },
+    {
+      "name": "fourth",
+      "status": "failed",
+      "error": "Timed out: rollback drain gate",
+      "reportSha256": "bf8577d8f4a83c2aab790847d6ca8c107605fc4511d88564ac257ad95feb62ef"
+    },
+    {
+      "name": "fifth",
+      "status": "failed",
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'remoteCleanupPending'\n+ ]\n- []\n",
+      "reportSha256": "c5e8cd3d34804172301d630adb35544d56561065aa913c033427b9932318efbc"
+    }
+  ],
+  "verification": {
+    "apiTests": 507,
+    "webTests": 256,
+    "apiBuild": "passed",
+    "webBuild": "passed with existing chunk size warning",
+    "compose": "passed",
+    "productionDeployment": false,
+    "databaseBackupRestore": false,
+    "mainCombinedRegression": false,
+    "toolTests": 13
+  }
+}

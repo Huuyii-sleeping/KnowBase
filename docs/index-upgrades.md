@@ -20,6 +20,8 @@ psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f deploy/postgres/migrations/010_index_
 
 API、Worker 使用同一代码与配置，启用 Outbox Relay 和三条现有消费者；旧 Worker 不认识新命令，必须先停旧 Worker 再升级，不能混跑。回滚前先暂停全部批次并等待已提交任务终止；尚有升级消息时不要切回旧消费者。暂停/取消不会撤销已激活索引。不要直接删表清空批次作为回滚手段。
 
+固定版本的小批发布、排空检查和回退操作见 [发布操作单](ingestion-release-runbook.md)，真实模型演练见 [回退报告](ingestion-release-report.md)。
+
 与 main 的契约整合和联合回归仍是实际升级业务文档前的前置，见 [基线衔接问题](ingestion-baseline.md)。本分支的隔离演练不代表已完成 main 集成。更换向量空间需要独立的查询侧/索引空间切换方案，不能作为普通分块升级直接运行。
 
 ## 预览规则与操作
