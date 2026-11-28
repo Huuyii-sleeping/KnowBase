@@ -1,0 +1,48 @@
+{
+  "schema": "deployment-object-storage-smoke-v1",
+  "createdAt": "2026-11-28T14:34:23.526Z",
+  "composeSource": "deploy/docker-compose.yml:rustfs",
+  "changes": "isolated project/port/credentials only; preserve image, command, entrypoint and named volume",
+  "status": "passed",
+  "cases": [
+    {
+      "name": "default image entrypoint starts with deployment command and named volume",
+      "status": "passed"
+    },
+    {
+      "name": "wrong credentials cannot list buckets",
+      "status": "passed"
+    },
+    {
+      "name": "saved bytes read back with identical SHA-256",
+      "status": "passed"
+    },
+    {
+      "name": "named-volume bytes survive container restart",
+      "status": "passed"
+    },
+    {
+      "name": "object and bucket deletion complete",
+      "status": "passed"
+    }
+  ],
+  "image": {
+    "name": "rustfs/rustfs:latest",
+    "id": "sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21",
+    "entrypoint": ["/entrypoint.sh"],
+    "command": ["server", "/data", "--console-address", ":9001"],
+    "user": "rustfs"
+  },
+  "inputSha256": "f4e45f6e281700e8fb198670ffe7fe6e0a7b8427e2ecd1d38603ed96dfd9a0d1",
+  "portMapping": {
+    "before": 53917,
+    "after": 53924
+  },
+  "isolatedServicesRemoved": true,
+  "sourceCommit": "aa59e45947123a1b9fc731d961cbdf1d30835d58",
+  "reportSha256": "39c187d04b9cf7749b6ddc5867895daff5325d1af9572408cdc254c4f07e2c83",
+  "firstAttempt": {
+    "status": "failed",
+    "reason": "Random host port changed across restart; test retained the previous port. Re-querying compose port fixed the harness; deployment configuration unchanged."
+  }
+}
