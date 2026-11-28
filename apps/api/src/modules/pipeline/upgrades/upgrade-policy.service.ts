@@ -29,7 +29,8 @@ export class UpgradePolicyService {
         this.config.get('ELASTICSEARCH_DOCUMENT_INDEX', 'kh_document'),
         this.config.get('ELASTICSEARCH_CHUNK_INDEX', 'kh_chunk'),
         this.config.get('NEO4J_URI', 'bolt://localhost:17687'),
-        'generation-schema-v1',
+        'generation-schema-v2:structured-context-v1',
+        this.config.get('RAG_RETRIEVAL_CONTEXT', 'title-heading'),
       ]),
       budgetFingerprint: upgradeHash(
         [

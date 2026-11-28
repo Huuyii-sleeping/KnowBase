@@ -17,6 +17,7 @@ import { Module } from '@nestjs/common';
 import { DocumentsModule } from '../documents/documents.module';
 import { MessageQueueModule } from '../message-queue/message-queue.module';
 import { MarkdownChunkerService } from './chunk/markdown-chunker.service';
+import { RagChunkTextService } from './chunk/rag-chunk-text.service';
 import { EmbeddingService } from './embedding/embedding.service';
 import { GraphIndexService } from './kg/graph-index.service';
 import { GraphExtractionService } from './kg/graph-extraction.service';
@@ -55,6 +56,7 @@ import { GenerationCleanupService } from './generation-cleanup.service';
     MarkdownChunkerService,
     DocumentChunksService,
     DocumentEmbeddingService,
+    RagChunkTextService,
     EmbeddingService,
     VectorIndexService,
     GraphIndexService,

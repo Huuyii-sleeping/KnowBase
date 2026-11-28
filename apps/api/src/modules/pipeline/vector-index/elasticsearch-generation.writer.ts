@@ -68,6 +68,7 @@ export class ElasticsearchGenerationWriter {
           document_version: chunk.version,
           chunk_index: chunk.chunkIndex,
           content: chunk.content,
+          retrieval_text: chunk.retrievalText ?? chunk.content,
           embedding: chunk.embedding,
           ...(chunk.metadata ? { ingestion: chunk.metadata } : {}),
         },

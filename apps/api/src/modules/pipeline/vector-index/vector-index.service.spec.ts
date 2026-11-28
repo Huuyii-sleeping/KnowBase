@@ -25,6 +25,55 @@ vi.mock('@elastic/elasticsearch', () => ({
 import { VectorIndexService } from './vector-index.service';
 
 describe('VectorIndexService document search', () => {
+  it.each([
+    [{}, ['content.cjk', 'retrieval_text.cjk']],
+    [
+      {
+        RAG_KEYWORD_ANALYZER: 'standard',
+        RAG_RETRIEVAL_CONTEXT: 'body',
+        RAG_KEYWORD_POLICY: 'combined',
+      },
+      ['content'],
+    ],
+  ])(
+    'uses the adopted defaults and honors explicit legacy retrieval settings: %j',
+    async (settings, fields) => {
+      searchMock.mockReset().mockResolvedValue({ hits: { hits: [] } });
+      const service = new VectorIndexService(
+        {
+          get: (key: string, fallback: unknown) => settings[key] ?? fallback,
+        } as any,
+        { active: vi.fn().mockResolvedValue(['current']) } as any,
+      );
+      expect(
+        await service.searchKeywordChunks({ query: '借用材料', topK: 5 }),
+      ).toEqual([]);
+      expect(searchMock).toHaveBeenCalledTimes(fields.length);
+      expect(
+        searchMock.mock.calls.map(
+          ([input]) => Object.keys(input.query.bool.must[0].match)[0],
+        ),
+      ).toEqual(fields);
+      for (const [input] of searchMock.mock.calls)
+        expect(input.query.bool.filter).toEqual([
+          { terms: { generation_id: ['current'] } },
+        ]);
+    },
+  );
+
+  it('rejects unsupported keyword analyzers instead of silently changing retrieval behavior', () => {
+    expect(
+      () =>
+        new VectorIndexService(
+          {
+            get: (key: string, fallback: unknown) =>
+              key === 'RAG_KEYWORD_ANALYZER' ? 'unknown' : fallback,
+          } as any,
+          {} as any,
+        ),
+    ).toThrow('standard or cjk');
+  });
+
   it('never queries external indexes when no current generation is visible', async () => {
     searchMock.mockReset();
     const service = new VectorIndexService(

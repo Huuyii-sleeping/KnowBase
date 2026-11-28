@@ -147,6 +147,22 @@ export class DocumentQueryService {
     return rows.map((row) => row.id);
   }
 
+  async findPublishedByIds(
+    ids: string[],
+    user?: AuthUser,
+  ): Promise<Document[]> {
+    const uniqueIds = [...new Set(ids)];
+    if (!uniqueIds.length) return [];
+    const builder = this.documentRepository
+      .createQueryBuilder('document')
+      .where('document.id IN (:...ids)', { ids: uniqueIds })
+      .andWhere('document.status = :publishedStatus', {
+        publishedStatus: DocumentStatus.PUBLISHED,
+      });
+    if (user) this.access?.applyVisibilityFilter(builder, user);
+    return builder.getMany();
+  }
+
   async findEntity(id: string): Promise<Document> {
     const document = await this.documentRepository.findOne({ where: { id } });
     if (!document) {

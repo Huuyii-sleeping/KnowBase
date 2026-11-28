@@ -2,7 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AuthUser } from '../auth/auth.types';
 import { KnowledgeGraphQueryService } from '../graph/knowledge-graph-query.service';
 import { SearchGraphDto } from '../graph/dto/search-graph.dto';
-import { HybridSearchItem, HybridSearchService } from '../search/hybrid-search.service';
+import {
+  HybridSearchItem,
+  HybridSearchService,
+} from '../search/hybrid-search.service';
 import { GraphIntentService } from './graph-intent.service';
 
 export interface AnswerRetrievalResult {
@@ -25,30 +28,43 @@ export class AnswerRetrievalService {
     topK: number,
     user?: AuthUser,
   ): Promise<AnswerRetrievalResult> {
-    const hybrid = await this.hybridSearch.search({ query: question, topK }, user);
+    const hybrid = await this.hybridSearch.search(
+      { query: question, topK },
+      user,
+    );
     if (!this.graphIntent.shouldUseGraph(question) || !user) {
       return { items: hybrid.items, graphUsed: false };
     }
 
     try {
       const terms = this.graphIntent.extractTerms(question);
-      const graphResults = await Promise.all(terms.map((term) => this.graphQuery.search({
-        query: term,
-        maxHops: 3,
-        limit: Math.min(topK, 10),
-      } satisfies SearchGraphDto, user)));
+      const graphResults = await Promise.all(
+        terms.map((term) =>
+          this.graphQuery.search(
+            {
+              query: term,
+              maxHops: 3,
+              limit: Math.min(topK, 10),
+            } satisfies SearchGraphDto,
+            user,
+          ),
+        ),
+      );
       const graphItems = this.uniqueGraphItems(
-        graphResults.flatMap((graph) => graph.items.map((item) => this.toSearchItem(item))),
+        graphResults.flatMap((graph) =>
+          graph.items.map((item) => this.toSearchItem(item)),
+        ),
       ).filter((item) => this.supportsQuestionTerms(item, terms));
-      if (terms.length >= 2 && graphItems.length === 0) {
-        return { items: [], graphUsed: false };
-      }
+      // Graph paths supplement documents. An empty graph says nothing about
+      // whether the already authorized document evidence supports the question.
       return {
         items: [...hybrid.items, ...graphItems],
         graphUsed: graphItems.length > 0,
       };
     } catch (error) {
-      this.logger.warn(`Knowledge graph retrieval failed; using hybrid results: ${this.errorMessage(error)}`);
+      this.logger.warn(
+        `Knowledge graph retrieval failed; using hybrid results: ${this.errorMessage(error)}`,
+      );
       return { items: hybrid.items, graphUsed: false };
     }
   }
@@ -63,7 +79,10 @@ export class AnswerRetrievalService {
     });
   }
 
-  private supportsQuestionTerms(item: HybridSearchItem, terms: string[]): boolean {
+  private supportsQuestionTerms(
+    item: HybridSearchItem,
+    terms: string[],
+  ): boolean {
     if (terms.length < 2) return true;
     const content = `${item.title} ${item.content ?? ''}`.toLocaleLowerCase();
     return terms.filter((term) => content.includes(term)).length >= 2;
@@ -75,7 +94,9 @@ export class AnswerRetrievalService {
     relations: Array<{ documentId: string; chunkId: string; type: string }>;
   }): HybridSearchItem {
     const firstRelation = path.relations[0];
-    const entityPath = path.entities.map((entity) => `${entity.name}（${entity.type}）`).join(' -> ');
+    const entityPath = path.entities
+      .map((entity) => `${entity.name}（${entity.type}）`)
+      .join(' -> ');
     const relationSummary = path.relations
       .map((relation) => relation.type)
       .filter(Boolean)

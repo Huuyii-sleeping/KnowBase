@@ -1,0 +1,2227 @@
+{
+  "version": "knowbase-rerank-v2-model-order",
+  "freeze_commit": "721c84f",
+  "protocol_sha256": "5b6f1c7c3b273fdc49b5f91f84d4a1d480c8e076ed84da93ada0a7126e9b3558",
+  "raw_outputs_sha256": {
+    "order-replay.json": "b452ca48e3ebabf3e83903dd2dc33802b0c2757090d630142404f613ba3bd1b3",
+    "order-audit.json": "f4541f9adce8b1695000cafdfc21c1e2715a0f2f1992e9771a6fc401e8832a6e"
+  },
+  "scope": "384 exposed synthetic pools x7 strategies=2688 offline selections, two order-only candidates; same model inference and admitted membership reused, not independent data",
+  "admission_membership_and_evidence_metrics_unchanged": true,
+  "decision": {
+    "development_candidate": "bge-m3-anchor2-model-order",
+    "development_gain": 0.375,
+    "development_gain_gate": true,
+    "regression_gates": [
+      {
+        "source": "holdout-candidate",
+        "split": "validation",
+        "no_new_evidence_loss": true,
+        "no_source_completeness_regression": true
+      },
+      {
+        "source": "holdout-default",
+        "split": "validation",
+        "no_new_evidence_loss": true,
+        "no_source_completeness_regression": true
+      },
+      {
+        "source": "v3-candidate",
+        "split": "development",
+        "no_new_evidence_loss": false,
+        "no_source_completeness_regression": true
+      },
+      {
+        "source": "v3-candidate",
+        "split": "regression",
+        "no_new_evidence_loss": true,
+        "no_source_completeness_regression": true
+      },
+      {
+        "source": "v3-candidate",
+        "split": "validation",
+        "no_new_evidence_loss": true,
+        "no_source_completeness_regression": true
+      }
+    ],
+    "accepted": false,
+    "business_defaults_changed": false,
+    "scope": "Exposed synthetic fixed-pool regression only; no production or answer acceptance"
+  },
+  "summaries": [
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 0.773438,
+      "all_sources_found": 0.75,
+      "evidence_recall": 0.710938,
+      "all_evidence_found": 0.65625,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.710938,
+      "evidence_mrr": 0.765625,
+      "evidence_gained": 0,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {
+        "top_k": 22
+      },
+      "offline_selection_mean_ms": 0.0093,
+      "offline_selection_p95_ms": 0.0145,
+      "top1_annotated_evidence_hit_rate": 0.765625
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "mminilm",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.976562,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.976562,
+      "evidence_mrr": 0.964063,
+      "evidence_gained": 21,
+      "evidence_lost": 1,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0029,
+      "offline_selection_p95_ms": 0.0047,
+      "top1_annotated_evidence_hit_rate": 0.953125
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "bge-m3",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 1.0,
+      "evidence_gained": 22,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0027,
+      "offline_selection_p95_ms": 0.0045,
+      "top1_annotated_evidence_hit_rate": 1
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "mminilm-anchor2",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.96875,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.96875,
+      "evidence_mrr": 0.833333,
+      "evidence_gained": 20,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0244,
+      "offline_selection_p95_ms": 0.0564,
+      "top1_annotated_evidence_hit_rate": 0.765625
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 0.84375,
+      "evidence_gained": 22,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0201,
+      "offline_selection_p95_ms": 0.0295,
+      "top1_annotated_evidence_hit_rate": 0.765625
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "mminilm-anchor2-model-order",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.96875,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.96875,
+      "evidence_mrr": 0.960938,
+      "evidence_gained": 20,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.031,
+      "offline_selection_p95_ms": 0.0635,
+      "top1_annotated_evidence_hit_rate": 0.953125
+    },
+    {
+      "source": "holdout-candidate",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2-model-order",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 1.0,
+      "evidence_gained": 22,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.024,
+      "offline_selection_p95_ms": 0.0342,
+      "top1_annotated_evidence_hit_rate": 1
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 0.601562,
+      "all_sources_found": 0.5625,
+      "evidence_recall": 0.5,
+      "all_evidence_found": 0.4375,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.5,
+      "evidence_mrr": 0.5625,
+      "evidence_gained": 0,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {
+        "top_k": 38
+      },
+      "offline_selection_mean_ms": 0.0077,
+      "offline_selection_p95_ms": 0.0109,
+      "top1_annotated_evidence_hit_rate": 0.5625
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "mminilm",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.976562,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.976562,
+      "evidence_mrr": 0.964844,
+      "evidence_gained": 37,
+      "evidence_lost": 1,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0027,
+      "offline_selection_p95_ms": 0.004,
+      "top1_annotated_evidence_hit_rate": 0.953125
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "bge-m3",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 1.0,
+      "evidence_gained": 38,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0024,
+      "offline_selection_p95_ms": 0.0034,
+      "top1_annotated_evidence_hit_rate": 1
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "mminilm-anchor2",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.96875,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.96875,
+      "evidence_mrr": 0.696615,
+      "evidence_gained": 36,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0199,
+      "offline_selection_p95_ms": 0.0432,
+      "top1_annotated_evidence_hit_rate": 0.5625
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 0.708333,
+      "evidence_gained": 38,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0142,
+      "offline_selection_p95_ms": 0.022,
+      "top1_annotated_evidence_hit_rate": 0.5625
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "mminilm-anchor2-model-order",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.96875,
+      "all_evidence_found": 0.96875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.96875,
+      "evidence_mrr": 0.960938,
+      "evidence_gained": 36,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0262,
+      "offline_selection_p95_ms": 0.049,
+      "top1_annotated_evidence_hit_rate": 0.953125
+    },
+    {
+      "source": "holdout-default",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2-model-order",
+      "questions": 80,
+      "answerable": 64,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 1,
+      "all_evidence_found": 1,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 1.0,
+      "evidence_mrr": 1.0,
+      "evidence_gained": 38,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.018,
+      "offline_selection_p95_ms": 0.0264,
+      "top1_annotated_evidence_hit_rate": 1
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "rule",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.645833,
+      "all_sources_found": 0.611111,
+      "evidence_recall": 0.5625,
+      "all_evidence_found": 0.527778,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.5625,
+      "evidence_mrr": 0.569444,
+      "evidence_gained": 0,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {
+        "top_k": 41
+      },
+      "offline_selection_mean_ms": 0.0137,
+      "offline_selection_p95_ms": 0.0213,
+      "top1_annotated_evidence_hit_rate": 0.5416666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "mminilm",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.930556,
+      "all_sources_found": 0.902778,
+      "evidence_recall": 0.840278,
+      "all_evidence_found": 0.777778,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.840278,
+      "evidence_mrr": 0.838889,
+      "evidence_gained": 32,
+      "evidence_lost": 7,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0048,
+      "offline_selection_p95_ms": 0.0073,
+      "top1_annotated_evidence_hit_rate": 0.7916666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "bge-m3",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.944444,
+      "all_sources_found": 0.888889,
+      "evidence_recall": 0.9375,
+      "all_evidence_found": 0.875,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.9375,
+      "evidence_mrr": 0.944444,
+      "evidence_gained": 39,
+      "evidence_lost": 7,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0042,
+      "offline_selection_p95_ms": 0.0065,
+      "top1_annotated_evidence_hit_rate": 0.8888888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "mminilm-anchor2",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.895833,
+      "all_sources_found": 0.875,
+      "evidence_recall": 0.826389,
+      "all_evidence_found": 0.763889,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.826389,
+      "evidence_mrr": 0.66088,
+      "evidence_gained": 27,
+      "evidence_lost": 3,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0259,
+      "offline_selection_p95_ms": 0.0404,
+      "top1_annotated_evidence_hit_rate": 0.5416666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "bge-m3-anchor2",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.972222,
+      "all_sources_found": 0.944444,
+      "evidence_recall": 0.9375,
+      "all_evidence_found": 0.888889,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.9375,
+      "evidence_mrr": 0.69213,
+      "evidence_gained": 36,
+      "evidence_lost": 3,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0944,
+      "offline_selection_p95_ms": 0.0271,
+      "top1_annotated_evidence_hit_rate": 0.5416666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "mminilm-anchor2-model-order",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.895833,
+      "all_sources_found": 0.875,
+      "evidence_recall": 0.826389,
+      "all_evidence_found": 0.763889,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.826389,
+      "evidence_mrr": 0.825,
+      "evidence_gained": 27,
+      "evidence_lost": 3,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0356,
+      "offline_selection_p95_ms": 0.0546,
+      "top1_annotated_evidence_hit_rate": 0.7777777777777778
+    },
+    {
+      "source": "v3-candidate",
+      "split": "development",
+      "strategy": "bge-m3-anchor2-model-order",
+      "questions": 96,
+      "answerable": 72,
+      "document_recall": 0.972222,
+      "all_sources_found": 0.944444,
+      "evidence_recall": 0.9375,
+      "all_evidence_found": 0.888889,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.9375,
+      "evidence_mrr": 0.944444,
+      "evidence_gained": 36,
+      "evidence_lost": 3,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0997,
+      "offline_selection_p95_ms": 0.0325,
+      "top1_annotated_evidence_hit_rate": 0.9027777777777778
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "rule",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.597222,
+      "all_sources_found": 0.569444,
+      "evidence_recall": 0.486111,
+      "all_evidence_found": 0.444444,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.492958,
+      "evidence_mrr": 0.520833,
+      "evidence_gained": 0,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {
+        "top_k": 45
+      },
+      "offline_selection_mean_ms": 0.0215,
+      "offline_selection_p95_ms": 0.0294,
+      "top1_annotated_evidence_hit_rate": 0.5138888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "mminilm",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.909722,
+      "all_sources_found": 0.902778,
+      "evidence_recall": 0.909722,
+      "all_evidence_found": 0.902778,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.922535,
+      "evidence_mrr": 0.850694,
+      "evidence_gained": 39,
+      "evidence_lost": 1,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0063,
+      "offline_selection_p95_ms": 0.0141,
+      "top1_annotated_evidence_hit_rate": 0.7916666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "bge-m3",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.965278,
+      "all_sources_found": 0.958333,
+      "evidence_recall": 0.965278,
+      "all_evidence_found": 0.958333,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.978873,
+      "evidence_mrr": 0.900926,
+      "evidence_gained": 42,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0057,
+      "offline_selection_p95_ms": 0.013,
+      "top1_annotated_evidence_hit_rate": 0.8472222222222222
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "mminilm-anchor2",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.916667,
+      "all_sources_found": 0.916667,
+      "evidence_recall": 0.909722,
+      "all_evidence_found": 0.902778,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.922535,
+      "evidence_mrr": 0.646991,
+      "evidence_gained": 38,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0336,
+      "offline_selection_p95_ms": 0.0476,
+      "top1_annotated_evidence_hit_rate": 0.5138888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "bge-m3-anchor2",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.958333,
+      "all_sources_found": 0.958333,
+      "evidence_recall": 0.951389,
+      "all_evidence_found": 0.944444,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.964789,
+      "evidence_mrr": 0.658333,
+      "evidence_gained": 41,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0249,
+      "offline_selection_p95_ms": 0.0426,
+      "top1_annotated_evidence_hit_rate": 0.5138888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "mminilm-anchor2-model-order",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.916667,
+      "all_sources_found": 0.916667,
+      "evidence_recall": 0.909722,
+      "all_evidence_found": 0.902778,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.922535,
+      "evidence_mrr": 0.85,
+      "evidence_gained": 38,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0467,
+      "offline_selection_p95_ms": 0.0792,
+      "top1_annotated_evidence_hit_rate": 0.7916666666666666
+    },
+    {
+      "source": "v3-candidate",
+      "split": "regression",
+      "strategy": "bge-m3-anchor2-model-order",
+      "questions": 80,
+      "answerable": 72,
+      "document_recall": 0.958333,
+      "all_sources_found": 0.958333,
+      "evidence_recall": 0.951389,
+      "all_evidence_found": 0.944444,
+      "pool_evidence_recall": 0.986111,
+      "pool_present_retention": 0.964789,
+      "evidence_mrr": 0.898148,
+      "evidence_gained": 41,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.033,
+      "offline_selection_p95_ms": 0.0507,
+      "top1_annotated_evidence_hit_rate": 0.8472222222222222
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "rule",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 0.763889,
+      "all_sources_found": 0.722222,
+      "evidence_recall": 0.652778,
+      "all_evidence_found": 0.611111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.652778,
+      "evidence_mrr": 0.662037,
+      "evidence_gained": 0,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {
+        "top_k": 16
+      },
+      "offline_selection_mean_ms": 0.0144,
+      "offline_selection_p95_ms": 0.0192,
+      "top1_annotated_evidence_hit_rate": 0.6388888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "mminilm",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 0.986111,
+      "all_sources_found": 0.972222,
+      "evidence_recall": 0.916667,
+      "all_evidence_found": 0.861111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.916667,
+      "evidence_mrr": 0.894444,
+      "evidence_gained": 15,
+      "evidence_lost": 4,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0038,
+      "offline_selection_p95_ms": 0.0052,
+      "top1_annotated_evidence_hit_rate": 0.8333333333333334
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "bge-m3",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 0.944444,
+      "all_sources_found": 0.888889,
+      "evidence_recall": 0.944444,
+      "all_evidence_found": 0.888889,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.944444,
+      "evidence_mrr": 0.944444,
+      "evidence_gained": 14,
+      "evidence_lost": 2,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0036,
+      "offline_selection_p95_ms": 0.0053,
+      "top1_annotated_evidence_hit_rate": 0.8888888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "mminilm-anchor2",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.875,
+      "all_evidence_found": 0.861111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.875,
+      "evidence_mrr": 0.722222,
+      "evidence_gained": 11,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0263,
+      "offline_selection_p95_ms": 0.0441,
+      "top1_annotated_evidence_hit_rate": 0.6388888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 0.972222,
+      "all_sources_found": 0.944444,
+      "evidence_recall": 0.888889,
+      "all_evidence_found": 0.861111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.888889,
+      "evidence_mrr": 0.731481,
+      "evidence_gained": 11,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.021,
+      "offline_selection_p95_ms": 0.0248,
+      "top1_annotated_evidence_hit_rate": 0.6388888888888888
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "mminilm-anchor2-model-order",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 1.0,
+      "all_sources_found": 1,
+      "evidence_recall": 0.875,
+      "all_evidence_found": 0.861111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.875,
+      "evidence_mrr": 0.826389,
+      "evidence_gained": 11,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0342,
+      "offline_selection_p95_ms": 0.0533,
+      "top1_annotated_evidence_hit_rate": 0.7777777777777778
+    },
+    {
+      "source": "v3-candidate",
+      "split": "validation",
+      "strategy": "bge-m3-anchor2-model-order",
+      "questions": 48,
+      "answerable": 36,
+      "document_recall": 0.972222,
+      "all_sources_found": 0.944444,
+      "evidence_recall": 0.888889,
+      "all_evidence_found": 0.861111,
+      "pool_evidence_recall": 1,
+      "pool_present_retention": 0.888889,
+      "evidence_mrr": 0.875,
+      "evidence_gained": 11,
+      "evidence_lost": 0,
+      "mean_selected_count": 5,
+      "negative_empty_rate": 0,
+      "baseline_loss_decisions": {},
+      "offline_selection_mean_ms": 0.0264,
+      "offline_selection_p95_ms": 0.0476,
+      "top1_annotated_evidence_hit_rate": 0.8333333333333334
+    }
+  ],
+  "top1_changes_vs_anchor_order": {
+    "mminilm-anchor2-model-order": {
+      "top1_gained": 86,
+      "top1_lost": 7,
+      "cases": [
+        {
+          "source": "v3-candidate",
+          "id": "kb010",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb011",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb012",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb013",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb017",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb018",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb020",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb022",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb027",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb028",
+          "split": "regression",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb029",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val004",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val005",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val007",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val008",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val010",
+          "split": "regression",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val011",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val014",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val015",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val019",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val020",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val022",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val030",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val036",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_07",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_contract_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_07",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_release_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_release_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_training_05",
+          "split": "development",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_training_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_training_09",
+          "split": "development",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_09",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_repair_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_repair_09",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_vehicle_02",
+          "split": "validation",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_vehicle_05",
+          "split": "validation",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_vehicle_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_data_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-07",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-08",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-ceramics-kiln-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-ceramics-kiln-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-03",
+          "split": "validation",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-planetarium-visit-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-planetarium-visit-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-cold-chain-samples-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-cold-chain-samples-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-theatre-rigging-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-theatre-rigging-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-manuscript-reading-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-manuscript-reading-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-mountain-radio-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-mountain-radio-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        }
+      ]
+    },
+    "bge-m3-anchor2-model-order": {
+      "top1_gained": 102,
+      "top1_lost": 2,
+      "cases": [
+        {
+          "source": "v3-candidate",
+          "id": "kb010",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb011",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb012",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb013",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb014",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb016",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb017",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb018",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb020",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb022",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb028",
+          "split": "regression",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "kb029",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val004",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val005",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val007",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val008",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val009",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val011",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val014",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val015",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val016",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val019",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val020",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val022",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val030",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "val036",
+          "split": "regression",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_07",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_equipment_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_travel_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_contract_05",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_contract_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_access_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_07",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_purchase_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_archive_09",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_release_03",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_release_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_training_02",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_training_06",
+          "split": "development",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_sample_09",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_repair_02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_repair_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_repair_09",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_vehicle_05",
+          "split": "validation",
+          "top1_before": true,
+          "top1_after": false
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_vehicle_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "v3-candidate",
+          "id": "v3_data_06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-wetland-survey-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-planetarium-visit-07",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-cold-chain-samples-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-theatre-rigging-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-manuscript-reading-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-mountain-radio-08",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-ceramics-kiln-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-ceramics-kiln-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-ceramics-kiln-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-default",
+          "id": "holdout-reef-dive-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-wetland-survey-06",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-planetarium-visit-04",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-planetarium-visit-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-cold-chain-samples-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-cold-chain-samples-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-theatre-rigging-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-theatre-rigging-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-manuscript-reading-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-manuscript-reading-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-manuscript-reading-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-mountain-radio-03",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-mountain-radio-05",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        },
+        {
+          "source": "holdout-candidate",
+          "id": "holdout-ceramics-kiln-02",
+          "split": "validation",
+          "top1_before": false,
+          "top1_after": true
+        }
+      ]
+    }
+  },
+  "selected_ids_sha256": "b2446c99dc723b42e88ce10d3e34e3a7f19418c35033705f571011875906673c"
+}

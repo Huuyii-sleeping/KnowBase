@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "dataset": "knowbase-retrieval-v1",
+    "started_at": "2026-11-10T11:39:03.184Z",
+    "api_git_commit": "d3d82826a6833b4dd55fa946207c50b65581f0d8",
+    "working_tree_dirty": true,
+    "document_count": 14,
+    "document_mapping": [
+      {
+        "file": "kb_access.md",
+        "id": "8e2e93d4-3e4e-4c93-b510-e5affe72abce"
+      },
+      {
+        "file": "kb_deletion.md",
+        "id": "bc55aebf-39c6-44ec-b152-dadff9205c5d"
+      },
+      {
+        "file": "kb_delivery.md",
+        "id": "ce3c446a-b573-4e41-98a2-74c4effe5eae"
+      },
+      {
+        "file": "kb_generations.md",
+        "id": "70589eec-7d03-4764-81d5-5d8c10019fa8"
+      },
+      {
+        "file": "kb_graph.md",
+        "id": "95eadf75-fc37-494f-835e-eb17ec755e92"
+      },
+      {
+        "file": "kb_noise.md",
+        "id": "1529ac77-705b-443c-a9e7-8fabb166e454"
+      },
+      {
+        "file": "kb_policy_archive.md",
+        "id": "12e626bc-1209-49bb-b827-91c0e9c98347"
+      },
+      {
+        "file": "kb_policy_current.md",
+        "id": "574220a5-a10a-46f9-ba3f-671741ae290c"
+      },
+      {
+        "file": "kb_ports.md",
+        "id": "9b350532-20fc-4055-ab18-17dde40e10b4"
+      },
+      {
+        "file": "kb_rag.md",
+        "id": "be1e7bcd-7d55-46f5-8871-521c5060f40d"
+      },
+      {
+        "file": "kb_review.md",
+        "id": "09dd359c-c633-4bf0-b52a-43572a57fcce"
+      },
+      {
+        "file": "kb_search.md",
+        "id": "552e77e1-1a99-42b6-931d-cb61f76284cb"
+      },
+      {
+        "file": "kb_storage.md",
+        "id": "61aabb12-6c86-4405-971e-37ea0f9deea6"
+      },
+      {
+        "file": "kb_upload.md",
+        "id": "6c4cb676-510c-42a2-9216-611354075b20"
+      }
+    ],
+    "indexed_chunk_count": 16,
+    "question_count": 40,
+    "corpus_sha256": {
+      "manifest.json": "e3c6191fd3d36db4bd702da9aa0a88da9a64cd8965687c84b52a89e8d3fe8c7b",
+      "questions.json": "f5f23d63be751d4cdbc5f0c6ee2569b4942681ecfc7065eed3dad225e1312308",
+      "docs/kb_access.md": "7cfdc1382aad0a0067163a9dfaa5ff7f7384c91d76d2f1bc5c95e6d725762c91",
+      "docs/kb_deletion.md": "97281c405ffbb5e949b68101081ede36b263d1be377b53b279e09b97d0b0f4e9",
+      "docs/kb_delivery.md": "4de3a7438e75c7d79c8e881b38c87a65b1861b172f35d81d904abfa742e20234",
+      "docs/kb_generations.md": "6ed8d1feb87ac18167feca64e54ef50f73423247cbff77acc379e6d9b95397a2",
+      "docs/kb_graph.md": "b38f7a702d589f1ad9e11f082ad5112ba555a3d4fa671db77c6d779115f994fb",
+      "docs/kb_noise.md": "e56872b620f37aa1ba8f7fb502c585d1f7c01dbd008c3112ae16ac103e6fc6d2",
+      "docs/kb_policy_archive.md": "93bb8e7f495023bf86b6db715c745de13cc47a0a32c8095296cfad6c4cf27300",
+      "docs/kb_policy_current.md": "01e5868cd9c2703ba45c92a6e60ec55ba7dfb76a93f2fc78738efb5bf32b6c45",
+      "docs/kb_ports.md": "c7ebe11a5d867089918858622c70d66b45f4055de251af47602beb1aa4630c02",
+      "docs/kb_rag.md": "b58d4889d63cee640621a194cc68867389d28e61b174c4f50c85b5f3b71c90de",
+      "docs/kb_review.md": "4e54df26c5d7b437b8333921202dbff042a5dcf5687a59f9acc9b85350ceee03",
+      "docs/kb_search.md": "3362e06e877df472d83ede7cd80a65cc70f6116500d8e027604919755c1743ae",
+      "docs/kb_storage.md": "3b5adfaa1d7879a269de0a1b771ae4fa2e9c190925fb75f229782bdd70fa7ccf",
+      "docs/kb_upload.md": "1cde5e4373d32854ff0797b8ff95cb096ced0a7a844b43b27c6cb023db2bf925"
+    },
+    "embedding_model": "nomic-embed-text:latest",
+    "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "embedding_encoding": "plain",
+    "keyword_analyzer": "standard",
+    "dimensions": 768,
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "reranking": "existing rule-based implementation; unchanged",
+    "hybrid_retrieval": {
+      "keywordUnit": "active RAG chunk content",
+      "mergeUnit": "chunk ID",
+      "candidateMultiplier": 3,
+      "maxCandidatesPerRoute": 60
+    },
+    "scope": "Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.",
+    "top_k": [1, 3, 5],
+    "modes": ["keyword", "semantic", "hybrid"],
+    "warmup": "One untimed request per mode after corpus indexing; one measured pass per mode/K.",
+    "ranking_unit": "Deduplicate the first API TopK candidates by document; no extra candidate fetch. Evidence checks inspect all returned TopK contents.",
+    "python_version": "3.14.6",
+    "ir_measures_version": "0.4.3"
+  },
+  "raw_report_directory": "reports/retrieval-recall-v1-regression/2026-11-10T11-38-08-635Z-46866",
+  "summaries": [
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "keyword",
+      "top_k": 1,
+      "precision_at_k": 0.8889,
+      "recall_at_k": 0.8194,
+      "mrr": 0.8889,
+      "ndcg_at_k": 0.8889,
+      "hit_rate": 0.8889,
+      "all_gold_hit_rate": 0.75,
+      "evidence_recall": null,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 21.81,
+      "p95_latency_ms": 28.99
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "keyword",
+      "top_k": 3,
+      "precision_at_k": 0.3704,
+      "recall_at_k": 0.9861,
+      "mrr": 0.9398,
+      "ndcg_at_k": 0.9446,
+      "hit_rate": 1,
+      "all_gold_hit_rate": 0.9722,
+      "evidence_recall": null,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 27.64,
+      "p95_latency_ms": 45.52
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "keyword",
+      "top_k": 5,
+      "precision_at_k": 0.2278,
+      "recall_at_k": 1.0,
+      "mrr": 0.9398,
+      "ndcg_at_k": 0.9519,
+      "hit_rate": 1,
+      "all_gold_hit_rate": 1,
+      "evidence_recall": null,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 30.14,
+      "p95_latency_ms": 42.96
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "semantic",
+      "top_k": 1,
+      "precision_at_k": 0.5833,
+      "recall_at_k": 0.5556,
+      "mrr": 0.5833,
+      "ndcg_at_k": 0.5833,
+      "hit_rate": 0.5833,
+      "all_gold_hit_rate": 0.5278,
+      "evidence_recall": 0.4583,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 87.39,
+      "p95_latency_ms": 210.32
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "semantic",
+      "top_k": 3,
+      "precision_at_k": 0.25,
+      "recall_at_k": 0.6806,
+      "mrr": 0.6435,
+      "ndcg_at_k": 0.6394,
+      "hit_rate": 0.7222,
+      "all_gold_hit_rate": 0.6389,
+      "evidence_recall": 0.5833,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 59.05,
+      "p95_latency_ms": 87.93
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "semantic",
+      "top_k": 5,
+      "precision_at_k": 0.1667,
+      "recall_at_k": 0.7361,
+      "mrr": 0.656,
+      "ndcg_at_k": 0.6645,
+      "hit_rate": 0.7778,
+      "all_gold_hit_rate": 0.6944,
+      "evidence_recall": 0.6528,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 53.79,
+      "p95_latency_ms": 68.5
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "hybrid",
+      "top_k": 1,
+      "precision_at_k": 0.6667,
+      "recall_at_k": 0.625,
+      "mrr": 0.6667,
+      "ndcg_at_k": 0.6667,
+      "hit_rate": 0.6667,
+      "all_gold_hit_rate": 0.5833,
+      "evidence_recall": 0.5694,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 56.88,
+      "p95_latency_ms": 74.5
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "hybrid",
+      "top_k": 3,
+      "precision_at_k": 0.3148,
+      "recall_at_k": 0.8611,
+      "mrr": 0.8565,
+      "ndcg_at_k": 0.8433,
+      "hit_rate": 0.8889,
+      "all_gold_hit_rate": 0.8333,
+      "evidence_recall": 0.7917,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 66.02,
+      "p95_latency_ms": 95.26
+    },
+    {
+      "questions": 40,
+      "answerable_questions": 36,
+      "unanswerable_questions": 4,
+      "mode": "hybrid",
+      "top_k": 5,
+      "precision_at_k": 0.2222,
+      "recall_at_k": 0.9722,
+      "mrr": 0.9005,
+      "ndcg_at_k": 0.9181,
+      "hit_rate": 0.9722,
+      "all_gold_hit_rate": 0.9722,
+      "evidence_recall": 0.9444,
+      "negative_empty_rate": 0,
+      "average_latency_ms": 61.89,
+      "p95_latency_ms": 91.25
+    }
+  ],
+  "compared_to": "../../knowbase-retrieval-v1/experiments/hybrid-evidence-v1.json experiment B",
+  "quality_metrics_equal": [
+    "precision_at_k",
+    "recall_at_k",
+    "mrr",
+    "ndcg_at_k",
+    "hit_rate",
+    "all_gold_hit_rate",
+    "evidence_recall",
+    "negative_empty_rate"
+  ],
+  "working_tree_note": "Only pending experiment documentation and result JSON made the tree dirty during this regression; application source was committed. No runtime code changed during measurement."
+}

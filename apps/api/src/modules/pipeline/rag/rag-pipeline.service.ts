@@ -2,6 +2,7 @@ import { IndexBuildOptions } from '../../indexing/index-build-options';
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
 import { DocumentEmbeddingService } from '../embedding/document-embedding.service';
+import { RagChunkTextService } from '../chunk/rag-chunk-text.service';
 import { DocumentChunksService } from '../chunk/document-chunks.service';
 import { ingestionStage } from '../../ingestion/ingestion-stage';
 import {
@@ -20,6 +21,7 @@ export class RagPipelineService {
     private readonly vectorIndex: VectorIndexService,
     private readonly generations: IndexGenerationStore,
     private readonly builds: IndexBuildService,
+    private readonly chunkText: RagChunkTextService,
   ) {}
 
   async rebuildDocument(
@@ -53,12 +55,16 @@ export class RagPipelineService {
           document.contentId,
           content,
         );
+        const retrievalChunks = this.chunkText.forChunks(
+          chunks,
+          document.title,
+        );
         count = chunks.length;
         await report('embedding', 0, chunks.length);
         const embeddings = chunks.length
           ? await this.embedding.embed(
               document.id,
-              chunks.map((chunk) => chunk.embeddingText),
+              retrievalChunks.map((chunk) => chunk.retrievalText),
               (completed, total) => report('embedding', completed, total),
             )
           : [];
@@ -66,22 +72,25 @@ export class RagPipelineService {
           throw new Error('embedding count does not match chunk count');
         }
 
-        const vectorChunks: VectorChunkInput[] = chunks.map((chunk, index) => ({
-          id: `${document.id}:v${document.version}:c${index}`,
-          documentId: document.id,
-          version: document.version,
-          chunkIndex: index,
-          content: chunk.content,
-          metadata: {
-            strategy: chunk.strategy,
-            contentHash: chunk.contentHash,
-            headingPath: chunk.headingPath,
-            ranges: chunk.ranges,
-            parseStrategy: content.parseStrategy,
-            embeddingFingerprint: this.embedding.fingerprint,
-          },
-          embedding: embeddings[index],
-        }));
+        const vectorChunks: VectorChunkInput[] = retrievalChunks.map(
+          (chunk, index) => ({
+            id: `${document.id}:v${document.version}:c${index}`,
+            documentId: document.id,
+            version: document.version,
+            chunkIndex: index,
+            content: chunk.content,
+            retrievalText: chunk.retrievalText,
+            metadata: {
+              strategy: chunk.strategy,
+              contentHash: chunk.contentHash,
+              headingPath: chunk.headingPath,
+              ranges: chunk.ranges,
+              parseStrategy: content.parseStrategy,
+              embeddingFingerprint: this.embedding.fingerprint,
+            },
+            embedding: embeddings[index],
+          }),
+        );
 
         await report('index_write', 0, vectorChunks.length);
         await ingestionStage(

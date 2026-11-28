@@ -229,7 +229,18 @@ before(
       heads,
       content,
       new SearchPipelineService(vector, heads, builds),
-      new RagPipelineService(content, chunks, embedding, vector, heads, builds),
+      new RagPipelineService(
+        content,
+        chunks,
+        embedding,
+        vector,
+        heads,
+        builds,
+        new (get(
+          'pipeline/chunk/rag-chunk-text.service.js',
+          'RagChunkTextService',
+        ))(chunker, config),
+      ),
       new KgPipelineService(content, chunks, extract, graph, heads, builds),
     );
   },
@@ -493,7 +504,7 @@ test('real queue and stores complete all three pipelines, duplicate bodies stay 
   const next = await batch([b]);
   assert.equal(
     (await plans.items(next))[0].previous_strategy,
-    'structure-v4:160:20',
+    'structure-v5:160:20',
   );
   console.log(
     JSON.stringify({

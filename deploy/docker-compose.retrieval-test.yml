@@ -1,0 +1,25 @@
+services:
+  mongodb:
+    image: mongo:8
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: delivery_test
+      MONGO_INITDB_ROOT_PASSWORD: delivery_test
+    ports:
+      - '127.0.0.1::27017'
+    volumes:
+      - mongo-data:/data/db
+
+  rustfs:
+    image: rustfs/rustfs:latest
+    environment:
+      RUSTFS_ACCESS_KEY: delivery_test
+      RUSTFS_SECRET_KEY: delivery_test_secret
+    command: server /data --console-address ":9001"
+    ports:
+      - '127.0.0.1::9000'
+    volumes:
+      - rustfs-data:/data
+
+volumes:
+  mongo-data:
+  rustfs-data:

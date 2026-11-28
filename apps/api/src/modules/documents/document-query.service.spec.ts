@@ -134,4 +134,38 @@ describe('DocumentQueryService', () => {
     expect((await service.findOneForUser('doc', user)).content).toBeUndefined();
     expect(contentStore.findByContentId).toHaveBeenCalledOnce();
   });
+  it('batch-reads only published visible metadata, deduplicates IDs and avoids MongoDB', async () => {
+    const builder = {
+      where: vi.fn().mockReturnThis(),
+      andWhere: vi.fn().mockReturnThis(),
+      getMany: vi.fn().mockResolvedValue([{ id: 'one' }]),
+    };
+    const repository = { createQueryBuilder: vi.fn().mockReturnValue(builder) };
+    const content = { findByContentId: vi.fn() };
+    const access = { applyVisibilityFilter: vi.fn() };
+    const service = new DocumentQueryService(
+      repository as any,
+      content as any,
+      access as any,
+    );
+    const user = { id: 'user', role: 'MEMBER' as const };
+    expect(await service.findPublishedByIds([], user)).toEqual([]);
+    expect(repository.createQueryBuilder).not.toHaveBeenCalled();
+    expect(
+      await service.findPublishedByIds(['one', 'one', 'two'], user),
+    ).toEqual([{ id: 'one' }]);
+    expect(builder.where).toHaveBeenCalledWith('document.id IN (:...ids)', {
+      ids: ['one', 'two'],
+    });
+    expect(builder.andWhere).toHaveBeenCalledWith(
+      'document.status = :publishedStatus',
+      { publishedStatus: 'PUBLISHED' },
+    );
+    expect(access.applyVisibilityFilter).toHaveBeenCalledWith(builder, user);
+    expect(content.findByContentId).not.toHaveBeenCalled();
+    builder.getMany.mockRejectedValueOnce(new Error('database failed'));
+    await expect(service.findPublishedByIds(['one'], user)).rejects.toThrow(
+      'database failed',
+    );
+  });
 });

@@ -26,7 +26,8 @@
     "benchmark:table-context": "pnpm build && node test/ingestion/quality/evaluate-table-context.cjs",
     "benchmark:chunk-evidence": "pnpm build && node test/ingestion/quality/evaluate-chunks.cjs",
     "test:complex-quality": "pnpm build && node --test test/ingestion/complex-quality/*.test.cjs",
-    "benchmark:complex-quality": "pnpm build && node test/ingestion/complex-quality/evaluate.cjs"
+    "benchmark:complex-quality": "pnpm build && node test/ingestion/complex-quality/evaluate.cjs",
+    "benchmark:retrieval": "pnpm build && node ../../tools/rag-evaluation/run_baseline.cjs"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.19.2",

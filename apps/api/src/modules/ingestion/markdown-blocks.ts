@@ -35,8 +35,31 @@ export function markdownBlocks(
   let sectionIndex = -1;
   const isTable = (i: number) =>
     lines[i]?.text.includes('|') && tableDelimiter(lines[i + 1]?.text ?? '');
+  const setextTitle = (i: number) => {
+    const text = lines[i]?.text;
+    const underline = lines[i + 1]?.text.match(/^ {0,3}(=+|-+)[ \t]*$/);
+    if (
+      !text?.trim() ||
+      !underline ||
+      /^(?: {4}|\t| {0,3}(?:>|[-+*] |\d+[.)] ))/.test(text) ||
+      heading.test(text) ||
+      fence.test(text) ||
+      isTable(i) ||
+      /^ {0,3}(?:-+|=+)[ \t]*$/.test(text)
+    )
+      return undefined;
+    // A heading cannot consume a delimiter from a different parser source block.
+    const sourceAt = (line: number) =>
+      sections.findIndex(
+        (part) =>
+          lines[line].start >= part.start && lines[line].start < part.end,
+      );
+    if (sourceAt(i) !== sourceAt(i + 1)) return undefined;
+    return { level: underline[1][0] === '=' ? 1 : 2, text: text.trim() };
+  };
   const isBoundary = (i: number) =>
     heading.test(lines[i].text) ||
+    Boolean(setextTitle(i)) ||
     fence.test(lines[i].text) ||
     equation.test(lines[i].text) ||
     htmlTable.test(lines[i].text) ||
@@ -74,6 +97,7 @@ export function markdownBlocks(
           )
         : lines[line].start < sections[section].end);
     const title = lines[i].text.match(heading);
+    const setext = setextTitle(i);
     const open = lines[i].text.match(fence);
     const math = lines[i].text.match(equation);
     let kind: DocumentBlock['kind'] = 'paragraph';
@@ -90,13 +114,14 @@ export function markdownBlocks(
       while (sameSection(endLine)) {
         if (close.test(lines[endLine++].text)) break;
       }
-    } else if (title) {
+    } else if (title || setext) {
       kind = 'heading';
-      while (headings.length && headings.at(-1)!.level >= title[1].length)
-        headings.pop();
+      const level = setext?.level ?? title![1].length;
+      if (setext) endLine = i + 2;
+      while (headings.length && headings.at(-1)!.level >= level) headings.pop();
       headings.push({
-        level: title[1].length,
-        text: title[2].replace(/[ \t]+#+\s*$/, ''),
+        level,
+        text: setext?.text ?? title![2].replace(/[ \t]+#+\s*$/, ''),
       });
     } else if (htmlTable.test(lines[i].text)) {
       kind = 'table';

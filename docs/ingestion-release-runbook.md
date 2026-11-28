@@ -1,6 +1,6 @@
 # 入库发布与回退操作单
 
-本操作单覆盖已有 generation 协议、证据/候选保存和索引批次能力之间的兼容升级。固定版本演练见 [发布回退报告](ingestion-release-report.md)。执行到生产前必须先完成最新 main 的契约整合和组合版本回归；本分支通过不等于主线已可部署。
+本操作单覆盖已有 generation 协议、证据/候选保存和索引批次能力之间的兼容升级。固定版本演练见 [发布回退报告](ingestion-release-report.md)。2026-11-28 已在当前分支整合固定 main 并完成 [组合回归](ingestion-main-integration-report.md)；分支尚未合入 main 或部署生产，正式发布仍需按目标版本和环境复查。
 
 ## 发布包与窗口
 

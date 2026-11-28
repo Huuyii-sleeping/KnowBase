@@ -1,0 +1,80 @@
+{
+  "version": "holdout-v1",
+  "frozen_retrieval_commit": "72d4fd99dfc85c10207f35d635e53629053eb553",
+  "purpose": "One-time prospective data-disjoint synthetic holdout after existing configuration selection; not independent author, human or real-user blind evaluation",
+  "dataset_plan": {
+    "new_families": 8,
+    "new_documents": 40,
+    "questions": 80,
+    "answerable": 64,
+    "unanswerable": 16,
+    "categories_positive": [
+      "exact_identifier",
+      "paraphrase",
+      "negation_condition",
+      "boundary_value",
+      "role_scope",
+      "heading_context",
+      "multi_document",
+      "cross_chunk"
+    ],
+    "per_family": "8positive questions,2negative questions; primary manual+companion+3confusers",
+    "source_overlap": "No reused document bodies, titles, question text or family labels from prior benchmark versions; related retrieval phenomena deliberately remain covered"
+  },
+  "configurations": [
+    {
+      "name": "current-default",
+      "context": "body",
+      "lexical": "standard",
+      "keyword_policy": "combined",
+      "body_slots": 2,
+      "keyword_budget": 15,
+      "semantic_budget": 15
+    },
+    {
+      "name": "frozen-candidate",
+      "context": "title-heading",
+      "lexical": "cjk",
+      "keyword_policy": "body-reserve",
+      "body_slots": 2,
+      "keyword_budget": 30,
+      "semantic_budget": 15
+    }
+  ],
+  "fixed": {
+    "model": "nomic-embed-text",
+    "encoding": "plain",
+    "dimensions": 768,
+    "chunk_size": 1000,
+    "overlap": 150,
+    "final_k": 5,
+    "query_modes": "all off",
+    "merge_rerank_generation": "unchanged"
+  },
+  "expected_scored_requests": 160,
+  "gates": {
+    "indexed_evidence_presence": 1.0,
+    "pool_evidence_recall_min": 0.95,
+    "pool_all_sources_rate_min": 0.95,
+    "pool_all_evidence_rate_min": 0.9,
+    "each_positive_category_evidence_min": 0.85,
+    "merge_loss_max": 0,
+    "new_individual_pool_evidence_losses_vs_default_max": 0
+  },
+  "secondary": "FinalTop5 evidence recall and losses separate from pool; negative candidates not refusal quality; no exhaustive precision claim",
+  "selection": "Evaluate frozen candidate against both absolute gates and per-evidence default regressions; no choose-new-configuration step",
+  "stop_rules": [
+    "No code/config/question/gold changes after first scored query",
+    "Do not keep trying variants or increase budgets if gates fail",
+    "Report every failed category and missing evidence; no deployment in this task",
+    "Infrastructure failures may be rerun identically; retain failed run status",
+    "After results are viewed this dataset is exposed regression, no longer unseen holdout"
+  ],
+  "limitations": [
+    "Same assistant authors new data after seeing prior experiments; knowledge of earlier failures may influence design",
+    "Synthetic themed sources and questions share an author; lexical/style correlations remain",
+    "New source families do not establish real production distribution or statistical independence",
+    "One serial pass per configuration; separate rebuilt indexes; no small candidate-rank causality or production latency conclusion",
+    "No human relevance adjudication or runtime permission/fault-injection acceptance"
+  ]
+}

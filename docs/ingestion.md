@@ -37,7 +37,7 @@
 
 HTML/Markdown 表格先提取单元格结构，再按完整行分组，每组重复完整表头路径和分隔行，合并单元格的原始值与派生检索视图分别保存（详见 [表格证据](table-ingestion.md)）；代码按行拆分，每块补齐原围栏。若“表头 + 一整行”本身超过预算，该表降为带列标题、逻辑行列及单元格文字偏移的片段；长单元格优先按句界拆开。单个列标题/caption 无法放入预算时仍明确失败，详见 [证据片段评测](chunk-evidence-quality.md)。超长代码单行允许按字符拆分，片段用于阅读，不保证各段可以独立执行。
 
-Chunk 包含 `content`、`embeddingText`、标题路径、来源块范围、内容 SHA-256 及 `structure-v4:<size>:<overlap>` 策略。当前 `embeddingText` 与 `content` 相同。来源范围描述原始正文块，并非拆分后的字符精确引用；新增标题、重复表头及围栏没有原文件字节位置。现有检索响应字段含义保持兼容，ES 的 `ingestion` 元数据保存在 `_source`，不参与搜索映射。
+Chunk 包含 `content`、`embeddingText`、标题路径、来源块范围、内容 SHA-256 及 `structure-v5:<size>:<overlap>` 策略。结构缓存中的 `embeddingText` 与 `content` 相同。RAG 复用这些结构块，由 `RagChunkTextService` 单独生成 `retrievalText`：按 `RAG_RETRIEVAL_CONTEXT` 补充文档标题及尚未包含的章节，保留正文、hash 和来源不变；不再次切分。默认模式为 title-heading，ES 写入独立的 `retrieval_text` 与 CJK 子字段，查询返回引用正文 `content`。Setext 标题只在同一来源块中识别。来源范围描述原始正文块，并非拆分后的字符精确引用；新增标题、重复表头及围栏没有原文件字节位置。现有检索响应字段含义保持兼容，ES 的 `ingestion` 元数据保存在 `_source`，不参与搜索映射。
 
 RAG 和 KG 通过同一服务复用 MongoDB `ingestion_chunks` 中的有序产物。键包括 documentId、contentId、正文摘要、来源区段、解析策略和分块策略。每个 Chunk 独立一条记录，最后写清单、数量及摘要；缺清单、缺项或摘要错误都按未命中重算，避免把半成品作为完整产物使用。策略变化必须变更版本常量；同一版本下不能改变规则后继续复用旧缓存。
 
@@ -59,7 +59,7 @@ RAG 和 KG 通过同一服务复用 MongoDB `ingestion_chunks` 中的有序产�
 
 一次调用中的相同输入先去重并保持输出顺序；每个批次校验向量数量、维度、有限数值和非零模长后立即保存缓存，后续批次失败或进程重启时可复用已保存结果。实现、故障恢复对比和边界见 [索引构建恢复](index-build-recovery.md)。
 
-跨重建复用的缓存键包含 documentId、实际模型输入文本和模型指纹。模型指纹由提供方、端点、模型名、显式模型修订、维度及输入预处理版本计算。只填模型别名不启用持久缓存；配置修订应使用实际部署模型的 digest/版本，模型权重变化后必须更新。缓存不跨文档共用，权限变更仍通过当前修订与 generation 激活控制可见性。
+跨重建复用的缓存键包含 documentId、实际模型输入文本和模型指纹。模型指纹由提供方、端点、模型名、显式模型修订、维度、文档/查询前缀及 `task-prefix-v2` 预处理版本计算。前缀计入最终 token/字符预算，命中缓存也重新检查；成功批次回调仍使用添加前缀前的检索文本作为缓存键。查询通过提供方的 `embedQuery` 使用查询前缀，不复用文档编码。只填模型别名不启用持久缓存；配置修订应使用实际部署模型的 digest/版本，模型权重变化后必须更新。缓存不跨文档共用，权限变更仍通过当前修订与 generation 激活控制可见性。
 
 分块和向量缓存失败会退回重算，并记录不含正文的日志；不将缓存服务可用性变成索引成功的前置条件。TTL 通过 MongoDB TTL 索引回收，读取时也检查过期日期。旧任务与删除竞争后留下的不可见缓存最多保留到 TTL；这些缓存不是检索入口。
 
@@ -77,7 +77,7 @@ ES 按条数及 NDJSON 字节数分批；所有请求成功后执行一次 refre
 
 ## 升级与回滚
 
-批量索引升级需要额外的 [迁移 010 与管理操作](index-upgrades.md)。单次构建先执行 [索引构建进度迁移 009](index-build-recovery.md#升级与回滚)。停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射。
+批量索引升级需要额外的 [迁移 010 与管理操作](index-upgrades.md)。单次构建先执行 [索引构建进度迁移 009](index-build-recovery.md#升级与回滚)。停止旧 Worker 后部署新 API/Worker，避免旧 Worker 将新增资源清理消息误当成重建任务。解析任务和 generation 回收的 PostgreSQL 迁移见 [mineru-ingestion.md](mineru-ingestion.md)；正文结构为可选新增字段。MongoDB 新增 `ingestion_chunks` 与 `ingestion_embeddings` 两个可丢弃集合，要求唯一键、documentId 和 TTL 索引；应用默认由 Mongoose 创建。若部署禁用了自动建索引，先执行 [ingestion_indexes.js](../deploy/mongodb/migrations/003_ingestion_indexes.js)。ES 会补充不参与索引的 `ingestion` 对象映射及正文/检索文本的 CJK 子字段；增加字段不会回填旧文档，需要完整 generation 重建。
 
 已有已发布文档可通过原有管理员 `rebuild-indexes` 接口使用新分块规则构建。该接口只读取已保存 Markdown，不会重新解析原文件；PDF/DOCX 解析修复对存量文件生效，可启用异步功能后从原文件重新解析，或重新上传、人工修订正文。分块改变会改变 Chunk 序号和 ID，不能将旧 Chunk 序号作为跨重建永久定位。
 
@@ -111,3 +111,5 @@ pnpm --filter @knowbase/api test:delivery
 原生解析优化前后和真实 MinerU 的量化比较、方法与限制见 [ingestion-comparison.md](ingestion-comparison.md)。
 
 当前不支持音频、视频上传与解析；前后端均拒绝这些格式，旧媒体配置不会开启入口。未完成事项暂停，见 [音视频 TODO](media-ingestion-todo.md)。
+
+2026-11-28 已在当前分支整合固定 main 的检索/问答契约，组合回归、策略变化和未验收边界见 [整合报告](ingestion-main-integration-report.md)。

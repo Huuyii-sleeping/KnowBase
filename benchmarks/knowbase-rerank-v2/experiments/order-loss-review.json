@@ -1,0 +1,46 @@
+{
+  "strategy": "bge-m3-anchor2-model-order",
+  "comparison": "own anchor admission order",
+  "scope": "Both top1 annotated-evidence regressions; same-assistant post-result review, not generated-answer evaluation",
+  "primary_score_changed": false,
+  "cases": [
+    {
+      "source": "v3-candidate",
+      "id": "kb028",
+      "question": "发布任务如何防止丢失，旧版本任务又如何防止覆盖新索引？",
+      "reference_answer": "Outbox 与发布原子保存防丢任务，索引最终版本校验与批次可见性阻止旧任务覆盖。",
+      "classification": "required_subquestions_missing_from_top1",
+      "rationale": "新首条是消息恢复说明，未提供发布状态与 Outbox 同事务保存，也没有旧版本不能覆盖新版的完整条款；两项证据仍在 Top5。原首条也只覆盖索引批次子问题，故两种首条都不是完整答案依据。",
+      "before_top1": {
+        "chunk_id": "c2bbed77-c168-4742-8bc3-01150f8ddec2:v1:c0:c0eff1ae-6ded-492f-823d-85b2eee7c4ba",
+        "document": "kb_generations.md",
+        "content_sha256": "a92b2c7a1ceea093475817846aef44840e2945c9a3fc5543bffe1bf3e56de5a9"
+      },
+      "after_top1": {
+        "chunk_id": "06e056fb-63b5-450b-b7fa-6f29e2bad877:v1:c1:6672c88b-3f16-47e9-962f-804298069c6a",
+        "document": "kb_delivery.md",
+        "content_sha256": "d766a51b50ffd40f202d99706c050d80f919b2becc3c228ab915a472f88ea54a"
+      },
+      "top5_membership_unchanged": true
+    },
+    {
+      "source": "v3-candidate",
+      "id": "v3_vehicle_05",
+      "question": "外组同事拿到了公务用车的编号，是否就能打开我们组批准的详情？",
+      "reference_answer": "编号不能代替逐人授权。",
+      "classification": "partial_support_in_top1",
+      "rationale": "新首条仅说明恢复详情须核对权限，没有外组逐人授权和编号不构成权限的明确条款；原来完整条款仍在后续入选片段中。",
+      "before_top1": {
+        "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c0:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+        "document": "vehicle_rules.md",
+        "content_sha256": "d09b77c22d9f07411fc83627493d0636d056b76c2e768280f76eee24fa362b30"
+      },
+      "after_top1": {
+        "chunk_id": "786bd1ad-575e-4888-b0d5-d545b70ce153:v1:c3:d9acfb3f-0289-4362-ad5f-3ba000443a8e",
+        "document": "vehicle_rules.md",
+        "content_sha256": "9d6a65898c8fb5b7056b9b97112372c45b3b2659336358f1ccd49af2e74c0627"
+      },
+      "top5_membership_unchanged": true
+    }
+  ]
+}

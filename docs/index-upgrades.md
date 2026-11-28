@@ -12,7 +12,7 @@ psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f deploy/postgres/migrations/010_index_
 
 空库初始化包含 `init/010_index_upgrades.sql`；迁移可重复执行。增加的四张表保存计划、逐文档快照、三条管线任务和构建尝试。快照没有到原文档的外键，删除文档后仍能核对跳过原因；不保存正文、原始模型错误或凭证。
 
-预览要求显式设置 `EMBEDDING_MODEL_REVISION` 和 `OLLAMA_KG_MODEL_REVISION`。填写实际部署模型的不可变修订或摘要，不要填写任意日期冒充模型修订。目标固定分块策略（含大小与重叠）、Embedding 空间、图谱模型/提示规则、输入批次预算和目标索引配置。端点只进入摘要，不向页面返回地址或密钥。配置变化后原计划不能继续投递；恢复原配置或新建预览。
+预览要求显式设置 `EMBEDDING_MODEL_REVISION` 和 `OLLAMA_KG_MODEL_REVISION`。填写实际部署模型的不可变修订或摘要，不要填写任意日期冒充模型修订。目标固定分块策略（含大小与重叠）、Embedding 空间与任务前缀、检索上下文模式、图谱模型/提示规则、输入批次预算和目标索引配置。端点只进入摘要，不向页面返回地址或密钥。配置变化后原计划不能继续投递；恢复原配置或新建预览。
 
 `INDEX_UPGRADE_MAX_IN_FLIGHT=6` 控制整个数据库内的批量任务准入上限，单位是**管线任务**。每份文档最多产生全文、向量、图谱三个任务。已提交、正在处理及尚未结束自动重试的失败任务占用名额。此上限与 `RABBITMQ_PREFETCH`、`RAG_EMBEDDING_CONCURRENCY` 各自独立，不限制正常发布产生的任务。
 
@@ -22,7 +22,7 @@ API、Worker 使用同一代码与配置，启用 Outbox Relay 和三条现有�
 
 固定版本的小批发布、排空检查和回退操作见 [发布操作单](ingestion-release-runbook.md)，真实模型演练见 [回退报告](ingestion-release-report.md)。
 
-与 main 的契约整合和联合回归仍是实际升级业务文档前的前置，见 [基线衔接问题](ingestion-baseline.md)。本分支的隔离演练不代表已完成 main 集成。更换向量空间需要独立的查询侧/索引空间切换方案，不能作为普通分块升级直接运行。
+2026-11-28 已在本分支整合固定 main 并完成 [组合回归](ingestion-main-integration-report.md)；尚未将分支合入 main 或部署生产。后续 main 变更需重新核对契约。更换向量空间需要独立的查询侧/索引空间切换方案，不能作为普通分块升级直接运行。
 
 ## 预览规则与操作
 

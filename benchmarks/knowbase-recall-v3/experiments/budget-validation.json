@@ -1,0 +1,3000 @@
+{
+  "scope": "Fixed configurations verified on source-family-disjoint synthetic questions; no production or independent human acceptance",
+  "raw_report_directory": "reports/retrieval-recall-v3-validation/2026-11-10T13-52-39-394Z-57968",
+  "metadata": {
+    "dataset": "knowbase-recall-v3",
+    "started_at": "2026-11-10T13:55:31.481Z",
+    "api_git_commit": "fcc417fa627f92a99bc6428b97aa82f6faf9d0c9",
+    "working_tree_dirty": true,
+    "document_count": 158,
+    "document_mapping": [
+      {
+        "file": "kb_access.md",
+        "id": "fb398463-8a2a-4e12-a6ff-47f4aaac341d"
+      },
+      {
+        "file": "kb_deletion.md",
+        "id": "9032451a-baba-4a0d-a4b5-058c1d3a8744"
+      },
+      {
+        "file": "kb_delivery.md",
+        "id": "9adb83f0-c328-4426-a756-f5339307c7a8"
+      },
+      {
+        "file": "kb_generations.md",
+        "id": "94075ab3-ddff-4453-92d4-5a60269a9fe5"
+      },
+      {
+        "file": "kb_graph.md",
+        "id": "8cac0036-131d-4b8a-bc59-d38627f92416"
+      },
+      {
+        "file": "kb_noise.md",
+        "id": "bdf6da0e-95f8-4353-9ef2-4722051a5d42"
+      },
+      {
+        "file": "kb_policy_archive.md",
+        "id": "5849b001-7030-4b72-8205-ecd7fcb38d9e"
+      },
+      {
+        "file": "kb_policy_current.md",
+        "id": "a1a4f215-8d4c-489d-ad81-ee7583d5eccf"
+      },
+      {
+        "file": "kb_ports.md",
+        "id": "055562a6-3123-4031-8216-259fb9e8ed38"
+      },
+      {
+        "file": "kb_rag.md",
+        "id": "6dd5e665-5ead-4032-b576-07eb839d8adf"
+      },
+      {
+        "file": "kb_review.md",
+        "id": "49172bad-f0eb-425a-a45d-fe187224ac1e"
+      },
+      {
+        "file": "kb_search.md",
+        "id": "c1146ccc-782a-46d6-8975-4b28b0c3abdb"
+      },
+      {
+        "file": "kb_storage.md",
+        "id": "2871cf7e-1833-4371-bc18-23b058706856"
+      },
+      {
+        "file": "kb_upload.md",
+        "id": "b92fc044-81dc-42c8-b0f7-b0d928fe539e"
+      },
+      {
+        "file": "noise_01_01.md",
+        "id": "f2dc0a85-cd2b-49f6-a783-e261520b87f2"
+      },
+      {
+        "file": "noise_01_02.md",
+        "id": "08cd5f24-c9ef-4028-9794-1a0afb8fd671"
+      },
+      {
+        "file": "noise_01_03.md",
+        "id": "ae02b13d-ca3f-4c03-ae91-bb9c4571237c"
+      },
+      {
+        "file": "noise_01_04.md",
+        "id": "4fafc41e-46da-4431-8de7-01a124d1a462"
+      },
+      {
+        "file": "noise_01_05.md",
+        "id": "0bdd6fda-b199-4a57-9c8b-c88665447c6b"
+      },
+      {
+        "file": "noise_01_06.md",
+        "id": "12446352-7a70-4cd5-8187-1678ff55f3ee"
+      },
+      {
+        "file": "noise_02_01.md",
+        "id": "779d6141-1d85-431e-9912-66ef541aa768"
+      },
+      {
+        "file": "noise_02_02.md",
+        "id": "cb94c5d3-5c05-4c87-b1a1-6adbd6408db2"
+      },
+      {
+        "file": "noise_02_03.md",
+        "id": "b2afca18-ed0f-4eb3-9fb0-5864647885e0"
+      },
+      {
+        "file": "noise_02_04.md",
+        "id": "1d149b51-11de-460b-a4f9-d11a175e5243"
+      },
+      {
+        "file": "noise_02_05.md",
+        "id": "70cb4eb4-0071-4fd1-b13a-37078eb72d57"
+      },
+      {
+        "file": "noise_02_06.md",
+        "id": "cb05502e-b349-4720-8484-ead37f2a7c92"
+      },
+      {
+        "file": "noise_03_01.md",
+        "id": "0a372da7-73fe-47b6-9b2a-efc4f07187bf"
+      },
+      {
+        "file": "noise_03_02.md",
+        "id": "411c6c0b-89cc-4b6a-9b06-37fb8fafec9c"
+      },
+      {
+        "file": "noise_03_03.md",
+        "id": "e1f32ca0-6329-46e4-b612-84fd6bf99086"
+      },
+      {
+        "file": "noise_03_04.md",
+        "id": "b1d1fcba-2791-488e-8848-cf7253dbbb0f"
+      },
+      {
+        "file": "noise_03_05.md",
+        "id": "d256c2bc-36b5-4436-9d4c-ba03f93c1309"
+      },
+      {
+        "file": "noise_03_06.md",
+        "id": "8f7d4a43-b0fe-4621-8ca4-e01014a2db4f"
+      },
+      {
+        "file": "noise_04_01.md",
+        "id": "ecdae3d2-8f8e-4ce2-b70c-dbb585505707"
+      },
+      {
+        "file": "noise_04_02.md",
+        "id": "3208cca3-3064-49a6-96e4-561a11dab985"
+      },
+      {
+        "file": "noise_04_03.md",
+        "id": "9c97d080-f818-4bae-8526-14de26f65654"
+      },
+      {
+        "file": "noise_04_04.md",
+        "id": "00720a5b-2b52-4e1e-b72f-690e9873ecad"
+      },
+      {
+        "file": "noise_04_05.md",
+        "id": "13b517b1-13bf-4822-b905-3042e5f34192"
+      },
+      {
+        "file": "noise_04_06.md",
+        "id": "15669a35-4b33-478c-ae11-57990821e51f"
+      },
+      {
+        "file": "noise_05_01.md",
+        "id": "d8e6542b-fd63-4252-ba6f-3d928ef6e6d9"
+      },
+      {
+        "file": "noise_05_02.md",
+        "id": "9019d60e-4e63-4817-b109-1246bf1d7bf6"
+      },
+      {
+        "file": "noise_05_03.md",
+        "id": "15d75a67-2b3c-452e-bfc4-4da3660173be"
+      },
+      {
+        "file": "noise_05_04.md",
+        "id": "7cb1a45d-f72f-436c-8c6d-09c4bb9745a8"
+      },
+      {
+        "file": "noise_05_05.md",
+        "id": "71697362-64a4-4e5e-9899-6863b96d6304"
+      },
+      {
+        "file": "noise_05_06.md",
+        "id": "c64af096-3273-47ad-a209-368729108339"
+      },
+      {
+        "file": "noise_06_01.md",
+        "id": "44ab8cb0-ae73-4bb4-96c5-356efbcb6b22"
+      },
+      {
+        "file": "noise_06_02.md",
+        "id": "6423470b-53fd-41a6-97f1-7364bcc3e889"
+      },
+      {
+        "file": "noise_06_03.md",
+        "id": "caaeb9c2-0bb2-4d4c-8ec9-3d5f55c87918"
+      },
+      {
+        "file": "noise_06_04.md",
+        "id": "eb0eb3bd-7e33-4eaf-bc39-2f8eb4cf06c0"
+      },
+      {
+        "file": "noise_06_05.md",
+        "id": "7b3c88c2-fd48-4251-8249-34d6656fe793"
+      },
+      {
+        "file": "noise_06_06.md",
+        "id": "2bf4048b-0fb0-4f2a-b2c9-00d22b762749"
+      },
+      {
+        "file": "noise_07_01.md",
+        "id": "0afa777e-900f-4655-987d-88b41444c6ce"
+      },
+      {
+        "file": "noise_07_02.md",
+        "id": "3d67cff9-b64f-43c8-9158-93cf033f36d3"
+      },
+      {
+        "file": "noise_07_03.md",
+        "id": "295dc8cc-522f-4086-ab71-ce3f8181a951"
+      },
+      {
+        "file": "noise_07_04.md",
+        "id": "0e407d61-c5db-41a4-8f67-5605f3d4c2fd"
+      },
+      {
+        "file": "noise_07_05.md",
+        "id": "8a793141-29ba-47fc-a70c-7ca88139fae4"
+      },
+      {
+        "file": "noise_07_06.md",
+        "id": "f7f5b021-1a69-4ba8-b90e-02b5e0010a99"
+      },
+      {
+        "file": "noise_08_01.md",
+        "id": "8066974c-88e8-44e1-aec3-10c1ec08f07d"
+      },
+      {
+        "file": "noise_08_02.md",
+        "id": "2aa575c4-d6b5-4978-96a2-3de268d56914"
+      },
+      {
+        "file": "noise_08_03.md",
+        "id": "d1ea3a7b-6d9d-43b3-bf28-13028caee45c"
+      },
+      {
+        "file": "noise_08_04.md",
+        "id": "3686257f-2f76-4990-b4f9-899d32a22e1a"
+      },
+      {
+        "file": "noise_08_05.md",
+        "id": "c75cba25-660e-41da-b1ce-1407d5566bad"
+      },
+      {
+        "file": "noise_08_06.md",
+        "id": "35786cad-7589-4556-806f-5081716b8d76"
+      },
+      {
+        "file": "noise_09_01.md",
+        "id": "e04d0dc5-363b-4a63-ba73-004144e74559"
+      },
+      {
+        "file": "noise_09_02.md",
+        "id": "5a30a1b8-9fc9-40cf-bffe-2cd34809d512"
+      },
+      {
+        "file": "noise_09_03.md",
+        "id": "7020dd63-773b-42ae-9420-515929c486b6"
+      },
+      {
+        "file": "noise_09_04.md",
+        "id": "d35fef5c-ab29-446d-96de-f26bda7279cf"
+      },
+      {
+        "file": "noise_09_05.md",
+        "id": "7f97e375-8edd-4cdf-83b9-10cb41ab95a1"
+      },
+      {
+        "file": "noise_09_06.md",
+        "id": "d4067105-f226-49c7-8170-a450cc2d74fe"
+      },
+      {
+        "file": "noise_10_01.md",
+        "id": "0f57ab55-095b-4f9c-8d85-95b9c2e337c5"
+      },
+      {
+        "file": "noise_10_02.md",
+        "id": "4d36fc49-bd37-4a08-beb1-58f5724429d9"
+      },
+      {
+        "file": "noise_10_03.md",
+        "id": "fca26b56-3653-4503-a2b4-6cca6ec709c7"
+      },
+      {
+        "file": "noise_10_04.md",
+        "id": "c31234e3-6262-400e-a95f-d2786097dfdb"
+      },
+      {
+        "file": "noise_10_05.md",
+        "id": "eda8b8d0-9bfa-4645-9f9d-55cdaad2c394"
+      },
+      {
+        "file": "noise_10_06.md",
+        "id": "6480e19c-10cb-4e75-9f6f-66eb37888179"
+      },
+      {
+        "file": "noise_11_01.md",
+        "id": "2ef1d479-4d61-4439-a40f-69485e6ca88a"
+      },
+      {
+        "file": "noise_11_02.md",
+        "id": "598b3c06-0f50-42a2-a908-ab5ef5d45b93"
+      },
+      {
+        "file": "noise_11_03.md",
+        "id": "1562d667-0633-4d2e-968f-25548a89577d"
+      },
+      {
+        "file": "noise_11_04.md",
+        "id": "1acd73fb-b0d4-4660-8a9d-8de47a70671a"
+      },
+      {
+        "file": "noise_11_05.md",
+        "id": "150d5a41-2ba3-465e-a140-d6fed6e207b1"
+      },
+      {
+        "file": "noise_11_06.md",
+        "id": "3ad506df-0a92-4d4d-82c5-5f40ca60e7ba"
+      },
+      {
+        "file": "noise_12_01.md",
+        "id": "627c815f-598a-4f9a-884c-6a02f56df68a"
+      },
+      {
+        "file": "noise_12_02.md",
+        "id": "0d14789e-0e9d-4bbb-987c-2ec0353ec24d"
+      },
+      {
+        "file": "noise_12_03.md",
+        "id": "b4006682-5326-48cf-bf8d-ef88c52aa106"
+      },
+      {
+        "file": "noise_12_04.md",
+        "id": "96835d66-43ed-423e-acad-27b2e065e515"
+      },
+      {
+        "file": "noise_12_05.md",
+        "id": "4edad032-472a-44da-bec2-e188066a490a"
+      },
+      {
+        "file": "noise_12_06.md",
+        "id": "dd7a9cb9-cd10-46bf-95d0-d4ce00c991a6"
+      },
+      {
+        "file": "noise_13_01.md",
+        "id": "894af5e3-cad1-4e0f-afc8-45727651f69e"
+      },
+      {
+        "file": "noise_13_02.md",
+        "id": "996c7bf6-372b-45b7-b3b0-44cb7a08d6e2"
+      },
+      {
+        "file": "noise_13_03.md",
+        "id": "f8862f25-350b-4010-bb46-72593e06bd19"
+      },
+      {
+        "file": "noise_13_04.md",
+        "id": "8ef5a74a-81ac-4332-8287-58551388d788"
+      },
+      {
+        "file": "noise_13_05.md",
+        "id": "e15e24b8-f4c7-4b13-88d3-2f97dd18496e"
+      },
+      {
+        "file": "noise_13_06.md",
+        "id": "2d4b9eb0-c120-44d0-a0fa-50ea1041c918"
+      },
+      {
+        "file": "noise_14_01.md",
+        "id": "6ebc71ed-7ac1-44a4-bdde-a026827e9784"
+      },
+      {
+        "file": "noise_14_02.md",
+        "id": "fc67cfd3-3778-441b-8cf8-46ceb5f1be70"
+      },
+      {
+        "file": "noise_14_03.md",
+        "id": "57c9605c-9edd-4b3b-996e-ce3c467155ea"
+      },
+      {
+        "file": "noise_14_04.md",
+        "id": "65ad7ce1-191d-4aa5-b058-3268fa8fefa6"
+      },
+      {
+        "file": "noise_14_05.md",
+        "id": "994ae40a-81d6-480f-ac52-844962ddc173"
+      },
+      {
+        "file": "noise_14_06.md",
+        "id": "3ebbe431-82fe-4262-8038-64ec117dc506"
+      },
+      {
+        "file": "noise_15_01.md",
+        "id": "c190c0fc-7e04-40fa-ae95-f1b8cc63d44e"
+      },
+      {
+        "file": "noise_15_02.md",
+        "id": "75b22567-fa56-4b9b-9145-4be71149e504"
+      },
+      {
+        "file": "noise_15_03.md",
+        "id": "379a738a-407b-441c-bf5a-2e3e0d439af5"
+      },
+      {
+        "file": "noise_15_04.md",
+        "id": "2ceff37b-5ba8-41e5-aa56-eeed00c3823b"
+      },
+      {
+        "file": "noise_15_05.md",
+        "id": "a1ae60d4-c2cb-4a63-97b1-034bb55463df"
+      },
+      {
+        "file": "noise_15_06.md",
+        "id": "e8e7593b-edcd-485a-9b84-8c6b35ea32e2"
+      },
+      {
+        "file": "noise_16_01.md",
+        "id": "ae02b267-e535-4d4a-8386-5954f08cdde3"
+      },
+      {
+        "file": "noise_16_02.md",
+        "id": "9d099870-378c-4e96-a45e-8d3bd5f58b8b"
+      },
+      {
+        "file": "noise_16_03.md",
+        "id": "3cb087dc-5b5f-48c4-b951-6f45e3f41dce"
+      },
+      {
+        "file": "noise_16_04.md",
+        "id": "0ce7201d-12b7-4dd5-8a47-72c300f3d6f9"
+      },
+      {
+        "file": "noise_16_05.md",
+        "id": "f5ece7ed-4f53-4224-82e2-ff46ee8373a7"
+      },
+      {
+        "file": "noise_16_06.md",
+        "id": "132492d5-8329-4b6a-a891-ed1317309331"
+      },
+      {
+        "file": "noise_17_01.md",
+        "id": "d24889e8-0871-4d6c-84aa-c2def1fb08ad"
+      },
+      {
+        "file": "noise_17_02.md",
+        "id": "d400e2b1-2bab-4d32-a35c-115994afd860"
+      },
+      {
+        "file": "noise_17_03.md",
+        "id": "8c4664da-b90b-4945-8dc1-53e402385cc5"
+      },
+      {
+        "file": "noise_17_04.md",
+        "id": "6e963a55-3125-4bba-abea-6c44b32e674b"
+      },
+      {
+        "file": "noise_17_05.md",
+        "id": "4d19117d-fa9a-439c-921a-d41ad94953e2"
+      },
+      {
+        "file": "noise_17_06.md",
+        "id": "4b3ed141-8a45-467c-8e8a-2545c710826e"
+      },
+      {
+        "file": "noise_18_01.md",
+        "id": "226a5e84-5057-42ba-8799-71e274beb329"
+      },
+      {
+        "file": "noise_18_02.md",
+        "id": "4d5faa38-0564-41c5-b47c-5bdc6795e868"
+      },
+      {
+        "file": "noise_18_03.md",
+        "id": "12938c74-9896-4811-b7ba-f29270e2b07c"
+      },
+      {
+        "file": "noise_18_04.md",
+        "id": "6afb14b9-0fb1-45d5-9c62-9d685170981f"
+      },
+      {
+        "file": "noise_18_05.md",
+        "id": "fb45ef30-7055-4e1b-86f4-9368aea4a0a8"
+      },
+      {
+        "file": "noise_18_06.md",
+        "id": "841e4257-a91a-43e0-8235-d0c9fb915724"
+      },
+      {
+        "file": "noise_19_01.md",
+        "id": "5a3893e8-e66b-49dd-aa89-383e425ec589"
+      },
+      {
+        "file": "noise_19_02.md",
+        "id": "8b00e51a-3a26-472a-800f-2622ea21b292"
+      },
+      {
+        "file": "noise_19_03.md",
+        "id": "3f3bdfa0-71a5-4631-8b2a-2de565ce9f32"
+      },
+      {
+        "file": "noise_19_04.md",
+        "id": "33bd3af4-3e13-449b-b06b-6f0804da9288"
+      },
+      {
+        "file": "noise_19_05.md",
+        "id": "5d512a4e-abbc-4169-bc59-73b1884981e3"
+      },
+      {
+        "file": "noise_19_06.md",
+        "id": "01e49651-f1ad-44dc-b183-afb7abad9a25"
+      },
+      {
+        "file": "noise_20_01.md",
+        "id": "3839c6ed-0407-4d47-8bca-a94ede3f27b8"
+      },
+      {
+        "file": "noise_20_02.md",
+        "id": "ca372bc5-342a-4ac2-9825-793ad3b83b73"
+      },
+      {
+        "file": "noise_20_03.md",
+        "id": "c0f82f38-eeb5-41f0-b0cc-465718eb376f"
+      },
+      {
+        "file": "noise_20_04.md",
+        "id": "8bca527b-0fed-478f-a5ba-20774ae63492"
+      },
+      {
+        "file": "noise_20_05.md",
+        "id": "b24e0609-24dd-4625-9497-1085b1d6a848"
+      },
+      {
+        "file": "noise_20_06.md",
+        "id": "401806d4-dc3a-43ce-b7d4-222539325a3c"
+      },
+      {
+        "file": "equipment_rules.md",
+        "id": "73bc8d74-dfd6-4781-8b9c-2e30a812c312"
+      },
+      {
+        "file": "equipment_exceptions.md",
+        "id": "c870842b-5529-47e1-94d3-8e8556747f6e"
+      },
+      {
+        "file": "travel_rules.md",
+        "id": "a5c6b407-1d8e-4856-a687-9c1e3f37f596"
+      },
+      {
+        "file": "travel_exceptions.md",
+        "id": "274445f0-99f2-45d5-9692-f448d5873a9c"
+      },
+      {
+        "file": "contract_rules.md",
+        "id": "2fea13f1-f1f7-4d3b-a204-3945f25cb5e8"
+      },
+      {
+        "file": "contract_exceptions.md",
+        "id": "c6438e87-40f0-4c47-9a98-a7819825c476"
+      },
+      {
+        "file": "access_rules.md",
+        "id": "0f2557c3-fae3-45c0-b6a6-3af9386d5734"
+      },
+      {
+        "file": "access_exceptions.md",
+        "id": "1cc67bd4-3c49-4209-b1d5-90c09c2fa8e0"
+      },
+      {
+        "file": "purchase_rules.md",
+        "id": "e80fc233-666e-4695-897d-2da3982f5e62"
+      },
+      {
+        "file": "purchase_exceptions.md",
+        "id": "ad3e792c-faf8-4f50-a715-60b3aaf4c355"
+      },
+      {
+        "file": "archive_rules.md",
+        "id": "883c29df-c664-432b-bf45-f9fc7cba3f40"
+      },
+      {
+        "file": "archive_exceptions.md",
+        "id": "80415444-6d45-4934-9ad6-ebb6c98c3dbe"
+      },
+      {
+        "file": "release_rules.md",
+        "id": "b1d5b314-b1a9-4709-8338-a7479c838cc2"
+      },
+      {
+        "file": "release_exceptions.md",
+        "id": "fb43b278-b9ac-45ab-bb02-d80c25b9b95e"
+      },
+      {
+        "file": "training_rules.md",
+        "id": "ca158485-b652-4fe7-b5ac-064130296fb4"
+      },
+      {
+        "file": "training_exceptions.md",
+        "id": "737f09aa-c182-4fed-a4fe-df1f8119c8da"
+      },
+      {
+        "file": "sample_rules.md",
+        "id": "d01fb7a4-b60d-42dd-8b70-c6bcb8668613"
+      },
+      {
+        "file": "sample_exceptions.md",
+        "id": "4913d1ab-28e5-48a5-83c0-d2cbd6fbba6a"
+      },
+      {
+        "file": "repair_rules.md",
+        "id": "0031a43e-f819-4b65-9a5a-7716043cabb7"
+      },
+      {
+        "file": "repair_exceptions.md",
+        "id": "0033fd6f-157d-474c-ae94-23ecb7cdde85"
+      },
+      {
+        "file": "vehicle_rules.md",
+        "id": "ef1ad9bc-a513-4153-8def-dc31c00c24f2"
+      },
+      {
+        "file": "vehicle_exceptions.md",
+        "id": "40e634ab-c017-48f6-9e01-97f2306709b6"
+      },
+      {
+        "file": "data_rules.md",
+        "id": "fd80e374-da5a-49b7-9317-c0767ba96a78"
+      },
+      {
+        "file": "data_exceptions.md",
+        "id": "b017572d-f1af-4167-b665-bc988a45c511"
+      }
+    ],
+    "indexed_chunk_count": 220,
+    "question_count": 224,
+    "corpus_sha256": {
+      "manifest.json": "57c6349273a8f17d4b184f4879ae871f3b014d956871d0cc4fa2e971ad382e56",
+      "questions.json": "1ab9c25501b44346668f488216eb651bff977a5dd602b5d68b828988072819a7",
+      "protocol.json": "939d2904e2563f39336c2999008bce84bcfc2450355ce23add8950804f48d794",
+      "docs/kb_access.md": "7cfdc1382aad0a0067163a9dfaa5ff7f7384c91d76d2f1bc5c95e6d725762c91",
+      "docs/kb_deletion.md": "97281c405ffbb5e949b68101081ede36b263d1be377b53b279e09b97d0b0f4e9",
+      "docs/kb_delivery.md": "4de3a7438e75c7d79c8e881b38c87a65b1861b172f35d81d904abfa742e20234",
+      "docs/kb_generations.md": "6ed8d1feb87ac18167feca64e54ef50f73423247cbff77acc379e6d9b95397a2",
+      "docs/kb_graph.md": "b38f7a702d589f1ad9e11f082ad5112ba555a3d4fa671db77c6d779115f994fb",
+      "docs/kb_noise.md": "e56872b620f37aa1ba8f7fb502c585d1f7c01dbd008c3112ae16ac103e6fc6d2",
+      "docs/kb_policy_archive.md": "93bb8e7f495023bf86b6db715c745de13cc47a0a32c8095296cfad6c4cf27300",
+      "docs/kb_policy_current.md": "01e5868cd9c2703ba45c92a6e60ec55ba7dfb76a93f2fc78738efb5bf32b6c45",
+      "docs/kb_ports.md": "c7ebe11a5d867089918858622c70d66b45f4055de251af47602beb1aa4630c02",
+      "docs/kb_rag.md": "b58d4889d63cee640621a194cc68867389d28e61b174c4f50c85b5f3b71c90de",
+      "docs/kb_review.md": "4e54df26c5d7b437b8333921202dbff042a5dcf5687a59f9acc9b85350ceee03",
+      "docs/kb_search.md": "3362e06e877df472d83ede7cd80a65cc70f6116500d8e027604919755c1743ae",
+      "docs/kb_storage.md": "3b5adfaa1d7879a269de0a1b771ae4fa2e9c190925fb75f229782bdd70fa7ccf",
+      "docs/kb_upload.md": "1cde5e4373d32854ff0797b8ff95cb096ced0a7a844b43b27c6cb023db2bf925",
+      "docs/noise_01_01.md": "80a701c1207c6f7f27e0607ad5462ee325e040a37366a16e476abb7b614a968e",
+      "docs/noise_01_02.md": "4ac8db24109f272d4328e2ef0a430b36fa5e78dfeec82b7221aed3cfcea0d404",
+      "docs/noise_01_03.md": "ec57c8255d9cfbb39f3c5ba0fb81868e1946ac5be7c35f295b3189ac22a89a19",
+      "docs/noise_01_04.md": "fde44b8b5175b5218ac49d83a6a38bd41641f3401736d56d73d13bd481611b67",
+      "docs/noise_01_05.md": "45408a1cacc1eb1e093ae758204cedff0c6d3bb560a086d03af7c22b205415af",
+      "docs/noise_01_06.md": "9c197fa2fc8b2b0966cc54676444e817fb5bf04d4fd4b8b51a373842077f08ae",
+      "docs/noise_02_01.md": "920c9ef00c783b60826cdc90e91f5a1e811d438e33b282b0894c0d8f53186e80",
+      "docs/noise_02_02.md": "ca78551c5f755b8c18fac4664f882779719099d829249f3251de612fe7d07ea2",
+      "docs/noise_02_03.md": "cf1c5ff2cd4faf57215f122e60d7bb0791067b7bd6eafc595bfb2a3e5f72ff23",
+      "docs/noise_02_04.md": "0382e74a69dd9dc4788e7b91d104b50bdb0145bba5661f024f807f407607e25f",
+      "docs/noise_02_05.md": "4593ec9c6ea8e00e33a4168f46a557e690402c2f98529cb82cd6d4658459739e",
+      "docs/noise_02_06.md": "7548cbb288a1dce20f96fd05711045cca96d22bfd9bb26db5bafecebbde4f5cf",
+      "docs/noise_03_01.md": "59c4efd50765a7f2b5f5c2f74c6a313467adb5679cc5145f61a1ec6f30c86264",
+      "docs/noise_03_02.md": "82822f9b2b86d76a8132e405d8b68161cef37a7d9b8c912fc5a926790f181241",
+      "docs/noise_03_03.md": "ac0d569a64d2535fbd1212bebdc1022c65c3ce51752cb9da4e81ebd4cf05a59c",
+      "docs/noise_03_04.md": "7c67a6170c1c19104349d31c7ac89a2d71f7c86db0aa68815cd0cf7f8eb4a247",
+      "docs/noise_03_05.md": "2457e1cc7458e43ebfa4d6be4ea24ebe6cfeebc0ff7b63b215e19da2d17fc119",
+      "docs/noise_03_06.md": "6d2888568a58482e271c30d820e9f0a08e2d9934f7b536a56eb146c5c00fb5f7",
+      "docs/noise_04_01.md": "05db24681a4ed2a80fbdfb2f15e38be2bf16b577a8f8c6150e57b87de0d69174",
+      "docs/noise_04_02.md": "0de542b568749384bf5ac314a9e2e4602122622d5434d474fd536df5ddb5be03",
+      "docs/noise_04_03.md": "90e8e24ec63db408456f0a9ea7ced313d7a0a452e28cb3ab18cbbaf375990332",
+      "docs/noise_04_04.md": "b57d1bdf0ece3ca14be12fb6d54c7e37619f206417fecd82568ac5b1fea902bd",
+      "docs/noise_04_05.md": "ad745a17c0053439bb479791603ce0b574c9646459b5493a4530c9a062e35ab3",
+      "docs/noise_04_06.md": "0419b2dbb40b5bade3b3528db5a9416d3eeccf7d5953ee6ec813e5c5c479b774",
+      "docs/noise_05_01.md": "6b6177c9d541f23d8aa2101848f7a995c1beb05558b8071a48e9a595d72e8ea4",
+      "docs/noise_05_02.md": "0c9d73ef3134ee6671df9ae372603209728bd10d8e4c4d9509d5ed374565fbaf",
+      "docs/noise_05_03.md": "d6a7f58c4fa0f796541ae4065b93496102ef0709b9afa1549e9c610f6b2dac46",
+      "docs/noise_05_04.md": "3515b5891a8d2e6c80ab771cf2dd68373c6f5518d93008e85ca6a34e6311bc04",
+      "docs/noise_05_05.md": "ccaab790ea8ec452d3e77167979d445a985839543e72a356284ae489e8703a34",
+      "docs/noise_05_06.md": "8771de1b579ce4c7f729cd66ac66ce27e68dbd8d23335094b7ea14b20b60b7be",
+      "docs/noise_06_01.md": "16fff74c3b2e3a3560d22c1519a752de32c3480581ee93f4cec0d404329f8d58",
+      "docs/noise_06_02.md": "e0e02c19868292b71d67eac17a48282471b747657e547fe2c0ac94a89ac6fa5a",
+      "docs/noise_06_03.md": "8abfbd4a6df77ed18280fe4ed8baaf67ae993c64989ad28fb7fac2db53bcbbfd",
+      "docs/noise_06_04.md": "482a88b852e687b16a8e02adcd1dc5b7faa86e3b6cde7b5b5ad2db029c681f82",
+      "docs/noise_06_05.md": "f0ba25ddd72b72a1878ae80511e06681cbe5ced3b6e5c379b061ea70f212fee2",
+      "docs/noise_06_06.md": "c5336f9fcda90be1863526a26aea41c5d3ac5c51ad8e617ddc4710d6c7bd16e2",
+      "docs/noise_07_01.md": "49a5063e54282c05d0c1eb8757dad3f649fe71782a5566e0c68ae65827e250d1",
+      "docs/noise_07_02.md": "e30c58ad5a6eb22af9e1b5345c45a5b7cee48ec26be0b1de76a6c57425ac4ebc",
+      "docs/noise_07_03.md": "d1237d01ba983da74902c85aca0c0ee915c67d3da1947c83e68b0ec21c56fc08",
+      "docs/noise_07_04.md": "f9bdbec8d8849cef763f112736b7e382281a85cbf7c158dc997cd3bba0754000",
+      "docs/noise_07_05.md": "db6c78cac9e7d113d82634dc0e9547b53eba3674345a88f980c4a4aca102c864",
+      "docs/noise_07_06.md": "6dec49a1ebb25868019c4e6d18599d6b21c908e5668c4441579784ab77143258",
+      "docs/noise_08_01.md": "87ff32f1a7aa43508d777d6af52c9a0bb3bf35d55fde2bea28cb06a74b6cd2a9",
+      "docs/noise_08_02.md": "06ea9f0e2a2f6765628325766f91bb4025afe941403d70cc3031256387d1a398",
+      "docs/noise_08_03.md": "b0f2d45edc592a264cbf0d61fe7f6d49ede6bff175e86bbd1c858eafb84d328b",
+      "docs/noise_08_04.md": "49054c2ab3caf60127ed3f61b6aece8935c2ced2e94bba140f720180d00d5de2",
+      "docs/noise_08_05.md": "0a20193ce41320df349f9fcd4ee7a07828b9d05624dc66f484170cb426b61c82",
+      "docs/noise_08_06.md": "a17d1241edd10f6cb2ca409720dfd5c73e4625af1ce1f43961a9dab2363173a7",
+      "docs/noise_09_01.md": "be614f2f07a02296a1a50edf7b593d67b6b9a812d7d6987f0d443f2027e414dc",
+      "docs/noise_09_02.md": "43edeb64b4513217d9db116bb96744b2feb26d5928f2f0e9f0dd6bd03667e271",
+      "docs/noise_09_03.md": "93fec4787d72c7e678c783582287881bd828c940279784f04af3a679cf2bc5b4",
+      "docs/noise_09_04.md": "591d8a5f7396a45df1310b36f049a0efb49e2adf92ef00d503ec420e37438e68",
+      "docs/noise_09_05.md": "1c511fedfa54d3baedb1eec8fb2b3a4e9b5ee105537b439c130aca3f410e063c",
+      "docs/noise_09_06.md": "54656e7dd9b2ab81b1b534babc4a9fa0cf6a686cc63f3ed884597306f773cf14",
+      "docs/noise_10_01.md": "c19de1a68d3f5f2c4eabf1bcedc5e82406c9119a30de2ae855803eeed5d00405",
+      "docs/noise_10_02.md": "bbc392241d45b92c07f7d33f0c3e23bade2bcf2d9c70821de8db94081e34971b",
+      "docs/noise_10_03.md": "4cf45b10557069a7f21242790e9de0b856a75d12443ee4c7d175a166c2a8f4f5",
+      "docs/noise_10_04.md": "7bb4e8b1b8286a8619bcbf69f2db5b3a50574470b60a3a97a17f29c650e1eb4e",
+      "docs/noise_10_05.md": "cc16102899317bda32b390f5c1ed8a90d288d605983667502b4c5ec5a97a3c0e",
+      "docs/noise_10_06.md": "c34b8706be597e26c3bcb5109d09f4c77d7c97b3357a90a02ab33887918929c0",
+      "docs/noise_11_01.md": "c47d3ef040fa8c9e3039459d2840b93c5054447e33c22b9565883f4ec7c15f42",
+      "docs/noise_11_02.md": "172cdec9323ecdd97915f04f52adf99d34b34e5e22ff808f66fc3e5e34f22069",
+      "docs/noise_11_03.md": "d609b28348e5860ce94221161c442da26728c24f0cd9e52fad369d0715f3aeb5",
+      "docs/noise_11_04.md": "3b351a72cc1c5d1114c9b836c0f6151f02dae4d84f8029fa97c8aa6caa989d12",
+      "docs/noise_11_05.md": "62bbb230db16e7cccdfbc074cc8c37aec958ca52decfa13bc93e94b669fa51cc",
+      "docs/noise_11_06.md": "0d1d5331ac1ed19c256a3a1bc8bb214b38ff06d607271505c2ba7723fef8dd31",
+      "docs/noise_12_01.md": "e67856b7e9c532ca3d0d1ac3322e5b93abaf7732d27ea49f84770b7123c7c766",
+      "docs/noise_12_02.md": "09bf79a47597fc622c02c1892e1f86de028015536c0bc75fc9b5380e823b71ff",
+      "docs/noise_12_03.md": "b8a7f2b43fe0c2ce797652f142f89cbe0646bdccbf90dc7e3e2f2feef3806e07",
+      "docs/noise_12_04.md": "e5e67922568ba3957e73e91627b8d25dc8fbaeb468f6e7c3f130636087bf2d98",
+      "docs/noise_12_05.md": "ba8b4cc0c3abcc88bb227b58c358bee8ca14a6806fd9d16db9eabb179df2da09",
+      "docs/noise_12_06.md": "bc056bd7b166653b25f18322e152b915ceb978594fdc382e847f9365b0c25191",
+      "docs/noise_13_01.md": "d8c5adda61e55f9f6ed6660ef44f1e3a70bd9afee04c37f69690abbff99f08c4",
+      "docs/noise_13_02.md": "de646bf836aab6d5f4aee77053f569fdbdb1e4406358678c5c2aebd43a05ddf3",
+      "docs/noise_13_03.md": "0c13ff13babd1897cb6528e91ed5f5576a16fb25fdf836c86eeb03333f0a328f",
+      "docs/noise_13_04.md": "c80f07bb555d827f2202c504b62321fc417dc0e90d583ed78590c6885708f18e",
+      "docs/noise_13_05.md": "a85b5919bbdea967b0c88325c7cb39ee114272a21647353995c8381cc87cf37d",
+      "docs/noise_13_06.md": "8d2b7f6b01b164d7da18e92fe1d2527cbd404ae9abb3ee631114e16a0b62cc8e",
+      "docs/noise_14_01.md": "88bcabf060d0c8b9ebabe69089de9baf9bc038519981b65e7736ec81d1a63eff",
+      "docs/noise_14_02.md": "69df0145bc78413eb95596b91171fc6288712bde14652a581a0bdb9ea366bae4",
+      "docs/noise_14_03.md": "02ee35bf1f9ea5b2e82fff5ca43f17d0c56f2bf014d2dfe49e338171502f65db",
+      "docs/noise_14_04.md": "3cb29a83a408ddc5d48e95dd5a0b4403b254c8dabca336ad56f87c41c510554d",
+      "docs/noise_14_05.md": "c48ba0b222e219158ce96b953bd554bb8d1d1620824a532ba073267204cef5da",
+      "docs/noise_14_06.md": "fc7743e5055f574ef1e623d77e985decca859b15d0b518bc4b9d57528c3e8492",
+      "docs/noise_15_01.md": "c5e82331eea93e9888e0d36ff9ed496ea4d70d22d1e06c19c98b4b7ce042801d",
+      "docs/noise_15_02.md": "b9639ee44940f28c32e9e619a1bb78f29309c2785c0c4d4fb28eba97d0387d77",
+      "docs/noise_15_03.md": "8caa4ec92837516db8842ba810de8b0cdf206adcd52788751242f27796c9e1f1",
+      "docs/noise_15_04.md": "9849e34c21d765265b368d9f56631dc02b1c1bd984d9e88db0e7fc6e8cabcec3",
+      "docs/noise_15_05.md": "d51c6e4e66891dcdd5df408f07999a9f3e5903519366f1f648a637132d4ddb78",
+      "docs/noise_15_06.md": "914e3f4becb0a732e30de61b28820200e8b78c26d62aab41d87ac540f59e51b4",
+      "docs/noise_16_01.md": "9cfefefce04af0595abec869553c8b41507d43bf0d631aad2990e4a7cd1c0f6f",
+      "docs/noise_16_02.md": "d5df287f573d227fef20870d0b79952f6ad0c3a058ab191934eae5248feb2a6b",
+      "docs/noise_16_03.md": "0c7265047319611954098ba55413df24f258419093ed4ea266d821a2ab82356a",
+      "docs/noise_16_04.md": "df7d5340596caa7c109068fe7dbfa7823f811ee5a1d300091dec4d352af72cc7",
+      "docs/noise_16_05.md": "b46e54e572c5900e74f2fa4704ee51872f3812bf82c7af63b2d73d3bb60391d1",
+      "docs/noise_16_06.md": "2639bfd77cfc2ac75e4ebe13a269cd314af1a919b4b48988463fc0d50ea8331c",
+      "docs/noise_17_01.md": "816c5055fbd949d121042590387cc4e4b0c63d008f2b144a577072274d9904de",
+      "docs/noise_17_02.md": "88d14ad2410417948049b18ce459cc46b57ed4d3109f89e02fbe12fd9bd89f7c",
+      "docs/noise_17_03.md": "31f1a0676c543d9dd04b3d90eeafa22049b93d1a06b6e137172e19fe6f4419a0",
+      "docs/noise_17_04.md": "561b8bf4ac65628cd878bc6465b1e33a595c22693de7c1603e05f459110b1cf4",
+      "docs/noise_17_05.md": "b9e3c41e0a50ae6044eb5609b06611cd9a39e9df5e3984914a58f9aa33f9b43b",
+      "docs/noise_17_06.md": "b3157b7a6874d3abe1fc505b7b6d3281773d7fb9066f731e813e338922353c80",
+      "docs/noise_18_01.md": "02c3585432bbc9b2d8c24b70ed76325058a8fd0b02afef88dac6cf1130afbe00",
+      "docs/noise_18_02.md": "37376ee907db950360c0ce125196edde00085e62be372183c442b47a113fe77f",
+      "docs/noise_18_03.md": "034eb9de487f570662a5eeccc6fe9168b27ea6a66acfb43bbf65066162caabbb",
+      "docs/noise_18_04.md": "5024cefb03df124987db3aa25a1893cb7a6327177ac2b74341e77fe51d289329",
+      "docs/noise_18_05.md": "48d8d35991038625fb63930f88f0d8c00062fdd7bf92fb134addfba41d87048a",
+      "docs/noise_18_06.md": "bf3eaada1e954d237e1e6c2e0fd43c1a8a6066db84db9b1942724545ced5aa8d",
+      "docs/noise_19_01.md": "497a0c7ecdf0626d7cc00e0d2099ca476554145323719c3eef63cfcd6a8001d7",
+      "docs/noise_19_02.md": "4f8940156acf81a8e4e96d23a0ff404fd29116368c719b2c678c104fd9bd402c",
+      "docs/noise_19_03.md": "d983a89284c0fa4ad07c0c0a65d5a5eff33ae3747f02215c79d597378436de1f",
+      "docs/noise_19_04.md": "c3c26c92ca26cc3e366684e9db642002689c3146e8e57312e0089cdde26f51c0",
+      "docs/noise_19_05.md": "e878ad0aea5d5485af85e90b5cd6aab28976ef4b9a5fea763382bd4aefbd64d8",
+      "docs/noise_19_06.md": "a891057a8fc4f8d27b91aed776870555d669967414e52af299dd9e0dbfe51a8c",
+      "docs/noise_20_01.md": "0fa002ddeced0cd80316101ef4556d0cbf36e129bb65d4d1da3134ad7c4bdf37",
+      "docs/noise_20_02.md": "b41c5e5846c6fbc4f24380325c81ea2ba369d2b897c88e7226c35b4eee99ee40",
+      "docs/noise_20_03.md": "7ebeaf6327dbb1c47bf02385170dad6d108caea5f494df9460c223969ba4a552",
+      "docs/noise_20_04.md": "9f471b0543becd765421b9dfb89a4e07818bcfdb613559eafef756f46e8ec34e",
+      "docs/noise_20_05.md": "5b808b7511635ceee5b99c76e8e09c10d2a6fe95747e1fdc79876d41e67a9413",
+      "docs/noise_20_06.md": "ebe1880c1409ada75197c24e9d41f158b5d97c5c8c700fd2ae9208d29cb715d5",
+      "docs/equipment_rules.md": "e1ccc73418d52a05c42302503f78d65952578de8d7f490b92921c8a4a96487af",
+      "docs/equipment_exceptions.md": "aa3c124abd77910ba611fc0c5d361007040801429373395e7098b77dab7472e7",
+      "docs/travel_rules.md": "26bce5ef7c09d307e7b0f7a3c1cca1ec52eb42923838a2363ea3774ad2e07527",
+      "docs/travel_exceptions.md": "497d8b1de442c65a113986c5de7243b2cf66c15ea966d6a79aa979a3588cbdac",
+      "docs/contract_rules.md": "a85de0a1540fd31fcae2a0abbbfc8cca0d41d94542e979054c6cd0e5d8189276",
+      "docs/contract_exceptions.md": "29a30753ec6ead84b3d7b228240be8c008191b5d76a00958db5edee5a6d3607e",
+      "docs/access_rules.md": "d27496fb866c1be6317f41c17c92dca9461eba05dec72a15a213bb73ad0d8ca5",
+      "docs/access_exceptions.md": "ba6bcd0dc7125b8957b2661a90af78d38bfec5bbe7b3480b2fb16fe32ae42076",
+      "docs/purchase_rules.md": "7f6c02ff6a31546ae66036b1875802ea7d1e6ccc6018ce503dc6e2f58dd8d3dd",
+      "docs/purchase_exceptions.md": "1958eb5570a1d8ea2c17cb131d6afd5524b272efa54718a35c19e68a0c4c6c79",
+      "docs/archive_rules.md": "b3bc15ff0e3511b8eacdb1e7d3524fdad9f48febfd199ffe3efae3c163abf8b0",
+      "docs/archive_exceptions.md": "39999f42f38f729609eaf16109870b495e6b56734ad88120cae887d7fec7ca25",
+      "docs/release_rules.md": "31bf96ddf3e6f7560496be2b11b8dbf8d73012fd2e68951e482c5d13ce023c32",
+      "docs/release_exceptions.md": "45f1c9fec1435f43ca554891bcd52850701c108c25134a450a63cb363b06d787",
+      "docs/training_rules.md": "48cda0529d6c9c3482203358d3343693142b56d6ac0a5e49d103077b0e0420e6",
+      "docs/training_exceptions.md": "68876af1ce537e8229d9bc903ec9ce7e3f6d9479f1995c04a6a6335949be2c77",
+      "docs/sample_rules.md": "9a9874adb42d0722cdeac184c9136f73c1d48474c78e96493f44a2bab4532175",
+      "docs/sample_exceptions.md": "8619833fac2964ae6548359b2b999abd2f2e886129490bf9cbb513063c97fab9",
+      "docs/repair_rules.md": "b67c4e4c3b5eda0444e95058ef919cc66d9aa0ce7f7de81992d02b81e8cf9439",
+      "docs/repair_exceptions.md": "eb2e5172e0c9d974458d8248947522ece6f29e23dfb428295c6b039e3742917e",
+      "docs/vehicle_rules.md": "e43b5825db21de9bfab6843b4e3331ba76e60b47ccddadf03cad2e31f23072bb",
+      "docs/vehicle_exceptions.md": "8cf20146ddcce096b9061501b61bc684e8b41c26860d6d28a2caa8345144d280",
+      "docs/data_rules.md": "1e29f6575ce8851d52b4c88b6473a2bd053154cc8d8796a00778b7a5807e1e80",
+      "docs/data_exceptions.md": "2b8d998df513e07fd3cab59ee349aecabb3504bf30bf5bac75debd8834684043"
+    },
+    "embedding_model": "nomic-embed-text:latest",
+    "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+    "embedding_encoding": "plain",
+    "keyword_analyzer": "cjk",
+    "dimensions": 768,
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "reranking": "existing rule-based implementation; unchanged",
+    "hybrid_retrieval": {
+      "keywordUnit": "active RAG chunk content",
+      "mergeUnit": "chunk ID",
+      "candidateMultiplier": 3,
+      "maxCandidatesPerRoute": 60
+    },
+    "scope": "Isolated corpus; real HTTP API, auth, parsing, persistence, RabbitMQ, Elasticsearch and Ollama embeddings; only search and RAG workers; no graph or answer evaluation.",
+    "top_k": [1, 3, 5],
+    "modes": ["keyword", "semantic", "hybrid"],
+    "warmup": "One untimed request per mode after corpus indexing; one measured pass per mode/K.",
+    "ranking_unit": "Deduplicate the first API TopK candidates by document; no extra candidate fetch. Evidence checks inspect all returned TopK contents.",
+    "recall_audit": {
+      "budgets": [15, "k30-s10"],
+      "route_budgets": [
+        {
+          "id": 15,
+          "keyword": 15,
+          "semantic": 15
+        },
+        {
+          "id": "k30-s10",
+          "keyword": 30,
+          "semantic": 10
+        }
+      ],
+      "split": "validation",
+      "requests": 96,
+      "http_selection_verified": "v3_sample_01"
+    }
+  },
+  "summaries": [
+    {
+      "split": "validation",
+      "budget_per_route": 15,
+      "route_budgets": {
+        "id": 15,
+        "keyword": 15,
+        "semantic": 15
+      },
+      "stages": {
+        "indexed": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 1,
+          "all_evidence_found": 1,
+          "mean_candidate_count": 220,
+          "negative_empty_rate": 0
+        },
+        "keyword_raw": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 1,
+          "all_evidence_found": 1,
+          "mean_candidate_count": 43.38,
+          "negative_empty_rate": 0
+        },
+        "keyword": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 0.8889,
+          "all_evidence_found": 0.8889,
+          "mean_candidate_count": 15,
+          "negative_empty_rate": 0
+        },
+        "semantic_raw": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.9167,
+          "all_sources_found": 0.8889,
+          "evidence_recall": 0.6806,
+          "all_evidence_found": 0.6111,
+          "mean_candidate_count": 45,
+          "negative_empty_rate": 0
+        },
+        "semantic": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.8611,
+          "all_sources_found": 0.8333,
+          "evidence_recall": 0.5972,
+          "all_evidence_found": 0.5278,
+          "mean_candidate_count": 15,
+          "negative_empty_rate": 0
+        },
+        "pool": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 0.8889,
+          "all_evidence_found": 0.8889,
+          "mean_candidate_count": 25.65,
+          "negative_empty_rate": 0
+        },
+        "selected": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.8611,
+          "all_sources_found": 0.8333,
+          "evidence_recall": 0.5972,
+          "all_evidence_found": 0.5278,
+          "mean_candidate_count": 5,
+          "negative_empty_rate": 0
+        }
+      },
+      "by_category": {
+        "boundary_value": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 25.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "cross_chunk": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 21,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "exact_identifier": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 26.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "heading_context": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 26.5,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "historical_version": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 26.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "multi_document": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.875,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 27.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.875,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "negation_condition": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 25.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "paraphrase": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.5,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.5,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "role_scope": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 27.5,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "unanswerable": {
+          "keyword": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": 0
+          },
+          "semantic": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 15,
+            "negative_empty_rate": 0
+          },
+          "pool": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 25.67,
+            "negative_empty_rate": 0
+          },
+          "selected": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": 0
+          }
+        }
+      },
+      "mean_ms": 59.54,
+      "p95_ms": 77.03,
+      "acceptance": {
+        "quality_and_serial_latency_passed": false,
+        "checks": {
+          "evidence_recall": false,
+          "all_sources_found": true,
+          "all_evidence_found": false,
+          "each_positive_category": false,
+          "merge_loss": true,
+          "serial_latency": true
+        },
+        "positive_category_evidence": {
+          "boundary_value": 1,
+          "cross_chunk": 1,
+          "exact_identifier": 1,
+          "heading_context": 0,
+          "historical_version": 1,
+          "multi_document": 1,
+          "negation_condition": 1,
+          "paraphrase": 1,
+          "role_scope": 1
+        },
+        "merge_losses": 0,
+        "safety_status": "requires separate permission and generation consistency tests",
+        "scope": "synthetic engineering gate, not production acceptance"
+      }
+    },
+    {
+      "split": "validation",
+      "budget_per_route": "k30-s10",
+      "route_budgets": {
+        "id": "k30-s10",
+        "keyword": 30,
+        "semantic": 10
+      },
+      "stages": {
+        "indexed": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 1,
+          "all_evidence_found": 1,
+          "mean_candidate_count": 220,
+          "negative_empty_rate": 0
+        },
+        "keyword_raw": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 1,
+          "all_evidence_found": 1,
+          "mean_candidate_count": 84.62,
+          "negative_empty_rate": 0
+        },
+        "keyword": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 0.9722,
+          "all_evidence_found": 0.9722,
+          "mean_candidate_count": 29.62,
+          "negative_empty_rate": 0
+        },
+        "semantic_raw": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.8611,
+          "all_sources_found": 0.8333,
+          "evidence_recall": 0.625,
+          "all_evidence_found": 0.5556,
+          "mean_candidate_count": 30,
+          "negative_empty_rate": 0
+        },
+        "semantic": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.7639,
+          "all_sources_found": 0.7222,
+          "evidence_recall": 0.5,
+          "all_evidence_found": 0.4444,
+          "mean_candidate_count": 10,
+          "negative_empty_rate": 0
+        },
+        "pool": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 1.0,
+          "all_sources_found": 1,
+          "evidence_recall": 0.9722,
+          "all_evidence_found": 0.9722,
+          "mean_candidate_count": 34.98,
+          "negative_empty_rate": 0
+        },
+        "selected": {
+          "questions": 48,
+          "answerable": 36,
+          "unanswerable": 12,
+          "document_recall": 0.7639,
+          "all_sources_found": 0.7222,
+          "evidence_recall": 0.5,
+          "all_evidence_found": 0.4444,
+          "mean_candidate_count": 5,
+          "negative_empty_rate": 0
+        }
+      },
+      "by_category": {
+        "boundary_value": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "cross_chunk": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 32,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "exact_identifier": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 35.5,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "heading_context": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 36.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "historical_version": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 36.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.5,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "multi_document": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.875,
+            "all_sources_found": 0.75,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 35.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.875,
+            "all_sources_found": 0.75,
+            "evidence_recall": 0.75,
+            "all_evidence_found": 0.75,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "negation_condition": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.75,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 35.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.75,
+            "all_sources_found": 0.75,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "paraphrase": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 35.75,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.5,
+            "all_sources_found": 0.5,
+            "evidence_recall": 0.25,
+            "all_evidence_found": 0.25,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "role_scope": {
+          "keyword": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 30,
+            "negative_empty_rate": null
+          },
+          "semantic": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.0,
+            "all_sources_found": 0,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": null
+          },
+          "pool": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 1.0,
+            "all_sources_found": 1,
+            "evidence_recall": 1,
+            "all_evidence_found": 1,
+            "mean_candidate_count": 37.25,
+            "negative_empty_rate": null
+          },
+          "selected": {
+            "questions": 4,
+            "answerable": 4,
+            "unanswerable": 0,
+            "document_recall": 0.0,
+            "all_sources_found": 0,
+            "evidence_recall": 0,
+            "all_evidence_found": 0,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": null
+          }
+        },
+        "unanswerable": {
+          "keyword": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 28.5,
+            "negative_empty_rate": 0
+          },
+          "semantic": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 10,
+            "negative_empty_rate": 0
+          },
+          "pool": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 34.67,
+            "negative_empty_rate": 0
+          },
+          "selected": {
+            "questions": 12,
+            "answerable": 0,
+            "unanswerable": 12,
+            "document_recall": null,
+            "all_sources_found": null,
+            "evidence_recall": null,
+            "all_evidence_found": null,
+            "mean_candidate_count": 5,
+            "negative_empty_rate": 0
+          }
+        }
+      },
+      "mean_ms": 51.0,
+      "p95_ms": 63.26,
+      "acceptance": {
+        "quality_and_serial_latency_passed": false,
+        "checks": {
+          "evidence_recall": true,
+          "all_sources_found": true,
+          "all_evidence_found": true,
+          "each_positive_category": false,
+          "merge_loss": true,
+          "serial_latency": true
+        },
+        "positive_category_evidence": {
+          "boundary_value": 1,
+          "cross_chunk": 1,
+          "exact_identifier": 1,
+          "heading_context": 0.75,
+          "historical_version": 1,
+          "multi_document": 1,
+          "negation_condition": 1,
+          "paraphrase": 1,
+          "role_scope": 1
+        },
+        "merge_losses": 0,
+        "safety_status": "requires separate permission and generation consistency tests",
+        "scope": "synthetic engineering gate, not production acceptance"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "v3_sample_01",
+      "budget": 15,
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_02",
+      "budget": 15,
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "样品保管员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_03",
+      "budget": 15,
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。已在群里说明用途不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_04",
+      "budget": 15,
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_05",
+      "budget": 15,
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "质检组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_06",
+      "budget": 15,
+      "category": "heading_context",
+      "pool_evidence_recall": 0,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "允许窗口为36分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "filtered_or_route_budget"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_07",
+      "budget": 15,
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_08",
+      "budget": 15,
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "单次申请金额不超过1800元时使用普通流程",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_09",
+      "budget": 15,
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_10",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_11",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_12",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_01",
+      "budget": 15,
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_02",
+      "budget": 15,
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "维修调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_03",
+      "budget": 15,
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "必须同时满足故障等级确认且安全隔离完成，才可以提交维修派单申请。已经上传故障照片不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_04",
+      "budget": 15,
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_05",
+      "budget": 15,
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "设施组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_06",
+      "budget": 15,
+      "category": "heading_context",
+      "pool_evidence_recall": 0,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "允许窗口为15分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "filtered_or_route_budget"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_07",
+      "budget": 15,
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_08",
+      "budget": 15,
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "单次申请金额不超过4500元时使用普通流程",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_09",
+      "budget": 15,
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_10",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_11",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_12",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_01",
+      "budget": 15,
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_02",
+      "budget": 15,
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_03",
+      "budget": 15,
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "必须同时满足出行事由批准且驾驶员资质核验通过，才可以提交公务用车申请。已经在日历占位不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_vehicle_04",
+      "budget": 15,
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_05",
+      "budget": 15,
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_06",
+      "budget": 15,
+      "category": "heading_context",
+      "pool_evidence_recall": 0,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "允许窗口为180分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "filtered_or_route_budget"
+        }
+      ]
+    },
+    {
+      "id": "v3_vehicle_07",
+      "budget": 15,
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_08",
+      "budget": 15,
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_09",
+      "budget": 15,
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_10",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_11",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_12",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_01",
+      "budget": 15,
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_02",
+      "budget": 15,
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_03",
+      "budget": 15,
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_04",
+      "budget": 15,
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_05",
+      "budget": 15,
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "分析组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_06",
+      "budget": 15,
+      "category": "heading_context",
+      "pool_evidence_recall": 0,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "允许窗口为20分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "filtered_or_route_budget"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_07",
+      "budget": 15,
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_08",
+      "budget": 15,
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_09",
+      "budget": 15,
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_10",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_11",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_12",
+      "budget": 15,
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_01",
+      "budget": "k30-s10",
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_02",
+      "budget": "k30-s10",
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "样品保管员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_03",
+      "budget": "k30-s10",
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。已在群里说明用途不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_04",
+      "budget": "k30-s10",
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_05",
+      "budget": "k30-s10",
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "质检组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_06",
+      "budget": "k30-s10",
+      "category": "heading_context",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "允许窗口为36分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_07",
+      "budget": "k30-s10",
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "sample_exceptions.md",
+          "quote": "涉及外部机构借样时，即使金额未超过普通额度，也必须转专项审批",
+          "cause": "selection_loss"
+        },
+        {
+          "doc": "sample_rules.md",
+          "quote": "必须同时满足批次放行且领用用途审批通过，才可以提交样品领用申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_08",
+      "budget": "k30-s10",
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "单次申请金额不超过1800元时使用普通流程",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_09",
+      "budget": "k30-s10",
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "sample_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_sample_10",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_11",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_sample_12",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_01",
+      "budget": "k30-s10",
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_02",
+      "budget": "k30-s10",
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "维修调度员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_03",
+      "budget": "k30-s10",
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "必须同时满足故障等级确认且安全隔离完成，才可以提交维修派单申请。已经上传故障照片不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_04",
+      "budget": "k30-s10",
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_05",
+      "budget": "k30-s10",
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "设施组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_06",
+      "budget": "k30-s10",
+      "category": "heading_context",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "允许窗口为15分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_07",
+      "budget": "k30-s10",
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_08",
+      "budget": "k30-s10",
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "单次申请金额不超过4500元时使用普通流程",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_09",
+      "budget": "k30-s10",
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0.5,
+      "losses": [
+        {
+          "doc": "repair_rules.md",
+          "quote": "超时并不自动表示失败，不应立即重复创建同一申请。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_repair_10",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_11",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_repair_12",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_01",
+      "budget": "k30-s10",
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_02",
+      "budget": "k30-s10",
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_03",
+      "budget": "k30-s10",
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "必须同时满足出行事由批准且驾驶员资质核验通过，才可以提交公务用车申请。已经在日历占位不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_vehicle_04",
+      "budget": "k30-s10",
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_05",
+      "budget": "k30-s10",
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "行政组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_vehicle_06",
+      "budget": "k30-s10",
+      "category": "heading_context",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "vehicle_rules.md",
+          "quote": "允许窗口为180分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_vehicle_07",
+      "budget": "k30-s10",
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_08",
+      "budget": "k30-s10",
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_09",
+      "budget": "k30-s10",
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_10",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_11",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_vehicle_12",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_01",
+      "budget": "k30-s10",
+      "category": "exact_identifier",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_02",
+      "budget": "k30-s10",
+      "category": "paraphrase",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "数据审批员负责最终批准；申请人只能创建和补充申请，直属主管只能确认用途",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_03",
+      "budget": "k30-s10",
+      "category": "negation_condition",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "必须同时满足数据分级确认且用途授权完成，才可以提交数据导出申请。能够在工作台预览数据不能代替上述条件，条件缺一时应保留草稿，不允许先提交后补齐。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_04",
+      "budget": "k30-s10",
+      "category": "boundary_value",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_05",
+      "budget": "k30-s10",
+      "category": "role_scope",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "分析组成员可以查看本组已批准记录；其他组需要逐人授权，知道记录编号不构成访问权限。",
+          "cause": "selection_loss"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_06",
+      "budget": "k30-s10",
+      "category": "heading_context",
+      "pool_evidence_recall": 0,
+      "selected_evidence_recall": 0,
+      "losses": [
+        {
+          "doc": "data_rules.md",
+          "quote": "允许窗口为20分钟。窗口从最终批准时间开始计算，到达边界时仍可撤回",
+          "cause": "filtered_or_route_budget"
+        }
+      ]
+    },
+    {
+      "id": "v3_data_07",
+      "budget": "k30-s10",
+      "category": "multi_document",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_08",
+      "budget": "k30-s10",
+      "category": "historical_version",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_09",
+      "budget": "k30-s10",
+      "category": "cross_chunk",
+      "pool_evidence_recall": 1,
+      "selected_evidence_recall": 1,
+      "losses": []
+    },
+    {
+      "id": "v3_data_10",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_11",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    },
+    {
+      "id": "v3_data_12",
+      "budget": "k30-s10",
+      "category": "unanswerable",
+      "pool_evidence_recall": null,
+      "selected_evidence_recall": null,
+      "losses": []
+    }
+  ]
+}

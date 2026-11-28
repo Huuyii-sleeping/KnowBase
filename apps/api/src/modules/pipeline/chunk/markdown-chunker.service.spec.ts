@@ -37,7 +37,7 @@ describe('MarkdownChunkerService', () => {
     });
     expect(chunks.at(-1)?.ranges[0].source?.tableRowEnd).toBe(14);
     expect(
-      chunks.every((chunk) => chunk.strategy.startsWith('structure-v4:')),
+      chunks.every((chunk) => chunk.strategy.startsWith('structure-v5:')),
     ).toBe(true);
   });
   it('preserves the nearest heading when the document title is very long', async () => {

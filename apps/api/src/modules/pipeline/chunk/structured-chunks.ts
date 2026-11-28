@@ -5,7 +5,7 @@ import { ChunkOptions, StructuredChunk } from './chunk.types';
 import { structuredTableFragments } from './table-fragments';
 import { TableFragment } from './table-cell-fragments';
 
-export const CHUNK_STRATEGY = 'structure-v4';
+export const CHUNK_STRATEGY = 'structure-v5';
 
 export async function structuredChunks(
   blocks: DocumentBlock[],

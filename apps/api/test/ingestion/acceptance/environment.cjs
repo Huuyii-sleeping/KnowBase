@@ -128,6 +128,8 @@ class AcceptanceEnvironment extends DeliveryTestEnvironment {
         OUTBOX_BATCH_SIZE: '10',
         LANGFUSE_ENABLED: 'false',
         EMBEDDING_PROVIDER: 'ollama',
+        CHAT_MODEL_PROVIDER: 'ollama',
+        OLLAMA_CHAT_MODEL: 'qwen2.5:0.5b',
         OLLAMA_BASE_URL: 'http://127.0.0.1:11434',
         OLLAMA_EMBEDDING_MODEL: 'nomic-embed-text:latest',
         EMBEDDING_MODEL_REVISION: process.env.QUALITY_EMBEDDING_REVISION,

@@ -117,6 +117,34 @@ describe('Markdown structure', () => {
     expect(() => markdownBlocks('abc', sections)).toThrow('source section');
   });
 
+  it('retains Setext headings and CRLF source offsets without reading fenced examples or crossing partitions', () => {
+    const text =
+      'Policy\r\n====\r\n\r\nWindow\r\n---\r\nLimit 731.\r\n\r\n```md\r\nFake\r\n====\r\n```';
+    const blocks = markdownBlocks(text);
+    expect(blocks[2]).toMatchObject({
+      kind: 'paragraph',
+      text: 'Limit 731.',
+      headingPath: ['Policy', 'Window'],
+    });
+    expect(blocks.at(-1)).toMatchObject({
+      kind: 'code',
+      headingPath: ['Policy', 'Window'],
+    });
+    for (const block of blocks)
+      expect(text.slice(block.start, block.end)).toBe(block.text);
+    const separated = 'Title\n====\nbody';
+    expect(
+      markdownBlocks(separated, [
+        { start: 0, end: 6, source: { page: 1 } },
+        { start: 6, end: separated.length, source: { page: 2 } },
+      ]).some((block) => block.kind === 'heading'),
+    ).toBe(false);
+    expect(
+      markdownBlocks('---\n\n> quoted\n---').some(
+        (block) => block.kind === 'heading',
+      ),
+    ).toBe(false);
+  });
   it('supports lists, tilde fences and empty content', () => {
     expect(markdownBlocks('')).toEqual([]);
     expect(

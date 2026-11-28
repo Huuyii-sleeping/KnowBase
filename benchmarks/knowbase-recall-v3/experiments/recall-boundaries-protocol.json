@@ -1,0 +1,38 @@
+{
+  "version": "recall-boundaries-v1",
+  "scope": "All-synthetic, all-exposed diagnostic regression; not unseen acceptance",
+  "fixed": {
+    "dataset": "knowbase-recall-v3",
+    "context": "title-heading",
+    "keyword_policy": "body-reserve",
+    "analyzer": "cjk",
+    "model": "nomic-embed-text",
+    "encoding": "plain",
+    "chunk_size": 1000,
+    "chunk_overlap": 150,
+    "semantic_budget": 15,
+    "final_k": 5,
+    "reranking": "unchanged",
+    "split": "all"
+  },
+  "configurations": [
+    { "body_slots": 2, "keyword_budgets": [15, 20, 30] },
+    { "body_slots": 1, "keyword_budgets": [15] },
+    { "body_slots": 3, "keyword_budgets": [15] }
+  ],
+  "expected_scored_requests": 1120,
+  "diagnostics": [
+    "Record every metadata-eligible candidate before retained-budget slicing",
+    "Separate metadata_filter from route_budget; never relax publication, version or permissions",
+    "Legacy traces without eligibility remain ambiguous rather than retroactively relabelled",
+    "For each lost evidence record raw, eligible and retained ranks for both routes"
+  ],
+  "selection": "Compare each pool evidence hit against the rerun 2:1/15:15 baseline, development heading coverage, final selection side effects and query cost. Prefer bounded improvement without new pool evidence losses; do not claim the best proportion globally.",
+  "stop_rules": [
+    "Only test the three frozen proportions and three keyword budgets; no repeated fine tuning if no useful gain",
+    "If val017 remains missing from raw candidates or retained pool, investigate its matching/rank evidence before considering a separately frozen controlled-term experiment",
+    "Do not change frozen questions/answers, model or reranking to rescue measured cases",
+    "Default configuration and business deployment remain unchanged"
+  ],
+  "known_cases": ["kb027", "val006", "val017"]
+}

@@ -49,6 +49,14 @@ describe('upgrade preview contract', () => {
       policy().snapshot().hash,
     );
   });
+  it('invalidates previews when retrieval context changes even with identical chunks and dimensions', () => {
+    expect(policy({ RAG_RETRIEVAL_CONTEXT: 'body' }).snapshot().hash).not.toBe(
+      policy().snapshot().hash,
+    );
+    expect(
+      policy({ RAG_RETRIEVAL_CONTEXT: 'title-heading' }).snapshot().hash,
+    ).toBe(policy().snapshot().hash);
+  });
   it('requires immutable model identities rather than silently trusting aliases', () => {
     const p = new UpgradePolicyService(
       new ConfigService(),

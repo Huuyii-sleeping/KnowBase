@@ -2,6 +2,8 @@
 
 本文件收敛解析保存、结构分块和索引恢复的已有成果，作为 [执行路线](ingestion-optimization-roadmap.md) 阶段 4 的开发起点。它不表示已经部署、批量升级存量文档或完成 main 集成。
 
+> 本文是阶段 1–3 的历史冻结记录。2026-11-28 的 main 整合与后续验收状态以 [组合回归报告](ingestion-main-integration-report.md) 和 [执行路线](ingestion-optimization-roadmap.md) 为准；下面保留当时的未完成项，不回写历史结果。
+
 ## 代码边界与提交
 
 | 能力              | 固定提交  | 范围                                                                                 |

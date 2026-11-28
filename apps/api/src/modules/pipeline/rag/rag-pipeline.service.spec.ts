@@ -12,6 +12,7 @@ function fixture() {
     version: 3,
     contentId: 'body',
     status: 'PUBLISHED',
+    title: 'Source',
   };
   const generations = {
     capture: vi.fn().mockResolvedValue(document),
@@ -40,6 +41,14 @@ function fixture() {
     finish: vi.fn(),
     prune: vi.fn(),
   };
+  const chunkText = {
+    forChunks: vi.fn((chunks) =>
+      chunks.map((chunk) => ({
+        ...chunk,
+        retrievalText: 'Source\n' + chunk.content,
+      })),
+    ),
+  };
   const service = new RagPipelineService(
     content as any,
     chunker as any,
@@ -47,10 +56,32 @@ function fixture() {
     index as any,
     generations as any,
     new IndexBuildService(generations as any, progress as any),
+    chunkText as any,
   );
-  return { service, generations, content, chunker, embedding, index, progress };
+  return {
+    service,
+    generations,
+    content,
+    chunker,
+    embedding,
+    index,
+    progress,
+    chunkText,
+  };
 }
 describe('RagPipelineService generations', () => {
+  it('does not write or activate when context assembly fails', async () => {
+    const { service, chunkText, index, generations, progress } = fixture();
+    chunkText.forChunks.mockImplementationOnce(() => {
+      throw new Error('context failed');
+    });
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'context failed',
+    );
+    expect(index.stageChunks).not.toHaveBeenCalled();
+    expect(generations.activate).not.toHaveBeenCalled();
+    expect(progress.finish.mock.calls.at(-1)?.[1]).toBe('failed');
+  });
   it('activates an empty batch without calling the embedding provider', async () => {
     const { service, chunker, embedding, index } = fixture();
     chunker.forContent.mockResolvedValueOnce([]);
@@ -63,8 +94,18 @@ describe('RagPipelineService generations', () => {
     );
   });
   it('stages all embeddings before activating a complete generation', async () => {
-    const { service, index, generations } = fixture();
+    const { service, index, generations, chunkText, embedding } = fixture();
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 2 });
+    expect(chunkText.forChunks).toHaveBeenCalledOnce();
+    expect(chunkText.forChunks).toHaveBeenCalledWith(
+      expect.any(Array),
+      'Source',
+    );
+    expect(embedding.embed).toHaveBeenCalledWith(
+      'doc',
+      ['Source\nOne', 'Source\nTwo'],
+      expect.any(Function),
+    );
     expect(generations.capture).toHaveBeenCalledWith('doc', 3);
     expect(index.stageChunks).toHaveBeenCalledWith('doc', expect.any(String), [
       expect.objectContaining({ id: 'doc:v3:c0', embedding: [0.1] }),

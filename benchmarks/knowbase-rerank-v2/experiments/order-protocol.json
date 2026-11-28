@@ -1,0 +1,118 @@
+{
+  "version": "knowbase-rerank-v2-model-order",
+  "status_at_freeze": "Output order experiment unscored; all mminilm and mminilm-anchor2 results exposed; BGE prefix quality exposed including training09 timeout loss and several extra quota-label losses; complete BGE scoring pending",
+  "parent_protocol": "benchmarks/knowbase-rerank-v2/experiments/anchor-protocol.json",
+  "files_sha256": {
+    "benchmarks/knowbase-rerank-v2/experiments/anchor-protocol.json": "5218515d769bbddea13db8e00e16ba89ff1cb2e17ae84c467d4e69632f9a04b4",
+    "tools/rag-evaluation/rerank-order-replay.cjs": "8347796708666ad63d752c1a3a53555356ce299f44610904c053b79f1d3288f6"
+  },
+  "sources": [
+    {
+      "id": "v3-candidate",
+      "dataset": "benchmarks/knowbase-recall-v3",
+      "run": "reports/retrieval-phrase-paired/2026-11-14T11-10-31-933Z-3624/knowbase-recall-v3/off-r1",
+      "budget": "k30-s15",
+      "trace_sha256": "c5b44c8c1bdd36b907c4e7d90e1b2efe42eb45fb6d9b7d14ae9985ac8a3d148e",
+      "files_sha256": {
+        "metadata.json": "9b1df57fd76d9395f7d395cc14e3a84dc380e5c157d1121c54c8a48e440ae518",
+        "indexed-corpus.json": "875fbc811b74a59f4ec263fd08691a1f7a35f2d909c7776a221e18214d8f1a77",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-default",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-default/2026-11-14T14-54-21-258Z-7543",
+      "budget": 15,
+      "trace_sha256": "02a947fdffbfc06f19616c79614bff8d94566f6ab67c51dc43bb02bfb546b074",
+      "files_sha256": {
+        "metadata.json": "73ccca2fc0f15cd5212be98ab1dfd0110fd4dd4c2685f46ebea7f437a4bd8df3",
+        "indexed-corpus.json": "6739024e87e17c813653cb96fc8b903a63fc90c5966462a0c6ae15b5f4e70ece",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    },
+    {
+      "id": "holdout-candidate",
+      "dataset": "benchmarks/knowbase-holdout-v1",
+      "run": "reports/retrieval-holdout-candidate/2026-11-14T14-56-04-614Z-8148",
+      "budget": "k30-s15",
+      "trace_sha256": "72f56402966b9ee1bbe1ab5a2f712c0755d03fcb692d485f746873a681b493c4",
+      "files_sha256": {
+        "metadata.json": "5be6ff3f4e7afc73821b741e589752a96d008b9a123f434bec6dfc8996bae044",
+        "indexed-corpus.json": "7c9f07d2a90c403bbcf72978ea0ec2ed90482b99c4e83eac8f3d58205d881949",
+        "run-status.json": "5bdc4bb3ad85eaa994ae27ea899eaf219ba54b9a9f598282dcc0f2fecc6b7514"
+      }
+    }
+  ],
+  "fixed_constraints": {
+    "topK": 5,
+    "maxChunksPerDocument": 2,
+    "maxContextCharacters": 6000,
+    "first_oversized_candidate": "production exception preserved"
+  },
+  "strategies": [
+    {
+      "id": "rule",
+      "kind": "rule"
+    },
+    {
+      "id": "mminilm",
+      "kind": "model",
+      "diagnostic": true
+    },
+    {
+      "id": "bge-m3",
+      "kind": "model",
+      "diagnostic": true
+    },
+    {
+      "id": "mminilm-anchor2",
+      "kind": "anchor",
+      "diagnostic": true
+    },
+    {
+      "id": "bge-m3-anchor2",
+      "kind": "anchor",
+      "diagnostic": true
+    },
+    {
+      "id": "mminilm-anchor2-model-order",
+      "kind": "model-order",
+      "admission": "mminilm-anchor2",
+      "model": "mminilm"
+    },
+    {
+      "id": "bge-m3-anchor2-model-order",
+      "kind": "model-order",
+      "admission": "bge-m3-anchor2",
+      "model": "bge-m3"
+    }
+  ],
+  "selection": {
+    "source": "v3-candidate",
+    "split": "development",
+    "minimum_development_gain": 0.02,
+    "tie_break": [
+      "evidence_recall",
+      "all_evidence_found",
+      "evidence_mrr",
+      "frozen_strategy_order"
+    ],
+    "regression_gates": "No new evidence losses and no aggregate source completeness regression on every source/split, including development. Failure stops this candidate; do not select another using regression scores."
+  },
+  "policy": "Reuse exact parent-admitted selected IDs, then sort only that set by descending raw model score; stable equal scores preserve admission order. No candidate added or removed. Admission constraints including first oversized exception are calculated once by the parent selector, not reapplied after presentation ordering. Preserve admission decisions and original admitted order explicitly.",
+  "measurement": "Evidence recall, completeness and evidence losses must be identical to anchor parent; report evidence MRR and Top1 annotated-evidence hit as ordering diagnostics, not complete Precision or answer accuracy. Same zero-loss selection gate, no new gate or label edits.",
+  "motivation": "Fixed anchors protect membership but can pin irrelevant baseline items ahead of model-selected evidence; current answer consumer sorts by rerankScore again. Test membership protection separately from final order using the same complete model scores.",
+  "boundaries": [
+    "No retrieval, answer generation, publication/ACL runtime retest or production configuration changes",
+    "RRF cap5 is diagnostic only: same Top5/6000 but changed document distribution; cannot pass adoption gate",
+    "No parameter sweeps, model substitution by observed scores, question-specific business keyword rules, label edits or silent fallback",
+    "All corpora exposed and assistant-authored; best observed candidate is not independent production acceptance",
+    "New model weights fetched from ModelScope mirror with pinned mirror commit and individual SHA256, not claimed byte-equivalent to unavailable Hugging Face revision",
+    "Independent post-mminilm experiment, not an amendment to the primary frozen protocol; reuse only verified complete FP16 scores via the parent replay validator",
+    "Raw models and RRF are diagnostic in this experiment; only the two fixed anchor2 strategies are eligible; choose on development only, do not switch runner-up after regression failure",
+    "Not independent validation of a hypothesis suggested by already exposed model losses",
+    "New independent order-only hypothesis; no reinference, model changes, ratio search, label edits, question-specific rules or production changes",
+    "Raw models and anchor-order controls are diagnostic; only two model-order strategies eligible, choose on development only; do not claim a new blind evaluation"
+  ]
+}

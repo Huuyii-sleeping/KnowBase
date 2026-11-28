@@ -1,0 +1,3992 @@
+{
+  "protocol_sha256": "238d2d451035004bebb4d59d463ea4a38b9c7785449840cde1b81d176d632259",
+  "scope": "All synthetic, template-correlated and exposed; annotated-evidence recall, not exhaustive precision or answer/production acceptance",
+  "scored_requests": 448,
+  "verified_invariants": [
+    "identical220 original chunks",
+    "identical corpus/question hashes and model digest",
+    "same clean code commit",
+    "one call per route with retained30:15 and raw caps90:45",
+    "original semantic and rerank query; unchanged fusion and rerank code",
+    "all indexed evidence present; zero cross-route merge losses"
+  ],
+  "baseline_pool_changes_vs_prior": [],
+  "baseline_selected_changes_vs_prior": [],
+  "experiments": [
+    {
+      "mode": "off",
+      "raw_report_directory": "reports/retrieval-keyword-noise-off/2026-11-14T10-43-39-511Z-99457",
+      "metadata": {
+        "api_git_commit": "29ac7eabb28172cf8f7b2f8227a6e1e5fdf29104",
+        "working_tree_dirty": false,
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "document_count": 158,
+        "indexed_chunk_count": 220,
+        "question_count": 224,
+        "keyword_query_mode": "off"
+      },
+      "corpus_fingerprints_sha256": "c726d241af9d0da81281d57d5f33ff7ceebbf444163f612d160cdd8acc3aafaa",
+      "summaries": [
+        {
+          "split": "development",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 83.78,
+              "negative_empty_rate": 0
+            },
+            "keyword": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 29.4,
+              "negative_empty_rate": 0
+            },
+            "semantic_raw": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.8889,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.7361,
+              "all_evidence_found": 0.6944,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5764,
+              "all_evidence_found": 0.5417,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 37.71,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.6458,
+              "all_sources_found": 0.6111,
+              "evidence_recall": 0.5625,
+              "all_evidence_found": 0.5278,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 83.78,
+              "negative_empty_rate": 0
+            },
+            "semantic_eligible": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.8889,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.7361,
+              "all_evidence_found": 0.6944,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "boundary_value": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 32.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "cross_chunk": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_identifier": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "heading_context": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "historical_version": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.9375,
+                "all_sources_found": 0.875,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.9375,
+                "all_sources_found": 0.875,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.8125,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.5625,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5625,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "negation_condition": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "role_scope": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 27.58,
+                "negative_empty_rate": 0
+              },
+              "semantic": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 36.25,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            }
+          },
+          "mean_ms": 128.13,
+          "p95_ms": 231.26,
+          "acceptance": {
+            "quality_and_serial_latency_passed": true,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": true
+            },
+            "positive_category_evidence": {
+              "boundary_value": 1,
+              "cross_chunk": 1,
+              "exact_identifier": 1,
+              "heading_context": 1,
+              "historical_version": 1,
+              "multi_document": 1,
+              "negation_condition": 1,
+              "paraphrase": 1,
+              "role_scope": 1
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        },
+        {
+          "split": "regression",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 83.65,
+              "negative_empty_rate": 0.125
+            },
+            "keyword": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 28.71,
+              "negative_empty_rate": 0.125
+            },
+            "semantic_raw": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5347,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6111,
+              "all_sources_found": 0.5833,
+              "evidence_recall": 0.4861,
+              "all_evidence_found": 0.4444,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 39.98,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.5972,
+              "all_sources_found": 0.5694,
+              "evidence_recall": 0.4861,
+              "all_evidence_found": 0.4444,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 83.65,
+              "negative_empty_rate": 0.125
+            },
+            "semantic_eligible": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5347,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "cross_chunk": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_term": {
+              "keyword": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 25.88,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.625,
+                "all_evidence_found": 0.625,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 36,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.625,
+                "all_evidence_found": 0.625,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.3125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 42.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.3125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "parameter_table": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 29.12,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 42.31,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.3125,
+                "all_sources_found": 0.3125,
+                "evidence_recall": 0.125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 26.25,
+                "negative_empty_rate": 0.125
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 38.25,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            },
+            "version": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "workflow": {
+              "keyword": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.9167,
+                "all_sources_found": 0.9167,
+                "evidence_recall": 0.9167,
+                "all_evidence_found": 0.9167,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.9167,
+                "all_sources_found": 0.9167,
+                "evidence_recall": 0.9167,
+                "all_evidence_found": 0.9167,
+                "mean_candidate_count": 43.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            }
+          },
+          "mean_ms": 146.57,
+          "p95_ms": 240.86,
+          "acceptance": {
+            "quality_and_serial_latency_passed": true,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": true
+            },
+            "positive_category_evidence": {
+              "cross_chunk": 1,
+              "exact_term": 1,
+              "multi_document": 1,
+              "parameter_table": 1,
+              "paraphrase": 1,
+              "version": 1,
+              "workflow": 0.9167
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        },
+        {
+          "split": "validation",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 84.73,
+              "negative_empty_rate": 0
+            },
+            "keyword": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 29.73,
+              "negative_empty_rate": 0
+            },
+            "semantic_raw": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.9444,
+              "all_sources_found": 0.9444,
+              "evidence_recall": 0.8333,
+              "all_evidence_found": 0.8056,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.7639,
+              "all_sources_found": 0.7222,
+              "evidence_recall": 0.6528,
+              "all_evidence_found": 0.6111,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 38.48,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.7639,
+              "all_sources_found": 0.7222,
+              "evidence_recall": 0.6528,
+              "all_evidence_found": 0.6111,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 84.73,
+              "negative_empty_rate": 0
+            },
+            "semantic_eligible": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.9444,
+              "all_sources_found": 0.9444,
+              "evidence_recall": 0.8333,
+              "all_evidence_found": 0.8056,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "boundary_value": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 32.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "cross_chunk": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_identifier": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 36.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "heading_context": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "historical_version": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.75,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.75,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.875,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.875,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "negation_condition": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "role_scope": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 41,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 28.92,
+                "negative_empty_rate": 0
+              },
+              "semantic": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 38.42,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            }
+          },
+          "mean_ms": 155.52,
+          "p95_ms": 566.99,
+          "acceptance": {
+            "quality_and_serial_latency_passed": false,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": false
+            },
+            "positive_category_evidence": {
+              "boundary_value": 1,
+              "cross_chunk": 1,
+              "exact_identifier": 1,
+              "heading_context": 1,
+              "historical_version": 1,
+              "multi_document": 1,
+              "negation_condition": 1,
+              "paraphrase": 1,
+              "role_scope": 1
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        }
+      ],
+      "triggered_questions": 0,
+      "triggered_positive_metrics": {
+        "regression": {
+          "keyword": 0.9824561403508771,
+          "pool": 0.9824561403508771,
+          "selected": 0.45614035087719296
+        },
+        "development": {
+          "keyword": 1,
+          "pool": 1,
+          "selected": 0.6625
+        },
+        "validation": {
+          "keyword": 1,
+          "pool": 1,
+          "selected": 0.775
+        }
+      },
+      "triggered_by_split": {
+        "regression": 0,
+        "development": 0,
+        "validation": 0
+      },
+      "route_recall_calls": {
+        "keyword": 224,
+        "semantic": 224
+      },
+      "estimated_index_search_requests": 672,
+      "query_embedding_calls": 224,
+      "evidence_changes": {
+        "keyword_raw": [],
+        "keyword": [],
+        "semantic_raw": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "candidate_changes": {
+        "keyword": {
+          "changed_identity_order_count": 0,
+          "changed_identity_set_count": 0,
+          "changed_identity_or_score_count": 0,
+          "changed_untriggered_questions": []
+        },
+        "semantic": {
+          "changed_identity_order_count": 0,
+          "changed_identity_set_count": 0,
+          "changed_identity_or_score_count": 0,
+          "changed_untriggered_questions": []
+        },
+        "pool": {
+          "changed_identity_order_count": 0,
+          "changed_identity_set_count": 0,
+          "changed_identity_or_score_count": 0,
+          "changed_untriggered_questions": []
+        },
+        "selected": {
+          "changed_identity_order_count": 0,
+          "changed_identity_set_count": 0,
+          "changed_identity_or_score_count": 0,
+          "changed_untriggered_questions": []
+        }
+      },
+      "semantic_retained_order_or_score_differences": [],
+      "known_case": {
+        "id": "val017",
+        "question": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+        "type": "answerable",
+        "category": "workflow",
+        "split": "regression",
+        "budget": "k30-s15",
+        "keyword_budget": 30,
+        "semantic_budget": 15,
+        "stages": {
+          "indexed": {
+            "document_recall": 1.0,
+            "all_sources_found": true,
+            "evidence_recall": 1,
+            "all_evidence_found": true,
+            "evidence_hits": [
+              true
+            ],
+            "candidate_count": 220,
+            "unique_document_count": 158
+          },
+          "keyword_raw": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 90,
+            "unique_document_count": 66
+          },
+          "keyword": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 30,
+            "unique_document_count": 18
+          },
+          "semantic_raw": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 24
+          },
+          "semantic": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 15,
+            "unique_document_count": 13
+          },
+          "pool": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 20
+          },
+          "selected": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 5,
+            "unique_document_count": 5
+          },
+          "keyword_eligible": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 90,
+            "unique_document_count": 66
+          },
+          "semantic_eligible": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 24
+          }
+        },
+        "losses": [
+          {
+            "doc": "kb_review.md",
+            "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回",
+            "cause": "not_in_raw_candidates",
+            "routes": {
+              "keyword": {
+                "raw_rank": null,
+                "eligible_rank": null,
+                "retained_rank": null,
+                "reason": "not_in_raw_candidates"
+              },
+              "semantic": {
+                "raw_rank": null,
+                "eligible_rank": null,
+                "retained_rank": null,
+                "reason": "not_in_raw_candidates"
+              }
+            }
+          }
+        ],
+        "elapsed_ms": 162.8665420000034,
+        "keyword_ms": 84.86741599999368,
+        "semantic_ms": 162.07962500001304,
+        "route_timings": {
+          "keyword": {
+            "visibilityMs": 2.743958000006387,
+            "embeddingMs": 0,
+            "indexMs": 75.11287499999162,
+            "metadataMs": 7.004500000010012
+          },
+          "semantic": {
+            "visibilityMs": 2.896666999993613,
+            "embeddingMs": 136.47812499999418,
+            "indexMs": 20.467166999995243,
+            "metadataMs": 2.23133300000336
+          }
+        },
+        "query_plans": {
+          "keyword": [
+            {
+              "query": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+              "budget": 30
+            }
+          ],
+          "semantic": [
+            {
+              "query": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+              "budget": 15
+            }
+          ]
+        }
+      },
+      "remaining_pool_misses": [
+        "val017"
+      ]
+    },
+    {
+      "mode": "trim-question",
+      "raw_report_directory": "reports/retrieval-keyword-noise-trim-question/2026-11-14T10-47-47-876Z-508",
+      "metadata": {
+        "api_git_commit": "29ac7eabb28172cf8f7b2f8227a6e1e5fdf29104",
+        "working_tree_dirty": false,
+        "embedding_digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "document_count": 158,
+        "indexed_chunk_count": 220,
+        "question_count": 224,
+        "keyword_query_mode": "trim-question"
+      },
+      "corpus_fingerprints_sha256": "c726d241af9d0da81281d57d5f33ff7ceebbf444163f612d160cdd8acc3aafaa",
+      "summaries": [
+        {
+          "split": "development",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 83.78,
+              "negative_empty_rate": 0
+            },
+            "keyword": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 29.4,
+              "negative_empty_rate": 0
+            },
+            "semantic_raw": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.8889,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.7361,
+              "all_evidence_found": 0.6944,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5764,
+              "all_evidence_found": 0.5417,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 37.71,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.6458,
+              "all_sources_found": 0.6111,
+              "evidence_recall": 0.5625,
+              "all_evidence_found": 0.5278,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 83.78,
+              "negative_empty_rate": 0
+            },
+            "semantic_eligible": {
+              "questions": 96,
+              "answerable": 72,
+              "unanswerable": 24,
+              "document_recall": 0.8889,
+              "all_sources_found": 0.875,
+              "evidence_recall": 0.7361,
+              "all_evidence_found": 0.6944,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "boundary_value": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 32.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "cross_chunk": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_identifier": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "heading_context": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "historical_version": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.9375,
+                "all_sources_found": 0.875,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.9375,
+                "all_sources_found": 0.875,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.8125,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.5625,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5625,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "negation_condition": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.625,
+                "all_sources_found": 0.625,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0.375,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "role_scope": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 27.58,
+                "negative_empty_rate": 0
+              },
+              "semantic": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 36.25,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 24,
+                "answerable": 0,
+                "unanswerable": 24,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            }
+          },
+          "mean_ms": 201.07,
+          "p95_ms": 518.51,
+          "acceptance": {
+            "quality_and_serial_latency_passed": false,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": false
+            },
+            "positive_category_evidence": {
+              "boundary_value": 1,
+              "cross_chunk": 1,
+              "exact_identifier": 1,
+              "heading_context": 1,
+              "historical_version": 1,
+              "multi_document": 1,
+              "negation_condition": 1,
+              "paraphrase": 1,
+              "role_scope": 1
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        },
+        {
+          "split": "regression",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 83.65,
+              "negative_empty_rate": 0.125
+            },
+            "keyword": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 28.71,
+              "negative_empty_rate": 0.125
+            },
+            "semantic_raw": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5347,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6111,
+              "all_sources_found": 0.5833,
+              "evidence_recall": 0.4861,
+              "all_evidence_found": 0.4444,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 39.98,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.5972,
+              "all_sources_found": 0.5694,
+              "evidence_recall": 0.4861,
+              "all_evidence_found": 0.4444,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.9861,
+              "all_sources_found": 0.9861,
+              "evidence_recall": 0.9861,
+              "all_evidence_found": 0.9861,
+              "mean_candidate_count": 83.65,
+              "negative_empty_rate": 0.125
+            },
+            "semantic_eligible": {
+              "questions": 80,
+              "answerable": 72,
+              "unanswerable": 8,
+              "document_recall": 0.6667,
+              "all_sources_found": 0.6389,
+              "evidence_recall": 0.5347,
+              "all_evidence_found": 0.5,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "cross_chunk": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.375,
+                "all_evidence_found": 0,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_term": {
+              "keyword": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 25.88,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.625,
+                "all_evidence_found": 0.625,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 36,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.625,
+                "all_evidence_found": 0.625,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.3125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 42.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.3125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "parameter_table": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 29.12,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.375,
+                "all_sources_found": 0.375,
+                "evidence_recall": 0.125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 42.31,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 16,
+                "answerable": 16,
+                "unanswerable": 0,
+                "document_recall": 0.3125,
+                "all_sources_found": 0.3125,
+                "evidence_recall": 0.125,
+                "all_evidence_found": 0.125,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 26.25,
+                "negative_empty_rate": 0.125
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 38.25,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 0,
+                "unanswerable": 8,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            },
+            "version": {
+              "keyword": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.12,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 8,
+                "answerable": 8,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "workflow": {
+              "keyword": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.9167,
+                "all_sources_found": 0.9167,
+                "evidence_recall": 0.9167,
+                "all_evidence_found": 0.9167,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.9167,
+                "all_sources_found": 0.9167,
+                "evidence_recall": 0.9167,
+                "all_evidence_found": 0.9167,
+                "mean_candidate_count": 43.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 12,
+                "answerable": 12,
+                "unanswerable": 0,
+                "document_recall": 0.25,
+                "all_sources_found": 0.25,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            }
+          },
+          "mean_ms": 239.68,
+          "p95_ms": 631.45,
+          "acceptance": {
+            "quality_and_serial_latency_passed": false,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": false
+            },
+            "positive_category_evidence": {
+              "cross_chunk": 1,
+              "exact_term": 1,
+              "multi_document": 1,
+              "parameter_table": 1,
+              "paraphrase": 1,
+              "version": 1,
+              "workflow": 0.9167
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        },
+        {
+          "split": "validation",
+          "budget_per_route": "k30-s15",
+          "route_budgets": {
+            "id": "k30-s15",
+            "keyword": 30,
+            "semantic": 15
+          },
+          "stages": {
+            "indexed": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 220,
+              "negative_empty_rate": 0
+            },
+            "keyword_raw": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 84.73,
+              "negative_empty_rate": 0
+            },
+            "keyword": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 29.73,
+              "negative_empty_rate": 0
+            },
+            "semantic_raw": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.9444,
+              "all_sources_found": 0.9444,
+              "evidence_recall": 0.8333,
+              "all_evidence_found": 0.8056,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            },
+            "semantic": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.7639,
+              "all_sources_found": 0.7222,
+              "evidence_recall": 0.6528,
+              "all_evidence_found": 0.6111,
+              "mean_candidate_count": 15,
+              "negative_empty_rate": 0
+            },
+            "pool": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 38.5,
+              "negative_empty_rate": 0
+            },
+            "selected": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.7639,
+              "all_sources_found": 0.7222,
+              "evidence_recall": 0.6528,
+              "all_evidence_found": 0.6111,
+              "mean_candidate_count": 5,
+              "negative_empty_rate": 0
+            },
+            "keyword_eligible": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 1.0,
+              "all_sources_found": 1,
+              "evidence_recall": 1,
+              "all_evidence_found": 1,
+              "mean_candidate_count": 84.73,
+              "negative_empty_rate": 0
+            },
+            "semantic_eligible": {
+              "questions": 48,
+              "answerable": 36,
+              "unanswerable": 12,
+              "document_recall": 0.9444,
+              "all_sources_found": 0.9444,
+              "evidence_recall": 0.8333,
+              "all_evidence_found": 0.8056,
+              "mean_candidate_count": 45,
+              "negative_empty_rate": 0
+            }
+          },
+          "by_category": {
+            "boundary_value": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 32.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "cross_chunk": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "exact_identifier": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 36.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "heading_context": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "historical_version": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.75,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.75,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.75,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "multi_document": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.875,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 38.75,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.875,
+                "all_sources_found": 0.75,
+                "evidence_recall": 0.875,
+                "all_evidence_found": 0.75,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "negation_condition": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 39.5,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "paraphrase": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 40.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.5,
+                "all_evidence_found": 0.5,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "role_scope": {
+              "keyword": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 30,
+                "negative_empty_rate": null
+              },
+              "semantic": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": null
+              },
+              "pool": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 1.0,
+                "all_sources_found": 1,
+                "evidence_recall": 1,
+                "all_evidence_found": 1,
+                "mean_candidate_count": 41.25,
+                "negative_empty_rate": null
+              },
+              "selected": {
+                "questions": 4,
+                "answerable": 4,
+                "unanswerable": 0,
+                "document_recall": 0.5,
+                "all_sources_found": 0.5,
+                "evidence_recall": 0.25,
+                "all_evidence_found": 0.25,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": null
+              }
+            },
+            "unanswerable": {
+              "keyword": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 28.92,
+                "negative_empty_rate": 0
+              },
+              "semantic": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 15,
+                "negative_empty_rate": 0
+              },
+              "pool": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 38.42,
+                "negative_empty_rate": 0
+              },
+              "selected": {
+                "questions": 12,
+                "answerable": 0,
+                "unanswerable": 12,
+                "document_recall": null,
+                "all_sources_found": null,
+                "evidence_recall": null,
+                "all_evidence_found": null,
+                "mean_candidate_count": 5,
+                "negative_empty_rate": 0
+              }
+            }
+          },
+          "mean_ms": 160.12,
+          "p95_ms": 218.03,
+          "acceptance": {
+            "quality_and_serial_latency_passed": true,
+            "checks": {
+              "evidence_recall": true,
+              "all_sources_found": true,
+              "all_evidence_found": true,
+              "each_positive_category": true,
+              "merge_loss": true,
+              "serial_latency": true
+            },
+            "positive_category_evidence": {
+              "boundary_value": 1,
+              "cross_chunk": 1,
+              "exact_identifier": 1,
+              "heading_context": 1,
+              "historical_version": 1,
+              "multi_document": 1,
+              "negation_condition": 1,
+              "paraphrase": 1,
+              "role_scope": 1
+            },
+            "merge_losses": 0,
+            "safety_status": "requires separate permission and generation consistency tests",
+            "scope": "synthetic engineering gate, not production acceptance"
+          }
+        }
+      ],
+      "triggered_questions": 134,
+      "triggered_positive_metrics": {
+        "regression": {
+          "keyword": 0.9824561403508771,
+          "pool": 0.9824561403508771,
+          "selected": 0.45614035087719296
+        },
+        "development": {
+          "keyword": 1,
+          "pool": 1,
+          "selected": 0.6625
+        },
+        "validation": {
+          "keyword": 1,
+          "pool": 1,
+          "selected": 0.775
+        }
+      },
+      "triggered_by_split": {
+        "regression": 62,
+        "development": 48,
+        "validation": 24
+      },
+      "route_recall_calls": {
+        "keyword": 224,
+        "semantic": 224
+      },
+      "estimated_index_search_requests": 672,
+      "query_embedding_calls": 224,
+      "evidence_changes": {
+        "keyword_raw": [],
+        "keyword": [],
+        "semantic_raw": [],
+        "semantic": [],
+        "pool": [],
+        "selected": []
+      },
+      "candidate_changes": {
+        "keyword": {
+          "changed_identity_order_count": 54,
+          "changed_identity_set_count": 4,
+          "changed_identity_or_score_count": 54,
+          "changed_untriggered_questions": [
+            "kb008",
+            "kb038",
+            "kb040",
+            "val002",
+            "val031",
+            "v3_equipment_02",
+            "v3_equipment_05",
+            "v3_equipment_10",
+            "v3_travel_02",
+            "v3_contract_02",
+            "v3_contract_03",
+            "v3_contract_05",
+            "v3_contract_08",
+            "v3_contract_10",
+            "v3_contract_12",
+            "v3_access_02",
+            "v3_access_05",
+            "v3_archive_02",
+            "v3_archive_05",
+            "v3_archive_10",
+            "v3_release_02",
+            "v3_release_10",
+            "v3_training_02",
+            "v3_sample_02",
+            "v3_sample_03",
+            "v3_sample_05",
+            "v3_sample_08",
+            "v3_sample_10",
+            "v3_sample_12",
+            "v3_repair_02",
+            "v3_vehicle_02",
+            "v3_vehicle_05",
+            "v3_data_02",
+            "v3_data_05"
+          ]
+        },
+        "semantic": {
+          "changed_identity_order_count": 0,
+          "changed_identity_set_count": 0,
+          "changed_identity_or_score_count": 0,
+          "changed_untriggered_questions": []
+        },
+        "pool": {
+          "changed_identity_order_count": 54,
+          "changed_identity_set_count": 4,
+          "changed_identity_or_score_count": 54,
+          "changed_untriggered_questions": [
+            "kb008",
+            "kb038",
+            "kb040",
+            "val002",
+            "val031",
+            "v3_equipment_02",
+            "v3_equipment_05",
+            "v3_equipment_10",
+            "v3_travel_02",
+            "v3_contract_02",
+            "v3_contract_03",
+            "v3_contract_05",
+            "v3_contract_08",
+            "v3_contract_10",
+            "v3_contract_12",
+            "v3_access_02",
+            "v3_access_05",
+            "v3_archive_02",
+            "v3_archive_05",
+            "v3_archive_10",
+            "v3_release_02",
+            "v3_release_10",
+            "v3_training_02",
+            "v3_sample_02",
+            "v3_sample_03",
+            "v3_sample_05",
+            "v3_sample_08",
+            "v3_sample_10",
+            "v3_sample_12",
+            "v3_repair_02",
+            "v3_vehicle_02",
+            "v3_vehicle_05",
+            "v3_data_02",
+            "v3_data_05"
+          ]
+        },
+        "selected": {
+          "changed_identity_order_count": 6,
+          "changed_identity_set_count": 5,
+          "changed_identity_or_score_count": 9,
+          "changed_untriggered_questions": [
+            "v3_contract_02",
+            "v3_contract_03",
+            "v3_contract_10",
+            "v3_contract_12",
+            "v3_access_05",
+            "v3_data_05"
+          ]
+        }
+      },
+      "semantic_retained_order_or_score_differences": [],
+      "known_case": {
+        "id": "val017",
+        "question": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+        "type": "answerable",
+        "category": "workflow",
+        "split": "regression",
+        "budget": "k30-s15",
+        "keyword_budget": 30,
+        "semantic_budget": 15,
+        "stages": {
+          "indexed": {
+            "document_recall": 1.0,
+            "all_sources_found": true,
+            "evidence_recall": 1,
+            "all_evidence_found": true,
+            "evidence_hits": [
+              true
+            ],
+            "candidate_count": 220,
+            "unique_document_count": 158
+          },
+          "keyword_raw": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 90,
+            "unique_document_count": 66
+          },
+          "keyword": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 30,
+            "unique_document_count": 18
+          },
+          "semantic_raw": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 24
+          },
+          "semantic": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 15,
+            "unique_document_count": 13
+          },
+          "pool": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 20
+          },
+          "selected": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 5,
+            "unique_document_count": 5
+          },
+          "keyword_eligible": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 90,
+            "unique_document_count": 66
+          },
+          "semantic_eligible": {
+            "document_recall": 0.0,
+            "all_sources_found": false,
+            "evidence_recall": 0,
+            "all_evidence_found": false,
+            "evidence_hits": [
+              false
+            ],
+            "candidate_count": 45,
+            "unique_document_count": 24
+          }
+        },
+        "losses": [
+          {
+            "doc": "kb_review.md",
+            "quote": "只有 parseStatus=READY 的草稿或驳回文档才能提交审核。管理员负责审核通过或驳回",
+            "cause": "not_in_raw_candidates",
+            "routes": {
+              "keyword": {
+                "raw_rank": null,
+                "eligible_rank": null,
+                "retained_rank": null,
+                "reason": "not_in_raw_candidates"
+              },
+              "semantic": {
+                "raw_rank": null,
+                "eligible_rank": null,
+                "retained_rank": null,
+                "reason": "not_in_raw_candidates"
+              }
+            }
+          }
+        ],
+        "elapsed_ms": 70.78254200000083,
+        "keyword_ms": 44.011459000001196,
+        "semantic_ms": 70.35670799997752,
+        "route_timings": {
+          "keyword": {
+            "visibilityMs": 2.325125000003027,
+            "embeddingMs": 0,
+            "indexMs": 37.48520799999824,
+            "metadataMs": 4.187917000002926
+          },
+          "semantic": {
+            "visibilityMs": 2.33370799999102,
+            "embeddingMs": 55.20729200000642,
+            "indexMs": 11.211041999980807,
+            "metadataMs": 1.598666999983834
+          }
+        },
+        "query_plans": {
+          "keyword": [
+            {
+              "query": "解析尚未成功的草稿能申请发布审批 ，最终由 角色批准？",
+              "budget": 30
+            }
+          ],
+          "semantic": [
+            {
+              "query": "解析尚未成功的草稿能申请发布审批吗，最终由什么角色批准？",
+              "budget": 15
+            }
+          ]
+        }
+      },
+      "remaining_pool_misses": [
+        "val017"
+      ]
+    }
+  ]
+}

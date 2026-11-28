@@ -1,44 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ChatOllama } from '@langchain/ollama';
 import { ChatModelProvider } from './chat-model.types';
+import { DeepSeekChatModelService } from './deepseek-chat-model.service';
+import { OllamaChatModelService } from './ollama-chat-model.service';
 
 @Injectable()
 export class ChatModelService implements ChatModelProvider {
-  private readonly model: ChatOllama;
+  readonly modelName: string;
+  private readonly provider: DeepSeekChatModelService | OllamaChatModelService;
 
   constructor(config: ConfigService) {
-    this.model = new ChatOllama({
-      baseUrl: config.get<string>('OLLAMA_BASE_URL', 'http://localhost:11434'),
-      model: config.get<string>('OLLAMA_CHAT_MODEL', 'qwen2.5:0.5b'),
-      temperature: Number(config.get<string>('OLLAMA_CHAT_TEMPERATURE', '0')),
-      seed: Number(config.get<string>('OLLAMA_CHAT_SEED', '42')),
-    });
+    const provider = config
+      .get<string>('CHAT_MODEL_PROVIDER', 'deepseek')
+      .trim()
+      .toLowerCase();
+    if (provider === 'deepseek')
+      this.provider = new DeepSeekChatModelService(config);
+    else if (provider === 'ollama')
+      this.provider = new OllamaChatModelService(config);
+    else throw new Error('CHAT_MODEL_PROVIDER must be deepseek or ollama');
+    this.modelName = this.provider.modelName;
   }
 
-  async generate(prompt: string): Promise<string> {
-    const response = await this.model.invoke(prompt);
-    return this.toText(response.content);
-  }
-
-  private toText(content: unknown): string {
-    if (typeof content === 'string') {
-      return content.trim();
-    }
-    if (Array.isArray(content)) {
-      return content
-        .map((part) => {
-          if (typeof part === 'string') {
-            return part;
-          }
-          if (part && typeof part === 'object' && 'text' in part) {
-            return String((part as { text: unknown }).text);
-          }
-          return '';
-        })
-        .join('')
-        .trim();
-    }
-    return content ? String(content).trim() : '';
+  generate(prompt: string): Promise<string> {
+    return this.provider.generate(prompt);
   }
 }

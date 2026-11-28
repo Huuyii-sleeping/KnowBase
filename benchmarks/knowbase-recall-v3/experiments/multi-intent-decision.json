@@ -1,0 +1,41 @@
+{
+  "protocol": "multi-intent-protocol.json",
+  "results": "multi-intent-results.json",
+  "report": "multi-intent-audit-v3.md",
+  "status": "not_adopted",
+  "selected_query_mode": "off",
+  "scored_requests": 672,
+  "triggered_questions_per_split_mode": 48,
+  "basis": [
+    "Neither split mode gains any pool evidence compared with the same-run off baseline",
+    "Known failure val017 remains missing from raw keyword and semantic candidates",
+    "clauses-keyword loses v3_contract_06 evidence 0 in final selection without gains",
+    "clauses-both gains some final evidence but still loses v3_contract_06 evidence 0; development aggregate equality does not imply zero per-question regressions",
+    "More index, visibility and metadata requests; clauses-both also adds query embeddings"
+  ],
+  "fixed_budgets": {
+    "keyword_retained": 30,
+    "semantic_retained": 15,
+    "keyword_raw_cap": 90,
+    "semantic_raw_cap": 45,
+    "keyword_physical_raw_cap_with_body_reserve": 180
+  },
+  "split_mode_cost_per_224_scored_questions": {
+    "off": { "index_requests": 672, "query_embeddings": 224 },
+    "clauses-keyword": { "index_requests": 864, "query_embeddings": 224 },
+    "clauses-both": { "index_requests": 960, "query_embeddings": 320 }
+  },
+  "scope": "Conservative extractive rules, retained original query, two clauses, fixed raw and retained budgets. This result does not reject every possible multi-intent strategy.",
+  "further_tuning_performed": false,
+  "business_query_changed": false,
+  "public_split_endpoint_added": false,
+  "chunking_index_model_fusion_reranking_generation_changed": false,
+  "limitations": [
+    "All questions synthetic, correlated and exposed; not independent acceptance",
+    "Extracted clauses may lack shared subjects or cross-clause conditions",
+    "Native chosen-hit scores are retained without cross-query calibration",
+    "No exhaustive candidate relevance annotations or answer quality evaluation",
+    "Single serial pass per mode does not establish production latency or throughput"
+  ],
+  "delivery": "Internal experimental tools, tests and measured report only; default query mode remains off"
+}
