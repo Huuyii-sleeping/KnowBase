@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { UpgradeRunnerService } from '../upgrades/upgrade-runner.service';
+import { DocumentIndexUpgradeMessage } from '../../message-queue/message-queue.types';
+import { Injectable, Optional } from '@nestjs/common';
 import {
   MESSAGE_QUEUE_NAMES,
   MESSAGE_ROUTING_KEYS,
@@ -15,18 +17,25 @@ export class SearchPipelineConsumer {
   constructor(
     private readonly messageQueue: MessageQueueService,
     private readonly pipeline: SearchPipelineService,
+    @Optional() private readonly upgrades?: UpgradeRunnerService,
   ) {}
 
   consume(): Promise<void> {
     return this.messageQueue.consume<
-      DocumentIndexMessage | DocumentIndexDeleteMessage
+      | DocumentIndexUpgradeMessage
+      | DocumentIndexMessage
+      | DocumentIndexDeleteMessage
     >(
       MESSAGE_QUEUE_NAMES.SEARCH,
       [MESSAGE_ROUTING_KEYS.SEARCH_INDEX, MESSAGE_ROUTING_KEYS.SEARCH_DELETE],
       (message) =>
-        message.type === 'DOCUMENT_INDEX_DELETE'
-          ? this.pipeline.deleteDocument(message.documentId)
-          : this.pipeline.indexDocument(message),
+        message.type === 'DOCUMENT_INDEX_UPGRADE'
+          ? this.upgrades
+            ? this.upgrades.run(message, 'search')
+            : Promise.reject(new Error('UPGRADE_WORKER_UNAVAILABLE'))
+          : message.type === 'DOCUMENT_INDEX_DELETE'
+            ? this.pipeline.deleteDocument(message.documentId)
+            : this.pipeline.indexDocument(message),
     );
   }
 }

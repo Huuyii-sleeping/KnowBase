@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { MarkdownChunkerService } from './markdown-chunker.service';
 
 describe('Frozen recall corpus structure', () => {
-  it('actually separates headings and multi-chunk evidence with the benchmark splitter', async () => {
+  it('preserves frozen evidence while structure-aware chunks retain section headings', async () => {
     const directory = resolve(
       __dirname,
       '../../../../../../benchmarks/knowbase-recall-v3',
@@ -38,8 +38,8 @@ describe('Frozen recall corpus structure', () => {
       if (question.category === 'heading_context') {
         headingCases += 1;
         expect(
-          locations[0].every(
-            (i: number) => !chunks[i].includes(question.section_heading),
+          locations[0].every((i: number) =>
+            chunks[i].includes(question.section_heading),
           ),
           question.id,
         ).toBe(true);

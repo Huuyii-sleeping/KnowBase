@@ -29,6 +29,7 @@ export class ElasticsearchSchema {
       generation_id: { type: 'keyword' },
       document_version: { type: 'integer' },
       chunk_index: { type: 'integer' },
+      ingestion: { type: 'object', enabled: false },
       content: {
         type: 'text',
         fields: { cjk: { type: 'text', analyzer: 'cjk' } },
@@ -86,6 +87,7 @@ export class ElasticsearchSchema {
         generation_id: { type: 'keyword' },
         ...(properties.content && index === this.chunkIndex
           ? {
+              ingestion: { type: 'object' as const, enabled: false },
               content: properties.content,
               retrieval_text: properties.retrieval_text,
             }

@@ -1,3 +1,4 @@
+import { IndexBuildOptions } from '../../indexing/index-build-options';
 import { Injectable } from '@nestjs/common';
 import type { DocumentIndexMessage } from '../../message-queue/message-queue.types';
 import { VectorIndexService } from '../vector-index/vector-index.service';
@@ -12,17 +13,22 @@ export class SearchPipelineService {
     private readonly builds: IndexBuildService,
   ) {}
 
-  async indexDocument(message: DocumentIndexMessage): Promise<void> {
+  async indexDocument(
+    message: DocumentIndexMessage,
+    options?: IndexBuildOptions,
+  ): Promise<void> {
     const document = await this.generations.capture(
       message.documentId,
       message.version,
     );
-    if (!document) return;
+    if (!document || (options && document.contentId !== options.contentId))
+      return;
     await this.builds.build(
       document,
       'search',
-      (generation) =>
-        this.vectorIndex.indexDocument({
+      async (generation, report) => {
+        await report('index_write', 0, 1);
+        await this.vectorIndex.indexDocument({
           id: message.documentId,
           generation,
           document: {
@@ -31,8 +37,11 @@ export class SearchPipelineService {
             document_version: message.version,
             content: message.markdown,
           },
-        }),
+        });
+        await report('index_write', 1, 1);
+      },
       (generation) => this.vectorIndex.discardGeneration('search', generation),
+      options,
     );
   }
 

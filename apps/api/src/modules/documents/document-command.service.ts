@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { extname } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,9 +19,12 @@ import { DocumentVisibility } from '../authorization/document-access.service';
 import { DocumentRevisionService } from './document-revision.service';
 import { DocumentDeletionService } from './document-deletion.service';
 import { parseDocumentTags } from './document-tags.util';
+import { ParsedDocument } from './parsing/file-parser.types';
+import { ParseSubmissionService } from './ingestion/parse-submission.service';
 
 @Injectable()
 export class DocumentCommandService {
+  private readonly logger = new Logger(DocumentCommandService.name);
   constructor(
     @InjectRepository(Document)
     private readonly documentRepository: Repository<Document>,
@@ -30,6 +33,7 @@ export class DocumentCommandService {
     private readonly fileParser: FileParserService,
     private readonly revisions: DocumentRevisionService,
     private readonly deletion: DocumentDeletionService,
+    private readonly parseTasks: ParseSubmissionService,
   ) {}
 
   async create(
@@ -38,22 +42,63 @@ export class DocumentCommandService {
     user: AuthUser,
   ): Promise<string> {
     if (!file) {
-      throw new BadRequestException('file is required');
+      throw new BadRequestException({
+        code: 'FILE_REQUIRED',
+        message: 'file is required',
+      });
     }
 
     const documentId = randomUUID();
     const contentId = randomUUID();
     const originalName = file.originalname || 'uploaded-file';
     if (!this.fileParser.supports(originalName)) {
-      throw new BadRequestException(
-        'supported file types: pdf, xlsx, docx, pptx, txt, md',
-      );
+      throw new BadRequestException({
+        code: 'FILE_UNSUPPORTED',
+        message: 'File format is not supported by the configured parser',
+      });
     }
+
+    if (file.size === 0) {
+      throw new BadRequestException({
+        code: 'FILE_EMPTY',
+        message: 'file is empty',
+      });
+    }
+
+    this.fileParser.assertFileBudget(file.buffer);
 
     const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
     const storageKey = `original/${documentId}/${safeName}`;
     const title =
       dto.title?.trim() || originalName.replace(extname(originalName), '');
+
+    const document = this.documentRepository.create({
+      id: documentId,
+      title,
+      fileName: originalName,
+      mimeType: file.mimetype || 'application/octet-stream',
+      fileSize: file.size,
+      storageKey,
+      contentId,
+      uploaderId: user.id,
+      category: dto.category ?? null,
+      team: dto.team ?? null,
+      tags: parseDocumentTags(dto.tags),
+      status: DocumentStatus.DRAFT,
+      parseStatus: DocumentParseStatus.PENDING,
+      parseError: null,
+      rejectionReason: null,
+      version: 1,
+      permissions: {
+        visibility: dto.visibility ?? DocumentVisibility.PRIVATE,
+        userIds: [],
+        teams: [],
+      },
+      statistics: { viewCount: 0, queryCount: 0 },
+      submittedAt: null,
+      reviewedAt: null,
+      reviewedBy: null,
+    });
 
     await this.storage.putObject(
       storageKey,
@@ -61,8 +106,15 @@ export class DocumentCommandService {
       file.mimetype || 'application/octet-stream',
     );
 
+    let parsedAssets: ParsedDocument['assets'] = [];
+    let persistedDocument = false;
     try {
-      const parsed = dto.markdown?.trim()
+      if (this.parseTasks.enabled && !dto.markdown?.trim()) {
+        await this.parseTasks.create(document);
+        persistedDocument = true;
+        return document.id;
+      }
+      const parsed: ParsedDocument = dto.markdown?.trim()
         ? {
             markdown: dto.markdown.trim() + '\n',
             assets: [],
@@ -71,6 +123,7 @@ export class DocumentCommandService {
             warnings: [],
           }
         : await this.fileParser.parse(file.buffer, originalName, documentId);
+      parsedAssets = parsed.assets;
 
       await this.contentStore.create({
         contentId,
@@ -80,47 +133,51 @@ export class DocumentCommandService {
         warnings: parsed.warnings,
         version: 1,
         assets: parsed.assets,
+        sections: parsed.sections,
+        parseStrategy: parsed.parseStrategy,
+        quality: parsed.quality,
+        provenance: parsed.provenance,
+        evidence: parsed.evidence,
+        ready: parsed.ready,
       });
 
-      const document = this.documentRepository.create({
-        id: documentId,
-        title,
-        fileName: originalName,
-        mimeType: file.mimetype || 'application/octet-stream',
-        fileSize: file.size,
-        storageKey,
-        contentId,
-        uploaderId: user.id,
-        category: dto.category ?? null,
-        team: dto.team ?? null,
-        tags: parseDocumentTags(dto.tags),
-        status: DocumentStatus.DRAFT,
-        parseStatus: parsed.ready
-          ? DocumentParseStatus.READY
-          : parsed.error
-            ? DocumentParseStatus.FAILED
-            : DocumentParseStatus.PENDING,
-        parseError: parsed.error ?? null,
-        rejectionReason: null,
-        version: 1,
-        permissions: {
-          visibility: dto.visibility ?? DocumentVisibility.PRIVATE,
-          userIds: [],
-          teams: [],
-        },
-        statistics: { viewCount: 0, queryCount: 0 },
-        submittedAt: null,
-        reviewedAt: null,
-        reviewedBy: null,
-      });
+      document.parseStatus = parsed.ready
+        ? DocumentParseStatus.READY
+        : parsed.error
+          ? DocumentParseStatus.FAILED
+          : DocumentParseStatus.PENDING;
+      document.parseError = parsed.error ?? null;
 
       await this.documentRepository.save(document);
+      persistedDocument = true;
       return document.id;
     } catch (error) {
+      if (this.parseTasks.enabled && !dto.markdown?.trim()) {
+        // A lost COMMIT reply must not remove the original used by a live task.
+        try {
+          if (
+            await this.documentRepository.findOne({ where: { id: documentId } })
+          )
+            throw error;
+        } catch (lookupError) {
+          throw lookupError;
+        }
+      }
+      if (parsedAssets.length) {
+        try {
+          await this.fileParser.discardAssets(documentId, parsedAssets);
+        } catch {
+          this.logger.error(
+            `Unable to schedule extracted asset cleanup for ${documentId}`,
+          );
+        }
+      }
       await this.storage.removeObject(storageKey).catch(() => undefined);
       await this.contentStore
         .deleteByContentId(contentId)
         .catch(() => undefined);
+      if (persistedDocument)
+        await this.documentRepository.delete(documentId).catch(() => undefined);
       throw error;
     }
   }

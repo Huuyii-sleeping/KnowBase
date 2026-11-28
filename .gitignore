@@ -8,8 +8,13 @@ reports/retrieval/
 reports/retrieval-*/
 reports/answer/
 reports/answer-*/
+reports/ingestion*/
 .venv-rag-eval/
 .venv-ragas/
 apps/api/.env.langfuse
 __pycache__/
 *.pyc
+
+.venv-mineru/
+
+reports/index-upgrades/

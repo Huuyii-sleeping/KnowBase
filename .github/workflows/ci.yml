@@ -1,0 +1,44 @@
+name: Tests and builds
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Historical source snapshots are part of the evaluation-tool tests.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned package manager and locked dependencies
+        run: |
+          npm install --global pnpm@11.6.0
+          pnpm install --frozen-lockfile
+      - name: API unit tests and build
+        run: |
+          pnpm --filter @knowbase/api test --maxWorkers=2
+          pnpm --filter @knowbase/api build
+      - name: Web unit tests and build
+        run: |
+          pnpm --filter @knowbase/web test --maxWorkers=2
+          pnpm --filter @knowbase/web build
+      - name: Evaluation tools without model services
+        run: |
+          node --test apps/api/test/ingestion/quality/*.test.cjs apps/api/test/ingestion/baseline-reference.test.cjs apps/api/test/ingestion/capacity/metrics.test.cjs apps/api/test/ingestion/release/release.test.cjs apps/api/test/ingestion/resilience/fault-control.test.cjs
+          node --test tools/rag-evaluation/*.test.cjs
+      - name: Validate deployment configuration
+        run: docker compose -f deploy/docker-compose.yml config --quiet

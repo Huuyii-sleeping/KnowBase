@@ -6,10 +6,10 @@
 - MongoDB 保存 Markdown 正文
 - RustFS 保存原始二进制文件
 - NestJS 提供文档上传、CRUD 和审核接口
-- FileParserService 将 PDF、XLSX、DOCX、PPTX、TXT、MD 统一转换为 Markdown
+- 默认由 MinerU 将 PDF、Word/Excel/PPT（含旧格式）、静态 HTML 和图片转为 Markdown，TXT/MD 本地读取
 - 文档发布后通过 RabbitMQ 并行执行 Search、RAG、KG 三条索引管线
 - RAG 默认使用本地 Ollama `nomic-embed-text`，不需要 OpenAI API Key
-- 提供基于检索上下文的 Ollama AI 问答接口，并返回引用来源
+- 提供基于检索上下文的 AI 问答与引用来源，默认 DeepSeek，可显式选择本地 Ollama
 - 支持基于 Ollama 实体关系抽取的 Neo4j 知识图谱重建、删除清理和权限过滤查询
 - 支持通过 Langfuse Self-hosted 记录 RAG 问答链路
 
@@ -43,6 +43,12 @@ Docker 初始化脚本只会在对应数据卷第一次创建时执行。修改�
 已有 PostgreSQL 数据库可执行 `deploy/postgres/migrations` 下的增量 SQL。
 
 ## 启动 API
+
+按默认配置启动前，在本机配置 `DEEPSEEK_API_KEY`。只使用本地回答时，将 `CHAT_MODEL_PROVIDER` 设为 `ollama` 并准备 `OLLAMA_CHAT_MODEL` 指定的模型（模板为 `qwen2.5:7b`）；上面的 0.5B 模型用于图谱抽取。回答提供方与文档解析服务独立，详见 [模型配置](./docs/answer-model-provider.md)。
+
+已有库的迁移、写入窗口、批次试升级和回退步骤统一见 [发布操作单](./docs/ingestion-release-runbook.md)，合并审阅入口见 [发布准备](./docs/ingestion-release-preparation.md)。
+
+先按 [MinerU 部署说明](./docs/mineru-ingestion.md#配置与部署) 启动固定版本的解析服务。示例配置默认连接 `http://127.0.0.1:8000` 并启用异步解析；已有数据库需先执行说明中的增量迁移。
 
 ```bash
 pnpm install

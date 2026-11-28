@@ -42,6 +42,7 @@ describe('ElasticsearchSchema', () => {
     expect(indices.putMapping).toHaveBeenCalledWith({
       index: 'chunks',
       properties: {
+        ingestion: { type: 'object', enabled: false },
         generation_id: { type: 'keyword' },
         content: {
           type: 'text',

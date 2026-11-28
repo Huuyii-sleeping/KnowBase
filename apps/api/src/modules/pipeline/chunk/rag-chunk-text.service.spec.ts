@@ -44,7 +44,8 @@ describe('RagChunkTextService', () => {
       ),
     );
     expect(result[0].retrievalText).toContain('文档：Policy');
-    expect(result[0].retrievalText).toContain('章节：Guide');
+    expect(result[0].retrievalText).toContain('# Guide');
+    expect(result[0].retrievalText.match(/Guide/g)).toHaveLength(1);
   });
 
   it('adds only the document title in the title ablation, with sanitized bounded labels', async () => {
@@ -73,8 +74,9 @@ describe('RagChunkTextService', () => {
     const result = await service.prepare(markdown, 'Purchasing');
     expect(result.map((c) => c.content)).toEqual(await chunker.split(markdown));
     const answer = result.find((c) => c.content.includes('24 minutes'))!;
-    expect(answer.content).not.toContain('## Window');
-    expect(answer.retrievalText).toContain('章节：Policy > Window');
+    expect(answer.content).toContain('## Window');
+    expect(answer.retrievalText).toContain('# Policy');
+    expect(answer.retrievalText.match(/Window/g)).toHaveLength(1);
     expect(answer.retrievalText).not.toContain('Earlier');
     expect(await service.prepare('', 'Title')).toEqual([]);
   });
@@ -116,11 +118,33 @@ describe('RagChunkTextService', () => {
   it('rejects invalid modes and propagates chunker failures', async () => {
     expect(() => fixture('unknown')).toThrow('RAG_RETRIEVAL_CONTEXT');
     const { service, chunker } = fixture('title-heading');
-    chunker.splitLocated = async () => {
+    chunker.splitStructured = async () => {
       throw new Error('split failed');
     };
     await expect(service.prepare('text', 'Title')).rejects.toThrow(
       'split failed',
     );
+  });
+});
+
+describe('Structured retrieval context integration', () => {
+  it('keeps source ranges, hash, order and budgeted content without adding headings twice', async () => {
+    const { chunker, service } = fixture('title-heading', 1000);
+    const markdown =
+      '# Policy\n\n## Budget\n\n| Team | Limit |\n| --- | --- |\n| Research | 731 |';
+    const chunks = await chunker.splitStructured(markdown, [
+      { start: 0, end: markdown.length, source: { page: 2 } },
+    ]);
+    const result = service.forChunks(chunks, 'Policy');
+    expect(result).toHaveLength(chunks.length);
+    for (let i = 0; i < result.length; i++) {
+      expect(result[i]).toMatchObject(chunks[i]);
+      expect(result[i].retrievalText.match(/Policy/g)).toHaveLength(1);
+      expect(result[i].retrievalText.match(/Budget/g)).toHaveLength(1);
+      expect(result[i].ranges[0].source).toMatchObject({ page: 2 });
+    }
+    expect(
+      service.forChunks(chunks, 'Different source')[0].retrievalText,
+    ).toContain('文档：Different source');
   });
 });

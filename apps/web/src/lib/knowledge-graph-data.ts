@@ -1,7 +1,16 @@
 import type { EdgeData, GraphData, NodeData } from '@antv/g6';
 import type { GraphSearchPath } from './api';
 
-type EntityGroup = 'seed' | 'document' | 'model' | 'queue' | 'database' | 'search' | 'platform' | 'concept' | 'other';
+export type EntityGroup =
+  | 'seed'
+  | 'document'
+  | 'model'
+  | 'queue'
+  | 'database'
+  | 'search'
+  | 'platform'
+  | 'concept'
+  | 'other';
 
 export interface KnowledgeGraphNodeData extends Record<string, unknown> {
   label: string;
@@ -39,16 +48,27 @@ function normalizeKey(value: string): string {
 }
 
 function uniqueSorted(values: Iterable<string>): string[] {
-  return [...new Set([...values].filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  return [...new Set([...values].filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b),
+  );
 }
 
-function matchesFocus(entity: GraphSearchPath['entities'][number], focusQuery: string): boolean {
+function matchesFocus(
+  entity: GraphSearchPath['entities'][number],
+  focusQuery: string,
+): boolean {
   const query = normalizeKey(focusQuery);
   if (!query) return false;
-  return [entity.key, entity.name, entity.type].some((value) => normalizeKey(value).includes(query));
+  return [entity.key, entity.name, entity.type].some((value) =>
+    normalizeKey(value).includes(query),
+  );
 }
 
-function classifyEntityGroup(type: string, name: string, isSeed: boolean): EntityGroup {
+function classifyEntityGroup(
+  type: string,
+  name: string,
+  isSeed: boolean,
+): EntityGroup {
   if (isSeed) return 'seed';
   const text = `${type} ${name}`.toLowerCase();
   if (/document|文档|chunk|分块|markdown|正文/.test(text)) return 'document';
@@ -56,24 +76,39 @@ function classifyEntityGroup(type: string, name: string, isSeed: boolean): Entit
   if (/rabbitmq|消息|队列/.test(text)) return 'queue';
   if (/neo4j|图数据库|database|数据库/.test(text)) return 'database';
   if (/elasticsearch|搜索|检索/.test(text)) return 'search';
-  if (/service|service|consumer|consumer|流程|pipeline|模块|系统|平台/.test(text)) return 'platform';
-  if (/概念|术语|能力|关系|策略|方法|角色|地点|时间|制度/.test(text)) return 'concept';
+  if (
+    /service|service|consumer|consumer|流程|pipeline|模块|系统|平台/.test(text)
+  )
+    return 'platform';
+  if (/概念|术语|能力|关系|策略|方法|角色|地点|时间|制度/.test(text))
+    return 'concept';
   return 'other';
 }
 
-function estimateNodeSize(name: string, group: EntityGroup): [number, number] {
-  const length = [...name].length;
-  const width = Math.min(Math.max(128, length * 12 + 54), group === 'seed' ? 190 : 176);
-  return [width, group === 'seed' ? 62 : 56];
+function estimateNodeSize(_name: string, group: EntityGroup): [number, number] {
+  const diameter = group === 'seed' ? 80 : 64;
+  return [diameter, diameter];
 }
 
-function pickAnchor(paths: GraphSearchPath[], activePath: GraphSearchPath | null, focusQuery = '') {
-  const candidates = [activePath, ...paths].filter((path): path is GraphSearchPath => Boolean(path));
-  const focusedEntity = candidates.flatMap((path) => path.entities).find((entity) => matchesFocus(entity, focusQuery));
+function pickAnchor(
+  paths: GraphSearchPath[],
+  activePath: GraphSearchPath | null,
+  focusQuery = '',
+) {
+  const candidates = [activePath, ...paths].filter(
+    (path): path is GraphSearchPath => Boolean(path),
+  );
+  const focusedEntity = candidates
+    .flatMap((path) => path.entities)
+    .find((entity) => matchesFocus(entity, focusQuery));
   return focusedEntity ?? activePath?.seed ?? paths[0]?.seed ?? null;
 }
 
-export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: GraphSearchPath | null, focusQuery = ''): KnowledgeGraphDataset {
+export function buildKnowledgeGraphData(
+  paths: GraphSearchPath[],
+  activePath: GraphSearchPath | null,
+  focusQuery = '',
+): KnowledgeGraphDataset {
   const basePath = activePath ?? paths[0] ?? null;
   const seed = pickAnchor(paths, basePath, focusQuery);
   const seedId = seed?.key ?? '';
@@ -83,7 +118,7 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
     string,
     NodeData & {
       id: string;
-      type: 'rect';
+      type: 'circle';
       data: KnowledgeGraphNodeData;
       states: NodeData['states'];
     }
@@ -98,16 +133,32 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
   const relationCountByNode = new Map<string, number>();
 
   let order = 0;
-  const activeEntityKeys = new Set(activePath?.entities.map((entity) => entity.key) ?? []);
-  const activeRelationKeys = new Set(activePath?.relations.map((relation) => relation.key) ?? []);
+  const activeEntityKeys = new Set(
+    activePath?.entities.map((entity) => entity.key) ?? [],
+  );
+  const activeRelationKeys = new Set(
+    activePath?.relations.map((relation) => relation.key) ?? [],
+  );
 
   for (const path of paths) {
-    const documentIds = uniqueSorted(path.relations.map((relation) => relation.documentId));
-    const seedIndex = Math.max(0, path.entities.findIndex((entity) => entity.key === seedId));
+    const documentIds = uniqueSorted(
+      path.relations.map((relation) => relation.documentId),
+    );
+    const seedIndex = Math.max(
+      0,
+      path.entities.findIndex((entity) => entity.key === seedId),
+    );
+    const visited = new Set<string>();
 
     path.entities.forEach((entity, index) => {
+      const firstVisit = !visited.has(entity.key);
+      visited.add(entity.key);
       const existing = nodeMap.get(entity.key);
-      const group = classifyEntityGroup(entity.type, entity.name, entity.key === seedId);
+      const group = classifyEntityGroup(
+        entity.type,
+        entity.name,
+        entity.key === seedId,
+      );
       const size = estimateNodeSize(entity.name, group);
       const nextDocumentIds = new Set(existing?.data.documentIds ?? []);
       documentIds.forEach((documentId) => nextDocumentIds.add(documentId));
@@ -116,7 +167,7 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       if (!existing) {
         nodeMap.set(entity.key, {
           id: entity.key,
-          type: 'rect',
+          type: 'circle',
           data: {
             label: entity.name,
             entityType: entity.type,
@@ -137,13 +188,17 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
 
       existing.data.label = entity.name;
       existing.data.entityType = entity.type;
-      existing.data.group = classifyEntityGroup(entity.type, entity.name, existing.data.isSeed || entity.key === seedId);
+      existing.data.group = classifyEntityGroup(
+        entity.type,
+        entity.name,
+        existing.data.isSeed || entity.key === seedId,
+      );
       existing.data.depth = Math.min(existing.data.depth, depth);
       existing.data.size = [
         Math.max(existing.data.size[0], size[0]),
         Math.max(existing.data.size[1], size[1]),
       ];
-      existing.data.pathCount += 1;
+      if (firstVisit) existing.data.pathCount += 1;
       existing.data.isSeed = existing.data.isSeed || entity.key === seedId;
       existing.data.isActive = activeEntityKeys.has(entity.key);
       existing.data.documentIds = [...nextDocumentIds];
@@ -164,15 +219,23 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
       nextDocumentIds.add(relation.documentId);
       nextChunkIds.add(relation.chunkId);
       nextRelationIds.add(relation.key);
-      relationCountByNode.set(source.key, (relationCountByNode.get(source.key) ?? 0) + 1);
-      relationCountByNode.set(target.key, (relationCountByNode.get(target.key) ?? 0) + 1);
+      relationCountByNode.set(
+        source.key,
+        (relationCountByNode.get(source.key) ?? 0) + 1,
+      );
+      relationCountByNode.set(
+        target.key,
+        (relationCountByNode.get(target.key) ?? 0) + 1,
+      );
 
-      const isActive = activeRelationKeys.has(relation.key) || existing?.data.isActive === true;
+      const isActive =
+        activeRelationKeys.has(relation.key) ||
+        existing?.data.isActive === true;
       edgeMap.set(edgeKey, {
         id: edgeKey,
         source: source.key,
         target: target.key,
-        type: 'polyline',
+        type: 'quadratic',
         data: {
           relationType: relation.type,
           documentIds: [...nextDocumentIds],
@@ -185,22 +248,26 @@ export function buildKnowledgeGraphData(paths: GraphSearchPath[], activePath: Gr
     });
   }
 
-  const nodes = [...nodeMap.values()].map((node) => ({
-    id: node.id,
-    type: node.type,
-    data: {
-      ...node.data,
-      relationCount: relationCountByNode.get(node.id) ?? 0,
-    },
-    states: node.states,
-  })).sort((a, b) => {
-    const aData = a.data as KnowledgeGraphNodeData;
-    const bData = b.data as KnowledgeGraphNodeData;
-    return aData.depth - bData.depth
-      || bData.pathCount - aData.pathCount
-      || bData.relationCount - aData.relationCount
-      || aData.order - bData.order;
-  });
+  const nodes = [...nodeMap.values()]
+    .map((node) => ({
+      id: node.id,
+      type: node.type,
+      data: {
+        ...node.data,
+        relationCount: relationCountByNode.get(node.id) ?? 0,
+      },
+      states: node.states,
+    }))
+    .sort((a, b) => {
+      const aData = a.data as KnowledgeGraphNodeData;
+      const bData = b.data as KnowledgeGraphNodeData;
+      return (
+        aData.depth - bData.depth ||
+        bData.pathCount - aData.pathCount ||
+        bData.relationCount - aData.relationCount ||
+        aData.order - bData.order
+      );
+    });
 
   const edges = [...edgeMap.values()].map((edge) => ({
     id: edge.id,

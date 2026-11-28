@@ -4,6 +4,29 @@ import { RagPipelineConsumer } from './rag/rag-pipeline.consumer';
 import { KgPipelineConsumer } from './kg/kg-pipeline.consumer';
 
 describe('pipeline command routing', () => {
+  it('dispatches failed parser asset cleanup to its own handler', async () => {
+    let handler!: (message: any) => Promise<void>;
+    const transport = {
+      consume: vi.fn(async (_queue, _keys, callback) => {
+        handler = callback;
+      }),
+    };
+    const pipeline = { rebuildDocument: vi.fn(), deleteDocument: vi.fn() };
+    const assets = { cleanup: vi.fn() };
+    await new KgPipelineConsumer(
+      transport as any,
+      pipeline as any,
+      {} as any,
+      assets as any,
+    ).consume();
+    await handler({
+      type: 'DOCUMENT_ASSETS_DELETE',
+      documentId: 'doc',
+      keys: ['assets/doc/a'],
+    });
+    expect(assets.cleanup).toHaveBeenCalledWith('doc', ['assets/doc/a']);
+    expect(pipeline.rebuildDocument).not.toHaveBeenCalled();
+  });
   it('passes the requested RAG version and routes vector deletion independently', async () => {
     let handler!: (message: any) => Promise<void>;
     const transport = {
@@ -54,6 +77,7 @@ describe('pipeline command routing', () => {
       transport as any,
       pipeline as any,
       cleanup as any,
+      { cleanup: vi.fn() } as any,
     ).consume();
     await handler({
       type: 'DOCUMENT_SOURCE_DELETE',

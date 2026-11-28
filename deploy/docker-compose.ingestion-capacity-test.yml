@@ -1,0 +1,25 @@
+# Isolated benchmark only. Limits are per service, not dedicated host reservations.
+services:
+  postgres:
+    cpus: 1
+    mem_limit: 512m
+  rabbitmq:
+    cpus: 1
+    mem_limit: 512m
+    ports:
+      - '127.0.0.1::15672'
+    environment:
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbit collect_statistics_interval 500'
+  mongo:
+    cpus: 1
+    mem_limit: 768m
+    command: ['mongod', '--wiredTigerCacheSizeGB', '0.25', '--bind_ip_all']
+  object-storage:
+    cpus: 1
+    mem_limit: 768m
+  elasticsearch:
+    cpus: 1
+    mem_limit: 1g
+  neo4j:
+    cpus: 1
+    mem_limit: 768m

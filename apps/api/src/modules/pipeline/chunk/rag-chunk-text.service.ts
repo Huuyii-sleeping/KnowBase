@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MarkdownChunkerService } from './markdown-chunker.service';
-import { headingPathAt, markdownHeadings } from './markdown-headings';
 import { retrievalContext, RetrievalContext } from './retrieval-context';
+import { StructuredChunk } from './chunk.types';
 
 export interface RagChunkText {
   content: string;
@@ -12,7 +12,6 @@ export interface RagChunkText {
 @Injectable()
 export class RagChunkTextService {
   private readonly mode: RetrievalContext;
-
   constructor(
     private readonly chunker: MarkdownChunkerService,
     config: ConfigService,
@@ -23,26 +22,45 @@ export class RagChunkTextService {
   }
 
   async prepare(markdown: string, title: string): Promise<RagChunkText[]> {
-    if (this.mode === 'body')
-      return (await this.chunker.split(markdown)).map((content) => ({
-        content,
-        retrievalText: content,
-      }));
-    const headings =
-      this.mode === 'title-heading' ? markdownHeadings(markdown) : [];
-    const chunks = await this.chunker.splitLocated(markdown);
-    // Context only assists indexing/embedding. Citations and grading use content.
-    return chunks.map(({ content, startLine }) => {
-      const section = headingPathAt(headings, startLine);
+    return this.forChunks(
+      await this.chunker.splitStructured(markdown),
+      title,
+    ).map(({ content, retrievalText }) => ({ content, retrievalText }));
+  }
+
+  // Consume persisted structure once; never split again or reconstruct source positions.
+  forChunks<T extends StructuredChunk>(
+    chunks: T[],
+    title: string,
+  ): Array<T & RagChunkText> {
+    return chunks.map((chunk) => {
+      if (this.mode === 'body')
+        return { ...chunk, retrievalText: chunk.content };
+      const headings = new Set(
+        (chunk.content.match(/^(?:#{1,6} [^\n]+\n)+\n/)?.[0] ?? '')
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .map((line) => this.label(line.replace(/^#+ /, ''))),
+      );
+      const section =
+        this.mode === 'title-heading'
+          ? chunk.headingPath
+              .map((heading) => this.label(heading))
+              .filter((heading) => !headings.has(heading))
+          : [];
+      const documentTitle = this.label(title);
       const labels = [
-        title.trim() ? `文档：${this.label(title)}` : '',
-        section.length
-          ? `章节：${section.map((s) => this.label(s)).join(' > ')}`
+        documentTitle &&
+        !headings.has(documentTitle) &&
+        !section.includes(documentTitle)
+          ? `文档：${documentTitle}`
           : '',
+        section.length ? `章节：${section.join(' > ')}` : '',
       ].filter(Boolean);
       return {
-        content,
-        retrievalText: [...labels, content].join('\n\n'),
+        ...chunk,
+        retrievalText: [...labels, chunk.content].join('\n\n'),
       };
     });
   }

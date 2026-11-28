@@ -1,3 +1,5 @@
+import { requestFailure, type RequestFailureInfo } from '@/lib/api-error';
+import { RequestFailure } from '@/components/request-failure';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,15 +21,22 @@ interface EditMetaDialogProps {
   onSaved: (doc: DocumentDetail) => void;
 }
 
-export function EditMetaDialog({ doc, open, onOpenChange, onSaved }: EditMetaDialogProps) {
+export function EditMetaDialog({
+  doc,
+  open,
+  onOpenChange,
+  onSaved,
+}: EditMetaDialogProps) {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [team, setTeam] = useState('');
   const [tags, setTags] = useState('');
   const [saving, setSaving] = useState(false);
+  const [failure, setFailure] = useState<RequestFailureInfo | null>(null);
 
   useEffect(() => {
     if (doc && open) {
+      setFailure(null);
       setTitle(doc.title);
       setCategory(doc.category ?? '');
       setTeam(doc.team ?? '');
@@ -37,19 +46,23 @@ export function EditMetaDialog({ doc, open, onOpenChange, onSaved }: EditMetaDia
 
   const save = async () => {
     if (!doc) return;
+    setFailure(null);
     setSaving(true);
     try {
       const updated = await documentsApi.update(doc.id, {
         title: title.trim(),
         category: category.trim(),
         team: team.trim(),
-        tags: tags.split(/[,，]/).map((t) => t.trim()).filter(Boolean),
+        tags: tags
+          .split(/[,，]/)
+          .map((t) => t.trim())
+          .filter(Boolean),
       });
       toast('元数据已更新');
       onOpenChange(false);
       onSaved({ ...updated, content: doc.content });
     } catch (e) {
-      toast((e as Error).message, 'error');
+      setFailure(requestFailure(e));
     } finally {
       setSaving(false);
     }
@@ -64,24 +77,50 @@ export function EditMetaDialog({ doc, open, onOpenChange, onSaved }: EditMetaDia
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2 space-y-1.5">
             <Label htmlFor="em-title">标题</Label>
-            <Input id="em-title" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Input
+              id="em-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="em-category">分类</Label>
-            <Input id="em-category" value={category} onChange={(e) => setCategory(e.target.value)} />
+            <Input
+              id="em-category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="em-team">团队</Label>
-            <Input id="em-team" value={team} onChange={(e) => setTeam(e.target.value)} />
+            <Input
+              id="em-team"
+              value={team}
+              onChange={(e) => setTeam(e.target.value)}
+            />
           </div>
           <div className="col-span-2 space-y-1.5">
             <Label htmlFor="em-tags">标签</Label>
-            <Input id="em-tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="多个标签用逗号分隔" />
+            <Input
+              id="em-tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              placeholder="多个标签用逗号分隔"
+            />
           </div>
         </div>
+        {failure && (
+          <div className="mt-4">
+            <RequestFailure title="暂时无法保存" failure={failure} />
+          </div>
+        )}
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>取消</Button>
-          <Button onClick={save} disabled={saving}>{saving ? '保存中…' : '保存'}</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            取消
+          </Button>
+          <Button onClick={save} disabled={saving}>
+            {saving ? '保存中…' : '保存'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

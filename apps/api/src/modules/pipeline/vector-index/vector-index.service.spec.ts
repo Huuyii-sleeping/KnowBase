@@ -12,6 +12,7 @@ vi.mock('@elastic/elasticsearch', () => ({
       exists: vi.fn(),
       create: vi.fn(),
       putMapping: vi.fn(),
+      refresh: vi.fn().mockResolvedValue({ _shards: { failed: 0 } }),
     };
 
     search = searchMock;

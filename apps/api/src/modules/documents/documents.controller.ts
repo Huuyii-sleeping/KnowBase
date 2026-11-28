@@ -1,3 +1,5 @@
+import { WebImportService } from './web-import.service';
+import { ImportWebDto } from './dto/import-web.dto';
 import {
   Body,
   Controller,
@@ -27,7 +29,15 @@ import { AuthUser } from '../auth/auth.types';
 
 @Controller('documents')
 export class DocumentsController {
-  constructor(private readonly documentsService: DocumentsService) {}
+  constructor(
+    private readonly documentsService: DocumentsService,
+    private readonly webImport: WebImportService,
+  ) {}
+
+  @Post('import-web')
+  importWeb(@Body() dto: ImportWebDto, @CurrentUser() user: AuthUser) {
+    return this.webImport.create(dto.url, dto, user);
+  }
 
   @Post()
   @UseInterceptors(
@@ -114,5 +124,31 @@ export class DocumentsController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.documentsService.rebuildIndexes(id, user);
+  }
+
+  @Post(':id/reparse')
+  @HttpCode(HttpStatus.ACCEPTED)
+  reparse(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.documentsService.reparse(id, user);
+  }
+
+  @Get(':id/parse-status')
+  parseStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.documentsService.parseStatus(id, user);
+  }
+
+  @Post(':id/parse-cancel')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async cancelParse(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: AuthUser,
+  ) {
+    await this.documentsService.cancelParse(id, user);
   }
 }

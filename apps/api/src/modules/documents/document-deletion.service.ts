@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Document } from './entities/document.entity';
 import { AuthUser } from '../auth/auth.types';
 import { DocumentAccessService } from '../authorization/document-access.service';
 import { IndexGenerationStore } from '../indexing/index-generation.store';
 import { DocumentPipelinePublisher } from './document-pipeline.publisher';
+import { ParseTaskStore } from './ingestion/parse-task.store';
 
 @Injectable()
 export class DocumentDeletionService {
@@ -13,6 +14,7 @@ export class DocumentDeletionService {
     private readonly access: DocumentAccessService,
     private readonly generations: IndexGenerationStore,
     private readonly publisher: DocumentPipelinePublisher,
+    @Optional() private readonly parseTasks?: ParseTaskStore,
   ) {}
 
   async remove(id: string, user?: AuthUser): Promise<void> {
@@ -23,6 +25,7 @@ export class DocumentDeletionService {
       });
       if (!document) throw new NotFoundException('document not found');
       if (user) this.access.assertCanEdit(document, user);
+      await this.parseTasks?.invalidate(manager, id);
       await this.generations.tombstone(manager, id, document.version);
       await this.publisher.deleteDocument(document, manager);
       await manager.delete(Document, id);

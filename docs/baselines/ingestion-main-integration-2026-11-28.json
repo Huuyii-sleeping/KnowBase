@@ -1,0 +1,2049 @@
+{
+  "schema": "ingestion-main-integration-baseline-v1",
+  "date": "2026-11-28",
+  "branch": "codex/ingestion-optimization",
+  "parents": {
+    "ingestion": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+    "main": "b15d9380e77668a027f68c9700baff7fae52aa3b"
+  },
+  "workingTreeDirtyAtEvaluation": true,
+  "scope": "Fixed main incorporated into ingestion branch; isolated compatibility/integrity tests and local Ollama smoke. Not deployed to production or merged into main; no new DeepSeek/BGE quality benchmark.",
+  "configuration": {
+    "chunkStrategy": "structure-v5",
+    "embeddingPreprocessing": "task-prefix-v2",
+    "retrievalMode": "title-heading",
+    "documentQueryPrefixes": "empty defaults; nonempty nomic-task pair explicitly used in combined HTTP scenario only",
+    "vectorDimension": 768,
+    "persistentReuse": "document ID + final retrieval text + provider fingerprint",
+    "index": "CJK content/retrieval_text plus non-indexed ingestion metadata; bounded bulk, refresh before activate"
+  },
+  "verification": {
+    "api": {
+      "passed": 720,
+      "files": 121
+    },
+    "web": {
+      "passed": 256,
+      "files": 28
+    },
+    "services": {
+      "passed": 59,
+      "delivery": 8,
+      "parseTasks": 10,
+      "indexing": 25,
+      "upgrades": 16,
+      "firstAttempt": {
+        "passed": 57,
+        "failed": 2
+      },
+      "correctedIndexSuitePassed": 41
+    },
+    "persistenceAndNativeFormats": 15,
+    "resilience": 10,
+    "realFormats": 10,
+    "releaseRollback": 11,
+    "ingestionTools": 24,
+    "retrievalNodeTools": 49,
+    "retrievalPythonTools": 11,
+    "qualityConfigurations": 32,
+    "builds": ["api", "web"],
+    "lockfileFrozenOffline": true,
+    "mainQueryAndAnswerSourcesUnchanged": true
+  },
+  "runs": {
+    "combined-first": {
+      "schema": "ingestion-main-integration-v1",
+      "createdAt": "2026-11-28T12:55:35.891Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "tools": {
+        "sha256": "22195b9b922dba6bd26f95efb1162b0ba261a7b1f77e91ee456421f608c368d8",
+        "fileCount": 1
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "visibility": "TEAM",
+          "documentId": "ce9f68bb-409f-4642-8af0-3f6b6a9ff73b",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        },
+        {
+          "visibility": "PRIVATE",
+          "documentId": "44d51ede-e85d-4fc0-a460-5513e3938801",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        }
+      ],
+      "scope": "Real Ollama 768d query/document encoders with task prefixes, local 0.5b answer provider, rule rerank; not DeepSeek or real BGE quality validation.",
+      "models": [
+        {
+          "name": "qwen2.5:0.5b",
+          "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67"
+        },
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+        }
+      ],
+      "unauthorizedAnswer": {
+        "status": "insufficient",
+        "citations": 0,
+        "contexts": 0
+      },
+      "localAnswer": {
+        "status": "insufficient",
+        "citations": 0,
+        "contexts": 0,
+        "scope": "protocol/ACL smoke only; no answer accuracy claim"
+      },
+      "cacheHitRebuilds": 2,
+      "cleanup": true,
+      "isolatedServicesRemoved": true,
+      "reportSha256": "e37db67776b33cfa26a69f070b6eb253e78f76e692317790f774b0095ab9856a",
+      "apiLogSha256": "72c44cb13b333e44f5fe01decdd9df39428f4f8afeefb7d3ca165d2d505b12e2"
+    },
+    "combined-7b": {
+      "schema": "ingestion-main-integration-v1",
+      "createdAt": "2026-11-28T12:58:54.030Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "tools": {
+        "sha256": "5fd8ce7406d529873a9ccb8329516f051ec06ab17ca37340858b613c073992bd",
+        "fileCount": 1
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "visibility": "TEAM",
+          "documentId": "ca1b8afb-8ffa-4c6e-8ca2-833d639dad21",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        },
+        {
+          "visibility": "PRIVATE",
+          "documentId": "a1934a2a-4a0d-422a-853f-43e3288ffee3",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        }
+      ],
+      "scope": "Real Ollama 768d query/document encoders with task prefixes, local 7b answer provider, rule rerank; not DeepSeek or real BGE quality validation.",
+      "models": [
+        {
+          "name": "qwen2.5:7b",
+          "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+        },
+        {
+          "name": "qwen2.5:0.5b",
+          "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67"
+        },
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+        }
+      ],
+      "unauthorizedAnswer": {
+        "status": "insufficient",
+        "citations": 0,
+        "contexts": 0
+      },
+      "localAnswer": {
+        "status": "answered",
+        "citations": 1,
+        "contexts": 2,
+        "scope": "protocol/ACL smoke only; no answer accuracy claim"
+      },
+      "cacheHitRebuilds": 2,
+      "cleanup": true,
+      "isolatedServicesRemoved": true,
+      "reportSha256": "fd08d660052f5700f09eb1f12bf8d41ef88ade8ea80a438bf39fae1a4d293edb",
+      "apiLogSha256": "ce9bd84e2ed1367789501613b913446e2d51b54cfe0990f14aaf33b8f0014075"
+    },
+    "combined-final": {
+      "schema": "ingestion-main-integration-v1",
+      "createdAt": "2026-11-28T13:05:59.120Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "tools": {
+        "sha256": "697b858605754e33cbb689d6a2654a171072266a2cbb336ad42de466aeb4bcf8",
+        "fileCount": 1
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "visibility": "TEAM",
+          "documentId": "2739f89b-1ff9-4f75-bc18-b6f3c4ee15d1",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        },
+        {
+          "visibility": "PRIVATE",
+          "documentId": "6f3e824a-541d-4a27-b03c-c4e4209a0cae",
+          "chunks": 6,
+          "bodyAndSourceMetadataPreserved": true,
+          "retrievalTextSeparate": true,
+          "cacheEntries": 4,
+          "taskPrefixes": true,
+          "cachedRebuild": true,
+          "semanticAndHybridAcl": true
+        }
+      ],
+      "scope": "Real Ollama 768d query/document encoders with task prefixes, local 7b answer provider, rule rerank; not DeepSeek or real BGE quality validation.",
+      "models": [
+        {
+          "name": "qwen2.5:7b",
+          "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+        },
+        {
+          "name": "qwen2.5:0.5b",
+          "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67"
+        },
+        {
+          "name": "nomic-embed-text:latest",
+          "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+        }
+      ],
+      "unauthorizedAnswer": {
+        "status": "insufficient",
+        "citations": 0,
+        "contexts": 0
+      },
+      "localAnswer": {
+        "status": "answered",
+        "answer": "审批额度为731件。 [S1]",
+        "citations": 1,
+        "contexts": 2,
+        "scope": "protocol/ACL smoke only; no answer accuracy claim"
+      },
+      "cacheHitRebuilds": 2,
+      "cleanup": true,
+      "isolatedServicesRemoved": true,
+      "reportSha256": "babf305ddfc580c47a0d400fd65c81dce427fceebae6c8208e543dffb704993f",
+      "apiLogSha256": "d519fa2e9805a159ce71b75d69538edb1fe1b8d9e9061064ac4e7ca91ae44d29"
+    },
+    "resilience": {
+      "schema": "ingestion-resilience-http-v1",
+      "createdAt": "2026-11-28T13:01:09.599Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "compiled": {
+        "sha256": "fcf7602677e4a780a8174e3bcf492b8086e10d6cf1b1c741c97565c6a9665b68",
+        "fileCount": 717
+      },
+      "tools": {
+        "sha256": "48dd2f72fff812cafad8b3fe2c3394607fd7c974a65ca87d92505bf4c6b3fda6",
+        "fileCount": 8
+      },
+      "configuration": {
+        "parser": "native TXT",
+        "embedding": "deterministic 768d fixture",
+        "graph": "empty deterministic fixture",
+        "leaseMs": 3000,
+        "parseMaxAttempts": 3,
+        "pipelineRetryMs": 200,
+        "faultControl": "private test process IPC, no production HTTP fault endpoints"
+      },
+      "scope": "Real HTTP, production services/workers, PostgreSQL Mongo RabbitMQ RustFS ES Neo4j; native TXT parser, deterministic 768d embedding and empty graph fixture; test-only IPC service-boundary faults. No model-quality/performance claim.",
+      "cases": [
+        {
+          "name": "completed native parse ignores a duplicate command with a new delivery identity",
+          "status": "passed",
+          "evidence": {
+            "parses": 1,
+            "attempts": 1,
+            "duplicateDeliveryCompleted": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "failure after real Mongo body write removes abandoned body before retry adoption",
+          "status": "passed",
+          "evidence": {
+            "attempts": 2,
+            "remainingBodies": 1,
+            "abandonedBodyRemoved": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "apply failure reuses durable checkpoint without re-reading or re-parsing source",
+          "status": "passed",
+          "evidence": {
+            "attempts": 2,
+            "parses": 1,
+            "originalReads": 1,
+            "checkpointReused": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "three parse exceptions exhaust retry budget without publishing or persisting a body",
+          "status": "passed",
+          "evidence": {
+            "attempts": 3,
+            "noAdoptedBody": true,
+            "publicationRejected": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "SIGKILL after checkpoint resumes on restart without another parser execution",
+          "status": "passed",
+          "evidence": {
+            "signal": "SIGKILL",
+            "attempts": 2,
+            "newProcessParses": 0,
+            "newProcessOriginalReads": 0,
+            "checkpointReused": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "manual edit while native parser is paused cannot be overwritten by late output",
+          "status": "passed",
+          "evidence": {
+            "version": 2,
+            "manualRevisionPreserved": true,
+            "staleTask": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "candidate adoption rechecks revision after a concurrent edit invalidates its read snapshot",
+          "status": "passed",
+          "evidence": {
+            "adoptionHttpStatus": 409,
+            "manualRevisionPreserved": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "deletion during paused parsing leaves no body or original after late worker finishes",
+          "status": "passed",
+          "evidence": {
+            "lateWorkerFinished": true,
+            "noLateBody": true,
+            "originalRemoved": true,
+            "tombstonedPipelines": 3,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "lost activation reply after actual commit preserves active chunks and retry completes a new generation",
+          "status": "passed",
+          "evidence": {
+            "committedBeforeException": true,
+            "uncertainAttemptRecorded": true,
+            "retryActivated": true,
+            "originalGenerationPreserved": true,
+            "cleanup": true
+          }
+        },
+        {
+          "name": "deletion while staged index activation is paused cannot resurrect any visible generation",
+          "status": "passed",
+          "evidence": {
+            "lateActivationRejected": true,
+            "tombstonedPipelines": 3,
+            "stagedChunksRemoved": true,
+            "cleanup": true
+          }
+        }
+      ],
+      "isolatedServicesRemoved": true,
+      "status": "passed",
+      "httpStatuses": {
+        "200": 85,
+        "201": 18,
+        "202": 1,
+        "204": 10,
+        "404": 2,
+        "409": 1,
+        "422": 1
+      },
+      "reportSha256": "67c7a099cafc1383632d34304d77783a1835ff0c3316361178753849908c4dd0",
+      "apiLogSha256": "aa958e26308d6d4579ba958789f246e00f5d480c8e8646ede89c9f84625c95a3"
+    },
+    "acceptance-first": {
+      "schema": "ingestion-http-acceptance-v1",
+      "createdAt": "2026-11-28T13:02:56.199Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "tools": {
+        "sha256": "8684bab134dd4e3693c4c58adde39c88daedc945501b7136e830128e094347d2",
+        "fileCount": 14
+      },
+      "frontend": {
+        "sha256": "7021c1934e8785d1b5cd941b9790533b236207fbc7f253c1fe8dce29ef1218b4",
+        "fileCount": 96
+      },
+      "compiled": {
+        "sha256": "fcf7602677e4a780a8174e3bcf492b8086e10d6cf1b1c741c97565c6a9665b68",
+        "fileCount": 717
+      },
+      "runtime": {
+        "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "mineruServerVersion": "1.0.0",
+        "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+        "imageAnalysisMode": "ocr"
+      },
+      "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+      "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+      "status": "failed",
+      "cases": [],
+      "images": [
+        {
+          "ID": "sha256:42ef3ebfd671ebd01fdebb6dcbe80cf7b45eef2aa3d346ef4132f7ef31e67d2f",
+          "ContainerName": "knowbase-acceptance-f3824684-neo4j-1",
+          "Repository": "neo4j",
+          "Tag": "5-community",
+          "Platform": "linux/arm64/v8",
+          "Size": 349691154,
+          "Created": "2026-11-05T07:44:07.388925024Z",
+          "LastTagTime": "2026-11-09T13:26:16.718021344Z"
+        },
+        {
+          "ID": "sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21",
+          "ContainerName": "knowbase-acceptance-f3824684-object-storage-1",
+          "Repository": "rustfs/rustfs",
+          "Tag": "latest",
+          "Platform": "linux/arm64",
+          "Size": 81468250,
+          "Created": "2026-07-30T04:16:11.110846044Z",
+          "LastTagTime": "2026-08-08T06:58:57.586512292Z"
+        },
+        {
+          "ID": "sha256:e0ce8c35124d4a9f9785532d1f268f39e9728ffa1cb38f46fa482436424c4bd3",
+          "ContainerName": "knowbase-acceptance-f3824684-mongo-1",
+          "Repository": "mongo",
+          "Tag": "8",
+          "Platform": "linux/arm64/v8",
+          "Size": 321353034,
+          "Created": "2026-07-22T22:13:04.195785542Z",
+          "LastTagTime": "2026-08-08T07:07:08.715276797Z"
+        },
+        {
+          "ID": "sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139",
+          "ContainerName": "knowbase-acceptance-f3824684-postgres-1",
+          "Repository": "postgres",
+          "Tag": "16-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 113906408,
+          "Created": "2026-11-05T19:06:11.05471323Z",
+          "LastTagTime": "2026-11-12T13:18:23.927937042Z"
+        },
+        {
+          "ID": "sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267",
+          "ContainerName": "knowbase-acceptance-f3824684-rabbitmq-1",
+          "Repository": "rabbitmq",
+          "Tag": "4-management-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 93784804,
+          "Created": "2026-11-05T21:33:12.203226502Z",
+          "LastTagTime": "2026-11-12T13:18:24.809743626Z"
+        },
+        {
+          "ID": "sha256:01c1732062b4a846c5ca687b0094b89bad0bfed00c6d71626db32fb8f3131a78",
+          "ContainerName": "knowbase-acceptance-f3824684-elasticsearch-1",
+          "Repository": "docker.elastic.co/elasticsearch/elasticsearch",
+          "Tag": "8.15.3",
+          "Platform": "linux/arm64",
+          "Size": 510516881,
+          "Created": "2024-10-09T22:16:20.113714326Z",
+          "LastTagTime": "2026-08-08T07:06:59.436987001Z"
+        }
+      ],
+      "configuration": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "async": true,
+        "workers": true,
+        "chunkSize": 1000,
+        "chunkOverlap": 150,
+        "embeddingDimensions": 768,
+        "objectStorage": "RustFS",
+        "scope": "isolated HTTP and Worker lifecycle; no relevance or graph fact accuracy measurement"
+      },
+      "converterVersion": "LibreOfficeDev 26.8.0.0.alpha0 2c87e51eeaa2b413ff4ae097b2705eea1995d8e5",
+      "error": "Unknown acceptance case selection",
+      "isolatedServicesRemoved": true,
+      "reportSha256": "2c55e7ef38e7f870eb51d3f65af75bdaa1c54a4acb1207b3eaa2940d09c4dc03",
+      "apiLogSha256": "499de93434f557030a7d32347e74358c83e3da3ee672ff8ed7444f4e873938d6"
+    },
+    "acceptance-final": {
+      "schema": "ingestion-http-acceptance-v1",
+      "createdAt": "2026-11-28T13:04:39.259Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "tools": {
+        "sha256": "8684bab134dd4e3693c4c58adde39c88daedc945501b7136e830128e094347d2",
+        "fileCount": 14
+      },
+      "frontend": {
+        "sha256": "7021c1934e8785d1b5cd941b9790533b236207fbc7f253c1fe8dce29ef1218b4",
+        "fileCount": 96
+      },
+      "compiled": {
+        "sha256": "fcf7602677e4a780a8174e3bcf492b8086e10d6cf1b1c741c97565c6a9665b68",
+        "fileCount": 717
+      },
+      "runtime": {
+        "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "mineruServerVersion": "1.0.0",
+        "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+        "imageAnalysisMode": "ocr"
+      },
+      "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+      "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+      "status": "passed",
+      "cases": [
+        {
+          "id": "acceptance-scan-middle",
+          "status": "passed",
+          "inputSha256": "773ed7dd4142361e51f419d89a8c904c573432907163c11bfc46ad0c3501a5e6",
+          "documentId": "26d79ac2-4535-49df-9915-5b95dbe93dfd",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "quality": "needs_review",
+          "candidateRequired": true,
+          "criticalFacts": 3,
+          "evidence": 2,
+          "tables": 1,
+          "publishedVersion": 2,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-notes-txt",
+          "status": "passed",
+          "inputSha256": "c92e478e19de622c552305f3681ee09094c9f7c4b7d9025c436c439e59ec7bd0",
+          "documentId": "1108b070-a55c-4775-94ba-4ab6e5aca5e0",
+          "parser": "text",
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 1,
+          "evidence": 0,
+          "tables": 0,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 1,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-costs-xlsx",
+          "status": "passed",
+          "inputSha256": "2f77f95d1c2136d78de4a2d823208fd2c3bd4b9e6ca2c2a570bd2aedec349d79",
+          "documentId": "6d33626f-9686-40fe-84f2-b6d85d5f0598",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 2,
+          "evidence": 4,
+          "tables": 1,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 1,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-review-docx",
+          "status": "passed",
+          "inputSha256": "f9d42cd25ac642c821c03789ff0080b1e56d18521172b1e07f5697c4e8d21ff7",
+          "documentId": "c97312a7-f1f9-4b12-977f-ca91b3bede4a",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 3,
+          "evidence": 1,
+          "tables": 1,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-slides-pptx",
+          "status": "passed",
+          "inputSha256": "12aca6af3c9d17ceb055a3644fcd3599a4fdee56ae810c8b0f0d0ba02052425c",
+          "documentId": "d25e0ed8-8aeb-4c4c-b217-dd5f4184de61",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 2,
+          "evidence": 0,
+          "tables": 0,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-pages-pdf",
+          "status": "passed",
+          "inputSha256": "98d6feed93d59e70a7df27b187fe79d8a51514bf11959de80b83c6fa39f6c635",
+          "documentId": "c07fb3d2-ba0d-4a0d-8c3e-61c648b4886c",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "ocr"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 2,
+          "evidence": 0,
+          "tables": 0,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-review-doc",
+          "status": "passed",
+          "inputSha256": "6d4ef98c4384e0d4a9e3ff4a110cb85fd010c0824c85dcbc3b5cb65166cb5f08",
+          "documentId": "3b4892f6-c6f5-4a91-a805-22b18fe38f27",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 3,
+          "evidence": 1,
+          "tables": 1,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-costs-xls",
+          "status": "passed",
+          "inputSha256": "3a7ec35a2df201cc56d72a260520def49941ee97dab8f114e9c569740275c6e7",
+          "documentId": "276ff9dd-c45c-431f-a15c-7f0e7b217b72",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "needs_review",
+          "candidateRequired": true,
+          "criticalFacts": 2,
+          "evidence": 1,
+          "tables": 1,
+          "publishedVersion": 2,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 1,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-slides-ppt",
+          "status": "passed",
+          "inputSha256": "fcb6b98db31679f05fca8375c4450041e4629a0138bf1fc3b9134dbc659e8704",
+          "documentId": "9e9a5aaf-b503-4672-83ea-14cf425decfc",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 2,
+          "evidence": 0,
+          "tables": 0,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 2,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        },
+        {
+          "id": "acceptance-static-html-image",
+          "status": "passed",
+          "inputSha256": "7015231bcf2f79b2a07c060d965312e001a92056eefdf24fc37ba143038b33c8",
+          "documentId": "3f3be80b-8117-427a-9cb9-ba8cdc3491eb",
+          "parser": "mineru",
+          "provenance": {
+            "engine": "mineru",
+            "version": "4.2.3",
+            "tier": "flash",
+            "mode": "txt"
+          },
+          "quality": "accepted",
+          "candidateRequired": false,
+          "criticalFacts": 2,
+          "evidence": 2,
+          "tables": 1,
+          "publishedVersion": 1,
+          "activePipelines": 3,
+          "semanticEvidenceChunks": 3,
+          "sourceReadback": true,
+          "permissionChecks": true,
+          "reparsePreservedPublished": true,
+          "cleanup": true
+        }
+      ],
+      "images": [
+        {
+          "ID": "sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-object-storage-1",
+          "Repository": "rustfs/rustfs",
+          "Tag": "latest",
+          "Platform": "linux/arm64",
+          "Size": 81468250,
+          "Created": "2026-07-30T04:16:11.110846044Z",
+          "LastTagTime": "2026-08-08T06:58:57.586512292Z"
+        },
+        {
+          "ID": "sha256:42ef3ebfd671ebd01fdebb6dcbe80cf7b45eef2aa3d346ef4132f7ef31e67d2f",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-neo4j-1",
+          "Repository": "neo4j",
+          "Tag": "5-community",
+          "Platform": "linux/arm64/v8",
+          "Size": 349691154,
+          "Created": "2026-11-05T07:44:07.388925024Z",
+          "LastTagTime": "2026-11-09T13:26:16.718021344Z"
+        },
+        {
+          "ID": "sha256:e0ce8c35124d4a9f9785532d1f268f39e9728ffa1cb38f46fa482436424c4bd3",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-mongo-1",
+          "Repository": "mongo",
+          "Tag": "8",
+          "Platform": "linux/arm64/v8",
+          "Size": 321353034,
+          "Created": "2026-07-22T22:13:04.195785542Z",
+          "LastTagTime": "2026-08-08T07:07:08.715276797Z"
+        },
+        {
+          "ID": "sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-postgres-1",
+          "Repository": "postgres",
+          "Tag": "16-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 113906408,
+          "Created": "2026-11-05T19:06:11.05471323Z",
+          "LastTagTime": "2026-11-12T13:18:23.927937042Z"
+        },
+        {
+          "ID": "sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-rabbitmq-1",
+          "Repository": "rabbitmq",
+          "Tag": "4-management-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 93784804,
+          "Created": "2026-11-05T21:33:12.203226502Z",
+          "LastTagTime": "2026-11-12T13:18:24.809743626Z"
+        },
+        {
+          "ID": "sha256:01c1732062b4a846c5ca687b0094b89bad0bfed00c6d71626db32fb8f3131a78",
+          "ContainerName": "knowbase-acceptance-f9f5d41b-elasticsearch-1",
+          "Repository": "docker.elastic.co/elasticsearch/elasticsearch",
+          "Tag": "8.15.3",
+          "Platform": "linux/arm64",
+          "Size": 510516881,
+          "Created": "2024-10-09T22:16:20.113714326Z",
+          "LastTagTime": "2026-08-08T07:06:59.436987001Z"
+        }
+      ],
+      "configuration": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "async": true,
+        "workers": true,
+        "chunkSize": 1000,
+        "chunkOverlap": 150,
+        "embeddingDimensions": 768,
+        "objectStorage": "RustFS",
+        "scope": "isolated HTTP and Worker lifecycle; no relevance or graph fact accuracy measurement"
+      },
+      "converterVersion": "LibreOfficeDev 26.8.0.0.alpha0 2c87e51eeaa2b413ff4ae097b2705eea1995d8e5",
+      "isolatedServicesRemoved": true,
+      "reportSha256": "c6fe908fdec7765e9ead9b31177d83e592e7c07608b23daccedd079ef41064a9",
+      "apiLogSha256": "f2508a17600ee2c5caa492f2c0ce0faeadcb3a6998380dad6139e8053a29e02e"
+    },
+    "release": {
+      "schema": "ingestion-release-v1",
+      "createdAt": "2026-11-28T13:06:53.246Z",
+      "git": {
+        "commit": "e7b5c622813f868eaba84b95ac5ae5310ca87dd2",
+        "workingTreeDirty": true
+      },
+      "runtime": {
+        "mineru": "mineru-4.2.3:5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+        "mineruServerVersion": "1.0.0",
+        "embedding": "sha256:0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "kg": "sha256:a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+        "imageAnalysisMode": "ocr"
+      },
+      "mineruSnapshot": {
+        "schema": "mineru-runtime-snapshot-v1",
+        "python": "3.12.14",
+        "platform": "Darwin",
+        "arch": "arm64",
+        "packages": [
+          {
+            "name": "accelerate",
+            "version": "1.16.0"
+          },
+          {
+            "name": "aiofiles",
+            "version": "25.1.0"
+          },
+          {
+            "name": "aiosqlite",
+            "version": "0.22.1"
+          },
+          {
+            "name": "annotated-doc",
+            "version": "0.0.7"
+          },
+          {
+            "name": "annotated-types",
+            "version": "0.8.0"
+          },
+          {
+            "name": "anyio",
+            "version": "4.16.0"
+          },
+          {
+            "name": "beautifulsoup4",
+            "version": "4.15.0"
+          },
+          {
+            "name": "brotli",
+            "version": "1.2.1"
+          },
+          {
+            "name": "certifi",
+            "version": "2026.11.20"
+          },
+          {
+            "name": "cffi",
+            "version": "2.1.1"
+          },
+          {
+            "name": "charset-normalizer",
+            "version": "3.5.2"
+          },
+          {
+            "name": "click",
+            "version": "8.5.1"
+          },
+          {
+            "name": "cobble",
+            "version": "0.1.4"
+          },
+          {
+            "name": "cryptography",
+            "version": "50.0.2"
+          },
+          {
+            "name": "distro",
+            "version": "1.9.0"
+          },
+          {
+            "name": "docvortex",
+            "version": "0.6.26"
+          },
+          {
+            "name": "et_xmlfile",
+            "version": "2.0.0"
+          },
+          {
+            "name": "fastapi",
+            "version": "0.165.0"
+          },
+          {
+            "name": "fastapi_offline",
+            "version": "1.7.7"
+          },
+          {
+            "name": "filelock",
+            "version": "4.3.0"
+          },
+          {
+            "name": "flatbuffers",
+            "version": "25.12.19"
+          },
+          {
+            "name": "fonttools",
+            "version": "4.68.0"
+          },
+          {
+            "name": "fsspec",
+            "version": "2026.9.0"
+          },
+          {
+            "name": "ftfy",
+            "version": "6.3.1"
+          },
+          {
+            "name": "gradio",
+            "version": "6.32.0"
+          },
+          {
+            "name": "gradio_client",
+            "version": "2.7.2"
+          },
+          {
+            "name": "groovy",
+            "version": "0.1.2"
+          },
+          {
+            "name": "h11",
+            "version": "0.16.0"
+          },
+          {
+            "name": "hf-gradio",
+            "version": "0.4.1"
+          },
+          {
+            "name": "hf-xet",
+            "version": "1.8.0"
+          },
+          {
+            "name": "httpcore",
+            "version": "1.0.9"
+          },
+          {
+            "name": "httpcore2",
+            "version": "2.16.2"
+          },
+          {
+            "name": "httpx",
+            "version": "0.28.1"
+          },
+          {
+            "name": "httpx-retries",
+            "version": "0.6.0"
+          },
+          {
+            "name": "httpx2",
+            "version": "2.16.2"
+          },
+          {
+            "name": "huggingface_hub",
+            "version": "2.4.0"
+          },
+          {
+            "name": "idna",
+            "version": "3.20"
+          },
+          {
+            "name": "jieba",
+            "version": "0.42.1"
+          },
+          {
+            "name": "Jinja2",
+            "version": "3.1.6"
+          },
+          {
+            "name": "jiter",
+            "version": "0.19.0"
+          },
+          {
+            "name": "json_repair",
+            "version": "0.64.9"
+          },
+          {
+            "name": "latex2mathml",
+            "version": "3.81.1"
+          },
+          {
+            "name": "loguru",
+            "version": "0.8.0"
+          },
+          {
+            "name": "lxml",
+            "version": "6.1.3"
+          },
+          {
+            "name": "mammoth",
+            "version": "1.13.0"
+          },
+          {
+            "name": "markdown-it-py",
+            "version": "4.3.0"
+          },
+          {
+            "name": "MarkupSafe",
+            "version": "3.0.4"
+          },
+          {
+            "name": "mathml2omml",
+            "version": "0.0.2"
+          },
+          {
+            "name": "mdurl",
+            "version": "0.1.2"
+          },
+          {
+            "name": "metafile-render",
+            "version": "0.4.2"
+          },
+          {
+            "name": "mineru",
+            "version": "4.2.3"
+          },
+          {
+            "name": "mineru-llama-cpp",
+            "version": "0.2.3"
+          },
+          {
+            "name": "mineru-magika",
+            "version": "1.0.3"
+          },
+          {
+            "name": "mineru_vl_utils",
+            "version": "2.0.9"
+          },
+          {
+            "name": "ml_dtypes",
+            "version": "0.7.0"
+          },
+          {
+            "name": "modelscope",
+            "version": "1.40.3"
+          },
+          {
+            "name": "modelscope-hub",
+            "version": "0.7.1"
+          },
+          {
+            "name": "mpmath",
+            "version": "1.3.0"
+          },
+          {
+            "name": "networkx",
+            "version": "3.7"
+          },
+          {
+            "name": "nh3",
+            "version": "0.3.8"
+          },
+          {
+            "name": "numpy",
+            "version": "2.5.5"
+          },
+          {
+            "name": "olefile",
+            "version": "0.47"
+          },
+          {
+            "name": "onnx",
+            "version": "1.23.2"
+          },
+          {
+            "name": "onnxruntime",
+            "version": "1.32.0"
+          },
+          {
+            "name": "openai",
+            "version": "2.54.0"
+          },
+          {
+            "name": "openpyxl",
+            "version": "3.1.5"
+          },
+          {
+            "name": "opentelemetry-api",
+            "version": "1.45.2"
+          },
+          {
+            "name": "orjson",
+            "version": "3.13.0"
+          },
+          {
+            "name": "packaging",
+            "version": "26.3"
+          },
+          {
+            "name": "pandas",
+            "version": "3.1.1"
+          },
+          {
+            "name": "pillow",
+            "version": "13.0.0"
+          },
+          {
+            "name": "pip",
+            "version": "25.0.1"
+          },
+          {
+            "name": "protobuf",
+            "version": "7.36.2"
+          },
+          {
+            "name": "psutil",
+            "version": "7.2.2"
+          },
+          {
+            "name": "pyclipper",
+            "version": "1.4.0"
+          },
+          {
+            "name": "pycparser",
+            "version": "3.12"
+          },
+          {
+            "name": "pydantic",
+            "version": "2.14.4"
+          },
+          {
+            "name": "pydantic_core",
+            "version": "2.50.5"
+          },
+          {
+            "name": "pydub",
+            "version": "0.25.1"
+          },
+          {
+            "name": "Pygments",
+            "version": "2.21.0"
+          },
+          {
+            "name": "pylatexenc",
+            "version": "2.11"
+          },
+          {
+            "name": "pypdf",
+            "version": "7.1.1"
+          },
+          {
+            "name": "pypdfium2",
+            "version": "5.15.2"
+          },
+          {
+            "name": "pypptx-with-oxml",
+            "version": "1.0.3"
+          },
+          {
+            "name": "python-dateutil",
+            "version": "4.0.0"
+          },
+          {
+            "name": "python-docx",
+            "version": "1.2.0"
+          },
+          {
+            "name": "python-multipart",
+            "version": "0.0.34"
+          },
+          {
+            "name": "pytz",
+            "version": "2026.6"
+          },
+          {
+            "name": "PyYAML",
+            "version": "6.0.4"
+          },
+          {
+            "name": "regex",
+            "version": "2026.11.19"
+          },
+          {
+            "name": "reportlab",
+            "version": "5.1.0"
+          },
+          {
+            "name": "requests",
+            "version": "2.34.2"
+          },
+          {
+            "name": "resvg_py",
+            "version": "0.5.0"
+          },
+          {
+            "name": "rich",
+            "version": "15.0.0"
+          },
+          {
+            "name": "rl_accel",
+            "version": "0.9.3"
+          },
+          {
+            "name": "safehttpx",
+            "version": "0.1.7"
+          },
+          {
+            "name": "safetensors",
+            "version": "0.8.0"
+          },
+          {
+            "name": "semantic-version",
+            "version": "2.10.0"
+          },
+          {
+            "name": "setuptools",
+            "version": "84.2.1"
+          },
+          {
+            "name": "shapely",
+            "version": "2.2.0"
+          },
+          {
+            "name": "shellingham",
+            "version": "1.5.4"
+          },
+          {
+            "name": "sniffio",
+            "version": "1.3.1"
+          },
+          {
+            "name": "soupsieve",
+            "version": "4.1.3"
+          },
+          {
+            "name": "starlette",
+            "version": "1.10.0"
+          },
+          {
+            "name": "sympy",
+            "version": "1.14.0"
+          },
+          {
+            "name": "tinycss2",
+            "version": "1.5.1"
+          },
+          {
+            "name": "tokenizers",
+            "version": "0.23.3"
+          },
+          {
+            "name": "tomlkit",
+            "version": "0.14.0"
+          },
+          {
+            "name": "torch",
+            "version": "2.15.0"
+          },
+          {
+            "name": "torchvision",
+            "version": "0.29.2"
+          },
+          {
+            "name": "tqdm",
+            "version": "4.70.1"
+          },
+          {
+            "name": "transformers",
+            "version": "5.24.0"
+          },
+          {
+            "name": "truststore",
+            "version": "0.10.5"
+          },
+          {
+            "name": "typer",
+            "version": "0.29.2"
+          },
+          {
+            "name": "typing-inspection",
+            "version": "0.4.5"
+          },
+          {
+            "name": "typing_extensions",
+            "version": "4.16.0"
+          },
+          {
+            "name": "tzdata",
+            "version": "2026.6"
+          },
+          {
+            "name": "urllib3",
+            "version": "2.8.0"
+          },
+          {
+            "name": "uvicorn",
+            "version": "0.54.0"
+          },
+          {
+            "name": "watchfiles",
+            "version": "1.3.0"
+          },
+          {
+            "name": "wcwidth",
+            "version": "0.9.5"
+          },
+          {
+            "name": "webencodings",
+            "version": "0.6.1"
+          },
+          {
+            "name": "xlsxwriter",
+            "version": "3.3.4"
+          },
+          {
+            "name": "ziafont",
+            "version": "0.11"
+          },
+          {
+            "name": "ziamath",
+            "version": "0.13"
+          }
+        ],
+        "models": [
+          {
+            "file": "Layout/PP-DocLayoutV2/config.json",
+            "bytes": 3787,
+            "sha256": "18a696b54c64c4fa582afcd3a41407c4b65a99dc7ab187ad2fed8af8e4128ad8"
+          },
+          {
+            "file": "Layout/PP-DocLayoutV2/model.safetensors",
+            "bytes": 214798436,
+            "sha256": "e60f3725aeedc88fd319416ef166bda79171a41516a301c27cab9132dc2739d2"
+          },
+          {
+            "file": "Layout/PP-DocLayoutV2/preprocessor_config.json",
+            "bytes": 575,
+            "sha256": "56281a70c931a291dcaf653605fb4df713fd823f65e939aecd6005c26346a103"
+          },
+          {
+            "file": "OCR/paddleocr/ch_PP-OCRv6_small_rec_infer.safetensors",
+            "bytes": 21204736,
+            "sha256": "f65a332afe5aa663f0b9d5706f4ae8457b5b4058a842d5c1eb22df505c27d642"
+          },
+          {
+            "file": "OCR/paddleocr/ch_PP-OCRv6_tiny_det_infer.safetensors",
+            "bytes": 1786412,
+            "sha256": "cae3c88d2a9902fd0293e6b17990428f54bfa7ec98f800a4368e95423a754d16"
+          }
+        ],
+        "sha256": "5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b"
+      },
+      "lockfileSha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "source": {
+        "sha256": "1176533735ce5af0c676ce5a108d11c69e8bed2ad2a7df559b1c61aea1b77f03",
+        "fileCount": 360
+      },
+      "compiled": {
+        "sha256": "fcf7602677e4a780a8174e3bcf492b8086e10d6cf1b1c741c97565c6a9665b68",
+        "fileCount": 717
+      },
+      "tools": {
+        "sha256": "e39b101ed88414fc1d13da7c47e27daf8f1971b20b733ae93031c76de19ebace",
+        "fileCount": 10
+      },
+      "deploy": {
+        "sha256": "833cdda9e75bfe1fe9c1fc2e7f39bdc0215588a8751f24bfe82f3fd7aadf0bae",
+        "fileCount": 32
+      },
+      "scope": "Isolated fixed branch pair, real MinerU/Ollama and six storage/queue services; current lockfile for both binaries. Not latest main integration or production deployment.",
+      "cases": [
+        {
+          "name": "legacy PostgreSQL schema upgrade and repeat migration",
+          "status": "passed",
+          "evidence": {
+            "base": "001 + 004/005",
+            "applied": "002–010 twice",
+            "legacyRowUnchanged": true,
+            "noOutboxCreated": true,
+            "catalogSha256": "586d2e82c7d97f082bc091d3a1f8b4f7b490db738c8a33abab374574dd3c2399",
+            "tables": [
+              "kh_document",
+              "kh_document_parse_task",
+              "kh_index_build_progress",
+              "kh_index_generation_retention",
+              "kh_index_head",
+              "kh_index_upgrade_attempt",
+              "kh_index_upgrade_item",
+              "kh_index_upgrade_plan",
+              "kh_index_upgrade_task",
+              "kh_pipeline_outbox",
+              "kh_pipeline_receipt",
+              "kh_user"
+            ]
+          }
+        },
+        {
+          "name": "MongoDB index upgrade preserves data and uniqueness",
+          "status": "passed",
+          "evidence": {
+            "applied": "002/003/004 twice using unmodified mongosh scripts",
+            "legacyBodyUnchanged": true,
+            "uniquenessRejectedDuplicates": 5,
+            "ttlSeconds": 0,
+            "indexes": {
+              "document_content": [
+                {
+                  "v": 2,
+                  "key": {
+                    "_id": 1
+                  },
+                  "name": "_id_"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "contentId": 1
+                  },
+                  "name": "contentId_1",
+                  "unique": true
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1,
+                    "version": 1
+                  },
+                  "name": "documentId_1_version_1"
+                }
+              ],
+              "document_evidence": [
+                {
+                  "v": 2,
+                  "key": {
+                    "_id": 1
+                  },
+                  "name": "_id_"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "contentId": 1
+                  },
+                  "name": "contentId_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "contentId": 1,
+                    "id": 1
+                  },
+                  "name": "contentId_1_id_1",
+                  "unique": true
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1
+                  },
+                  "name": "documentId_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1,
+                    "contentId": 1,
+                    "ordinal": 1
+                  },
+                  "name": "documentId_1_contentId_1_ordinal_1",
+                  "unique": true
+                }
+              ],
+              "document_assets": [
+                {
+                  "v": 2,
+                  "key": {
+                    "_id": 1
+                  },
+                  "name": "_id_"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "createdAt": 1
+                  },
+                  "name": "createdAt_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1
+                  },
+                  "name": "documentId_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "objectKey": 1
+                  },
+                  "name": "objectKey_1",
+                  "unique": true
+                }
+              ],
+              "ingestion_chunks": [
+                {
+                  "v": 2,
+                  "key": {
+                    "_id": 1
+                  },
+                  "name": "_id_"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1
+                  },
+                  "name": "documentId_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "expiresAt": 1
+                  },
+                  "name": "expiresAt_1",
+                  "expireAfterSeconds": 0
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "key": 1,
+                    "index": 1
+                  },
+                  "name": "key_1_index_1",
+                  "unique": true
+                }
+              ],
+              "ingestion_embeddings": [
+                {
+                  "v": 2,
+                  "key": {
+                    "_id": 1
+                  },
+                  "name": "_id_"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "documentId": 1
+                  },
+                  "name": "documentId_1"
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "expiresAt": 1
+                  },
+                  "name": "expiresAt_1",
+                  "expireAfterSeconds": 0
+                },
+                {
+                  "v": 2,
+                  "key": {
+                    "key": 1
+                  },
+                  "name": "key_1",
+                  "unique": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "old binary creates published document and current generation",
+          "status": "passed",
+          "evidence": {
+            "documentId": "9a36e249-eb77-4d3f-bbba-40f7ac72bcbd",
+            "bodySha256": "cfb4cb8de00b3192c2d02dd74c78e4dee34eee228589f7f8239cd1d930e56fcb",
+            "bodyUnchanged": true,
+            "sourceUnchanged": true,
+            "versionUnchanged": true,
+            "indexVisible": true
+          }
+        },
+        {
+          "name": "new binary reads old data and upgrades one canary",
+          "status": "passed",
+          "evidence": {
+            "planId": "80f7fb85-d063-4f55-851b-bdf3fa7ddc39",
+            "documents": 1,
+            "activeDocuments": 1,
+            "tasks": [
+              {
+                "pipeline": "kg",
+                "state": "succeeded",
+                "count": 1
+              },
+              {
+                "pipeline": "rag",
+                "state": "succeeded",
+                "count": 1
+              },
+              {
+                "pipeline": "search",
+                "state": "succeeded",
+                "count": 1
+              }
+            ],
+            "target": {
+              "protocol": "index-upgrade-v1",
+              "chunkStrategy": "structure-v5:256:20",
+              "graphFingerprint": "3b3bfe95b2f6fbba583175a77d4e18f43cec081cc8da26000578a93a0c32cee3",
+              "indexFingerprint": "c32337349d8bfb9f3dc17e984b96184df6245d6792e07251ca3451f5cbf8c18f",
+              "budgetFingerprint": "8284bd34a5ccc9fb68dc266ec8b9a1eb269a79f7335226aba900d5035bd6cbd4",
+              "embeddingFingerprint": "27be3d7b7554203201730027cfc90252b113f2c325d3c55fe39800e8dfc9b182"
+            },
+            "targetHash": "23fa87efa6a36373782f783cc9313cf01512c1cf06dda77092e7823b59f9f3b7",
+            "bodyUnchanged": true
+          }
+        },
+        {
+          "name": "real MinerU OCR retains original, body, evidence and indexes",
+          "status": "passed",
+          "evidence": {
+            "documentId": "f326d55b-f606-406e-81dc-537fed1dd856",
+            "sourceSha256": "773ed7dd4142361e51f419d89a8c904c573432907163c11bfc46ad0c3501a5e6",
+            "bodySha256": "d897caa490cb38b235ceea23aed161c242aaa1ac08aae88016d1a96d29e83c16",
+            "assets": 2,
+            "parser": "mineru",
+            "provenance": {
+              "engine": "mineru",
+              "version": "4.2.3",
+              "tier": "flash",
+              "mode": "ocr"
+            }
+          }
+        },
+        {
+          "name": "expand canary to two documents without replacing body",
+          "status": "passed",
+          "evidence": {
+            "planId": "ee6f70c9-ab2d-4763-9f02-8736ecc3b75d",
+            "documents": 2,
+            "activeDocuments": 2,
+            "tasks": [
+              {
+                "pipeline": "kg",
+                "state": "succeeded",
+                "count": 2
+              },
+              {
+                "pipeline": "rag",
+                "state": "succeeded",
+                "count": 2
+              },
+              {
+                "pipeline": "search",
+                "state": "succeeded",
+                "count": 2
+              }
+            ],
+            "target": {
+              "protocol": "index-upgrade-v1",
+              "chunkStrategy": "structure-v5:256:20",
+              "graphFingerprint": "3b3bfe95b2f6fbba583175a77d4e18f43cec081cc8da26000578a93a0c32cee3",
+              "indexFingerprint": "c32337349d8bfb9f3dc17e984b96184df6245d6792e07251ca3451f5cbf8c18f",
+              "budgetFingerprint": "8284bd34a5ccc9fb68dc266ec8b9a1eb269a79f7335226aba900d5035bd6cbd4",
+              "embeddingFingerprint": "27be3d7b7554203201730027cfc90252b113f2c325d3c55fe39800e8dfc9b182"
+            },
+            "targetHash": "23fa87efa6a36373782f783cc9313cf01512c1cf06dda77092e7823b59f9f3b7",
+            "bodyUnchanged": true
+          }
+        },
+        {
+          "name": "reparse candidate remains independent before rollback",
+          "status": "passed",
+          "evidence": {
+            "documentId": "f326d55b-f606-406e-81dc-537fed1dd856",
+            "taskId": "649f1ab5-e706-4ef0-b64f-cd934f9b0375",
+            "bodySha256": "bb84ccf0265f9bd423f6e1f66c82d004ace03250a94e431d805fa8f9cb2e84ed",
+            "assets": [
+              "assets/f326d55b-f606-406e-81dc-537fed1dd856/8c7e75fe-fac7-49a0-ad94-34faea5bc121-images-page_0_table_1.jpg",
+              "assets/f326d55b-f606-406e-81dc-537fed1dd856/62bf721e-e0b7-45cb-af25-87a598cb545f-mineru-structure.json"
+            ],
+            "currentPublishedBodyPreserved": true
+          }
+        },
+        {
+          "name": "changed strategy and same-dimension changed model both reject old preview",
+          "status": "passed",
+          "evidence": {
+            "strategyMismatchStatus": 409,
+            "modelMismatchStatus": 409,
+            "embeddingDimensions": 768,
+            "headsUnchanged": true
+          }
+        },
+        {
+          "name": "rollback gate rejects live consumers and dead-letter messages",
+          "status": "passed",
+          "evidence": {
+            "liveRejected": ["queueConsumers"],
+            "deadLetterRejected": ["queueReady"],
+            "clear": {
+              "parseActive": 0,
+              "remoteCleanupPending": 0,
+              "outboxPending": 0,
+              "receiptsIncomplete": 0,
+              "plansRunning": 0,
+              "upgradeUnfinished": 0,
+              "buildsUncertain": 0,
+              "queueReady": 0,
+              "queueConsumers": 0,
+              "queues": [
+                {
+                  "queue": "knowbase.pipeline.search",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.search.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.rag",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.rag.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.kg",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.kg.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.document.parse",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.document.parse.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "old binary and old chunk strategy read newer data without dropping schema",
+          "status": "passed",
+          "evidence": {
+            "rollbackRevision": "d825b0f365291e48cc747f85bd51bd25f91f07c8",
+            "strategy": "structure-v4:1000:20",
+            "currentBodiesPreserved": true,
+            "candidatePreserved": true,
+            "oldBinaryRebuild": true,
+            "additiveTablesRetained": true
+          }
+        },
+        {
+          "name": "roll forward restores batch management and deletes all test artifacts",
+          "status": "passed",
+          "evidence": {
+            "currentVersionRecovered": true,
+            "cleanup": true,
+            "final": {
+              "parseActive": 0,
+              "remoteCleanupPending": 0,
+              "outboxPending": 0,
+              "receiptsIncomplete": 0,
+              "plansRunning": 0,
+              "upgradeUnfinished": 0,
+              "buildsUncertain": 0,
+              "queueReady": 0,
+              "queueConsumers": 0,
+              "queues": [
+                {
+                  "queue": "knowbase.pipeline.search",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.search.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.rag",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.rag.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.kg",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.pipeline.kg.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.document.parse",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                },
+                {
+                  "queue": "knowbase.document.parse.dead",
+                  "messageCount": 0,
+                  "consumerCount": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "status": "passed",
+      "rollbackArtifact": {
+        "revision": "d825b0f365291e48cc747f85bd51bd25f91f07c8",
+        "dependencies": "current locked node_modules (not historical lockfile reinstall)",
+        "source": {
+          "sha256": "95f16c1f8d9b0e5d3bee9b08eaa4657afb2a81f1b0af6ef08d809f1e6bd708cf",
+          "fileCount": 300
+        },
+        "compiled": {
+          "sha256": "971b816ab8edfc69683d0cae24c62f57d152b101e31a8b110a7ed218d1192f5d",
+          "fileCount": 610
+        }
+      },
+      "images": [
+        {
+          "ID": "sha256:01c1732062b4a846c5ca687b0094b89bad0bfed00c6d71626db32fb8f3131a78",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-elasticsearch-1",
+          "Repository": "docker.elastic.co/elasticsearch/elasticsearch",
+          "Tag": "8.15.3",
+          "Platform": "linux/arm64",
+          "Size": 510516881,
+          "Created": "2024-10-09T22:16:20.113714326Z",
+          "LastTagTime": "2026-08-08T07:06:59.436987001Z"
+        },
+        {
+          "ID": "sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-object-storage-1",
+          "Repository": "rustfs/rustfs",
+          "Tag": "latest",
+          "Platform": "linux/arm64",
+          "Size": 81468250,
+          "Created": "2026-07-30T04:16:11.110846044Z",
+          "LastTagTime": "2026-08-08T06:58:57.586512292Z"
+        },
+        {
+          "ID": "sha256:e0ce8c35124d4a9f9785532d1f268f39e9728ffa1cb38f46fa482436424c4bd3",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-mongo-1",
+          "Repository": "mongo",
+          "Tag": "8",
+          "Platform": "linux/arm64/v8",
+          "Size": 321353034,
+          "Created": "2026-07-22T22:13:04.195785542Z",
+          "LastTagTime": "2026-08-08T07:07:08.715276797Z"
+        },
+        {
+          "ID": "sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-postgres-1",
+          "Repository": "postgres",
+          "Tag": "16-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 113906408,
+          "Created": "2026-11-05T19:06:11.05471323Z",
+          "LastTagTime": "2026-11-12T13:18:23.927937042Z"
+        },
+        {
+          "ID": "sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-rabbitmq-1",
+          "Repository": "rabbitmq",
+          "Tag": "4-management-alpine",
+          "Platform": "linux/arm64/v8",
+          "Size": 93784804,
+          "Created": "2026-11-05T21:33:12.203226502Z",
+          "LastTagTime": "2026-11-12T13:18:24.809743626Z"
+        },
+        {
+          "ID": "sha256:42ef3ebfd671ebd01fdebb6dcbe80cf7b45eef2aa3d346ef4132f7ef31e67d2f",
+          "ContainerName": "knowbase-acceptance-97b9a4c5-neo4j-1",
+          "Repository": "neo4j",
+          "Tag": "5-community",
+          "Platform": "linux/arm64/v8",
+          "Size": 349691154,
+          "Created": "2026-11-05T07:44:07.388925024Z",
+          "LastTagTime": "2026-11-09T13:26:16.718021344Z"
+        }
+      ],
+      "configuration": {
+        "parser": "mineru",
+        "imageMode": "ocr",
+        "async": true,
+        "productionEntrypoints": true,
+        "upgradedChunkSize": 256,
+        "rollbackChunkSize": 1000,
+        "overlap": 20,
+        "embeddingDimensions": 768,
+        "sameEmbeddingSpace": true,
+        "outboxPollMs": 100,
+        "outboxBatch": 10,
+        "generationGcEnabled": false,
+        "mutationIngress": "isolated harness is the only writer"
+      },
+      "isolatedServicesRemoved": true,
+      "reportSha256": "53eeb726dfc7ea8bb6f928efaa9f6d6fe6ac14a3997cf6836a6198663ee6df7a",
+      "apiLogSha256": "ff14cb97af4f610af0d467b7e2878004702f4f67a45fff00bba87b6aa4eb7cca"
+    }
+  },
+  "quality": {
+    "reportSha256": "7834600d773c7ed7a8400d8e1bf2d278ef84d6cec4aee7bdf776b906e534072d",
+    "status": "passed",
+    "cases": 32,
+    "passed": 32
+  },
+  "logs": {
+    "retrieval-python.log": "ea216df006bb79710fc0a9e670861ec826d2eddd284f95fd39749025a11cf548",
+    "release.log": "f79acd1eafee8f06f608d46663aa0762888aadb99c61a7cabf5d8a2c7a947092",
+    "resilience.log": "8d446b3299d211b160597138d7624f702cdb319b946ea46323ca184a6653ee31",
+    "retrieval-python-final.log": "3e5e13e45c5679793abc28956a6df70007e21db734fe0b654ea32d652c337f49",
+    "lockfile.log": "db94292bbd3af6d5baf0f58c468ab2e749c4a0b388a5033ef4fed510771de992",
+    "combined-first.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "acceptance-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "api-final.log": "61ed9cd3858d0eb667b163f5251fc801324b8a6da2784b4bc6d182382416160c",
+    "index-final.log": "e644d6e19c4fbdc681f6350dbb961999ea97878e4dd0ae27fa1a5d293222c55e",
+    "acceptance-first.log": "8d3d2a7b73d421bbc6cea74c79f90659706bb072d90329d9892d9d284a5bddb4",
+    "chunks.log": "b3c16bf99ea6bc7f304dd897eebd65d40364ed5ab346eb9cbb67f53b626b6b68",
+    "persistence-formats.log": "e9cfca8a2b3a6d5abf0b8f040a6cec9609e1a21cf699c63fcc11d8e01765dbfb",
+    "combined-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tools.log": "67ccc008b0d3b36af3d0b7a1677c625c33b051e07bad15aea6a8ba4be14ff511",
+    "web-build.log": "c31646cef2fd1400cbb2bf859c5bc5bed03066c6c5c03ad338dc0943e5193a29",
+    "retrieval-tools.log": "3cf4304dce17fcc637998911641684575855cd6fef3ab419cd24494c130cdce5",
+    "services-first.log": "0fb094bd45124debd875f8d62af9494f4876759ea3d27920869d374c7ae80e0a",
+    "combined-7b.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "mineruRuntime": {
+    "sha256": "5ac1b90c8761385768caf3354d4ca7fcf8fcb1c7c98d0f71f7de0b8e292a152b",
+    "snapshotSha256": "84c01847db6fe585beec8e7ef3168bee04d0f1cf47580f3248ceb2b86792c9fd"
+  },
+  "pending": [
+    "normal public DNS web recheck",
+    "DeepSeek/BGE combined business quality re-evaluation",
+    "production OCR/model load capacity",
+    "cross-store backup restoration",
+    "PR merge/release deployment"
+  ]
+}

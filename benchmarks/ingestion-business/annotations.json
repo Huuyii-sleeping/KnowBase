@@ -1,0 +1,188 @@
+{
+  "schema": "ingestion-quality-v1",
+  "provenance": "authored-synthetic-business-v1",
+  "documents": [
+    {
+      "id": "charter",
+      "file": "charter.md",
+      "split": "development",
+      "facts": [
+        ["180万元"],
+        ["2026-06-30"],
+        ["武汉备援仓仅参与灾备演练"],
+        ["质量部"]
+      ]
+    },
+    {
+      "id": "approved-change",
+      "file": "change-approved.md",
+      "split": "development",
+      "facts": [["198万元"], ["2026-07-15"], ["已批准"], ["另行", "单独采购单"]]
+    },
+    {
+      "id": "proposal",
+      "file": "meeting-proposal.md",
+      "split": "holdout",
+      "facts": [["12万元"], ["2026-07-22"], ["未作出批准决定"], ["仍为198万元"]]
+    },
+    {
+      "id": "incident",
+      "file": "incident.md",
+      "split": "holdout",
+      "facts": [
+        ["9.3摄氏度"],
+        ["2026-09-16 10:00"],
+        ["12500元"],
+        ["1800元"],
+        ["技术恢复不等于产品放行"]
+      ]
+    },
+    {
+      "id": "runbook",
+      "file": "runbook.md",
+      "split": "development",
+      "facts": [["2026-07-18"], ["15分钟"], ["120分钟"], ["三年"], ["五分钟"]]
+    },
+    {
+      "id": "contract",
+      "file": "contract.html",
+      "split": "development",
+      "facts": [["120万元"], ["0.05%"], ["5%"]],
+      "tables": [
+        {
+          "rowCount": 4,
+          "columnCount": 4,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "阶段"],
+            [1, 2, "付款比例"],
+            [1, 3, "含税金额（万元）"],
+            [1, 4, "条件"],
+            [2, 1, "预付款"],
+            [2, 2, "30%"],
+            [2, 3, "36"],
+            [2, 4, "合同生效并收合规发票"],
+            [3, 1, "试运行验收"],
+            [3, 2, "40%"],
+            [3, 3, "48"],
+            [3, 4, "两仓完成试运行"],
+            [4, 1, "最终验收"],
+            [4, 2, "30%"],
+            [4, 3, "36"],
+            [4, 4, "缺陷关闭且资料移交"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "budget",
+      "file": "budget.html",
+      "split": "holdout",
+      "facts": [["万元"], ["不是198万元总预算的完整分解"]],
+      "tables": [
+        {
+          "rowCount": 6,
+          "columnCount": 6,
+          "headerRows": [1, 2],
+          "cells": [
+            [1, 1, "部门", 2, 1],
+            [1, 2, "科目", 2, 1],
+            [1, 3, "第一季度", 1, 2],
+            [1, 5, "第二季度", 1, 2],
+            [2, 3, "预算"],
+            [2, 4, "实际"],
+            [2, 5, "预算"],
+            [2, 6, "实际"],
+            [3, 1, "研发", 2, 1],
+            [3, 2, "平台"],
+            [3, 3, "60"],
+            [3, 4, "58.25"],
+            [3, 5, "40"],
+            [3, 6, "39.5"],
+            [4, 2, "离线缓存"],
+            [4, 3, "0"],
+            [4, 4, "0"],
+            [4, 5, "18"],
+            [4, 6, "17.8"],
+            [5, 1, "质量"],
+            [5, 2, "校准"],
+            [5, 3, "12"],
+            [5, 4, "11.2"],
+            [5, 5, "8"],
+            [5, 6, ""],
+            [6, 1, "运营"],
+            [6, 2, "退款冲减"],
+            [6, 3, "0"],
+            [6, 4, "-2.25"],
+            [6, 5, "0"],
+            [6, 6, "0"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "warehouse",
+      "file": "warehouse.html",
+      "split": "holdout",
+      "facts": [["2026-07-15"], ["不表示两仓同时放行"]],
+      "tables": [
+        {
+          "rowCount": 6,
+          "columnCount": 3,
+          "headerRows": [1],
+          "cells": [
+            [1, 1, "仓库"],
+            [1, 2, "检查项"],
+            [1, 3, "结果"],
+            [2, 1, "杭州", 2, 1],
+            [2, 2, "链路"],
+            [2, 3, "通过"],
+            [3, 2, "缓存"],
+            [3, 3, "通过"],
+            [4, 1, "苏州", 2, 1],
+            [4, 2, "链路"],
+            [4, 3, "通过"],
+            [5, 2, "校准"],
+            [5, 3, "待复检"],
+            [6, 1, "说明"],
+            [6, 2, "记录于2026-07-15，不表示两仓同时放行", 1, 2]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native-workbook",
+      "file": "budget.xlsx",
+      "split": "holdout",
+      "facts": [["研发"], ["离线缓存"]],
+      "worksheetCells": [
+        { "sheet": "预算执行", "address": "A3", "value": "研发" },
+        {
+          "sheet": "预算执行",
+          "address": "A4",
+          "coveredBy": "A3",
+          "value": null
+        },
+        { "sheet": "预算执行", "address": "D3", "value": 58.25 },
+        { "sheet": "预算执行", "address": "C4", "value": 0 },
+        { "sheet": "预算执行", "address": "D6", "value": -2.25 },
+        { "sheet": "预算执行", "address": "F5", "value": null },
+        {
+          "sheet": "预算执行",
+          "address": "D7",
+          "formula": "SUM(D3:D6)",
+          "cachedResult": 67.2,
+          "hasCachedResult": true
+        },
+        {
+          "sheet": "预算执行",
+          "address": "F7",
+          "formula": "SUM(F3:F6)",
+          "hasCachedResult": false
+        },
+        { "sheet": "付款", "address": "B2", "value": 0.3, "numberFormat": "0%" }
+      ],
+      "requiredIssues": ["XLSX_FORMULA_RESULT_MISSING"]
+    }
+  ]
+}

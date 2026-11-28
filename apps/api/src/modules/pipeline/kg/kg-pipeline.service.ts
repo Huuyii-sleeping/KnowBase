@@ -1,6 +1,8 @@
+import { IndexBuildOptions } from '../../indexing/index-build-options';
 import { Injectable } from '@nestjs/common';
 import { DocumentContentStore } from '../../documents/document-content.store';
-import { MarkdownChunkerService } from '../chunk/markdown-chunker.service';
+import { DocumentChunksService } from '../chunk/document-chunks.service';
+import { ingestionStage } from '../../ingestion/ingestion-stage';
 import { GraphExtractionService } from './graph-extraction.service';
 import { GraphIndexService } from './graph-index.service';
 import { IndexGenerationStore } from '../../indexing/index-generation.store';
@@ -10,7 +12,7 @@ import { IndexBuildService } from '../../indexing/index-build.service';
 export class KgPipelineService {
   constructor(
     private readonly contentStore: DocumentContentStore,
-    private readonly chunker: MarkdownChunkerService,
+    private readonly chunker: DocumentChunksService,
     private readonly extractor: GraphExtractionService,
     private readonly graphIndex: GraphIndexService,
     private readonly generations: IndexGenerationStore,
@@ -20,6 +22,7 @@ export class KgPipelineService {
   async rebuildDocument(
     documentId: string,
     expectedVersion: number,
+    options?: IndexBuildOptions,
   ): Promise<{
     chunks: number;
     entities: number;
@@ -30,29 +33,44 @@ export class KgPipelineService {
       documentId,
       expectedVersion,
     );
-    if (!document) {
+    if (!document || (options && document.contentId !== options.contentId)) {
       return { chunks: 0, entities: 0, relations: 0, skipped: true };
     }
 
-    const content = await this.contentStore.findByContentId(document.contentId);
-    if (!content) {
-      throw new Error(`document content not found: ${document.contentId}`);
-    }
-
-    const chunks = await this.chunker.split(content.markdown);
     let counts = { chunks: 0, entities: 0, relations: 0 };
     const activated = await this.builds.build(
       document,
       'kg',
-      async (generation) => {
+      async (generation, report) => {
+        await report('content');
+        const content = await this.contentStore.findByContentId(
+          document.contentId,
+        );
+        if (!content) {
+          throw new Error(`document content not found: ${document.contentId}`);
+        }
+
+        await report('chunk');
+        const chunks = await this.chunker.forContent(
+          document.id,
+          document.contentId,
+          content,
+        );
+
         const graphChunks = chunks.map((chunk, index) => ({
           id: `${document.id}:v${document.version}:c${index}:${generation}`,
           documentId: document.id,
           version: document.version,
           chunkIndex: index,
-          content: chunk,
+          content: chunk.content,
         }));
-        const extraction = await this.extractor.extract(graphChunks);
+        await report('graph_extract', 0, graphChunks.length);
+        const extraction = await ingestionStage(
+          'graph.extract',
+          { documentId, chunks: graphChunks.length },
+          () => this.extractor.extract(graphChunks),
+        );
+        await report('index_write', 0, graphChunks.length);
         await this.graphIndex.stageDocument(
           document.id,
           document.version,
@@ -62,6 +80,7 @@ export class KgPipelineService {
           extraction.mentions,
           extraction.relations,
         );
+        await report('index_write', graphChunks.length, graphChunks.length);
         counts = {
           chunks: graphChunks.length,
           entities: extraction.entities.length,
@@ -70,6 +89,7 @@ export class KgPipelineService {
       },
       (generation) =>
         this.graphIndex.discardGeneration(document.id, generation),
+      options,
     );
     return activated
       ? counts

@@ -22,18 +22,32 @@ function fixture() {
     findByContentId: vi.fn().mockResolvedValue({ markdown: '# Source' }),
   };
   const chunker = {
-    prepare: vi.fn().mockResolvedValue([
-      { content: 'One', retrievalText: 'Source\nOne' },
-      { content: 'Two', retrievalText: 'Source\nTwo' },
+    forContent: vi.fn().mockResolvedValue([
+      { content: 'One', embeddingText: 'One' },
+      { content: 'Two', embeddingText: 'Two' },
     ]),
   };
   const embedding = {
-    embedDocuments: vi.fn().mockResolvedValue([[0.1], [0.2]]),
+    embed: vi.fn().mockResolvedValue([[0.1], [0.2]]),
   };
   const index = {
     stageChunks: vi.fn(),
     discardGeneration: vi.fn(),
     deleteDocument: vi.fn(),
+  };
+  const progress = {
+    start: vi.fn(),
+    report: vi.fn(),
+    finish: vi.fn(),
+    prune: vi.fn(),
+  };
+  const chunkText = {
+    forChunks: vi.fn((chunks) =>
+      chunks.map((chunk) => ({
+        ...chunk,
+        retrievalText: 'Source\n' + chunk.content,
+      })),
+    ),
   };
   const service = new RagPipelineService(
     content as any,
@@ -41,35 +55,38 @@ function fixture() {
     embedding as any,
     index as any,
     generations as any,
-    new IndexBuildService(generations as any),
+    new IndexBuildService(generations as any, progress as any),
+    chunkText as any,
   );
-  return { service, generations, content, chunker, embedding, index };
+  return {
+    service,
+    generations,
+    content,
+    chunker,
+    embedding,
+    index,
+    progress,
+    chunkText,
+  };
 }
 describe('RagPipelineService generations', () => {
-  it('does not write or activate when context preparation or embedding fails', async () => {
-    const { service, content, chunker, embedding, index, generations } =
-      fixture();
-    content.findByContentId.mockResolvedValueOnce(null);
-    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
-      'content not found',
-    );
-    expect(chunker.prepare).not.toHaveBeenCalled();
-    chunker.prepare.mockRejectedValueOnce(new Error('context failed'));
+  it('does not write or activate when context assembly fails', async () => {
+    const { service, chunkText, index, generations, progress } = fixture();
+    chunkText.forChunks.mockImplementationOnce(() => {
+      throw new Error('context failed');
+    });
     await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
       'context failed',
     );
-    embedding.embedDocuments.mockRejectedValueOnce(new Error('model failed'));
-    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
-      'model failed',
-    );
     expect(index.stageChunks).not.toHaveBeenCalled();
     expect(generations.activate).not.toHaveBeenCalled();
+    expect(progress.finish.mock.calls.at(-1)?.[1]).toBe('failed');
   });
   it('activates an empty batch without calling the embedding provider', async () => {
     const { service, chunker, embedding, index } = fixture();
-    chunker.prepare.mockResolvedValueOnce([]);
+    chunker.forContent.mockResolvedValueOnce([]);
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 0 });
-    expect(embedding.embedDocuments).not.toHaveBeenCalled();
+    expect(embedding.embed).not.toHaveBeenCalled();
     expect(index.stageChunks).toHaveBeenCalledWith(
       'doc',
       expect.any(String),
@@ -77,21 +94,21 @@ describe('RagPipelineService generations', () => {
     );
   });
   it('stages all embeddings before activating a complete generation', async () => {
-    const { service, index, generations, chunker, embedding } = fixture();
+    const { service, index, generations, chunkText, embedding } = fixture();
     expect(await service.rebuildDocument('doc', 3)).toEqual({ chunks: 2 });
+    expect(chunkText.forChunks).toHaveBeenCalledOnce();
+    expect(chunkText.forChunks).toHaveBeenCalledWith(
+      expect.any(Array),
+      'Source',
+    );
+    expect(embedding.embed).toHaveBeenCalledWith(
+      'doc',
+      ['Source\nOne', 'Source\nTwo'],
+      expect.any(Function),
+    );
     expect(generations.capture).toHaveBeenCalledWith('doc', 3);
-    expect(chunker.prepare).toHaveBeenCalledWith('# Source', 'Source');
-    expect(embedding.embedDocuments).toHaveBeenCalledWith([
-      'Source\nOne',
-      'Source\nTwo',
-    ]);
     expect(index.stageChunks).toHaveBeenCalledWith('doc', expect.any(String), [
-      expect.objectContaining({
-        id: 'doc:v3:c0',
-        content: 'One',
-        retrievalText: 'Source\nOne',
-        embedding: [0.1],
-      }),
+      expect.objectContaining({ id: 'doc:v3:c0', embedding: [0.1] }),
       expect.objectContaining({ id: 'doc:v3:c1', embedding: [0.2] }),
     ]);
     expect(generations.activate).toHaveBeenCalledWith(
@@ -107,12 +124,12 @@ describe('RagPipelineService generations', () => {
       chunks: 0,
       skipped: true,
     });
-    expect(embedding.embedDocuments).not.toHaveBeenCalled();
+    expect(embedding.embed).not.toHaveBeenCalled();
     expect(index.stageChunks).not.toHaveBeenCalled();
   });
   it('does not activate an invalid embedding batch', async () => {
     const { service, embedding, generations, index } = fixture();
-    embedding.embedDocuments.mockResolvedValueOnce([[0.1]]);
+    embedding.embed.mockResolvedValueOnce([[0.1]]);
     await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
       'embedding count',
     );
@@ -139,5 +156,31 @@ describe('RagPipelineService generations', () => {
       skipped: true,
     });
     expect(index.discardGeneration).toHaveBeenCalled();
+  });
+  it('records cached/new vector progress and records failures before any index write', async () => {
+    const { service, embedding, content, progress, index } = fixture();
+    embedding.embed.mockImplementationOnce(async (_id, _texts, report) => {
+      await report(1, 2);
+      await report(2, 2);
+      return [[0.1], [0.2]];
+    });
+    await service.rebuildDocument('doc', 3);
+    expect(progress.report.mock.calls.map(([, ...event]) => event)).toEqual([
+      ['content', 0, 0],
+      ['chunk', 0, 0],
+      ['embedding', 0, 2],
+      ['embedding', 1, 2],
+      ['embedding', 2, 2],
+      ['index_write', 0, 2],
+      ['index_write', 2, 2],
+      ['activating', 0, 0],
+    ]);
+    content.findByContentId.mockResolvedValueOnce(null);
+    index.stageChunks.mockClear();
+    await expect(service.rebuildDocument('doc', 3)).rejects.toThrow(
+      'content not found',
+    );
+    expect(progress.finish.mock.calls.at(-1)?.[1]).toBe('failed');
+    expect(index.stageChunks).not.toHaveBeenCalled();
   });
 });

@@ -1,3 +1,5 @@
+import { ChunkRange } from '../chunk/chunk.types';
+import { integerOption } from '../../ingestion/numeric-option';
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client, type estypes } from '@elastic/elasticsearch';
@@ -65,6 +67,14 @@ export interface VectorChunkSearchItem {
 }
 
 export interface VectorChunkInput {
+  metadata?: {
+    strategy: string;
+    contentHash: string;
+    headingPath: string[];
+    ranges: ChunkRange[];
+    parseStrategy?: string;
+    embeddingFingerprint?: string;
+  };
   id: string;
   documentId: string;
   version: number;
@@ -115,6 +125,10 @@ export class VectorIndexService implements OnModuleDestroy {
       this.documentIndex,
       this.chunkIndex,
       this.schema,
+      {
+        maxChunks: integerOption(config, 'ES_BULK_MAX_CHUNKS', 200),
+        maxBytes: integerOption(config, 'ES_BULK_MAX_BYTES', 5242880),
+      },
     );
     const keywordAnalyzer = config.get<string>('RAG_KEYWORD_ANALYZER', 'cjk');
     if (keywordAnalyzer !== 'standard' && keywordAnalyzer !== 'cjk')

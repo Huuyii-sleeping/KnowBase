@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { IS_PUBLIC_KEY } from './auth.decorators';
+import { IS_PUBLIC_KEY, STORAGE_TICKET_KEY } from './auth.decorators';
 import { UserService } from '../../users/user.service';
 import { AuthUser } from '../../auth/auth.types';
 
@@ -25,14 +25,39 @@ export class AuthGuard implements CanActivate {
     ]);
     if (isPublic) return true;
 
-    const request = context.switchToHttp().getRequest<{ headers: { authorization?: string }; user?: AuthUser }>();
-    const token = request.headers.authorization?.replace(/^Bearer\s+/i, '');
+    const request = context.switchToHttp().getRequest<{
+      headers: { authorization?: string };
+      query?: { ticket?: string; key?: string };
+      user?: AuthUser;
+    }>();
+    const allowsTicket = this.reflector.get<boolean>(
+      STORAGE_TICKET_KEY,
+      context.getHandler(),
+    );
+    const ticket =
+      allowsTicket && typeof request.query?.ticket === 'string'
+        ? request.query.ticket
+        : undefined;
+    const token =
+      ticket || request.headers.authorization?.replace(/^Bearer\s+/i, '');
     if (!token) throw new UnauthorizedException('authentication required');
 
     try {
-      const payload = await this.jwt.verifyAsync<{ sub: string }>(token);
+      const payload = await this.jwt.verifyAsync<{
+        sub: string;
+        purpose?: string;
+        key?: string;
+      }>(token);
+      if (
+        ticket
+          ? payload.purpose !== 'storage_object' ||
+            payload.key !== request.query?.key
+          : payload.purpose !== undefined
+      )
+        throw new UnauthorizedException('invalid token scope');
       const user = payload.sub ? await this.users.findById(payload.sub) : null;
-      if (!user) throw new UnauthorizedException('user is inactive or not found');
+      if (!user)
+        throw new UnauthorizedException('user is inactive or not found');
       request.user = this.users.toAuthUser(user);
       return true;
     } catch (error) {

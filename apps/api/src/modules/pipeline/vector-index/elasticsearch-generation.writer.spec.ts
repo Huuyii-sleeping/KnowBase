@@ -5,7 +5,10 @@ function fixture() {
   const client = {
     index: vi.fn().mockResolvedValue({}),
     bulk: vi.fn().mockResolvedValue({ errors: false }),
-    indices: { exists: vi.fn().mockResolvedValue(true) },
+    indices: {
+      exists: vi.fn().mockResolvedValue(true),
+      refresh: vi.fn().mockResolvedValue({ _shards: { failed: 0 } }),
+    },
     deleteByQuery: vi.fn().mockResolvedValue({}),
   };
   const schema = {
@@ -22,6 +25,79 @@ function fixture() {
 }
 
 describe('ElasticsearchGenerationWriter', () => {
+  const chunk = (index: number) => ({
+    id: `doc:c${index}`,
+    documentId: 'doc',
+    version: 1,
+    chunkIndex: index,
+    content: 'body',
+    embedding: [1, 2],
+  });
+
+  it('bounds requests by count and bytes and refreshes only after every batch', async () => {
+    const { client, schema } = fixture();
+    const writer = new ElasticsearchGenerationWriter(
+      client as any,
+      'documents',
+      'chunks',
+      schema as any,
+      { maxChunks: 2, maxBytes: 500 },
+    );
+    await writer.stageChunks(
+      'doc',
+      'gen',
+      Array.from({ length: 5 }, (_, i) => chunk(i)),
+    );
+    expect(client.bulk.mock.calls.length).toBeGreaterThan(2);
+    for (const [request] of client.bulk.mock.calls) {
+      expect(request.operations.length).toBeLessThanOrEqual(4);
+      expect(
+        request.operations.reduce(
+          (sum: number, item: unknown) =>
+            sum + Buffer.byteLength(JSON.stringify(item)) + 1,
+          0,
+        ),
+      ).toBeLessThanOrEqual(500);
+      expect(request.refresh).toBe(false);
+    }
+    expect(client.indices.refresh).toHaveBeenCalledOnce();
+    expect(client.indices.refresh.mock.invocationCallOrder[0]).toBeGreaterThan(
+      client.bulk.mock.invocationCallOrder.at(-1)!,
+    );
+  });
+
+  it('does not refresh or complete when a later batch fails, and rejects oversized single items', async () => {
+    const { client, schema } = fixture();
+    client.bulk
+      .mockResolvedValueOnce({ errors: false })
+      .mockResolvedValueOnce({ errors: true });
+    const writer = new ElasticsearchGenerationWriter(
+      client as any,
+      'documents',
+      'chunks',
+      schema as any,
+      { maxChunks: 1, maxBytes: 1000 },
+    );
+    await expect(
+      writer.stageChunks('doc', 'gen', [chunk(0), chunk(1), chunk(2)]),
+    ).rejects.toThrow('one or more chunks');
+    expect(client.bulk).toHaveBeenCalledTimes(2);
+    expect(client.indices.refresh).not.toHaveBeenCalled();
+    await expect(
+      writer.stageChunks('doc', 'gen', [
+        { ...chunk(0), content: 'x'.repeat(1000) },
+      ]),
+    ).rejects.toThrow('ES_BULK_MAX_BYTES');
+  });
+
+  it('rejects a failed refresh barrier', async () => {
+    const { writer, client } = fixture();
+    client.indices.refresh.mockResolvedValueOnce({ _shards: { failed: 1 } });
+    await expect(writer.stageChunks('doc', 'gen', [chunk(0)])).rejects.toThrow(
+      'refresh failed',
+    );
+  });
+
   it('persists retrieval context separately from the original evidence', async () => {
     const { client, writer } = fixture();
     await writer.stageChunks('doc', 'new', [
@@ -74,7 +150,7 @@ describe('ElasticsearchGenerationWriter', () => {
     );
     await writer.stageChunks('doc', 'new', chunks);
     expect(client.bulk).toHaveBeenLastCalledWith({
-      refresh: 'wait_for',
+      refresh: false,
       operations: [
         { index: { _index: 'chunks', _id: 'doc:v2:c0:new' } },
         {

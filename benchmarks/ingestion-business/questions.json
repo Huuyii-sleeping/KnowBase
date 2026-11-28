@@ -1,0 +1,59 @@
+[
+  {
+    "id": "scope-01",
+    "split": "development",
+    "question": "北斗项目目前批准的预算是多少？为什么不能使用例会提议的金额？",
+    "sources": ["change-approved.md", "meeting-proposal.md"],
+    "facts": ["198万元", "12万元追加建议未批准"],
+    "purpose": "跨文件状态与版本辨别；本轮不运行问答评分"
+  },
+  {
+    "id": "scope-02",
+    "split": "holdout",
+    "question": "杭州、苏州、武汉是否在同一天正式上线？",
+    "sources": ["charter.md", "runbook.md"],
+    "facts": ["杭州7月15日", "苏州7月18日", "武汉仅灾备演练"]
+  },
+  {
+    "id": "scope-03",
+    "split": "holdout",
+    "question": "9月15日技术恢复后，可以立刻出库HLB-260915-A吗？",
+    "sources": ["incident.md", "runbook.md"],
+    "facts": ["不能", "质量部批准", "9月16日10时放行"]
+  },
+  {
+    "id": "scope-04",
+    "split": "development",
+    "question": "供应商试运行验收款金额是多少，触发条件是什么？",
+    "sources": ["contract.html", "budget.xlsx"],
+    "facts": ["48万元", "40%", "两仓完成试运行"]
+  },
+  {
+    "id": "scope-05",
+    "split": "holdout",
+    "question": "质量部门第二季度实际支出是0吗？",
+    "sources": ["budget.html", "budget.xlsx"],
+    "facts": ["空白待核定", "不是已确认零支出"]
+  },
+  {
+    "id": "scope-06",
+    "split": "holdout",
+    "question": "P1故障应在15分钟内恢复吗？",
+    "sources": ["runbook.md"],
+    "facts": ["15分钟是响应目标", "120分钟是恢复目标"]
+  },
+  {
+    "id": "scope-07",
+    "split": "development",
+    "question": "7月15日分仓验收表里，苏州的哪项仍未通过？",
+    "sources": ["warehouse.html"],
+    "facts": ["校准", "待复检"]
+  },
+  {
+    "id": "scope-08",
+    "split": "holdout",
+    "question": "季度明细合计能否代替198万元项目总预算？",
+    "sources": ["budget.html", "change-approved.md"],
+    "facts": ["不能", "明细不是完整分解"]
+  }
+]

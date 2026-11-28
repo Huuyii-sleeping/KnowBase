@@ -1,0 +1,132 @@
+{
+  "date": "2026-11-24",
+  "baseCommit": "6badcba5863656ff1d6e255491ad05609deb797e",
+  "sourceIdentity": "baseCommit plus sourceFiles SHA-256; report/logs excluded from source identity",
+  "sourceHash": "277b8ec3d5091fb67f2aa95352ca93230b8e6e9c2d265d49f6043bb5639c631c",
+  "sourceFiles": {
+    ".env.example": "f4266c8eb4cca8a6b043609c1dee6e15a1e19539ce3c3737cf9c20d9793fa183",
+    ".gitignore": "b777daade031583f201183d8487978812cd4aa3d5af0e920f6931b94fc49372a",
+    "apps/api/src/modules/indexing/index-build-options.ts": "a775866e99df264effebfff1fd92f41857b8c9a48d8641aec850e51469569ce2",
+    "apps/api/src/modules/indexing/index-build.service.spec.ts": "4d9285f898e9bcd6e8cb1950214030e6f319eacd4220a56d994d006a0a682788",
+    "apps/api/src/modules/indexing/index-build.service.ts": "118415f0f8885bfa2b20b47e91a03c8078b30a2ad90e29a763a36a48412ec412",
+    "apps/api/src/modules/indexing/index-generation.store.ts": "e141b18e38a9b73863ee8b7df4b9299953ad1af2bfbb50d0ed767932f42dfd2d",
+    "apps/api/src/modules/message-queue/message-queue.types.ts": "18eb860ba5d6bb6704c4cf1073ff5a27dafb3d2e8c2473bf65cbf703991688e7",
+    "apps/api/src/modules/pipeline/kg/kg-pipeline.consumer.ts": "aff5acab200bf1b66b97b1a439c381a9994608ffe8fd514dc79c7ebd9fb58e2d",
+    "apps/api/src/modules/pipeline/kg/kg-pipeline.service.ts": "63046d206a72911e31e521bb4d0aadb969cac3ca043e3f238ebcd7cca0484346",
+    "apps/api/src/modules/pipeline/kg/ollama-graph-extractor.service.spec.ts": "9115eb427920dc94a9d836cd0df6103c7924d52ffb24e5d7f3d442a600ed3212",
+    "apps/api/src/modules/pipeline/kg/ollama-graph-extractor.service.ts": "2ab6f0922b1ea2648354014a3f427d26c53d24841d3fc3fa1df29f19443a4561",
+    "apps/api/src/modules/pipeline/pipeline.module.ts": "13612244b33da9d506058643f276e7bb02538ff1a933ae231b878be008478194",
+    "apps/api/src/modules/pipeline/rag/rag-pipeline.consumer.ts": "023f344c8305c1272cc1133cb701ab0e5c60b6346c770c0bdae4a22cccc2e0ac",
+    "apps/api/src/modules/pipeline/rag/rag-pipeline.service.ts": "992d2327cc34a6c7770d986a7382c70b251840c8b0c7ba3edd38cece793c311b",
+    "apps/api/src/modules/pipeline/search/search-pipeline.consumer.ts": "35bcb5e4224cd3c1718952e36e0ca4d636dd864c46c83fefbee43d0de7c667a9",
+    "apps/api/src/modules/pipeline/search/search-pipeline.service.ts": "e5fd2729d35671671ed116aea46913f7c245da3ed59a80f34cbc57f9c274ebe5",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-command.service.spec.ts": "d106463146743b72584ea39fea9435cf6df9bf1f9a5f46465c5cca17b0d0daae",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-command.service.ts": "daab9045fc2c20ef2bfef49d58e2e2d430d33f22991e230d5c4dc8a5bdc02363",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-dispatch.store.ts": "cbb148e5fd88f7efa1a6b4f964b2432abba1836c7c036fcacfd296401c2a08f3",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-execution.store.spec.ts": "7d9877464c05ac099427c73b2d7c340731f55ca7a4759aded7180629d8179615",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-execution.store.ts": "e56adb71e38c2ec69dfd0d1d796af4f209c04c1a90c287cd0ec3c846ac823fff",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-management.service.ts": "150f15e8ad2a984ce25df362c6d29d018dccc2fc968c7a1cf0e61e88d5918478",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-plan.store.ts": "be021005daf454dae43f13f8e05e177f0006bc985004f1c99c2d3b49ce7c5b81",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-policy.service.ts": "c346ea6a8fc7db87d54cd458778f24f627dc73efe9915edffb1820f021a0a028",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-policy.spec.ts": "452325590cde0f125bb96ab5904370b71eaae8751fce01a800f4b83b6968547e",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-preview.service.spec.ts": "1a52dbca45e9cc4f7b153822c90952e4df382f1c7994e42f40c0fbbe930b6cac",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-preview.service.ts": "f9ccda5096882b88e6a7374030563de7defbdfe76ba6717f95ca63ddff0cd060",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-runner.service.spec.ts": "d6215ba71683a9a865bb54874050555d77051b416fa1203f7ac00d3e14593ddd",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-runner.service.ts": "bee9a675fd4ec583f6908c62f603f3c096d4d6be4b5f0852aaf8735f90f7ef75",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-scan.store.ts": "c43d5e53ae9b4c9947d76d481fff358e8db4cca7afe82057c11789dccdfec3e6",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-scheduler.service.spec.ts": "b54d36e3c810d708563c5da340270ada3443e7d91df2c10ba5b187063b72f3a5",
+    "apps/api/src/modules/pipeline/upgrades/upgrade-scheduler.service.ts": "7d390aa35e99a9e71c17cea7d990528da46a7dcc7304812709b954f3eb545bf4",
+    "apps/api/src/modules/pipeline/upgrades/upgrade.controller.ts": "7b2263c047a53738535c60b8ab4f9befc2967fd3a8491ff1d2335ad1fa471239",
+    "apps/api/src/modules/pipeline/upgrades/upgrade.dto.ts": "4f5504b8b1871a252a2beebe2223ae68c0d7e5538beb111cbf4ff0443c2e8e40",
+    "apps/api/src/modules/pipeline/upgrades/upgrade.types.ts": "4fc2be30645c016cdbdfed85e5baab134767b00823fb3a771ae601435760783c",
+    "apps/api/test/delivery/environment.cjs": "549d1411c340c7fa433c8494ee4422ae35d6a920deaca912e4b7811069295cd6",
+    "apps/api/test/indexing/upgrade-crash-worker.cjs": "b0f1d08c82b9e6e8564401ac4be25aa441e5fe02b54d68def25a0efbaec0d276",
+    "apps/api/test/indexing/upgrades.test.cjs": "c085954c86845fdf0653550a36bd09c559643f6c4b02e07088f2c85b55e81ecf",
+    "apps/web/src/App.tsx": "fadad5cb8978bf82cf0feb375ed2e1247fc76a2d3ecf1dfd0bfa9d491d5892cd",
+    "apps/web/src/components/app-shell.tsx": "c31e33683b14e56d3218b85bc317c63f286fba363f7153039ae1c90b39a40212",
+    "apps/web/src/components/document-index-status.spec.tsx": "ed10543c960f541c081488738a5c55f44f0ed4569f00cd98787da29cb0d8514c",
+    "apps/web/src/components/document-index-status.tsx": "a20bfd05514282952059d4968067f122b27747540a531339be1bc8140a9d8d96",
+    "apps/web/src/components/upgrade-items-table.tsx": "77b054509df51ba5eb5f3d573b3d55cd37d38599baa97a1b22ac0518c23ae3fe",
+    "apps/web/src/components/upgrade-preview-form.tsx": "19083d59ca8e3850ebf512a758f8f049e87efe512dee037832ade936c98a461c",
+    "apps/web/src/lib/api-error.ts": "b046d981315b643f3b9159462bbe9b5a5a810fb293798b371007338b4e9867e3",
+    "apps/web/src/lib/index-upgrades-api.spec.ts": "84c4a146b7b4b48ffc669c399bb6b867e07da071e48c6c1d910acea09e56d4e9",
+    "apps/web/src/lib/index-upgrades-api.ts": "0dba46482b21528f41cfe191f0db48306875e59b05de1aa40e93ad26f73a2ba4",
+    "apps/web/src/lib/upgrade-export.spec.ts": "5e2b22d6f36ef1f02fe1399c179ed0bca736f5ea26f93f560c575c5bc9496e2e",
+    "apps/web/src/lib/upgrade-export.ts": "6887abc25586e0313013ca802e52da5dd8b7e4ada511bd59262833c791f094f8",
+    "apps/web/src/pages/document-detail-page.tsx": "3a9c690fe042dbadf7fdcf3a2ad056a9f867b1020e5091e22631396e40d9ea13",
+    "apps/web/src/pages/index-upgrades-page.spec.tsx": "f053b116f877663373dd2a297c2a7283557bb81d4afddc24a0d9d356f4d16641",
+    "apps/web/src/pages/index-upgrades-page.tsx": "7cf0c6b8e28fea18c520ab3a851f08528251f123f4a52eb23e34be9b7d781ee4",
+    "deploy/docker-compose.upgrade-test.yml": "37f42922167e1540c1d404c43afff7f524681fc0c209722d00a8b18afc312e48",
+    "deploy/postgres/init/010_index_upgrades.sql": "11dff89cab18afb88ed5005674632e2e9c7947b371d5d773a7d5e9b15be40916",
+    "deploy/postgres/migrations/010_index_upgrades.sql": "57ff81f30c1b1e3cddd641e13a6ea4dcfb4cac8b9d620c76735c118f07203fe2"
+  },
+  "images": {
+    "postgres:16-alpine": "sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139",
+    "mongo:8": "sha256:e0ce8c35124d4a9f9785532d1f268f39e9728ffa1cb38f46fa482436424c4bd3",
+    "rabbitmq:4-management-alpine": "sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267",
+    "docker.elastic.co/elasticsearch/elasticsearch:8.15.3": "sha256:01c1732062b4a846c5ca687b0094b89bad0bfed00c6d71626db32fb8f3131a78",
+    "neo4j:5-community": "sha256:42ef3ebfd671ebd01fdebb6dcbe80cf7b45eef2aa3d346ef4132f7ef31e67d2f"
+  },
+  "fixtures": {
+    "source": "synthetic, generated inside isolated test storage",
+    "chunkStrategy": "structure-v4:160:20",
+    "embeddingDimensions": 2,
+    "embeddingRevision": "deterministic-embedding-v1",
+    "graphRevision": "deterministic-graph-v1",
+    "maxInFlight": 2,
+    "normalIntervalMs": 100,
+    "throttleCheckIntervalMs": 60000,
+    "realModels": false
+  },
+  "results": {
+    "api": {
+      "passed": 489,
+      "files": 103
+    },
+    "web": {
+      "passed": 248,
+      "files": 27
+    },
+    "quality": {
+      "passed": 13
+    },
+    "upgradeRealServices": {
+      "passed": 16
+    },
+    "existingRealServices": {
+      "passed": 51
+    },
+    "twoIdenticalDocuments": {
+      "tasks": 6,
+      "activations": 6,
+      "embeddingInputs": 2,
+      "graphInputs": 2
+    },
+    "localEdit": {
+      "initialEmbeddingInputs": 10,
+      "nextRevisionEmbeddingInputs": 2
+    },
+    "graphFailureRetry": {
+      "automaticAttempts": 3,
+      "manualAttempts": 1,
+      "successfulPipelinesRebuilt": 0,
+      "manualEmbeddingInputs": 0
+    }
+  },
+  "logs": {
+    "reports/index-upgrades/api-full-final.log": "e9c54f761acf07aa9fa9776c0264b5f7340afa5bdbcb7e2ae1fa5e8225367c28",
+    "reports/index-upgrades/web-full.log": "3154e03639e2f36aa2c5e9e0ea3b3104f7f8d6780d50d89d039293b923b177a3",
+    "reports/index-upgrades/quality-final.log": "fd34afbf3f955c9c6dda1bcdbe3833239415b34f823420a5bfe16d7db85a6bc9",
+    "reports/index-upgrades/drill-release.log": "dd1a10a15a2b14420b1ad3cb28864fc40f746a3ec45b005854f6e76501287f20",
+    "reports/index-upgrades/regression-real-services.log": "09fba35b21f4ce9ac67e62b0cd83d2f3e17403fb9abbd6c4d4298f3cd8e74786",
+    "reports/index-upgrades/api-build.log": "9aba080a04d36f3c5b3e64cf2e200d70a422c78297ff80bac5f5551def846538",
+    "reports/index-upgrades/web-build.log": "6119864e0c1a9a13c6c52ef2e6d2a7aa18890ea96b81de1ff0d67de91eb9efd8",
+    "reports/index-upgrades/lockfile.log": "f745521f3709822eca0e1779619f863fd9aaec80934dde50b565b858e872f685"
+  },
+  "limits": [
+    "No production data upgraded",
+    "No real model quality or speed claims",
+    "Main contract integration pending",
+    "UI verified by component tests; full browser workflow deferred to stage 6"
+  ]
+}

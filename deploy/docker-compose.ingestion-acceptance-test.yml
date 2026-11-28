@@ -1,0 +1,15 @@
+services:
+  object-storage:
+    image: rustfs/rustfs:latest
+    entrypoint: ['/usr/bin/rustfs']
+    command: server /data --console-address ":9001"
+    tmpfs: !override
+      - /data:mode=1777
+    environment:
+      RUSTFS_ACCESS_KEY: ingestion-test
+      RUSTFS_SECRET_KEY: ingestion-test-password
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/health']
+      interval: 2s
+      timeout: 5s
+      retries: 45

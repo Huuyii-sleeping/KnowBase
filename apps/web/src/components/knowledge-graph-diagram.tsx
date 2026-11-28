@@ -1,293 +1,297 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { EdgeData, Graph as G6Graph, NodeData } from '@antv/g6';
+import { Link } from 'react-router-dom';
 import type { GraphSearchPath } from '@/lib/api';
-import { buildKnowledgeGraphData, type KnowledgeGraphEdgeData, type KnowledgeGraphNodeData } from '@/lib/knowledge-graph-data';
+import {
+  buildKnowledgeGraphData,
+  type KnowledgeGraphNodeData,
+} from '@/lib/knowledge-graph-data';
+import {
+  getGraphPalette,
+  type GraphLayoutMode,
+} from '@/lib/knowledge-graph-presentation';
+import { useKnowledgeGraph } from '@/hooks/use-knowledge-graph';
+import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
 import { cn } from '@/lib/utils';
 
-const NODE_PALETTES = {
-  seed: { fill: '#F4C65A', stroke: '#A77407', label: '#392703', badgeFill: '#FFF1C9', badgeText: '#7B5100' },
-  document: { fill: '#8DD8DA', stroke: '#2D9DA2', label: '#0C4D52', badgeFill: '#E3F7F8', badgeText: '#0E6570' },
-  model: { fill: '#B4A4FF', stroke: '#6550D7', label: '#2C1A74', badgeFill: '#E7E0FF', badgeText: '#5940B5' },
-  queue: { fill: '#F2A1C1', stroke: '#CF688F', label: '#6F1B45', badgeFill: '#FDE4EE', badgeText: '#A03E69' },
-  database: { fill: '#84B9FF', stroke: '#2F6FD6', label: '#14386E', badgeFill: '#E0ECFF', badgeText: '#345A9C' },
-  search: { fill: '#9FD77A', stroke: '#5E9D44', label: '#28421A', badgeFill: '#E5F5D8', badgeText: '#497734' },
-  platform: { fill: '#D3D6E7', stroke: '#7B84A3', label: '#2E3349', badgeFill: '#EFF1F7', badgeText: '#5A6383' },
-  concept: { fill: '#D9CDA8', stroke: '#A68E59', label: '#4F4020', badgeFill: '#F2E9CF', badgeText: '#7F6940' },
-  other: { fill: '#D8D4F2', stroke: '#8A7ED0', label: '#403A72', badgeFill: '#ECE9FF', badgeText: '#6757B5' },
-} as const;
-
-type PaletteName = keyof typeof NODE_PALETTES;
-
-function getNodePalette(node: KnowledgeGraphNodeData) {
-  return NODE_PALETTES[node.group as PaletteName] ?? NODE_PALETTES.other;
-}
-
-function makeLayout(nodeOrder: string[], maxDepth: number) {
-  return {
-    type: 'antv-dagre',
-    rankdir: 'LR',
-    align: 'UL',
-    ranker: 'tight-tree',
-    nodeOrder,
-    begin: [36, 36],
-    nodesep: 62,
-    ranksep: Math.max(126, 112 + maxDepth * 6),
-    edgeLabelSpace: true,
-    controlPoints: true,
-    nodeSize: (node: NodeData) => (node.data?.size as [number, number] | undefined) ?? [140, 56],
-    nodeSpacing: 32,
-  } as const;
-}
-
-function getMaxDepth(nodes: NodeData[] | undefined) {
-  return Math.max(1, ...(nodes ?? []).map((node) => Number(node.data?.depth ?? 0)));
-}
-
-function getNodeStyle(datum: NodeData) {
-  const data = datum.data as KnowledgeGraphNodeData | undefined;
-  const palette = data ? getNodePalette(data) : NODE_PALETTES.other;
-  const isSeed = Boolean(data?.isSeed);
-  const isActive = Boolean(data?.isActive);
-  const size = data?.size ?? [140, 56];
-
-  return {
-    size,
-    fill: palette.fill,
-    stroke: isSeed ? palette.stroke : palette.stroke,
-    radius: 8,
-    lineWidth: isSeed ? 2.8 : 1.6,
-    opacity: isActive || isSeed ? 1 : 0.94,
-    labelText: data?.label ?? datum.id,
-    labelFill: palette.label,
-    labelFontSize: isSeed ? 14 : 12,
-    labelFontWeight: isSeed ? 700 : 600,
-    labelLineHeight: isSeed ? 18 : 16,
-    labelWordWrap: true,
-    labelMaxWidth: '82%',
-    labelMaxLines: 2,
-    labelPlacement: 'center' as const,
-    labelBackground: false,
-    labelOffsetX: 0,
-    labelOffsetY: 3,
-    badge: true,
-    badges: data?.entityType
-      ? [
-          {
-            text: data.entityType,
-            placement: 'top' as const,
-            backgroundFill: palette.badgeFill,
-            fill: palette.badgeText,
-            fontSize: 9,
-            fontWeight: 600,
-            padding: [1, 6, 1, 6],
-            offsetY: 8,
-            backgroundRadius: 6,
-            backgroundOpacity: 1,
-          },
-        ]
-      : [],
-    shadowBlur: isActive ? 10 : 0,
-    shadowColor: isActive ? palette.stroke : undefined,
-  };
-}
-
-function getEdgeStyle(datum: EdgeData) {
-  const data = datum.data as KnowledgeGraphEdgeData | undefined;
-  const isActive = Boolean(data?.isActive);
-
-  return {
-    stroke: isActive ? '#4f46e5' : '#B9BECA',
-    lineWidth: isActive ? 2.4 : 1.4,
-    opacity: isActive ? 1 : 0.72,
-    radius: 8,
-    endArrow: true,
-    endArrowType: 'vee' as const,
-    endArrowSize: 8,
-    label: true,
-    labelText: data?.relationType ?? '',
-    labelFill: isActive ? '#312E81' : '#5F6778',
-    labelFontSize: 10,
-    labelFontWeight: 600,
-    labelPlacement: 'center' as const,
-    labelAutoRotate: false,
-    labelWordWrap: false,
-    labelOffsetY: -8,
-    labelPadding: [2, 7, 2, 7],
-    labelBackground: true,
-    labelBackgroundFill: isActive ? '#EEF2FF' : '#FFFFFF',
-    labelBackgroundOpacity: 0.95,
-    labelBackgroundRadius: 6,
-    labelBackgroundLineWidth: 0,
-  };
-}
-
-function useKnowledgeGraph(paths: GraphSearchPath[], activePath: GraphSearchPath | null, query: string) {
-  return useMemo(() => buildKnowledgeGraphData(paths, activePath, query), [paths, activePath, query]);
-}
-
-export function KnowledgeGraphDiagram({ paths, activePath, query = '' }: { paths: GraphSearchPath[]; activePath: GraphSearchPath | null; query?: string }) {
-  const graphRef = useRef<G6Graph | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [renderError, setRenderError] = useState<string | null>(null);
-  const graph = useKnowledgeGraph(paths, activePath, query);
-  const maxDepth = getMaxDepth(graph.data.nodes);
+export function KnowledgeGraphDiagram({
+  paths,
+  activePath,
+  query = '',
+}: {
+  paths: GraphSearchPath[];
+  activePath: GraphSearchPath | null;
+  query?: string;
+}) {
+  const container = useRef<HTMLDivElement>(null);
+  const section = useRef<HTMLElement>(null);
+  const expandButton = useRef<HTMLButtonElement>(null);
+  const [mode, setMode] = useState<GraphLayoutMode>('network');
+  const [expanded, setExpanded] = useState(false);
+  const dataset = useMemo(
+    () => buildKnowledgeGraphData(paths, activePath, query),
+    [paths, activePath, query],
+  );
+  const canvas = useKnowledgeGraph(container, dataset, mode);
+  const selected = dataset.data.nodes?.find(
+    (node) => node.id === canvas.selectedId,
+  )?.data as KnowledgeGraphNodeData | undefined;
+  const groups = [
+    ...new Set(
+      dataset.data.nodes?.map((node) => String(node.data?.group)) ?? [],
+    ),
+  ];
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container || graphRef.current) return;
-
-    let cancelled = false;
-    let instance: G6Graph | null = null;
-    let renderPromise: Promise<void> | null = null;
-
-    void import('@antv/g6').then(({ Graph }) => {
-      if (cancelled) return;
-
-      instance = new Graph({
-        container,
-        autoResize: true,
-        autoFit: 'view',
-        padding: [32, 28, 32, 28],
-        background: '#FBFCFF',
-        data: { nodes: [], edges: [] },
-        layout: makeLayout(graph.nodeOrder, maxDepth),
-        node: {
-          type: 'rect',
-          style: getNodeStyle,
-          state: {
-            active: {
-              lineWidth: 3,
-              shadowBlur: 12,
-            },
-            hover: {
-              lineWidth: 3,
-              shadowBlur: 8,
-            },
-            inactive: {
-              opacity: 0.18,
-            },
-          },
-        },
-        edge: {
-          type: 'polyline',
-          style: getEdgeStyle,
-          state: {
-            active: {
-              lineWidth: 3,
-              opacity: 1,
-            },
-            hover: {
-              lineWidth: 3,
-              opacity: 1,
-            },
-            inactive: {
-              opacity: 0.1,
-            },
-          },
-        },
-        behaviors: [
-          'drag-canvas',
-          'zoom-canvas',
-          {
-            type: 'hover-activate',
-            state: 'hover',
-            inactiveState: 'inactive',
-            degree: 1,
-            direction: 'both',
-          },
-          {
-            type: 'focus-element',
-            animation: {
-              duration: 240,
-              easing: 'ease-out',
-            },
-            enable: true,
-          },
-        ],
-        transforms: [{ type: 'process-parallel-edges', mode: 'bundle', distance: 18 }],
-      });
-
-      graphRef.current = instance;
-      instance.setData(graph.data);
-      renderPromise = instance.render().catch((error: unknown) => {
-        if (!cancelled && graphRef.current === instance) {
-          setRenderError(error instanceof Error ? error.message : '图谱渲染失败');
-        }
-      });
-    }).catch((error: unknown) => {
-      if (!cancelled) setRenderError(error instanceof Error ? error.message : '图谱引擎加载失败');
-    });
-
-
-    return () => {
-      cancelled = true;
-      if (renderPromise) void renderPromise.finally(() => instance?.destroy());
-      else instance?.destroy();
-      if (graphRef.current === instance) graphRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const instance = graphRef.current;
-    if (!instance) return;
-
-    let cancelled = false;
-    setRenderError(null);
-    try {
-      instance.setData(graph.data);
-      instance.setOptions({
-        layout: makeLayout(graph.nodeOrder, maxDepth),
-        transforms: [{ type: 'process-parallel-edges', mode: 'bundle', distance: 18 }],
-      });
-      void instance.render().catch((error: unknown) => {
-        if (cancelled || graphRef.current !== instance) return;
-        setRenderError(error instanceof Error ? error.message : '图谱渲染失败');
-      });
-    } catch (error) {
-      if (!cancelled && graphRef.current === instance) {
-        setRenderError(error instanceof Error ? error.message : '图谱渲染失败');
+    if (!expanded) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const focusable = () =>
+      Array.from(
+        section.current?.querySelectorAll<HTMLElement>('button, select, a') ??
+          [],
+      ).filter((element) => !element.hasAttribute('disabled'));
+    expandButton.current?.focus();
+    const close = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setExpanded(false);
+      if (event.key !== 'Tab') return;
+      const elements = focusable();
+      if (event.shiftKey && document.activeElement === elements[0]) {
+        event.preventDefault();
+        elements.at(-1)?.focus();
       }
-    }
-
-    return () => {
-      cancelled = true;
+      if (!event.shiftKey && document.activeElement === elements.at(-1)) {
+        event.preventDefault();
+        elements[0]?.focus();
+      }
     };
-  }, [graph, maxDepth]);
-
-  if (!paths.length) {
-    return (
-      <div className="rounded-lg border border-dashed border-border bg-background px-6 py-14 text-center text-[13px] text-muted-foreground">
-        没有可视化的数据
-      </div>
-    );
-  }
+    window.addEventListener('keydown', close);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', close);
+      expandButton.current?.focus();
+    };
+  }, [expanded]);
 
   return (
-    <div className="rounded-lg border border-border bg-background p-4">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+    <section
+      ref={section}
+      role={expanded ? 'dialog' : undefined}
+      aria-modal={expanded || undefined}
+      aria-label="实体关系图"
+      className={cn(
+        'flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-white shadow-sm',
+        expanded && 'fixed inset-3 z-50 shadow-2xl sm:inset-6',
+      )}
+    >
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
         <div>
-          <div className="text-[12px] font-medium text-muted-foreground">实体关系图</div>
-          <div className="text-[13px] text-foreground">
-            {graph.seedLabel || '当前查询'} · {graph.nodeCount} 个实体 · {graph.edgeCount} 条关系
+          <h2 className="flex items-center gap-2 text-[14px] font-semibold">
+            <Icon
+              name="graph"
+              width={17}
+              height={17}
+              className="text-primary"
+            />
+            实体关系图
+          </h2>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {dataset.seedLabel} 的知识网络
+            <span className="mx-2 text-border">/</span>
+            {dataset.nodeCount} 个实体 · {dataset.edgeCount} 条关系
+          </p>
+        </div>
+        <div className="flex rounded-lg bg-muted p-1" aria-label="图谱布局">
+          {(
+            [
+              ['network', '关系网络'],
+              ['flow', '层级视图'],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={mode === value}
+              onClick={() => setMode(value)}
+              className={cn(
+                'rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors',
+                mode === value
+                  ? 'bg-white text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </header>
+      <div
+        className={cn(
+          'graph-network-canvas relative isolate h-[470px] min-h-0 sm:h-[610px]',
+          expanded && 'h-auto flex-1 sm:h-auto',
+        )}
+      >
+        <div
+          ref={container}
+          role="img"
+          aria-label={`${dataset.seedLabel} 的关系网络，${dataset.nodeCount} 个实体，${dataset.edgeCount} 条关系。可通过下方选择框查看实体详情。`}
+          className="absolute inset-0"
+        />
+        <div className="pointer-events-none absolute left-5 top-5 z-10 flex max-w-[75%] flex-wrap gap-x-4 gap-y-2">
+          {groups.map((group) => {
+            const palette = getGraphPalette(group);
+            return (
+              <span
+                key={group}
+                className="inline-flex items-center gap-1.5 text-[10px] text-muted-foreground"
+              >
+                <span
+                  className="h-2 w-2 rounded-full"
+                  style={{
+                    backgroundColor:
+                      group === 'seed' ? palette.fill : palette.stroke,
+                  }}
+                />
+                {palette.label}
+              </span>
+            );
+          })}
+        </div>
+        <Button
+          ref={expandButton}
+          variant="outline"
+          size="sm"
+          className="absolute right-4 top-4 z-10 bg-white px-2 shadow-sm"
+          aria-label={expanded ? '收起画布' : '展开画布'}
+          title={expanded ? '收起画布' : '展开画布'}
+          onClick={() => setExpanded(!expanded)}
+        >
+          <Icon name={expanded ? 'close' : 'expand'} width={16} height={16} />
+        </Button>
+        {canvas.loading && !canvas.error && (
+          <div
+            role="status"
+            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-white/70 text-xs text-muted-foreground"
+          >
+            正在整理关系网络…
+          </div>
+        )}
+        {canvas.error && (
+          <div
+            role="alert"
+            className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-white/95 px-6 text-center"
+          >
+            <p className="text-sm font-medium">关系图暂时无法显示</p>
+            <p className="max-w-md text-xs text-destructive">{canvas.error}</p>
+            <Button variant="outline" onClick={canvas.retry}>
+              重新加载
+            </Button>
+          </div>
+        )}
+        {selected && !canvas.loading && !canvas.error && (
+          <aside
+            className="absolute bottom-[112px] left-4 z-10 w-[230px] max-w-[calc(100%-2rem)] rounded-xl border border-border bg-white/95 p-4 shadow-lg backdrop-blur-sm sm:bottom-[68px]"
+            aria-label="实体详情"
+          >
+            <div className="flex items-start gap-2">
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] text-muted-foreground">
+                  {selected.entityType}
+                  {selected.isSeed && ' · 查询实体'}
+                </p>
+                <h3 className="mt-1 break-words text-sm font-semibold">
+                  {selected.label}
+                </h3>
+              </div>
+              <button
+                type="button"
+                aria-label="关闭实体详情"
+                className="rounded p-1 text-muted-foreground hover:bg-muted"
+                onClick={() => canvas.setSelectedId(null)}
+              >
+                <Icon name="close" width={14} height={14} />
+              </button>
+            </div>
+            <p className="mt-3 text-[11px] text-muted-foreground">
+              出现在 {selected.pathCount} 条路径中
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {selected.documentIds.map((id, index) => (
+                <Link
+                  key={id}
+                  to={`/documents/${id}`}
+                  className="text-[11px] font-medium text-primary hover:underline"
+                >
+                  来源文档 {index + 1} ↗
+                </Link>
+              ))}
+            </div>
+          </aside>
+        )}
+        <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-2">
+          <select
+            aria-label="选择图谱实体"
+            className="h-9 min-w-0 max-w-[180px] rounded-lg border border-border bg-white px-2.5 text-[11px] text-muted-foreground shadow-sm"
+            value={selected ? (canvas.selectedId ?? '') : ''}
+            onChange={(event) =>
+              canvas.setSelectedId(event.target.value || null)
+            }
+          >
+            <option value="">选择实体查看详情</option>
+            {dataset.data.nodes?.map((node) => (
+              <option key={node.id} value={node.id}>
+                {String(node.data?.label)}
+              </option>
+            ))}
+          </select>
+          <div className="flex h-9 items-center gap-0.5 rounded-lg border border-border bg-white p-1 shadow-sm">
+            <button
+              type="button"
+              className="graph-control"
+              aria-label="缩小关系图"
+              title="缩小"
+              disabled={canvas.loading || !!canvas.error}
+              onClick={canvas.zoomOut}
+            >
+              <Icon name="minus" width={15} height={15} />
+            </button>
+            <span
+              className="w-10 text-center font-mono text-[10px] tabular-nums text-muted-foreground"
+              aria-live="polite"
+            >
+              {Math.round(canvas.zoom * 100)}%
+            </span>
+            <button
+              type="button"
+              className="graph-control"
+              aria-label="放大关系图"
+              title="放大"
+              disabled={canvas.loading || !!canvas.error}
+              onClick={canvas.zoomIn}
+            >
+              <Icon name="plus" width={15} height={15} />
+            </button>
+            <span className="mx-1 h-4 w-px bg-border" />
+            <button
+              type="button"
+              className="graph-control"
+              aria-label="居中并适配关系图"
+              title="居中并适配"
+              disabled={canvas.loading || !!canvas.error}
+              onClick={canvas.fit}
+            >
+              <Icon name="fit" width={15} height={15} />
+            </button>
           </div>
         </div>
-        <div className="ml-auto flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-          <span className="rounded-full border border-border bg-secondary px-2 py-1">层级布局</span>
-          <span className="rounded-full border border-border bg-secondary px-2 py-1">关系箭头</span>
-          <span className="rounded-full border border-border bg-secondary px-2 py-1">悬停高亮</span>
-        </div>
       </div>
-
-      {renderError ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
-          图谱渲染失败：{renderError}
-        </div>
-      ) : (
-        <div
-          ref={containerRef}
-          className={cn('relative w-full overflow-hidden rounded-xl border border-border bg-[#fbfcff]', 'h-[560px]')}
-        />
-      )}
-    </div>
+      <footer className="flex flex-wrap justify-between gap-2 border-t border-border bg-white px-5 py-3 text-[10px] text-muted-foreground">
+        <span>拖动节点调整位置 · 滚轮缩放 · 点击节点查看来源</span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-1.5 w-4 rounded-full bg-primary/60" />
+          当前路径
+        </span>
+      </footer>
+    </section>
   );
 }

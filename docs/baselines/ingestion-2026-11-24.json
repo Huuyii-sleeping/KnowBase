@@ -1,0 +1,626 @@
+{
+  "schema": "ingestion-baseline-v1",
+  "baselineId": "ingestion-stages-1-3-2026-11-24",
+  "recordedAt": "2026-11-24T13:12:23.276876+00:00",
+  "implementationCommit": "3a82f9c7469c9f022662919af20a44fe4a2e6d72",
+  "branch": "codex/ingestion-optimization",
+  "implementationCommits": [
+    {
+      "commit": "db2403a5bdece85c3c5c73ec33790165e50dda17",
+      "capability": "parse-evidence-and-review"
+    },
+    {
+      "commit": "1971b9b9e819426cc1e964458727df9504683e8f",
+      "capability": "contextual-cell-chunks"
+    },
+    {
+      "commit": "3a82f9c7469c9f022662919af20a44fe4a2e6d72",
+      "capability": "embedding-checkpoints-and-build-progress"
+    }
+  ],
+  "sourceTrees": {
+    "apps/api": "792b38441ac1d84596cd8f595a6d9137ffc54de3",
+    "apps/web": "7f5e2356efc8f87bd25c0d7f681c0edee951813e",
+    "deploy": "664866872ec4c443ea2dbe1e7916b09e8fcf7ab0",
+    "benchmarks/ingestion-business": "3535189e4fc9d5924f348084d1c9206e5defa0d8"
+  },
+  "validationTreeState": "Source/configuration tested in the working tree match implementationCommit; documentation was pending. No merge with main was tested.",
+  "mainContractAudit": {
+    "main": "b15d9380e77668a027f68c9700baff7fae52aa3b",
+    "mergeBase": "d406b27a3670685f1ba57cdb7f266d5aa098993a",
+    "overlappingFiles": [
+      ".env.example",
+      "apps/api/package.json",
+      "apps/api/src/modules/documents/document-query.service.spec.ts",
+      "apps/api/src/modules/documents/document-query.service.ts",
+      "apps/api/src/modules/pipeline/chunk/markdown-chunker.service.ts",
+      "apps/api/src/modules/pipeline/embedding/embedding.service.spec.ts",
+      "apps/api/src/modules/pipeline/embedding/embedding.service.ts",
+      "apps/api/src/modules/pipeline/pipeline.module.ts",
+      "apps/api/src/modules/pipeline/rag/rag-pipeline.service.spec.ts",
+      "apps/api/src/modules/pipeline/rag/rag-pipeline.service.ts",
+      "apps/api/src/modules/pipeline/vector-index/elasticsearch-generation.writer.spec.ts",
+      "apps/api/src/modules/pipeline/vector-index/elasticsearch-generation.writer.ts",
+      "apps/api/src/modules/pipeline/vector-index/elasticsearch-schema.ts",
+      "apps/api/src/modules/pipeline/vector-index/vector-index.service.spec.ts",
+      "apps/api/src/modules/pipeline/vector-index/vector-index.service.ts",
+      "apps/api/test/indexing/consistency.test.cjs",
+      "apps/web/src/lib/api.ts",
+      "deploy/docker-compose.delivery-test.yml",
+      "docs/pipeline.md"
+    ],
+    "status": "reviewed-not-integrated",
+    "releaseGate": "Integrate main query/prefix/retrieval_text contracts and run combined regressions before merge or live batch upgrades."
+  },
+  "runtime": {
+    "node": "v24.16.0",
+    "pnpm": "11.6.0"
+  },
+  "configurationTemplate": {
+    "DOCUMENT_PARSER": "mineru",
+    "INGESTION_ASYNC_ENABLED": "true",
+    "MINERU_TIER": "flash",
+    "RAG_CHUNK_SIZE": "1000",
+    "RAG_CHUNK_OVERLAP": "150",
+    "RAG_EMBEDDING_DIMENSIONS": "768",
+    "RAG_EMBEDDING_BATCH_SIZE": "32",
+    "RAG_EMBEDDING_BATCH_CHARACTERS": "24000",
+    "RAG_EMBEDDING_CONCURRENCY": "2",
+    "RAG_EMBEDDING_TIMEOUT_MS": "60000",
+    "RAG_EMBEDDING_MAX_TOKENS": "",
+    "EMBEDDING_MODEL_REVISION": "",
+    "IMAGE_ANALYSIS_MODE": "ocr",
+    "INDEX_GENERATION_GC_ENABLED": "false",
+    "INGESTION_CACHE_TTL_DAYS": "30"
+  },
+  "configurationSource": {
+    "path": ".env.example",
+    "sha256": "20c360b93611557d7c5a204a78a391ca3d7ca8ebf09a8036d2959976afbeeb0d",
+    "bytes": 3104
+  },
+  "dependencyLocks": [
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "c2601b2bb674af7b31f82127df3014d396d44c372a440ef6db855c7ef8cd70cd",
+      "bytes": 346637
+    },
+    {
+      "path": "deploy/mineru/requirements.txt",
+      "sha256": "ace04850ea0dfe9cc8ea99fbace184e4707714aa4b575c217ffcee0c9f804277",
+      "bytes": 14
+    },
+    {
+      "path": "apps/api/scripts/xls/requirements.txt",
+      "sha256": "ccc8b6b3d7ce63c5f9eb08a990fba1b31f62e268b36db11d2d0087c3542732bf",
+      "bytes": 12
+    }
+  ],
+  "fixturesAndMigrations": [
+    {
+      "path": "benchmarks/ingestion-business/README.md",
+      "sha256": "fe926036d803f125c78c14429e1588e1bbf484822d7b4658f73b23615a9a339e",
+      "bytes": 1265
+    },
+    {
+      "path": "benchmarks/ingestion-business/annotations.json",
+      "sha256": "901d10cb402c2bdde2ef211a197240eaeae774aea7aaa7ac1d9fb052393581fb",
+      "bytes": 5290
+    },
+    {
+      "path": "benchmarks/ingestion-business/background.md",
+      "sha256": "9f95cdd419a4ba2a87c113927d2e99e5af858497c1a86ae26b6e514119545509",
+      "bytes": 2160
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-evidence.json",
+      "sha256": "43a9ec56a790a08ecf1a1fce1478dc5ad1c5d0a61a3f1c84d88a88e7df6b8fcb",
+      "bytes": 5107
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-fixtures/holdout-service.md",
+      "sha256": "9b2e447663cab59083c7939ac3d399593ea092d17f2d6b1bb23dca713fba25f2",
+      "bytes": 451
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-fixtures/holdout-transfer.md",
+      "sha256": "bf7b37087650e96155e1dacfd078dff2eef1e39f8438b32aeb70c85ed4aee8c3",
+      "bytes": 1839
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-fixtures/long-condition.md",
+      "sha256": "0036a97758b43b6d57794b1debb9abb2d1752478f84e3d1d5a0e40bf4e3ffde1",
+      "bytes": 1678
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-fixtures/merged-controls.md",
+      "sha256": "9fd1f51ba625b6ab754fecfeacaf9b81bbdf41aedafd24978270788e8d7c5d74",
+      "bytes": 646
+    },
+    {
+      "path": "benchmarks/ingestion-business/chunk-fixtures/wide-payment.md",
+      "sha256": "6047ef0ba39516addfabd3e124b90c8d73d39bff36f0a154d17392d2605f2560",
+      "bytes": 640
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/budget.html",
+      "sha256": "ab279ac6aa4f836316109d01308c8a28e405cc7e5ce6bc20004b1b20477d448d",
+      "bytes": 1108
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/change-approved.md",
+      "sha256": "109c57c74aafbecac3b1ae87417b5033a1cd08bfd5d67bdc0fec15edc2ed7782",
+      "bytes": 1002
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/charter.md",
+      "sha256": "28d3c5d62d56733b72879a8b8926c236d83c9d022e7b36ef7b71c8d310290b8c",
+      "bytes": 1351
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/contract.html",
+      "sha256": "f3f4a34722fc15e4e6feb94822ff0c8e5d8e3026660f0d03098e4d93cb0e6a6a",
+      "bytes": 1124
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/incident.md",
+      "sha256": "5b13e93cae0c25951b4f598c4dda96245cc63d008f6f45dcf44b211f5cb619d3",
+      "bytes": 859
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/meeting-proposal.md",
+      "sha256": "8d51e205b1e76c55b90ae98ea93acb3ea85c027a3cf47d60b7e1ae7114a9f066",
+      "bytes": 812
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/runbook.md",
+      "sha256": "342ab57078cb21ffb0b03fe0a3244d8650ec71db43ec69da2c327fc7420aef0a",
+      "bytes": 1107
+    },
+    {
+      "path": "benchmarks/ingestion-business/documents/warehouse.html",
+      "sha256": "28b2ea920a7f9963763ca7462dd9d869991dbf4227d2d12c026cbfd9a6e11da1",
+      "bytes": 671
+    },
+    {
+      "path": "benchmarks/ingestion-business/questions.json",
+      "sha256": "66f7bef24d29233ba6bc97dbb77a61c376735be806b73c76b39d2d0e7992ef78",
+      "bytes": 2023
+    },
+    {
+      "path": "benchmarks/ingestion-business/table-context.json",
+      "sha256": "98c618ab0aeb392e91e38f403a23b0ab1342b04d6efc66c7ec645480ba54c5d3",
+      "bytes": 1582
+    },
+    {
+      "path": "deploy/mongodb/init/001_document_content.js",
+      "sha256": "6d0e3aea45ef4bd85893ee03b3bf1554b04be44adea14dabd9fca0c84436ed0b",
+      "bytes": 210
+    },
+    {
+      "path": "deploy/mongodb/init/004_document_evidence.js",
+      "sha256": "5974a26a76917e448c60ec0a6b920eba96cdcb975be67ba50bc296048b130805",
+      "bytes": 489
+    },
+    {
+      "path": "deploy/mongodb/migrations/002_fix_document_content_indexes.js",
+      "sha256": "c1305df601d9cc9b40f9e98121f2fad9e44db6e9c865592835b715c0940fb54f",
+      "bytes": 482
+    },
+    {
+      "path": "deploy/mongodb/migrations/003_ingestion_indexes.js",
+      "sha256": "ff9224383d0792487dd6dfab66db28ce5bfe568c3c0652eed41724d5e9019abe",
+      "bytes": 451
+    },
+    {
+      "path": "deploy/mongodb/migrations/004_document_evidence.js",
+      "sha256": "5974a26a76917e448c60ec0a6b920eba96cdcb975be67ba50bc296048b130805",
+      "bytes": 489
+    },
+    {
+      "path": "deploy/postgres/init/001_document_schema.sql",
+      "sha256": "85f0870cdb78903759df59b5e90b34b40fc05f7c7f66594cef5a4cfb2d5c802c",
+      "bytes": 2667
+    },
+    {
+      "path": "deploy/postgres/init/004_pipeline_delivery.sql",
+      "sha256": "bec08fe3f1e30cd4dd2d71ef1b4acf2ad0cc450250f9b503d45178a686080c41",
+      "bytes": 997
+    },
+    {
+      "path": "deploy/postgres/init/005_index_generations.sql",
+      "sha256": "5d82447859e043323ed29a1904a4108fbee7813ac6008d166b582d65f8e46486",
+      "bytes": 540
+    },
+    {
+      "path": "deploy/postgres/init/006_document_parse_tasks.sql",
+      "sha256": "8025af18b0dc75904218255eabb8cbf693907b20f2747aa12c0d7e1017aea144",
+      "bytes": 1320
+    },
+    {
+      "path": "deploy/postgres/init/007_generation_retention.sql",
+      "sha256": "57cf3f3552f44093cf87caea18259e887ebae408afaa4d9551f57cd777bf9561",
+      "bytes": 398
+    },
+    {
+      "path": "deploy/postgres/init/008_parse_checkpoints.sql",
+      "sha256": "6bf9880c2f53ae48f8090a24e3b4a64182992f2ce484b0b2c430192d5976130f",
+      "bytes": 444
+    },
+    {
+      "path": "deploy/postgres/init/009_index_build_progress.sql",
+      "sha256": "158e54fadd621e5598fb3338b72cdd8d76b4eb3ccc689431b754d447fd33a37e",
+      "bytes": 1182
+    },
+    {
+      "path": "deploy/postgres/migrations/002_add_parse_error.sql",
+      "sha256": "460caac57f5e3deac58e6f9409cb4f8748ea0a3d95dc5e3752fef5648164f51b",
+      "bytes": 69
+    },
+    {
+      "path": "deploy/postgres/migrations/003_add_users.sql",
+      "sha256": "4e4a249504164424cafef69619cffd015e475dcd60ff5ed36897f172377a84b9",
+      "bytes": 870
+    },
+    {
+      "path": "deploy/postgres/migrations/004_pipeline_delivery.sql",
+      "sha256": "c219e3e9fb61c19a54d0d57eda9198f393ece39cd6446fe10b78b7502ab1874c",
+      "bytes": 38
+    },
+    {
+      "path": "deploy/postgres/migrations/005_index_generations.sql",
+      "sha256": "112e16bbc83ba062fd30f687309eabba712f6b231c835555005ccc108c4062b0",
+      "bytes": 38
+    },
+    {
+      "path": "deploy/postgres/migrations/006_document_parse_tasks.sql",
+      "sha256": "65c997e14e0dc445b570e7803b122cac46394a1eec129c7bc225933c05da7244",
+      "bytes": 41
+    },
+    {
+      "path": "deploy/postgres/migrations/007_generation_retention.sql",
+      "sha256": "49db25c074e7d7ae45eaf351c548640f7273acad8b9ce2f7b6013db331e80210",
+      "bytes": 41
+    },
+    {
+      "path": "deploy/postgres/migrations/008_parse_checkpoints.sql",
+      "sha256": "b6c89e0ab304ada1a126b0c709bd0dbfc9bc05a2f346f34eaeb1974c4a9a224a",
+      "bytes": 38
+    },
+    {
+      "path": "deploy/postgres/migrations/009_index_build_progress.sql",
+      "sha256": "c08a7db0976351afc6816e831f25b3734ee2f365bb1bd444e483ad2d241fd9d9",
+      "bytes": 41
+    }
+  ],
+  "checks": {
+    "focusedApi": {
+      "passed": 318,
+      "files": 59
+    },
+    "api": {
+      "passed": 443,
+      "files": 97,
+      "maxWorkers": 2
+    },
+    "web": {
+      "passed": 240,
+      "files": 23,
+      "maxWorkers": 2
+    },
+    "qualityTools": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "integrationFinal": {
+      "tests": 51,
+      "pass": 51,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "integrationInitial": {
+      "tests": 51,
+      "pass": 20,
+      "fail": 31,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "integrationTargetedRetry": {
+      "tests": 31,
+      "pass": 31,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "builds": ["api", "web"],
+    "composeConfigurations": 4,
+    "lockfile": "frozen-offline-check-passed",
+    "sourceFormatting": "passed; fixed fixtures and existing compact mock excluded",
+    "scriptSyntax": "node --check and Python compile passed"
+  },
+  "qualitySummary": {
+    "chunkComparison": [
+      {
+        "split": "all",
+        "before": {
+          "runs": 32,
+          "passed": 23,
+          "failedBuilds": 9,
+          "evidenceUnits": 76,
+          "together": 56,
+          "expectedQuotes": 140,
+          "preservedQuotes": 103,
+          "sourceMatched": 56,
+          "coveredCells": 103,
+          "indexedCharacters": 9700,
+          "identicalChunkCharacters": 0
+        },
+        "after": {
+          "runs": 32,
+          "passed": 32,
+          "failedBuilds": 0,
+          "evidenceUnits": 76,
+          "together": 76,
+          "expectedQuotes": 140,
+          "preservedQuotes": 140,
+          "sourceMatched": 76,
+          "coveredCells": 148,
+          "indexedCharacters": 16384,
+          "identicalChunkCharacters": 0
+        }
+      },
+      {
+        "split": "development",
+        "before": {
+          "runs": 16,
+          "passed": 11,
+          "failedBuilds": 5,
+          "evidenceUnits": 36,
+          "together": 25,
+          "expectedQuotes": 64,
+          "preservedQuotes": 44,
+          "sourceMatched": 25,
+          "coveredCells": 80,
+          "indexedCharacters": 4290,
+          "identicalChunkCharacters": 0
+        },
+        "after": {
+          "runs": 16,
+          "passed": 16,
+          "failedBuilds": 0,
+          "evidenceUnits": 36,
+          "together": 36,
+          "expectedQuotes": 64,
+          "preservedQuotes": 64,
+          "sourceMatched": 36,
+          "coveredCells": 112,
+          "indexedCharacters": 8104,
+          "identicalChunkCharacters": 0
+        }
+      },
+      {
+        "split": "holdout",
+        "before": {
+          "runs": 16,
+          "passed": 12,
+          "failedBuilds": 4,
+          "evidenceUnits": 40,
+          "together": 31,
+          "expectedQuotes": 76,
+          "preservedQuotes": 59,
+          "sourceMatched": 31,
+          "coveredCells": 23,
+          "indexedCharacters": 5410,
+          "identicalChunkCharacters": 0
+        },
+        "after": {
+          "runs": 16,
+          "passed": 16,
+          "failedBuilds": 0,
+          "evidenceUnits": 40,
+          "together": 40,
+          "expectedQuotes": 76,
+          "preservedQuotes": 76,
+          "sourceMatched": 40,
+          "coveredCells": 36,
+          "indexedCharacters": 8280,
+          "identicalChunkCharacters": 0
+        }
+      }
+    ],
+    "embeddingRecovery": {
+      "before": {
+        "persistedAfterFailure": 0,
+        "failedAttemptInputs": 6,
+        "retryInputs": 6,
+        "repeatInputs": 0,
+        "editedInputs": 1,
+        "vectorsCorrect": true
+      },
+      "after": {
+        "persistedAfterFailure": 4,
+        "failedAttemptInputs": 6,
+        "retryInputs": 2,
+        "repeatInputs": 0,
+        "editedInputs": 1,
+        "vectorsCorrect": true
+      },
+      "retryInputReduction": 0.6666666666666666
+    }
+  },
+  "evidence": [
+    {
+      "path": "reports/ingestion-quality/documents.json",
+      "sha256": "b9eb03d3e5d576ad1d560358e393738a53ac918c63129d81bdab1c3aaea616e6",
+      "bytes": 5596,
+      "scope": "historical-real-MinerU"
+    },
+    {
+      "path": "reports/ingestion-quality/comparison.json",
+      "sha256": "25892c0f2a2580969be0f0af94632534079c2b745c231ddeeeceb805c17d03ef",
+      "bytes": 1262,
+      "scope": "historical-real-MinerU"
+    },
+    {
+      "path": "reports/ingestion-quality-v2/evidence-verification.json",
+      "sha256": "279f0e9f5f66468f5bb91d12ea301a94a8ebc9e48c7dd7d036e8b0dda07936aa",
+      "bytes": 18624,
+      "scope": "historical-real-MinerU-with-Mongo-and-object-storage"
+    },
+    {
+      "path": "reports/ingestion-quality-v3/pdf-tables/pdf-tables.json",
+      "sha256": "2164db6250b79f2f954143c09c066531be223317d5c655005e65691f4ae2ab6a",
+      "bytes": 12023,
+      "scope": "historical-real-MinerU"
+    },
+    {
+      "path": "reports/ingestion-quality-v3/pdf-heading-failure/pdf-tables.json",
+      "sha256": "746898a06fa31eac79c322004dd8522162c3fe4f79418f8e59909ac87dd2d517",
+      "bytes": 4464,
+      "scope": "historical-failed-holdout-retained"
+    },
+    {
+      "path": "reports/ingestion-quality-v3/pdf-holdout/pdf-tables.json",
+      "sha256": "d83c29a097c4def7f967f1042c1cf3566936fe92492189915da87f2c1980e29f",
+      "bytes": 4367,
+      "scope": "historical-real-MinerU-after-fix"
+    },
+    {
+      "path": "reports/ingestion-quality-v3/evidence-verification.json",
+      "sha256": "3aec42e0e824a55dc0c34e7c6f74049182836497ed1c53c7e7d27619dff217b8",
+      "bytes": 12796,
+      "scope": "historical-real-MinerU-with-Mongo-and-object-storage"
+    },
+    {
+      "path": "reports/ingestion-baseline/chunks-before/chunks.json",
+      "sha256": "e410013e6d49dd74cd79b0523ffb99d92c271f33e5556e96e13285fe4eb14dba",
+      "bytes": 28994,
+      "scope": "rerun-historical-chunker-on-current-fixtures"
+    },
+    {
+      "path": "reports/ingestion-baseline/chunks-after/chunks.json",
+      "sha256": "e626baadb8938cbcfc0ca939fac7da8870ab0e833b38e999b3e9de94f446b892",
+      "bytes": 33631,
+      "scope": "rerun-current-chunker-no-model"
+    },
+    {
+      "path": "reports/ingestion-chunks/comparison.json",
+      "sha256": "75414b8ebf5383a471dbefc582850e93f663e2053a97ebddb9afeb5ca2c712cd",
+      "bytes": 7600,
+      "scope": "rerun-same-input-chunk-comparison"
+    },
+    {
+      "path": "reports/ingestion-index-recovery/comparison.json",
+      "sha256": "8836ca72a281e594de5f0f39362a826a76095b7de5a90e4c23705e5c58b5ccf8",
+      "bytes": 619,
+      "scope": "rerun-real-Mongo-deterministic-model"
+    }
+  ],
+  "logs": [
+    {
+      "path": "reports/ingestion-baseline/api-build.log",
+      "sha256": "9aba080a04d36f3c5b3e64cf2e200d70a422c78297ff80bac5f5551def846538",
+      "bytes": 13
+    },
+    {
+      "path": "reports/ingestion-baseline/api-tests.log",
+      "sha256": "6c9db5f46eeae94194025dda469df0e8048763f5402efac6819c21d675676884",
+      "bytes": 33014
+    },
+    {
+      "path": "reports/ingestion-baseline/chunk-evaluation.log",
+      "sha256": "0fbabe2b1939b20df0339e09d05af1392dbf7fbeeae5585f149017a016d61a78",
+      "bytes": 6837
+    },
+    {
+      "path": "reports/ingestion-baseline/docs-format.log",
+      "sha256": "0245e8834f520a18098f71583c69fe99c09abc594bd5f380234e7a3f907d20d0",
+      "bytes": 571
+    },
+    {
+      "path": "reports/ingestion-baseline/focused-tests.log",
+      "sha256": "f78dfaa2b4e20ddcf37309cd9372cd179296376b9969b8609048de6072867d72",
+      "bytes": 21117
+    },
+    {
+      "path": "reports/ingestion-baseline/format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "bytes": 66
+    },
+    {
+      "path": "reports/ingestion-baseline/integration-final.log",
+      "sha256": "53bab6f3c2cec00b1402f998c9d2d7a48d0d392b27a008ff5876cc2766a4bed7",
+      "bytes": 39592
+    },
+    {
+      "path": "reports/ingestion-baseline/integration-retry.log",
+      "sha256": "c729883ad2bc38d90d900a416d10e76df9723727605c5fc395be6085683be5c2",
+      "bytes": 16075
+    },
+    {
+      "path": "reports/ingestion-baseline/integration-tests.log",
+      "sha256": "3fef0290280ba76ee7b5b568f2e6013a642a88820852972f5dc1ef4dbd43d5a3",
+      "bytes": 39595
+    },
+    {
+      "path": "reports/ingestion-baseline/lockfile-check.log",
+      "sha256": "6ab205e4dda21d14409aea1a9b4629a9a2e19bf9059542ae9c19ff4842d4949b",
+      "bytes": 124
+    },
+    {
+      "path": "reports/ingestion-baseline/quality-tests.log",
+      "sha256": "fe3ebde207bc414173cc4a5241a1be5bf88a90ee670f8490323b181394ef737c",
+      "bytes": 1401
+    },
+    {
+      "path": "reports/ingestion-baseline/stage1-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "reports/ingestion-baseline/stage1-tests.log",
+      "sha256": "3ebc6854f9eb7737f4ae29f87947abf5dd4b61a09cc0dbd9c586525762bc93c9",
+      "bytes": 26874
+    },
+    {
+      "path": "reports/ingestion-baseline/stage1-web-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "reports/ingestion-baseline/stage2-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "reports/ingestion-baseline/stage2-tests.log",
+      "sha256": "a6649a252320c9b6a4c1f3ad349b647d6c4f083e9ee4d94a44743b58af6a141d",
+      "bytes": 2215
+    },
+    {
+      "path": "reports/ingestion-baseline/web-build.log",
+      "sha256": "c5448b1a51cb021e3144250630ce25e75e068f8468aaea72826e083d1a0cebf7",
+      "bytes": 1002
+    },
+    {
+      "path": "reports/ingestion-baseline/web-tests.log",
+      "sha256": "8b1ece2d7865b705f5aec6e41c260efdc45e5514c3e623d4bd2e5f6c95ae0770",
+      "bytes": 2387
+    }
+  ],
+  "limits": [
+    "Synthetic fixtures, no user business corpus",
+    "No fresh MinerU or VLM run in this consolidation",
+    "No combined-main build or retrieval acceptance",
+    "No deployment, live migration or existing-document upgrade",
+    "Audio and video unsupported; historical read/delete compatibility retained"
+  ],
+  "nextDeliverable": "4.1 upgrade preview; main integration remains a release/live-upgrade prerequisite"
+}
